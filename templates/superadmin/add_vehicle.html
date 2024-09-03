@@ -1,0 +1,474 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--**********************************
+Content body start
+***********************************-->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Car</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'vehiclelist' %}" style="color: white;"><button  class="btn btn-primary">View Car</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Add Vehicle</h4> -->
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
+                        </div>
+                    </div>
+                    
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Vehicle Owner</label>
+                        <div class="col-sm-10" >  
+                            <select id="single-select"  name="owner" class="form-control form-control-lg" >
+                                <option value="" selected disabled>Select Owner Id</option>
+                                {% for obj in ownerlist %}
+                                <option value="{{ obj.owner_id }}">{{ obj.name }} - {{obj.phone_number}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle No.*</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control form-control-lg" id="part1" name="part1" maxlength="2" placeholder="KA" required>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control form-control-lg" id="part2" name="part2" maxlength="2" placeholder="01" required>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control form-control-lg" id="part3" name="part3" maxlength="2" placeholder="AB" required>
+                        </div>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control form-control-lg" id="part4" name="part4" maxlength="4" placeholder="0000" required>
+                        </div>
+                    </div>
+                    
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
+                        <div class="col-sm-4">
+                            <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand *</label>
+                        <div class="col-sm-4">
+                            <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
+                                <option value="" selected disabled>Select Car Brand</option>
+                                <!-- Options will be dynamically added here -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model *</label>
+                        <div class="col-sm-4">
+                            <select id="model" name="model" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Model</option>
+                                <!-- Options will be dynamically added here -->
+                            </select>
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
+                        <div class="col-sm-4">    
+                            <select class="form-control form-control-lg" id="year" name="year">
+                                <option value="" selected disabled>Select Year</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Type *</label>
+                        <div class="col-sm-4">
+                            <select id="commission_type" name="commission_type" class="form-control form-control-lg" onchange="updateCommissionPercentage()">
+                                <option value="" selected disabled>Select Commission Type</option>
+                                {% for obj in ctypelist %}
+                                <option value="{{ obj.commission_id }}" data-percentage="{{ obj.commission_percentage }}">{{ obj.commission_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Percentage *</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" id="commission_percentage" name="commission_percentage" disabled>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car body color *</label>
+                        <div class="col-sm-4">
+                            <select id="color" name="color" class="form-control form-control-lg" >
+                                <option value="" selected disabled>Select Car Body Color</option>
+                                {% for obj in colorlist %}
+                                <option value="{{ obj.color_id }}">{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Transmission Type *</label>
+                        <div class="col-sm-4">
+                            <select id="transmission" name="transmission" class="form-control form-control-lg" >
+                                <option value="" selected disabled>Select Car Transmission Type</option>
+                                {% for obj in tlist %}
+                                <option value="{{ obj.transmission_id }}">{{ obj.transmission_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Color</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="color" name="color">
+                        </div>
+                    </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
+                        <div class="col-sm-4">
+                            <select id="vehicle_type" name="vehicle_type" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Fuel Type</option>
+                                {% for obj in vtypelist %}
+                                <option value="{{ obj.vehicle_type_id }}">{{ obj.vehicle_type_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="car_type" name="car_type">
+                                <option value="" selected disabled>Select Car Type</option>
+                                <option >AC</option>
+                                <option >NON AC</option>
+                            </select>
+                        </div>
+                    </div>
+
+                   
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry *</label>
+                        <div class="col-sm-4">
+                            <input type="date" class="form-control form-control-lg" id="insurance_expiry" name="insurance_expiry">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Drive Type *</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="drive_status" name="drive_status">
+                                <option value="" selected disabled>Select Drive Status</option>
+                                <option value="selfdrive" >Self Drive</option>
+                                <option value="otherdrive">Other Drive</option>
+                            </select>
+                        </div>
+                    </div><hr>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Registration Certificate *</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate">
+                            <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate">
+                            <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Policy *</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy">
+                            <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details">
+                            <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details *</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details">
+                            <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
+                        <div class="col-sm-4">
+                            <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test">
+                            <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="vehicle_status" name="vehicle_status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    
+                        
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+    const currentYear = new Date().getFullYear();
+
+    // Get the year dropdown element
+    const yearDropdown = document.getElementById('year');
+
+    // Add years from 2010 to next year
+    for (let year = 2010; year <= currentYear ; year++) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearDropdown.appendChild(option);
+    }
+
+    function updateCommissionPercentage() {
+        const commissionTypeDropdown = document.getElementById('commission_type');
+        const selectedOption = commissionTypeDropdown.options[commissionTypeDropdown.selectedIndex];
+        const commissionPercentage = selectedOption.getAttribute('data-percentage');
+        document.getElementById('commission_percentage').value = commissionPercentage;
+    }
+
+    function getbrand() {
+        $('#brand')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Brand</option>');
+        
+        const category = $('#category').val();
+        '{% for obj in blist %}'
+        if ('{{ obj.category.category_id }}' == category) {
+            $('#brand').append('<option value="{{ obj.brand_id }}">{{ obj.brand_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    function getmodel() {
+        $('#model')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Model</option>');
+        
+        const brand = $('#brand').val();
+        '{% for obj in modellist %}'
+        if ('{{ obj.brand.brand_id }}' == brand) {
+            $('#model').append('<option value="{{ obj.model_id }}">{{ obj.model_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    function enforceInputRestrictions() {
+        const part1 = document.getElementById('part1');
+        const part2 = document.getElementById('part2');
+        const part3 = document.getElementById('part3');
+        const part4 = document.getElementById('part4');
+
+        part1.addEventListener('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').substr(0, 2);
+        });
+
+        part2.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').substr(0, 2);
+        });
+
+        part3.addEventListener('input', function() {
+            this.value = this.value.toUpperCase().replace(/[^A-Z]/g, '').substr(0, 2);
+        });
+
+        part4.addEventListener('input', function() {
+            this.value = this.value.replace(/[^0-9]/g, '').substr(0, 4);
+        });
+    }
+
+    // Call the function to enforce input restrictions
+    enforceInputRestrictions();
+
+    $(document).ready(function() {
+        $("#save_action").click(function(event) {
+            event.preventDefault();
+            var company_format = $('#company_format').val();
+            var part1 = $('#part1').val();
+            var part2 = $('#part2').val();
+            var part3 = $('#part3').val();
+            var part4 = $('#part4').val();
+        
+        // Concatenate the vehicle number
+            var Vehicle_Number = part1 + part2 + part3 + part4;
+            // var Vehicle_Number = $('#Vehicle_Number').val();
+            var model = $('#model').val();
+            var year = $('#year').val();
+            var insurance_expiry = $('#insurance_expiry').val();
+            var car_type = $('#car_type').val();
+            var registration_certificate = $('#registration_certificate').val();
+            var fc_certificate = $('#fc_certificate').val();
+            var insurance_policy = $('#insurance_policy').val();
+            var tax_details = $('#tax_details').val();
+            var permit_details = $('#permit_details').val();
+            var emission_test = $('#emission_test').val();
+            var color = $('#color').val();
+            var transmission = $('#transmission').val();
+            var owner = $('#single-select').val();
+            var vehicle_type = $('#vehicle_type').val();
+            var commission_type = $('#commission_type').val();
+            var vehicle_status = $('#vehicle_status').val();
+            var drive_status = $('#drive_status').val();
+            var vehicleNumberError = $('#vehicle_number_error');
+            var valid = true;
+            var formData = new FormData();
+            formData.append('Vehicle_Number', Vehicle_Number);
+            formData.append('model', model);
+            formData.append('year', year);
+            formData.append('insurance_expiry', insurance_expiry);
+            formData.append('car_type', car_type);
+            formData.append('color', color);
+            formData.append('transmission', transmission);
+            formData.append('owner', owner);
+            formData.append('vehicle_status', vehicle_status);
+            formData.append('drive_status', drive_status);
+            formData.append('company_format', company_format);
+            formData.append('vehicle_type', vehicle_type);
+            formData.append('commission_type', commission_type);
+            var registration_certificate = $('#registration_certificate')[0].files[0];
+            if (registration_certificate) {
+                formData.append('registration_certificate', registration_certificate);
+            }
+            var fc_certificate = $('#fc_certificate')[0].files[0];
+            if (fc_certificate) {
+                formData.append('fc_certificate', fc_certificate);
+            }
+            var insurance_policy = $('#insurance_policy')[0].files[0];
+            if (insurance_policy) {
+                formData.append('insurance_policy', insurance_policy);
+            }
+            var tax_details = $('#tax_details')[0].files[0];
+            if (tax_details) {
+                formData.append('tax_details', tax_details);
+            }
+            var permit_details = $('#permit_details')[0].files[0];
+            if (permit_details) {
+                formData.append('permit_details', permit_details);
+            }
+            var emission_test = $('#emission_test')[0].files[0];
+            if (emission_test) {
+                formData.append('emission_test', emission_test);
+            } 
+
+            if (!Vehicle_Number || !color || !model || !owner || !vehicle_type  || !vehicle_status ||! commission_type ||!insurance_expiry || !drive_status) {
+                alert("All fields are required.");
+                valid = false;
+            }
+            
+            $.ajax({
+                url: '{% url "check_vehicleno" %}',
+                type: "GET",
+                data: { Vehicle_Number: Vehicle_Number },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("Vehicle Number already exists.");
+                    } else {
+                $.ajax({
+                    url: '{% url "addvehicle" %}',
+                    type: "POST",
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        alert("Vehicle added successfully");
+                        location.href = '{% url "vehiclelist" %}';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+
+        $("#registration_certificate, #fc_certificate, #insurance_policy, #tax_details,  #permit_details, #emission_test").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result).show();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+</script>
+
+{% endblock content %}

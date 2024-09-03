@@ -1,0 +1,391 @@
+{% extends 'quality/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'qindex' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'qridelist' %}">View Rides</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Add Ride Details</h4> -->
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Company Format</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Ride Type</label>
+                        <div class="col-sm-10">
+                            <select id="ridetype" name="ridetype" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Ride Type</option>
+                                {% for obj in ridetypelist %}
+                                <option value="{{ obj.ridetype_id }}">{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Source</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="source" name="source" maxlength="1000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Destination</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="destination" name="destination" maxlength="1000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Pick up Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control form-control-lg" id="pickup_date" name="pickup_date">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Pick up Time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control form-control-lg" id="pickup_time" name="pickup_time">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
+                        <div class="col-sm-10">
+                            <select name="select" id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for obj in catlist %}
+                                <option value={{obj.category_id}}>{{obj.category_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand</label>
+                        <div class="col-sm-10">
+                            <select name="select" id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
+                                <option value="" selected disabled>Select Brand</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Model</label>
+                        <div class="col-sm-10">
+                            <select name="select" id="model" name="model" class="form-control form-control-lg" >
+                                <option value="" selected disabled>Select Model</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Fare</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Phone Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" maxlength="10" placeholder="Enter Phone Number" autocomplete="off">
+                            <div id="phone_number_list" class="dropdown-menu"></div>
+                        </div>
+                    </div>                    
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name" placeholder="Enter Customer Name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Enter Email">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Address</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control form-control-lg" id="address" name="address" placeholder="Enter Address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Notes</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control form-control-lg" id="customer_notes" name="customer_notes" ></textarea>
+                        </div>
+                    </div>
+                    
+                    <input type="hidden" id="customer_id" name="customer_id">
+                    
+                    <!-- Add Ride button -->
+                    <div class="form-group row">
+                        <div class="col-sm-10 offset-sm-2">
+                            <button type="button" class="btn btn-primary" id="save_action">Save Ride</button>
+                        </div>
+                    </div>
+                    
+                    
+
+                    <!-- <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    // Set the minimum date to today's date
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        document.getElementById('pickup_date').setAttribute('min', today);
+    });
+</script>
+
+<script>
+    function getbrand() {
+        $('#brand')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Brand</option>');
+        
+        const category = $('#category').val();
+        '{% for obj in blist %}'
+        if ('{{ obj.category.category_id }}' == category) {
+            $('#brand').append('<option value="{{ obj.brand_id }}">{{ obj.brand_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    function getmodel() {
+        $('#model')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Model</option>');
+        
+        const brand = $('#brand').val();
+        '{% for obj in modellist %}'
+        if ('{{ obj.brand.brand_id }}' == brand) {
+            $('#model').append('<option value="{{ obj.model_id }}">{{ obj.model_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+</script>
+
+
+<script>
+  $(document).ready(function() {
+    $('#phone_number').on('keyup', function() {
+        var phoneNumber = $(this).val();
+        var phoneList = $('#phone_number_list');
+        
+        if (phoneNumber.length >= 2) {
+            $.ajax({
+                url: '{% url "search_phone_numbers" %}',
+                type: "GET",
+                data: {
+                    phone_number: phoneNumber
+                },
+                success: function(response) {
+                    phoneList.empty();
+                    if (response.success) {
+                        if (response.customers.length > 0) {
+                            $.each(response.customers, function(index, customer) {
+                                phoneList.append('<div class="dropdown-item phone-item" data-phone="' + customer.phone_number + '">' + customer.phone_number + ' - ' + customer.customer_name + '</div>');
+                            });
+                            phoneList.show();
+                        } else {
+                            phoneList.append('<div class="dropdown-item">Customer not found</div>');
+                            phoneList.show();
+                            clearCustomerDetails();
+                            enableCustomerDetails();
+                        }
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    clearCustomerDetails();
+                    disableCustomerDetails();
+                }
+            });
+        } else {
+            phoneList.hide();
+            clearCustomerDetails();
+            disableCustomerDetails();
+        }
+    });
+
+    $(document).on('click', '.phone-item', function() {
+        var phoneNumber = $(this).data('phone');
+        $('#phone_number').val(phoneNumber);
+        $('#phone_number_list').hide();
+
+        $.ajax({
+            url: '{% url "global_fetch_customer_details" %}',
+            type: "GET",
+            data: {
+                phone_number: phoneNumber
+            },
+            success: function(response) {
+                if (response.success) {
+                    $('#customer_name').val(response.customer.name);
+                    $('#email').val(response.customer.email);
+                    $('#address').val(response.customer.address);
+                    $('#customer_id').val(response.customer.id);
+                    disableCustomerDetails();
+                } else {
+                    alert(response.message);
+                    clearCustomerDetails();
+                    enableCustomerDetails();
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+                clearCustomerDetails();
+                enableCustomerDetails();
+            }
+        });
+    });
+
+    $(document).click(function(event) {
+        if (!$(event.target).closest('#phone_number_list').length && !$(event.target).is('#phone_number')) {
+            $('#phone_number_list').hide();
+        }
+    });
+
+    $("#save_action").click(function(event) {
+        event.preventDefault();
+        var company_format = $('#company_format').val();
+        var ridetype = $('#ridetype').val();
+        var source = $('#source').val();
+        var destination = $('#destination').val();
+        var pickup_date = $('#pickup_date').val();
+        var pickup_time = $('#pickup_time').val();
+        var model = $('#model').val();
+        var total_fare = $('#total_fare').val();
+        var customer = $('#customer_id').val();
+        var customer_notes = $('#customer_notes').val();
+        var ride_status = 'currentbookings';  // or get the appropriate value
+        var phone_number = $('#phone_number').val();
+        var customer_name = $('#customer_name').val();
+        var email = $('#email').val();
+        var address = $('#address').val();
+
+        // Validation for total_fare
+        if (total_fare <= 0 || total_fare < 10) {
+            alert('Total Fare must be a positive value greater than 0 and not a single digit.');
+            return false;
+        }
+
+        if (!ridetype || !total_fare || !model || !source || !destination || !pickup_time || !pickup_date || !phone_number || !customer_name ) {
+            alert("All fields are required.");
+        } else {
+            $.ajax({
+                url: '{% url "qaddbooking" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    company_format: company_format,
+                    ridetype: ridetype,
+                    source: source,
+                    destination: destination,
+                    pickup_date: pickup_date,
+                    pickup_time: pickup_time,
+                    model: model,
+                    total_fare: total_fare,
+                    customer: customer,
+                    customer_notes: customer_notes,
+                    ride_status: ride_status,
+                    phone_number: phone_number,
+                    customer_name: customer_name,
+                    email: email,
+                    address: address
+                },
+                success: function(result) {
+                    alert("Ride details added successfully");
+                    location.href = '{% url "qridelist" %}';
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+
+    function clearCustomerDetails() {
+        $('#customer_name').val('');
+        $('#email').val('');
+        $('#address').val('');
+        $('#customer_id').val('');
+    }
+
+    function enableCustomerDetails() {
+        $('#customer_name').prop('readonly', false);
+        $('#email').prop('readonly', false);
+        $('#address').prop('readonly', false);
+    }
+
+    function disableCustomerDetails() {
+        $('#customer_name').prop('readonly', true);
+        $('#email').prop('readonly', true);
+        $('#address').prop('readonly', true);
+    }
+});
+
+
+</script>
+
+<style>
+    #phone_number_list {
+    position: absolute;
+    /* width: calc(100% - 2px);  */
+    margin-top: 5px; 
+    margin-left: 15px;
+    z-index: 1000; 
+    background: white; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+}
+</style>
+
+{% endblock content %}

@@ -1,0 +1,118 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Vehicle Owner List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Company Id </th>
+                                    <th>Name </th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Document Verification Type</th>
+                                    <th>Document image</th>
+                                    <th>Status</th>
+                                    <th>Created On</th>
+                                    <th>Updated On</th>
+                                    <th>Created by</th>
+                                    <th>Updated by</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ i.company_format }}</td>
+                                    <td>{{ i.name }}</td>
+                                    <td>{{ i.phone_number }}</td>
+                                    <td>{{ i.email }}</td>
+                                    <td>{{ i.address }}</td>
+                                    <td>{{ i.document_verification_type }}</td>
+                                    <td>{{ i.document_link }}</td>
+                                    <td>
+                                        <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                            {{ i.status }}
+                                        </span>
+                                    </td>      
+                                    <td>{{ i.created_on }}</td>
+                                    <td>{{ i.updated_on }}</td>
+                                    <td>{{ i.created_by }}</td>
+                                    <td>{{ i.updated_by }}</td>
+                                    <td style="display: flex; justify-content: center; align-items: center;">
+                                        <!-- <a href="#" class="btn btn-primary"  onclick="EditVehicleowner('{{i.owner_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteVehicleowner('{{i.owner_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-warning" onclick="HistoryVehicleowner('{{i.owner_id}}')"><i class="fa fa-clock"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function DeleteVehicleowner(owner_id){
+        var action = confirm("Are you sure you want to delete this owner?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteVehicleowner" %}',
+              data: {
+                  'owner_id': owner_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("owner Deleted Successfully");
+                    window.location.href = "{% url 'viewvehicleowner' %}";
+                    $("#owner_id #i-" + owner_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditVehicleowner(owner_id) {
+        var action = confirm("Are you sure you want to edit this owner?");
+        if (action !== false) {
+            window.location.href = "EditVehicleowner/" + owner_id; // Add a slash here
+        }
+    };
+    function HistoryVehicleowner(owner_id) {
+        window.location.href = "adVehicleownerHistory/" + owner_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

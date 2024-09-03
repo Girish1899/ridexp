@@ -1,0 +1,195 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+ <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Price</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'pricinglist' %}" style="color: white;"><button  class="btn btn-primary">View Price</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <!-- <h4 class="card-title">Add Brand</h4> -->
+                            </div>
+                            <div class="card-body">
+                                <!-- <div class="basic-form"> -->
+                                    
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
+                                        <div class="col-sm-10">
+                                            <select id="category" name="category" class="form-control form-control-lg">
+                                                <option value="" selected disabled>Select Category</option>
+                                                {% for obj in catlist %}
+                                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Ride Type</label>
+                                        <div class="col-sm-10">
+                                            <select id="ridetype" name="ridetype" class="form-control form-control-lg">
+                                                <option value="" selected disabled>Select Ride Type</option>
+                                                {% for obj in rlist %}
+                                                <option value="{{ obj.ridetype_id }}">{{ obj.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Trip Type Radio Buttons (Initially Hidden) -->
+                                    <div class="form-group row" id="trip_type_section" style="display: none;">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
+                                        <div class="col-sm-10">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way">
+                                                <label class="form-check-label" for="one_way">One Way</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="trip_type" id="round_trip" value="round_trip">
+                                                <label class="form-check-label" for="round_trip">Round Trip</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control form-control-lg" id="car_type" name="car_type">
+                                                <option value="" selected disabled>Select Car Type</option>
+                                                <option >ac</option>
+                                                <option >non_ac</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Time Slot</label>
+                                        <div class="col-sm-10">
+                                            <select class="form-control form-control-lg" id="slots" name="slots">
+                                                <option value="" selected disabled>Select Time Slot</option>
+                                                <option value="12AM - 6AM">12AM - 6AM</option>
+                                                <option value="6AM - 12PM">6AM - 12PM</option>
+                                                <option value="12PM - 6PM">12PM - 6PM</option>
+                                                <option value="6PM - 12AM">6PM - 12AM</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    
+
+                                    
+                
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Beta</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control form-control-lg" id="driver_beta" name="driver_beta">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Toll Price</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control form-control-lg" id="toll_price" name="toll_price">
+                                        </div>
+                                    </div>
+
+                                    
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control form-control-lg" id="permit" name="permit">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price Per KM</label>
+                                        <div class="col-sm-10">
+                                            <input type="number" class="form-control form-control-lg" id="price_per_km" name="price_per_km">
+                                        </div>
+                                    </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                        </div>
+
+                                </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $('#trip_type_section').hide();
+
+        $('#ridetype').change(function () {
+            var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
+            if (selectedRideType.includes('out station')) {
+                $('#trip_type_section').show();
+            } else {
+                $('#trip_type_section').hide();
+            }
+        });
+
+        $("#save_action").click(function () {
+            var category = $('#category').val();
+            var ridetype = $('#ridetype').val();
+            var slots = $('#slots').val();
+            var driver_beta = $('#driver_beta').val();
+            var toll_price = $('#toll_price').val();
+            var car_type = $('#car_type').val();
+            var permit = $('#permit').val();
+            var price_per_km = $('#price_per_km').val();
+            var trip_type = $('input[name="trip_type"]:checked').val();
+
+            
+            if (!category || !ridetype || !price_per_km || !slots ) {
+                alert("All fields are required.");
+                return;
+            }
+            console.log("price_per_km :", price_per_km);
+
+          
+            $.ajax({
+                url: '{% url "addpricing" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: { ridetype : ridetype , category : category , price_per_km:price_per_km, slots: slots, driver_beta:driver_beta, toll_price:toll_price, car_type:car_type, trip_type:trip_type, permit:permit},
+                success: function (result) {
+                    console.log("result ***: ", result);
+                    alert("Prcing details added");
+                    location.href = "{% url 'pricinglist' %}";
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+             });
+        });
+    });
+</script>
+
+ {% endblock content%}    

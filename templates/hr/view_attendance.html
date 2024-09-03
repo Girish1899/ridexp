@@ -1,0 +1,98 @@
+{% extends 'hr/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'hrindex' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'addattendance' %}">Add Attendance</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Attendance List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                
+                                    <th>Employee Name</th>
+                                    <th>Employee Id</th>
+                                    <th>Attendance</th>
+                                    <th>Login Time</th>
+                                    <th>Logout Time </th>
+                                    <th>Duration</th>
+                                    <th>Created On</th>
+                                    <th>Updated On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for attendance in attendances %}
+                                <tr style="color: #030000;">
+                                    <td>{{ attendance.profile.user.username }}</td>
+                                    <td>{{ attendance.date }}</td>
+                                    <td>{{ attendance.mark_attendance }}</td>
+                                    <td>{{ attendance.login_time }}</td>
+                                    <td>{{ attendance.logout_time }}</td>
+                                    <td>{{ attendance.duration }}</td>
+                                    <td>{{ attendance.created_on }}</td>
+                                    <td>{{ attendance.updated_on }}</td>
+                                    <td style="display: flex; justify-content: center; align-items: center;">
+                                        <!-- <a href="#" class="btn btn-primary" onclick="EditAttendance('{{ attendance.attendance_Id }}')"><i class="fa fa-edit"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteAttendance('{{ attendance.attendance_Id }}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function DeleteAttendance(attendance_Id){
+        var action = confirm("Are you sure you want to delete this attendance?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteAttendance" %}',
+              data: {
+                  'attendance_Id': attendance_Id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Attendance Deleted Successfully");
+                    window.location.href = "{% url 'attendancelist' %}";
+                    $("#attendance_Id #i-" + attendance_Id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+
+</script>
+{% endblock content%}
+

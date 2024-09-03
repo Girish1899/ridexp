@@ -1,0 +1,239 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Local Package</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'view_localpackage' %}" style="color: white;"><button  class="btn btn-primary">View Local Package</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Category</label>
+                        <div class="col-sm-4">
+                            <select id="car_category" name="car_category" class="form-control form-control-lg">
+                                <option value="" selected disabled>* Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* City Name</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" id="city" name="city">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Package Name</label>
+                        <div class="col-sm-4">    
+                            <select class="form-control form-control-lg" id="package_name" name="package_name">
+                                <option value="">Select Local Package</option>
+                                <option value="2hrs20km">2 hrs 20km</option>
+                                <option value="3hrs30km">3 hrs 30km</option>
+                                <option value="4hrs40km">4 hrs 40km</option>
+                                <option value="5hrs50km">5 hrs 50km</option>
+                                <option value="6hrs60km">6 hrs 60km</option>
+                                <option value="7hrs70km">7 hrs 70km</option>
+                                <option value="8hrs80km">8 hrs 80km</option>
+                                <option value="12hrs150km">12 hrs 150km</option>
+                                <option value="nandihills8hrspackage">nandi hills 8hrs package</option>
+                            </select>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Company Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="company_commission" name="company_commission">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Min Amount Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="min_amount_ac" name="min_amount_ac">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Min Amount Non Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="min_amount_non_ac" name="min_amount_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Max km/day Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="max_km_per_day_ac" name="max_km_per_day_ac">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Max km/day Non AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="max_km_per_day_non_ac" name="max_km_per_day_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra hr charge Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_hr_charge_ac" name="extra_hr_charge_ac">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra hr charge Non Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_hr_charge_non_ac" name="extra_hr_charge_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra km charge Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_km_charge_ac" name="extra_km_charge_ac">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra km charge Non Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_km_charge_non_ac" name="extra_km_charge_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Driver Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_commission_percentage" name="driver_commission_percentage">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* GST Tax Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="gst_tax_percentage" name="gst_tax_percentage">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Driver Allowance</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_allowance" name="driver_allowance">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Additional Information</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control form-control-lg" id="additional_info" name="additional_info" ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Type</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="driver_per_km_commission_type" name="driver_per_km_commission_type">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_per_km_commission_charge" name="driver_per_km_commission_charge">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Dead Per KM Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="dead_per_km_charge" name="dead_per_km_charge">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var price_type = 'localpackage';  // Define ride_status here or fetch its value appropriately
+
+        $("#save_action").click(function () {
+            var city = $('#city').val();
+            var car_category = $('#car_category').val();
+            var package_name = $('#package_name').val();
+            var company_commission = $('#company_commission').val();
+            var min_amount_ac = $('#min_amount_ac').val();
+            var min_amount_non_ac = $('#min_amount_non_ac').val();
+            var max_km_per_day_ac = $('#max_km_per_day_ac').val();
+            var max_km_per_day_non_ac =$('#max_km_per_day_non_ac').val();
+            var extra_hr_charge_ac = $('#extra_hr_charge_ac').val();
+            var extra_hr_charge_non_ac = $('#extra_hr_charge_non_ac').val();
+            var extra_km_charge_ac = $('#extra_km_charge_ac').val();
+            var extra_km_charge_non_ac =$('#extra_km_charge_non_ac').val();
+            var driver_commission_percentage = $('#driver_commission_percentage').val();
+            var gst_tax_percentage = $('#gst_tax_percentage').val();
+            var driver_allowance = $('#driver_allowance').val();
+            var additional_info = $('#additional_info').val();
+            var driver_per_km_commission_type = $('#driver_per_km_commission_type').val();
+            var driver_per_km_commission_charge = $('#driver_per_km_commission_charge').val();
+            var dead_per_km_charge = $('#dead_per_km_charge').val();
+           
+            
+            // Add validation checks here
+            if (!price_type || !city || !car_category || !company_commission || !driver_commission_percentage) {
+                alert("All fields are required.");
+                return;
+            }
+
+            $.ajax({
+                url: '{% url "add_localpackage" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    price_type: price_type,
+                    city: city,
+                    car_category: car_category,
+                    package_name:package_name,
+                    company_commission: company_commission,
+                    min_amount_ac:min_amount_ac,
+                    min_amount_non_ac:min_amount_non_ac,
+                    max_km_per_day_ac:max_km_per_day_ac,
+                    max_km_per_day_non_ac:max_km_per_day_non_ac,
+                    extra_hr_charge_ac:extra_hr_charge_ac,
+                    extra_hr_charge_non_ac:extra_hr_charge_non_ac,
+                    extra_km_charge_ac:extra_km_charge_ac,
+                    extra_km_charge_non_ac:extra_km_charge_non_ac,
+                    driver_commission_percentage: driver_commission_percentage,
+                    gst_tax_percentage: gst_tax_percentage,
+                    driver_allowance:driver_allowance,
+                    additional_info: additional_info,
+                    driver_per_km_commission_type: driver_per_km_commission_type,
+                    driver_per_km_commission_charge: driver_per_km_commission_charge,
+                    dead_per_km_charge: dead_per_km_charge,
+
+                },
+                success: function (response) {
+                    // Handle success response
+                    alert("Local Package added successfully.");
+                    window.location.href = "{% url 'view_localpackage' %}";
+                },
+                error: function (response) {
+                    // Handle error response
+                    alert("Failed to add Local Package.");
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

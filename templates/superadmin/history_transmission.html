@@ -1,0 +1,58 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Transmission History for {{ transmission.transmission_name }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'TransmissionListView' %}" style="color: white;"><button  class="btn btn-primary">View Transmission</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Transmission Name</th>
+                                        <th>Created On/Created by</th>
+                                        <th>Updated By</th>
+                                        <th>Updated On</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.transmission_name }}</td>
+                                        <td>
+                                            <div>{{ record.created_on }}</div>
+                                            <div>{{ record.created_by }}</div>
+                                        </td>
+                                        <td style="color: green;">{{ record.updated_by }}</td>
+                                        <td style="color: red">{{ record.updated_on }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

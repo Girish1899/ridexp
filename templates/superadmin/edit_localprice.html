@@ -1,0 +1,634 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Ride Pricing</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'view_localprice' %}" style="color: white;"><button  class="btn btn-primary">View Ride Pricings</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="ride_pricing_id" name="ride_pricing_id" value="{{ rp.0.ride_pricing_id }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">City</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" id="city" name="city" value="{{rp.0.city}}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Type</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="car_category" name="car_category">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <!-- <option value="{{ obj.category_id }}" {% if rp.0.car_category == obj.category_id %}selected{% endif %}>{{ obj.category_name }}</option> -->
+                                <option value="{{obj.category_id}}" {% if obj.category_id == rp.0.car_category.brand.category.category_id %} selected {% endif %}>{{obj.category_name}}</option>
+                                {% endfor %}                            
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Company Commission</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="company_commission" name="company_commission" value="{{ rp.0.company_commission }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Commission Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_commission_percentage" name="driver_commission_percentage" value="{{ rp.0.driver_commission_percentage }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">VAT Tax Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="vat_tax_percentage" name="vat_tax_percentage" value="{{ rp.0.vat_tax_percentage }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Waiting Time Per Minute Charge</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="waiting_time_per_min_charge" name="waiting_time_per_min_charge" value="{{ rp.0.waiting_time_per_min_charge }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Type</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="driver_per_km_commission_type" name="driver_per_km_commission_type">
+                                <option value="No" {% if rp.0.driver_per_km_commission_type == "No" %}selected{% endif %}>No</option>
+                                <option value="Yes" {% if rp.0.driver_per_km_commission_type == "Yes" %}selected{% endif %}>Yes</option>
+                            </select>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_per_km_commission_charge" name="driver_per_km_commission_charge" value="{{ rp.0.driver_per_km_commission_charge }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Dead Per KM Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="dead_per_km_charge" name="dead_per_km_charge" value="{{ rp.0.dead_per_km_charge }}">
+                        </div>
+                    </div>
+                    
+<hr>
+                    <!--Cutomer Day Time Ride Non AC -->
+                    <h5 style="color: #454545; font-size: 18px; margin-top: 20px;">Day Time Ride (Non AC)</h5>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Base Fare Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_base_fare_non_ac" name="customer_day_base_fare_non_ac" value="{{ rp.0.customer_day_base_fare_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Per Minute Charge Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_per_min_charge_non_ac" name="customer_day_per_min_charge_non_ac" value="{{ rp.0.customer_day_per_min_charge_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price 0-5 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_0_5_km_non_ac" name="customer_day_price_0_5_km_non_ac" value="{{ rp.0.customer_day_price_0_5_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price 5-10 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_5_10_km_non_ac" name="customer_day_price_5_10_km_non_ac" value="{{ rp.0.customer_day_price_5_10_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price 10-15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_10_15_km_non_ac" name="customer_day_price_10_15_km_non_ac" value="{{ rp.0.customer_day_price_10_15_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price Above 15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_above_15_km_non_ac" name="customer_day_price_above_15_km_non_ac" value="{{ rp.0.customer_day_price_above_15_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <!--  -->
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Base Fare Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_base_fare_non_ac" name="driver_day_base_fare_non_ac" value="{{ rp.0.driver_day_base_fare_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Per Minute Charge Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_per_min_charge_non_ac" name="driver_day_per_min_charge_non_ac" value="{{ rp.0.driver_day_per_min_charge_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price 0-5 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_0_5_km_non_ac" name="driver_day_price_0_5_km_non_ac" value="{{ rp.0.driver_day_price_0_5_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price 5-10 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_5_10_km_non_ac" name="driver_day_price_5_10_km_non_ac" value="{{ rp.0.driver_day_price_5_10_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price 10-15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_10_15_km_non_ac" name="driver_day_price_10_15_km_non_ac" value="{{ rp.0.driver_day_price_10_15_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price Above 15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_above_15_km_non_ac" name="driver_day_price_above_15_km_non_ac" value="{{ rp.0.driver_day_price_above_15_km_non_ac }}">
+                        </div>
+                    </div><hr>
+                    
+                    <!-- Customer Night Time Ride Non AC -->
+                    <h5 style="color: #454545; font-size: 18px; margin-top: 20px;">Night Time Ride (Non AC)</h5>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Base Fare Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_base_fare_non_ac" name="customer_night_base_fare_non_ac" value="{{ rp.0.customer_night_base_fare_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Per Minute Charge Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_per_min_charge_non_ac" name="customer_night_per_min_charge_non_ac" value="{{ rp.0.customer_night_per_min_charge_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price 0-5 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_0_5_km_non_ac" name="customer_night_price_0_5_km_non_ac" value="{{ rp.0.customer_night_price_0_5_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price 5-10 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_5_10_km_non_ac" name="customer_night_price_5_10_km_non_ac" value="{{ rp.0.customer_night_price_5_10_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price 10-15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_10_15_km_non_ac" name="customer_night_price_10_15_km_non_ac" value="{{ rp.0.customer_night_price_10_15_km_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price Above 15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_above_15_km_non_ac" name="customer_night_price_above_15_km_non_ac" value="{{ rp.0.customer_night_price_above_15_km_non_ac }}">
+                        </div>
+                    </div><hr>
+                    
+                    <!-- Driver Night Time Ride Non AC -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Base Fare Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_base_fare_non_ac" name="driver_night_base_fare_non_ac" value="{{ rp.0.driver_night_base_fare_non_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Per Minute Charge Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_per_min_charge_non_ac" name="driver_night_per_min_charge_non_ac" value="{{ rp.0.driver_night_per_min_charge_non_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price 0-5 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_0_5_km_non_ac" name="driver_night_price_0_5_km_non_ac" value="{{ rp.0.driver_night_price_0_5_km_non_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price 5-10 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_5_10_km_non_ac" name="driver_night_price_5_10_km_non_ac" value="{{ rp.0.driver_night_price_5_10_km_non_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price 10-15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_10_15_km_non_ac" name="driver_night_price_10_15_km_non_ac" value="{{ rp.0.driver_night_price_10_15_km_non_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price Above 15 KM Non AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_above_15_km_non_ac" name="driver_night_price_above_15_km_non_ac" value="{{ rp.0.driver_night_price_above_15_km_non_ac }}">
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- Customer Day Time Ride AC -->
+                    <h5 style="color: #454545; font-size: 18px; margin-top: 20px;">Day Time Ride (AC)</h5>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Base Fare AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_base_fare_ac" name="customer_day_base_fare_ac" value="{{ rp.0.customer_day_base_fare_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Per Minute Charge AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_per_min_charge_ac" name="customer_day_per_min_charge_ac" value="{{ rp.0.customer_day_per_min_charge_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price 0-5 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_0_5_km_ac" name="customer_day_price_0_5_km_ac" value="{{ rp.0.customer_day_price_0_5_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price 5-10 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_5_10_km_ac" name="customer_day_price_5_10_km_ac" value="{{ rp.0.customer_day_price_5_10_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price 10-15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_10_15_km_ac" name="customer_day_price_10_15_km_ac" value="{{ rp.0.customer_day_price_10_15_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Day Price Above 15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_day_price_above_15_km_ac" name="customer_day_price_above_15_km_ac" value="{{ rp.0.customer_day_price_above_15_km_ac }}">
+                        </div>
+                    </div>
+                    <hr>
+                     <!-- Driver Day Time Ride AC -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Base Fare AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_base_fare_ac" name="driver_day_base_fare_ac" value="{{ rp.0.driver_day_base_fare_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Per Minute Charge AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_per_min_charge_ac" name="driver_day_per_min_charge_ac" value="{{ rp.0.driver_day_per_min_charge_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price 0-5 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_0_5_km_ac" name="driver_day_price_0_5_km_ac" value="{{ rp.0.driver_day_price_0_5_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price 5-10 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_5_10_km_ac" name="driver_day_price_5_10_km_ac" value="{{ rp.0.driver_day_price_5_10_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price 10-15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_10_15_km_ac" name="driver_day_price_10_15_km_ac" value="{{ rp.0.driver_day_price_10_15_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Day Price Above 15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_day_price_above_15_km_ac" name="driver_day_price_above_15_km_ac" value="{{ rp.0.driver_day_price_above_15_km_ac }}">
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- Customer Night Time Ride AC -->
+                    <h5 style="color: #454545; font-size: 18px; margin-top: 20px;">Night Time Ride (AC)</h5>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Base Fare AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_base_fare_ac" name="customer_night_base_fare_ac" value="{{ rp.0.customer_night_base_fare_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Per Minute Charge AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_per_min_charge_ac" name="customer_night_per_min_charge_ac" value="{{ rp.0.customer_night_per_min_charge_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price 0-5 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_0_5_km_ac" name="customer_night_price_0_5_km_ac" value="{{ rp.0.customer_night_price_0_5_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price 5-10 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_5_10_km_ac" name="customer_night_price_5_10_km_ac" value="{{ rp.0.customer_night_price_5_10_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price 10-15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_10_15_km_ac" name="customer_night_price_10_15_km_ac" value="{{ rp.0.customer_night_price_10_15_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Night Price Above 15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_night_price_above_15_km_ac" name="customer_night_price_above_15_km_ac" value="{{ rp.0.customer_night_price_above_15_km_ac }}">
+                        </div>
+                    </div>
+                    <hr>
+
+                    <!-- Driver Night Time Ride AC -->
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Base Fare AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_base_fare_ac" name="driver_night_base_fare_ac" value="{{ rp.0.driver_night_base_fare_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Per Minute Charge AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_per_min_charge_ac" name="driver_night_per_min_charge_ac" value="{{ rp.0.driver_night_per_min_charge_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price 0-5 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_0_5_km_ac" name="driver_night_price_0_5_km_ac" value="{{ rp.0.driver_night_price_0_5_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price 5-10 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_5_10_km_ac" name="driver_night_price_5_10_km_ac" value="{{ rp.0.driver_night_price_5_10_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price 10-15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_10_15_km_ac" name="driver_night_price_10_15_km_ac" value="{{ rp.0.driver_night_price_10_15_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Price Above 15 KM AC</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_price_above_15_km_ac" name="driver_night_price_above_15_km_ac" value="{{ rp.0.driver_night_price_above_15_km_ac }}">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+$(document).ready(function () {
+    $("#save_action").click(function (event) {
+        event.preventDefault();
+        var price_type = 'localprice';  // Define ride_status here or fetch its value appropriately
+
+        // Gather all form values using document.getElementById
+        var ride_pricing_id = document.getElementById('ride_pricing_id').value;
+        var city = document.getElementById('city').value;
+        var car_category = document.getElementById('car_category').value;
+        var company_commission = document.getElementById('company_commission').value;
+        var driver_commission_percentage = document.getElementById('driver_commission_percentage').value;
+        var vat_tax_percentage = document.getElementById('vat_tax_percentage').value;
+        var waiting_time_per_min_charge = document.getElementById('waiting_time_per_min_charge').value;
+        var driver_per_km_commission_type = document.getElementById('driver_per_km_commission_type').value;
+        var dead_per_km_charge = document.getElementById('dead_per_km_charge').value;
+        var driver_per_km_commission_charge = document.getElementById('driver_per_km_commission_charge').value;
+
+        // Day Time Ride Non AC
+        var customer_day_base_fare_non_ac = document.getElementById('customer_day_base_fare_non_ac').value;
+        var customer_day_per_min_charge_non_ac = document.getElementById('customer_day_per_min_charge_non_ac').value;
+        var customer_day_price_0_5_km_non_ac = document.getElementById('customer_day_price_0_5_km_non_ac').value;
+        var customer_day_price_5_10_km_non_ac = document.getElementById('customer_day_price_5_10_km_non_ac').value;
+        var customer_day_price_10_15_km_non_ac = document.getElementById('customer_day_price_10_15_km_non_ac').value;
+        var customer_day_price_above_15_km_non_ac = document.getElementById('customer_day_price_above_15_km_non_ac').value;
+        
+        var driver_day_base_fare_non_ac = document.getElementById('driver_day_base_fare_non_ac').value;
+        var driver_day_per_min_charge_non_ac = document.getElementById('driver_day_per_min_charge_non_ac').value;
+        var driver_day_price_0_5_km_non_ac = document.getElementById('driver_day_price_0_5_km_non_ac').value;
+        var driver_day_price_5_10_km_non_ac = document.getElementById('driver_day_price_5_10_km_non_ac').value;
+        var driver_day_price_10_15_km_non_ac = document.getElementById('driver_day_price_10_15_km_non_ac').value;
+        var driver_day_price_above_15_km_non_ac = document.getElementById('driver_day_price_above_15_km_non_ac').value;
+
+        // Night Time Ride Non AC
+        var customer_night_base_fare_non_ac = document.getElementById('customer_night_base_fare_non_ac').value;
+        var customer_night_per_min_charge_non_ac = document.getElementById('customer_night_per_min_charge_non_ac').value;
+        var customer_night_price_0_5_km_non_ac = document.getElementById('customer_night_price_0_5_km_non_ac').value;
+        var customer_night_price_5_10_km_non_ac = document.getElementById('customer_night_price_5_10_km_non_ac').value;
+        var customer_night_price_10_15_km_non_ac = document.getElementById('customer_night_price_10_15_km_non_ac').value;
+        var customer_night_price_above_15_km_non_ac = document.getElementById('customer_night_price_above_15_km_non_ac').value;
+
+        var driver_night_base_fare_non_ac = document.getElementById('driver_night_base_fare_non_ac').value;
+        var driver_night_per_min_charge_non_ac = document.getElementById('driver_night_per_min_charge_non_ac').value;
+        var driver_night_price_0_5_km_non_ac = document.getElementById('driver_night_price_0_5_km_non_ac').value;
+        var driver_night_price_5_10_km_non_ac = document.getElementById('driver_night_price_5_10_km_non_ac').value;
+        var driver_night_price_10_15_km_non_ac = document.getElementById('driver_night_price_10_15_km_non_ac').value;
+        var driver_night_price_above_15_km_non_ac = document.getElementById('driver_night_price_above_15_km_non_ac').value;
+
+        // Day Time Ride AC
+        var customer_day_base_fare_ac = document.getElementById('customer_day_base_fare_ac').value;
+        var customer_day_per_min_charge_ac = document.getElementById('customer_day_per_min_charge_ac').value;
+        var customer_day_price_0_5_km_ac = document.getElementById('customer_day_price_0_5_km_ac').value;
+        var customer_day_price_5_10_km_ac = document.getElementById('customer_day_price_5_10_km_ac').value;
+        var customer_day_price_10_15_km_ac = document.getElementById('customer_day_price_10_15_km_ac').value;
+        var customer_day_price_above_15_km_ac = document.getElementById('customer_day_price_above_15_km_ac').value;
+
+        var driver_day_base_fare_ac = document.getElementById('driver_day_base_fare_ac').value;
+        var driver_day_per_min_charge_ac = document.getElementById('driver_day_per_min_charge_ac').value;
+        var driver_day_price_0_5_km_ac = document.getElementById('driver_day_price_0_5_km_ac').value;
+        var driver_day_price_5_10_km_ac = document.getElementById('driver_day_price_5_10_km_ac').value;
+        var driver_day_price_10_15_km_ac = document.getElementById('driver_day_price_10_15_km_ac').value;
+        var driver_day_price_above_15_km_ac = document.getElementById('driver_day_price_above_15_km_ac').value;
+
+        // Night Time Ride AC
+        var customer_night_base_fare_ac = document.getElementById('customer_night_base_fare_ac').value;
+        var customer_night_per_min_charge_ac = document.getElementById('customer_night_per_min_charge_ac').value;
+        var customer_night_price_0_5_km_ac = document.getElementById('customer_night_price_0_5_km_ac').value;
+        var customer_night_price_5_10_km_ac = document.getElementById('customer_night_price_5_10_km_ac').value;
+        var customer_night_price_10_15_km_ac = document.getElementById('customer_night_price_10_15_km_ac').value;
+        var customer_night_price_above_15_km_ac = document.getElementById('customer_night_price_above_15_km_ac').value;
+
+        var driver_night_base_fare_ac = document.getElementById('driver_night_base_fare_ac').value;
+        var driver_night_per_min_charge_ac = document.getElementById('driver_night_per_min_charge_ac').value;
+        var driver_night_price_0_5_km_ac = document.getElementById('driver_night_price_0_5_km_ac').value;
+        var driver_night_price_5_10_km_ac = document.getElementById('driver_night_price_5_10_km_ac').value;
+        var driver_night_price_10_15_km_ac = document.getElementById('driver_night_price_10_15_km_ac').value;
+        var driver_night_price_above_15_km_ac = document.getElementById('driver_night_price_above_15_km_ac').value;
+
+        // Confirm and send data
+        if (confirm("Are you sure you want to save these local price?")) {
+            $.ajax({
+                url: '{% url "updatelocalprice" %}',  // Update this URL to match your Django view
+                type: "POST",
+                data: {
+                    'ride_pricing_id':ride_pricing_id,
+                    'price_type':price_type,
+                    'city': city,
+                    'car_category': car_category,
+                    'company_commission': company_commission,
+                    'driver_commission_percentage': driver_commission_percentage,
+                    'vat_tax_percentage': vat_tax_percentage,
+                    'waiting_time_per_min_charge': waiting_time_per_min_charge,
+                    'driver_per_km_commission_type': driver_per_km_commission_type,
+                    'dead_per_km_charge': dead_per_km_charge,
+                    'driver_per_km_commission_charge': driver_per_km_commission_charge,
+
+                    // Day Time Ride Non AC
+                    'customer_day_base_fare_non_ac': customer_day_base_fare_non_ac,
+                    'customer_day_per_min_charge_non_ac': customer_day_per_min_charge_non_ac,
+                    'customer_day_price_0_5_km_non_ac': customer_day_price_0_5_km_non_ac,
+                    'customer_day_price_5_10_km_non_ac': customer_day_price_5_10_km_non_ac,
+                    'customer_day_price_10_15_km_non_ac': customer_day_price_10_15_km_non_ac,
+                    'customer_day_price_above_15_km_non_ac': customer_day_price_above_15_km_non_ac,
+                    
+                    'driver_day_base_fare_non_ac': driver_day_base_fare_non_ac,
+                    'driver_day_per_min_charge_non_ac': driver_day_per_min_charge_non_ac,
+                    'driver_day_price_0_5_km_non_ac': driver_day_price_0_5_km_non_ac,
+                    'driver_day_price_5_10_km_non_ac': driver_day_price_5_10_km_non_ac,
+                    'driver_day_price_10_15_km_non_ac': driver_day_price_10_15_km_non_ac,
+                    'driver_day_price_above_15_km_non_ac': driver_day_price_above_15_km_non_ac,
+
+                    // Night Time Ride Non AC
+                    'customer_night_base_fare_non_ac': customer_night_base_fare_non_ac,
+                    'customer_night_per_min_charge_non_ac': customer_night_per_min_charge_non_ac,
+                    'customer_night_price_0_5_km_non_ac': customer_night_price_0_5_km_non_ac,
+                    'customer_night_price_5_10_km_non_ac': customer_night_price_5_10_km_non_ac,
+                    'customer_night_price_10_15_km_non_ac': customer_night_price_10_15_km_non_ac,
+                    'customer_night_price_above_15_km_non_ac': customer_night_price_above_15_km_non_ac,
+
+                    'driver_night_base_fare_non_ac': driver_night_base_fare_non_ac,
+                    'driver_night_per_min_charge_non_ac': driver_night_per_min_charge_non_ac,
+                    'driver_night_price_0_5_km_non_ac': driver_night_price_0_5_km_non_ac,
+                    'driver_night_price_5_10_km_non_ac': driver_night_price_5_10_km_non_ac,
+                    'driver_night_price_10_15_km_non_ac': driver_night_price_10_15_km_non_ac,
+                    'driver_night_price_above_15_km_non_ac': driver_night_price_above_15_km_non_ac,
+
+                    // Day Time Ride AC
+                    'customer_day_base_fare_ac': customer_day_base_fare_ac,
+                    'customer_day_per_min_charge_ac': customer_day_per_min_charge_ac,
+                    'customer_day_price_0_5_km_ac': customer_day_price_0_5_km_ac,
+                    'customer_day_price_5_10_km_ac': customer_day_price_5_10_km_ac,
+                    'customer_day_price_10_15_km_ac': customer_day_price_10_15_km_ac,
+                    'customer_day_price_above_15_km_ac': customer_day_price_above_15_km_ac,
+
+                    'driver_day_base_fare_ac': driver_day_base_fare_ac,
+                    'driver_day_per_min_charge_ac': driver_day_per_min_charge_ac,
+                    'driver_day_price_0_5_km_ac': driver_day_price_0_5_km_ac,
+                    'driver_day_price_5_10_km_ac': driver_day_price_5_10_km_ac,
+                    'driver_day_price_10_15_km_ac': driver_day_price_10_15_km_ac,
+                    'driver_day_price_above_15_km_ac': driver_day_price_above_15_km_ac,
+
+                    // Night Time Ride AC
+                    'customer_night_base_fare_ac': customer_night_base_fare_ac,
+                    'customer_night_per_min_charge_ac': customer_night_per_min_charge_ac,
+                    'customer_night_price_0_5_km_ac': customer_night_price_0_5_km_ac,
+                    'customer_night_price_5_10_km_ac': customer_night_price_5_10_km_ac,
+                    'customer_night_price_10_15_km_ac': customer_night_price_10_15_km_ac,
+                    'customer_night_price_above_15_km_ac': customer_night_price_above_15_km_ac,
+
+                    'driver_night_base_fare_ac': driver_night_base_fare_ac,
+                    'driver_night_per_min_charge_ac': driver_night_per_min_charge_ac,
+                    'driver_night_price_0_5_km_ac': driver_night_price_0_5_km_ac,
+                    'driver_night_price_5_10_km_ac': driver_night_price_5_10_km_ac,
+                    'driver_night_price_10_15_km_ac': driver_night_price_10_15_km_ac,
+                    'driver_night_price_above_15_km_ac': driver_night_price_above_15_km_ac,
+                },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("local price updated successfully");
+                        window.location.href = "{% url 'view_localprice' %}";
+                    } else {
+                        alert("Failed to update local price: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    alert("An error occurred: " + xhr.responseText);
+                }
+            });
+        }
+    });
+});
+
+</script>
+
+{% endblock content %}

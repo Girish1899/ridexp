@@ -1,0 +1,100 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Vehicle Type List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Vehicle Type Id</th>
+                                    <th>Company Id</th>
+                                    <th>Vehicle Type Name</th>
+                                    <th>Created by</th>
+                                    <th>Updated by</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{i.vehicle_type_id}}</td>
+                                    <td>{{ i.company_format }}</td>
+                                    <td>{{ i.vehicle_type_name }}</td>
+                                    <td>{{ i.created_by }}</td>
+                                    <td>{{ i.updated_by }}</td>
+                                    <td >
+                                        <!-- <a href="#" class="btn btn-primary"  onclick="EditVtype('{{i.vehicle_type_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteVtype('{{i.vehicle_type_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-warning" onclick="HistoryVtype('{{i.vehicle_type_id}}')"><i class="fa fa-clock"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeleteVtype(vehicle_type_id){
+        var action = confirm("Are you sure you want to delete this Vehicle Type?");
+        if (action != false) {
+          $.ajax({
+              url: "Deletevehicletype",
+              data: {
+                  'vehicle_type_id': vehicle_type_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Vehicle Type Deleted Successfully");
+                    window.location.href = "{% url 'vehicletypeList' %}";
+                    $("#vehicle_type_id #i-" + vehicle_type_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditVtype(vehicle_type_id) {
+        var action = confirm("Are you sure you want to edit this Vehicle Type?");
+        if (action !== false) {
+            window.location.href = "Editvehicletype/" + vehicle_type_id; // Add a slash here
+        }
+    };
+    function HistoryVtype(vehicle_type_id) {
+        window.location.href = "adVtypeHistory/" + vehicle_type_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

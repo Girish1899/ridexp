@@ -1,0 +1,88 @@
+{% extends 'telecaller/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'indextel' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'telecalleraddcustomer' %}">Add Customer</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Customer List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Customer Id </th>
+                                    <th>Customer Name </th>
+                                    <th>Phone Number</th>
+                                    <th>Email</th>
+                                    <th>Address</th>
+                                    <th>Status</th>
+                                    <th>Created On/Created by</th>
+                                    <th>Modified On/Modified by</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ i.company_format }}</td>
+                                    <td>{{ i.customer_name }}</td>
+                                    <td>{{ i.phone_number }}</td>
+                                    <td>{{ i.email }}</td>
+                                    <td>{{ i.address }}</td>
+                                    <td><span class="badge badge-success">{{i.status}}</span></td>
+                                    <td style="color: red;">
+                                        <div>{{ i.created_on }}</div>
+                                        <div>{{ i.created_by }}</div>
+                                    </td>
+                                    <td>
+                                        <div>{{ i.updated_on }}</div>
+                                        <div>{{ i.updated_by }}</div>
+                                    </td>
+                                    <td >
+                                        <a href="#" class="btn btn-primary"  onclick="EditCustomer('{{i.customer_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+
+    function EditCustomer(customer_id) {
+        var action = confirm("Are you sure you want to edit this customer?");
+        if (action !== false) {
+            window.location.href = "telecallerEditCustomer/" + customer_id; // Add a slash here
+        }
+    };
+
+</script>
+{% endblock content%}
+

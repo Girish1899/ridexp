@@ -1,0 +1,237 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Completed Bookings</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Completed Bookings List</h4>
+                        <!-- <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="filterDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Filter by Date Range
+                            </button>                            
+                        </div> -->
+                    </div>
+					<div class="card-body">
+                        <div class="table-responsive">
+                            <div class="mb-3">
+                                <button id="download-excel" class="btn btn-success">Download Excel</button>
+                                <button id="download-csv" class="btn btn-primary">Download CSV</button>
+                                <button id="download-pdf" class="btn btn-danger">Download PDF</button>
+                            </div>
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address/ph No</th>
+                                        <th>Ridetype</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place</th>                              
+                                        <th>Total Fare</th>
+                                        <th>Category</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Created On/Created By/Modified On/Modified By</th>
+                                        <th>Print Invoice</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <!-- <td>{{ i.company_format }}</td> -->
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div style="color: green">{{ i.customer.phone_number }}</div>
+                                        </td>
+                                        <td>{{ i.ridetype.name }}</td>
+                                        <td>{{ i.source }}</td>
+                                        <td>{{ i.destination }}</td>
+                                        <td>{{ i.total_fare }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div style="color: red">{{ i.created_on }}</div>
+                                            <div style="color: red">{{ i.created_by }}</div>
+                                            <div>{{ i.updated_on }}</div>
+                                            <div>{{ i.updated_by }}</div>
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'adinvoice_view' i.ride_id %}" class="btn btn-primary">Invoice</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add the necessary scripts for export functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> 
+
+<script>
+document.getElementById('download-excel').addEventListener('click', function() {
+    const table = document.querySelector('#example');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+    XLSX.writeFile(wb, 'completed_bookings.xlsx');
+});
+
+document.getElementById('download-csv').addEventListener('click', function() {
+    const table = document.querySelector('#example');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+    XLSX.writeFile(wb, 'completed_bookings.csv', { bookType: 'csv' });
+});
+
+document.getElementById('download-pdf').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.autoTable({ html: '#example' });
+    doc.save('completed_bookings.pdf');
+});
+</script>
+
+<!-- <script>
+document.addEventListener('DOMContentLoaded', function() {
+    flatpickr('#filterDropdown', {
+        mode: 'range',
+        dateFormat: 'Y-m-d',
+        onChange: function (selectedDates, dateStr, instance) {
+            if (selectedDates.length === 2) {
+                const startDate = selectedDates[0].toISOString().split('T')[0];
+                const endDate = selectedDates[1].toISOString().split('T')[0];
+
+                $.ajax({
+                    type: 'GET',
+                    url: '{% url "adcompleted_bookings_filter" %}',
+                    data: {
+                        start_date: startDate,
+                        end_date: endDate
+                    },
+                    success: function (data) {
+                        const bookings = JSON.parse(data); // Parse the JSON string into an object
+
+                        // Clear existing table rows
+                        const tbody = document.querySelector('#example tbody');
+                        tbody.innerHTML = '';
+
+                        // Populate table with filtered data
+                        bookings.forEach(booking => {
+                            const fields = booking.fields;
+
+                            const row = document.createElement('tr');
+                            row.style.color = '#030000';
+
+                            const companyFormatCell = document.createElement('td');
+                            companyFormatCell.innerHTML = `
+                                <div>${fields.company_format}</div>
+                                <div style="color: blue;">${fields.pickup_time}</div>
+                                <div style="color: blue;">${fields.pickup_date}</div>
+                            `;
+                            row.appendChild(companyFormatCell);
+
+                            const customerCell = document.createElement('td');
+                            customerCell.innerHTML = `
+                                <div style="color: rgb(61, 148, 219);">${fields.customer}</div>
+                                <div>${fields.customer.customer_email}</div>
+                                <div style="color: rgb(61, 148, 219);">${fields.customer.customer_address}</div>
+                                <div style="color: green">${fields.customer.customer_phone}</div>
+                            `;
+                            row.appendChild(customerCell);
+
+                            const rideTypeCell = document.createElement('td');
+                            rideTypeCell.textContent = fields.ridetype;
+                            row.appendChild(rideTypeCell);
+
+                            const pickupPlaceCell = document.createElement('td');
+                            pickupPlaceCell.textContent = fields.source;
+                            row.appendChild(pickupPlaceCell);
+
+                            const dropPlaceCell = document.createElement('td');
+                            dropPlaceCell.textContent = fields.destination;
+                            row.appendChild(dropPlaceCell);
+
+                            const totalFareCell = document.createElement('td');
+                            totalFareCell.textContent = fields.total_fare;
+                            row.appendChild(totalFareCell);
+
+                            const categoryCell = document.createElement('td');
+                            categoryCell.textContent = fields.model;
+                            row.appendChild(categoryCell);
+
+                            const customerCommentsCell = document.createElement('td');
+                            customerCommentsCell.textContent = fields.customer_notes;
+                            row.appendChild(customerCommentsCell);
+
+                            const bookingDatetimeCell = document.createElement('td');
+                            bookingDatetimeCell.textContent = fields.booking_datetime;
+                            row.appendChild(bookingDatetimeCell);
+
+                            const createdOnCell = document.createElement('td');
+                            createdOnCell.innerHTML = `
+                                <div style="color: red">${fields.created_on}</div>
+                                <div style="color: red">${fields.created_by}</div>
+                                <div>${fields.updated_on}</div>
+                                <div>${fields.updated_by}</div>
+                            `;
+                            row.appendChild(createdOnCell);
+
+                            const printInvoiceCell = document.createElement('td');
+                            const invoiceLink = document.createElement('a');
+                            // invoiceLink.href = `/invoice/${rideId}/`;
+                            invoiceLink.className = 'btn btn-primary';
+                            invoiceLink.textContent = 'Invoice';
+                            printInvoiceCell.appendChild(invoiceLink);
+                            row.appendChild(printInvoiceCell);
+
+                            tbody.appendChild(row);
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+        }
+    });
+});
+
+</script> -->
+
+
+{% endblock %}

@@ -1,0 +1,248 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Local Package</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'view_localpackage' %}" style="color: white;"><button  class="btn btn-primary">View Local Package</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Category</label>
+                        <input type="hidden" class="form-control" id="ride_pricing_id" name="ride_pricing_id" value="{{ rp.0.ride_pricing_id }}">
+                        <div class="col-sm-4">
+                            <select id="car_category" name="car_category" class="form-control form-control-lg">
+                                <option value="" disabled>* Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == rp.0.car_category %}selected{% endif %}>{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* City Name</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" id="city" name="city" value="{{ rp.0.city }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Package Name</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="package_name" name="package_name">
+                                <option value="">Select Local Package</option>
+                                <option value="2hrs20km" {% if rp.0.package_name == '2hrs20km' %}selected{% endif %}>2 hrs 20km</option>
+                                <option value="3hrs30km" {% if rp.0.package_name == '3hrs30km' %}selected{% endif %}>3 hrs 30km</option>
+                                <option value="4hrs40km" {% if rp.0.package_name == '4hrs40km' %}selected{% endif %}>4 hrs 40km</option>
+                                <option value="5hrs50km" {% if rp.0.package_name == '5hrs50km' %}selected{% endif %}>5 hrs 50km</option>
+                                <option value="6hrs60km" {% if rp.0.package_name == '6hrs60km' %}selected{% endif %}>6 hrs 60km</option>
+                                <option value="7hrs70km" {% if rp.0.package_name == '7hrs70km' %}selected{% endif %}>7 hrs 70km</option>
+                                <option value="8hrs80km" {% if rp.0.package_name == '8hrs80km' %}selected{% endif %}>8 hrs 80km</option>
+                                <option value="12hrs150km" {% if rp.0.package_name == '12hrs150km' %}selected{% endif %}>12 hrs 150km</option>
+                                <option value="nandihills8hrspackage" {% if rp.0.package_name == 'nandihills8hrspackage' %}selected{% endif %}>Nandi Hills 8hrs Package</option>
+                            </select>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Company Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="company_commission" name="company_commission" value="{{ rp.0.company_commission }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Min Amount Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="min_amount_ac" name="min_amount_ac" value="{{ rp.0.min_amount_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Min Amount Non Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="min_amount_non_ac" name="min_amount_non_ac" value="{{ rp.0.min_amount_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Max km/day Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="max_km_per_day_ac" name="max_km_per_day_ac" value="{{ rp.0.max_km_per_day_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Max km/day Non AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="max_km_per_day_non_ac" name="max_km_per_day_non_ac" value="{{ rp.0.max_km_per_day_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra hr charge Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_hr_charge_ac" name="extra_hr_charge_ac" value="{{ rp.0.extra_hr_charge_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra hr charge Non Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_hr_charge_non_ac" name="extra_hr_charge_non_ac" value="{{ rp.0.extra_hr_charge_non_ac }}">
+                        </div>
+                    </div>
+                    
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra km charge Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_km_charge_ac" name="extra_km_charge_ac" value="{{ rp.0.extra_km_charge_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Extra km charge Non Ac</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="extra_km_charge_non_ac" name="extra_km_charge_non_ac" value="{{ rp.0.extra_km_charge_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Driver Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_commission_percentage" name="driver_commission_percentage" value="{{ rp.0.driver_commission_percentage }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* GST Tax Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="gst_tax_percentage" name="gst_tax_percentage" value="{{ rp.0.gst_tax_percentage }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Driver Allowance</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_allowance" name="driver_allowance" value="{{ rp.0.driver_allowance }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Additional Information</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control form-control-lg" id="additional_info" name="additional_info">{{ rp.0.additional_info }}</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Type</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="driver_per_km_commission_type" name="driver_per_km_commission_type">
+                                <option value="No" {% if rp.0.driver_per_km_commission_type == 'No' %}selected{% endif %}>No</option>
+                                <option value="Yes" {% if rp.0.driver_per_km_commission_type == 'Yes' %}selected{% endif %}>Yes</option>
+                            </select>
+                        </div>
+                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_per_km_commission_charge" name="driver_per_km_commission_charge" value="{{ rp.0.driver_per_km_commission_charge }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Dead Per KM Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="dead_per_km_charge" name="dead_per_km_charge" value="{{ rp.0.dead_per_km_charge }}">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+    var price_type = 'localpackage';  // Define price_type here or fetch its value appropriately
+
+    $("#save_action_local").click(function () {
+        var ride_pricing_id = document.getElementById('ride_pricing_id').value;
+        var city = document.getElementById('city').value;
+        var car_category = document.getElementById('car_category').value;
+        var package_name = document.getElementById('package_name').value;
+        var company_commission = document.getElementById('company_commission').value;
+        var min_amount_ac = document.getElementById('min_amount_ac').value;
+        var min_amount_non_ac = document.getElementById('min_amount_non_ac').value;
+        var max_km_per_day_ac = document.getElementById('max_km_per_day_ac').value;
+        var max_km_per_day_non_ac = document.getElementById('max_km_per_day_non_ac').value;
+        var extra_hr_charge_ac = document.getElementById('extra_hr_charge_ac').value;
+        var extra_hr_charge_non_ac = document.getElementById('extra_hr_charge_non_ac').value;
+        var extra_km_charge_ac = document.getElementById('extra_km_charge_ac').value;
+        var extra_km_charge_non_ac = document.getElementById('extra_km_charge_non_ac').value;
+        var driver_commission_percentage = document.getElementById('driver_commission_percentage').value;
+        var gst_tax_percentage = document.getElementById('gst_tax_percentage').value;
+        var driver_allowance = document.getElementById('driver_allowance').value;
+        var additional_info = document.getElementById('additional_info').value;
+        var driver_per_km_commission_type = document.getElementById('driver_per_km_commission_type').value;
+        var driver_per_km_commission_charge = document.getElementById('driver_per_km_commission_charge').value;
+        var dead_per_km_charge = document.getElementById('dead_per_km_charge').value;
+
+        // Add validation checks here if needed
+        // if (!price_type || !city || !car_category || !package_name || !company_commission || !min_amount_ac) {
+        //     alert("All fields are required.");
+        //     return;
+        // }
+
+        if (confirm("Are you sure you want to save these local price settings?")) {
+            $.ajax({
+                url: '{% url "updatelocalprice" %}',  // Update this URL to match your Django view
+                type: "POST",
+                data: {
+                    'price_type': price_type,
+                    'ride_pricing_id':ride_pricing_id,
+                    'city': city,
+                    'car_category': car_category,
+                    'package_name': package_name,
+                    'company_commission': company_commission,
+                    'min_amount_ac': min_amount_ac,
+                    'min_amount_non_ac': min_amount_non_ac,
+                    'max_km_per_day_ac': max_km_per_day_ac,
+                    'max_km_per_day_non_ac': max_km_per_day_non_ac,
+                    'extra_hr_charge_ac': extra_hr_charge_ac,
+                    'extra_hr_charge_non_ac': extra_hr_charge_non_ac,
+                    'extra_km_charge_ac': extra_km_charge_ac,
+                    'extra_km_charge_non_ac': extra_km_charge_non_ac,
+                    'driver_commission_percentage': driver_commission_percentage,
+                    'gst_tax_percentage': gst_tax_percentage,
+                    'driver_allowance': driver_allowance,
+                    'additional_info': additional_info,
+                    'driver_per_km_commission_type': driver_per_km_commission_type,
+                    'driver_per_km_commission_charge': driver_per_km_commission_charge,
+                    'dead_per_km_charge': dead_per_km_charge,
+                },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("Local price updated successfully");
+                        window.location.href = "{% url 'view_airportprice' %}";
+                    } else {
+                        alert("Failed to update local price: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    alert("An error occurred: " + xhr.responseText);
+                }
+            });
+        }
+    });
+});
+
+</script>
+{% endblock content %}

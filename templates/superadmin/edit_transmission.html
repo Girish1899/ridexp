@@ -1,0 +1,112 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<!--**********************************
+        Content body start
+    ***********************************-->
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row page-titles mx-0">
+                <div class="col-sm-6 p-md-0">
+                    <div class="welcome-text">
+                        <h4>Edit Car Transmission</h4>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                    <a href="{% url 'TransmissionListView' %}" style="color: white;"><button  class="btn btn-primary">View Transmission</button></a>
+                    <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- <h4 class="card-title">Edit Category</h4> -->
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <input type="hidden" class="form-control" id="transmission_id" name="transmission_id" value="{{ tlist.0.transmission_id }}">
+                            <input type="hidden" class="form-control" id="original_transmission_name" name="original_transmission_name" value="{{ tlist.0.transmission_name }}">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Transmission Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-lg" id="transmission_name" name="transmission_name" value="{{ tlist.0.transmission_name }}">
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var transmission_name = $('#transmission_name').val().trim().toLowerCase();
+            var transmission_id = $('#transmission_id').val();
+            var original_transmission_name = $('#original_transmission_name').val();
+            console.log("transmission_id:", transmission_id);
+
+            if (transmission_name.trim() === '') {
+                alert("Please enter transmission name.");
+                return;
+            }
+
+            if (transmission_name.trim() === original_transmission_name.trim()) {
+                submitForm(transmission_name, transmission_id);
+            } else {
+                $.ajax({
+                    url: "{% url 'check_transmission' %}",
+                    type: "GET",
+                    data: { 'transmission_name': transmission_name },
+                    success: function (data) {
+                        if (data.exists) {
+                            alert("Transmission name already exists.");
+                        } else {
+                            if (confirm("Are you sure you want to save this transmission?")) {
+                                submitForm(transmission_name, transmission_id);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+        });
+
+        function submitForm(transmission_name, transmission_id) {
+            $.ajax({
+                url: "{% url 'UpdateTransmission' %}",
+                type: "POST",
+                data: {
+                    'transmission_name': transmission_name,
+                    'transmission_id': transmission_id,
+                },
+                headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("Transmission details edited successfully");
+                        window.location.href = "{% url 'TransmissionListView' %}";
+                    } else {
+                        alert("Failed to edit transmission details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+</script>
+{% endblock content %}

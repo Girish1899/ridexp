@@ -1,0 +1,207 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'userlist' %}" style="color: white;"><button  class="btn btn-primary">View Admin</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Edit User</h4>
+                            </div>
+                            <div class="card-body">
+                                <!-- <div class="basic-form"> -->
+                                    
+                                        <div class="form-group row">
+                                            <input type="hidden" class="form-control" id="profile_id" name="profile_id" value="{{ userlist.0.profile_id }}"> 
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Admin Id</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ userlist.0.company_format }}" readonly>
+                                            </div>
+                                        </div>
+
+                                        <!-- Add the Username field -->
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Username</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="user_name" name="user_name" value="{{ userlist.0.user.username }}">
+                                            </div>
+                                        </div>
+
+                                        <!-- Add the Email field -->
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ userlist.0.user.email }}">
+                                            </div>
+                                        </div>
+
+                                        <!-- Password field (empty by default) -->
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Password</label>
+                                            <div class="col-sm-10">
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control form-control-lg" id="password" name="password" placeholder="Enter new password (leave blank to keep current password)">
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-outline-secondary" type="button" id="togglePassword" onclick="togglePasswordVisibility()">
+                                                            <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ userlist.0.phone_number }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                                            <div class="col-sm-10">                                            
+                                                <textarea class="form-control" rows="2" id="address" name="address">{{ userlist.0.address }}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select User Type</label>
+                                            <div class="col-sm-10">    
+                                            <select class="form-control form-control-lg" id="type" name="type">
+                                                <option value="" selected disabled>Select User Type</option>
+                                                <option value="admin" {% if userlist.0.type == "admin" %} selected {% endif %}>Admin</option>
+                                                <option value="telecaller" {% if userlist.0.type == "telecaller" %} selected {% endif %}>Telecaller</option>
+                                                <option value="quality" {% if userlist.0.type == "quality" %} selected {% endif %}>Quality</option>
+                                                <option value="distributer" {% if userlist.0.type == "distributer" %} selected {% endif %}>Distributer</option>
+                                                <option value="rescue" {% if userlist.0.type == "rescue" %} selected {% endif %}>Rescue</option>
+                                                <option value="driver" {% if userlist.0.type == "driver" %} selected {% endif %}>Driver</option>
+                                                <option value="hr" {% if userlist.0.type == "hr" %} selected {% endif %}>HR</option>
+                                            </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                                            <div class="col-sm-10">    
+                                            <select class="form-control form-control-lg" id="status" name="status">
+                                                <option value="" selected disabled>Select Status</option>
+                                                <option value="active" {% if userlist.0.status == "active" %} selected {% endif %}>Active</option>
+                                                <option value="inactive" {% if userlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                                            </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                        </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+function togglePasswordVisibility() {
+        var passwordField = document.getElementById("password");
+        var toggleIcon = document.getElementById("togglePasswordIcon");
+    
+        if (passwordField.type === "password") {
+            passwordField.type = "text";
+            toggleIcon.classList.remove("fa-eye");
+            toggleIcon.classList.add("fa-eye-slash");
+        } else {
+            passwordField.type = "password";
+            toggleIcon.classList.remove("fa-eye-slash");
+            toggleIcon.classList.add("fa-eye");
+        }
+    }
+
+$(document).ready(function () {
+    $("#save_action").click(function (event) {
+        event.preventDefault();
+        var profile_id = document.getElementById('profile_id').value;
+        var user_name = document.getElementById('user_name').value;
+        var phone_number = document.getElementById('phone_number').value;
+        var address = document.getElementById('address').value;
+        var email = document.getElementById('email').value;
+        var password = document.getElementById('password').value;
+        var type = document.getElementById('type').value;
+        var status = document.getElementById('status').value;
+
+        if (!phone_number || !address || !type || !status || !user_name || !email) {
+            alert("All fields are required.");
+            return;
+        }
+
+        // Validate phone number format
+        var phonePattern = /^[0-9]{10}$/;
+        if (!phonePattern.test(phone_number)) {
+            alert("Please enter a valid 10-digit phone number.");
+            return;
+        }
+
+        if (confirm("Are you sure you want to save this user?")) {
+            $.ajax({
+                url: '{% url "UpdateUser" %}',
+                type: "POST",
+                data: {
+                    'profile_id': profile_id,
+                    'user_name': user_name,
+                    'phone_number': phone_number,
+                    'address': address,
+                    'type': type,
+                    'status': status,
+                    'email': email,
+                    'password': password,  // Include password in the data
+                },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("User details edited successfully");
+                        window.location.href = "{% url 'userlist' %}";
+                    } else {
+                        alert("Failed to edit user details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    alert("An error occurred: " + xhr.responseText);
+                }
+            });
+        }
+    });
+});
+
+
+</script>
+
+
+{% endblock content %}

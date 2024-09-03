@@ -1,0 +1,49 @@
+"""taxipro URL Configuration
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/4.1/topics/http/urls/
+Examples:
+Function views
+    1. Add an import:  from my_app import views
+    2. Add a URL to urlpatterns:  path('', views.home, name='home')
+Class-based views
+    1. Add an import:  from other_app.views import Home
+    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
+Including another URLconf
+    1. Import the include() function: from django.urls import include, path
+    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
+"""
+from django.contrib import admin
+from django.urls import path,include, re_path
+from django.conf.urls.static import static
+from rescue import views
+from taxipro import settings
+from django.views.generic import TemplateView
+from taxipro.views import *
+from superadmin import views
+
+urlpatterns = [
+    # path('', views.login_view, name='login'),
+    path('', include('website.urls')),
+
+    path('logout/', views.logout_view, name='logout'),
+    path('admin/', admin.site.urls),
+    # path('', TemplateView.as_view(template_name='index.html')), 
+    path('superadmin/', include('superadmin.urls')),
+    path('adminuser/', include('adminuser.urls')),
+    path('rescue/', include('rescue.urls')),
+    path('customer/', include('customer.urls')),
+    path('quality/', include('quality.urls')),
+    path('telecaller/', include('telecaller.urls')),
+    path('distributer/', include('distributer.urls')),
+    path('addride', views.AddRidee.as_view(), name='addride'),
+    path('driver/', include('driver.urls')),
+    path('hr/', include('hr.urls')),
+
+    path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
+    path('global_fetch_customer_details_by_phone/',global_fetch_customer_details_by_phone,name='global_fetch_customer_details_by_phone'),
+
+    path('check_dphonenumber', check_dphonenumber, name='check_dphonenumber'),
+    path('global_fetch_vehicle_details/', global_fetch_vehicle_details, name='global_fetch_vehicle_details'),
+  
+    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

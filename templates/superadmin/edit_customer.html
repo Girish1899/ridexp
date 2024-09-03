@@ -1,0 +1,180 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Edit Customer</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'customerlist' %}" style="color: white;"><button  class="btn btn-primary">View Customer</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <!-- <h4 class="card-title">Edit Customer</h4> -->
+                            </div>
+                            <div class="card-body">
+                                <!-- <div class="basic-form"> -->
+                                    
+                                        <div class="form-group row">
+                                            <input type="hidden" class="form-control" id="customer_id" name="customer_id" value="{{ customerlist.0.customer_id }}"> 
+                                            <input type="hidden" class="form-control" id="original_phone_number" name="original_phone_number" value="{{ customerlist.0.phone_number }}">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Id</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ customerlist.0.company_format }}" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Customer Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name" value="{{ customerlist.0.customer_name }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ customerlist.0.phone_number }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ customerlist.0.email }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                                            <div class="col-sm-10">                                            
+                                                <textarea class="form-control" rows="2" id="address" name="address">{{ customerlist.0.address }}</textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                                            <div class="col-sm-10">    
+                                            <select class="form-control form-control-lg" id="status" name="status">
+                                                <option value="" selected disabled>Select Status</option>
+                                                <option value="active" {% if customerlist.0.status == "active" %} selected {% endif %}>Active</option>
+                                                <option value="inactive" {% if customerlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                                            </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                        </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+            var customer_id = document.getElementById('customer_id').value;
+            var company_format = document.getElementById('company_format').value;
+            var customer_name = document.getElementById('customer_name').value;
+            var phone_number = document.getElementById('phone_number').value;
+            var email = document.getElementById('email').value;
+            var address = document.getElementById('address').value;
+            var status = document.getElementById('status').value;
+            var original_phone_number = $('#original_phone_number').val();
+
+            if (!customer_name || !phone_number || !email ) {
+                alert("All fields are required.");
+                return;
+            }
+
+            // Validate phone number format
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone_number)) {
+                alert("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            // Validate email format
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            // Check if phone number already exists
+            $.ajax({
+                url: "{% url 'check_phonenumber' %}",
+                type: "GET",
+                data: { 'phone_number': phone_number },
+                success: function (response) {
+                    if (phone_number.trim() !== original_phone_number.trim() && response.exists) {
+                        alert("Phone number already exists.");
+                    } else {
+                        if (confirm("Are you sure you want to save this customer?")) {
+                            submitForm(customer_id, customer_name, company_format, phone_number, address, email, status);
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        });
+
+        function submitForm(customer_id, customer_name, company_format, phone_number, address, email, status) {
+            $.ajax({
+                url: '{% url "UpdateCustomer" %}',
+                type: "POST",
+                data: {
+                    'customer_id': customer_id,
+                    'customer_name': customer_name,
+                    'phone_number': phone_number,
+                    'email': email,
+                    'address': address,
+                    'status': status,
+                    'company_format': company_format,
+                },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("Customer details edited successfully");
+                        window.location.href = "{% url 'customerlist' %}";
+                    } else {
+                        alert("Failed to edit customer details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+</script>
+
+{% endblock content %}

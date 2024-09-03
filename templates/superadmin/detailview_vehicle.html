@@ -1,0 +1,210 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Detail Car View</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Edit Car</h4> -->
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Name</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ driver.name }}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Mobile</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ driver.phone_number }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Unique Number</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ vehicle.company_format }}" disabled>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ vehicle.model.brand.category.category_name }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ vehicle.model.brand.brand_name }}" disabled>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ vehicle.model.model_name }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg"  value="{% if vehicle.insurance_expiry %}{{ vehicle.insurance_expiry|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Registration Certificate</label>
+                        <div class="col-sm-4">
+                            {% if vehicle.registration_certificate %}
+                            <a href="{{ vehicle.registration_certificate.url }}" target="_blank">
+                                <img src="{{ vehicle.registration_certificate.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate</label>
+                        <div class="col-sm-4">
+                            {% if vehicle.fc_certificate %}
+                            <a href="{{ vehicle.fc_certificate.url }}" target="_blank">
+                                <img src="{{ vehicle.fc_certificate.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Policy</label>
+                        <div class="col-sm-4">
+                            {% if vehicle.insurance_policy %}
+                            <a href="{{ vehicle.insurance_policy.url }}" target="_blank">
+                                <img src="{{ vehicle.insurance_policy.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details</label>
+                        <div class="col-sm-4">
+                            {% if vehicle.tax_details %}
+                            <a href="{{ vehicle.tax_details.url }}" target="_blank">
+                                <img src="{{ vehicle.tax_details.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details</label>
+                        <div class="col-sm-4">
+                            {% if vehicle.permit_details %}
+                            <a href="{{ vehicle.permit_details.url }}" target="_blank">
+                                <img src="{{ vehicle.permit_details.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    <!-- </div> -->
+
+                    <!-- <div class="form-group row"> -->
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test</label>
+                        <div class="col-sm-4">
+                            {% if vehicle.emission_test %}
+                            <a href="{{ vehicle.emission_test.url }}" target="_blank">
+                                <img src="{{ vehicle.emission_test.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg"  value="{{ vehicle.commission_percentage }}" disabled>
+                        </div>
+                  
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ vehicle.Vehicle_Number }}" maxlength="10" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Register Date</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{% if vehicle.created_on %}{{ vehicle.created_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Image</label>
+                        <div class="col-sm-4">
+                                {% if vehicle.model.brand.category.image %}
+                                <a href="{{ vehicle.model.brand.category.image.url }}" target="_blank">
+                                <img src="{{ vehicle.model.brand.category.image.url }}" alt="Image" class="category-image" style="display: block; max-width: 100px; margin-top: 10px;">
+                                </a>
+                                {% else %}
+                                No Image
+                                {% endif %}
+                            </div>
+                        </div>
+
+                            <hr>
+                            <div class="welcome-text">
+                                <center><h4 style="color: blue;">Owner Details</h4></center>
+                            </div>
+                            <hr>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Owner Name</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-lg" value="{{ vehicle.owner.name }}" disabled>
+                            </div>
+                        
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                            <div class="col-sm-4">
+                                <input type="email" class="form-control form-control-lg" value="{{ vehicle.owner.email }}" disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control form-control-lg"  value="{{ vehicle.owner.phone_number }}" disabled>
+                            </div>
+                        
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                            <div class="col-sm-4">                                            
+                                <textarea class="form-control" rows="2" disabled>{{ vehicle.owner.address }}</textarea>
+                            </div>
+                        </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,98 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                    <a href="{% url 'addtransmission' %}" style="color: white;"><button  class="btn btn-primary">Add Car Transmission</button></a>
+                    <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Transmission List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Car Transmission Type</th>
+                                        <th>Created On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ i.transmission_name }}</td>                                        
+                                        <td>{{ i.created_on }}</td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <a href="#" class="btn btn-primary"  onclick="EditTransmission('{{i.transmission_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-secondary" onclick="DeleteTransmission('{{i.transmission_id}}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="HistoryTransmission('{{i.transmission_id}}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'transmission' i.transmission_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
+
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function DeleteTransmission(transmission_id){
+        var action = confirm("Are you sure you want to delete this transmission?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteTransmission" %}',
+              data: {
+                  'transmission_id': transmission_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Transmission Deleted Successfully");
+                    window.location.href = "{% url 'TransmissionListView' %}";
+                    $("#transmission_id #i-" + transmission_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditTransmission(transmission_id) {
+        var action = confirm("Are you sure you want to edit this transmission?");
+        if (action !== false) {
+            window.location.href = "EditTransmission/" + transmission_id; // Add a slash here
+        }
+    };
+
+    function HistoryTransmission(transmission_id) {
+        window.location.href = "TransmissionHistory/" + transmission_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

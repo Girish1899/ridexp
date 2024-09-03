@@ -1,0 +1,141 @@
+{% extends 'driver/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'driver_dashboard' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'driver_ride_list' driver_id=driver.company_format %}">Ride List</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Assigned Ride List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Company format</th>                                        
+                                        <th>Ridetype</th>
+                                        <th>Source</th>
+                                        <th>Destination</th>
+                                        <th>Pickup date</th>
+                                        <th>Pickup time</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Model</th>                                       
+                                        <th>Total Fare</th>
+                                        <th>Customer phone number</th>
+                                        <th>Customer name</th>
+                                        <th>Customer email</th>
+                                        <th>Customer address</th>
+                                        <th>Customer Notes</th>
+                                        <th>ride_status</th>
+                                        <th>booking datetime</th>
+                                        <th>Created On</th>
+                                        <th>Updated On</th>
+                                        <th>Created by</th>
+                                        <th>Updated by</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ i.company_format }}</td>
+                                        <td>{{ i.ridetype.name }}</td>
+                                        <td>{{ i.source }}</td>
+                                        <td>{{ i.destination }}</td>
+                                        <td>{{ i.pickup_date }}</td>
+                                        <td>{{ i.pickup_time }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.model.brand.brand_name }}</td>
+                                        <td>{{ i.model.model_name }}</td>
+                                        <td>{{ i.total_fare }}</td>
+                                        <td>{{ i.customer.phone_number }}</td>
+                                        <td>{{ i.customer.customer_name }}</td>
+                                        <td>{{ i.customer.email }}</td>
+                                        <td>{{ i.customer.address }}</td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.ride_status }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>{{ i.created_on }}</td>
+                                        <td>{{ i.updated_on }}</td>
+                                        <td>{{ i.created_by }}</td>
+                                        <td>{{ i.updated_by }}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-success start-ride-btn" data-ride-id="{{ i.ride_id }}">Start Ride</button>
+                                            <button type="button" class="btn btn-danger stop-ride-btn" data-ride-id="{{ i.ride_id }}">Stop Ride</button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        console.log("Document is ready!");
+
+        $('.start-ride-btn').click(function() {
+            const rideId = $(this).data('ride-id');
+            $.ajax({
+                url: '{% url "start_ride" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: JSON.stringify({ ride_id: rideId }),
+                contentType: 'application/json; charset=utf-8',
+                success: function(result) {
+                    console.log("Ride started successfully.");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+
+        $('.stop-ride-btn').click(function() {
+            const rideId = $(this).data('ride-id');
+            $.ajax({
+                url: '{% url "stop_ride" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: JSON.stringify({ ride_id: rideId }),
+                contentType: 'application/json; charset=utf-8',
+                success: function(result) {
+                    console.log("Ride stopped successfully.");
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

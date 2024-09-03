@@ -1,0 +1,124 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Vehicle List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Company Format</th>
+                                        <th>Vehicle Number</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Model</th>
+                                        <th>Color</th>
+                                        <th>Owner Name</th>
+                                        <th>Vehicle Type</th>
+                                        <th>Commission Type</th>
+                                        <th>Document Verification Type</th>
+                                        <th>Document Link</th>
+                                        <th>Vehicle Status</th>
+                                        <th>Created On</th>
+                                        <th>Updated On</th>
+                                        <th>Created by</th>
+                                        <th>Updated by</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ i.company_format }}</td>
+                                        <td>{{ i.Vehicle_Number }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.model.brand.brand_name }}</td>
+                                        <td>{{ i.model.model_name }}</td>
+                                        <td>{{ i.color }}</td>
+                                        <td>{{ i.owner.name }}</td>
+                                        <td>{{ i.vehicle_type.vehicle_type_name }}</td>
+                                        <td>{{ i.commission_type.commission_name }}</td>
+                                        <td>{{ i.document_verification_type }}</td>
+                                        <td>{{ i.document_link }}</td>
+                                        <td>
+                                            <span class="badge {% if i.model.brand.category.category_status == 'inactive' or i.owner.status == 'inactive' %}badge-danger{% else %}{% if i.vehicle_status == 'active' %}badge-success{% else %}badge-danger{% endif %}{% endif %}">
+                                                {% if i.model.brand.category.category_status == 'inactive' or i.model.brand.status == 'inactive' or i.model.status == 'inactive' or i.owner.status == 'inactive' %}
+                                                    inactive
+                                                {% else %}
+                                                    {{ i.vehicle_status }}
+                                                {% endif %}
+                                            </span>
+                                        </td>
+                                        <td>{{ i.created_on }}</td>
+                                        <td>{{ i.updated_on }}</td>
+                                        <td>{{ i.created_by }}</td>
+                                        <td>{{ i.updated_by }}</td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <!-- <a href="#" class="btn btn-primary" onclick="EditVehicle('{{ i.vehicle_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-secondary" onclick="DeleteVehicle('{{ i.vehicle_id }}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                            <a href="#" class="btn btn-warning" onclick="HistoryVehicle('{{i.vehicle_id}}')"><i class="fa fa-clock"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function DeleteVehicle(vehicle_id){
+        var action = confirm("Are you sure you want to delete this vehicle?");
+        if (action != false) {
+            $.ajax({
+                url: "{% url 'DeleteVehicle' %}",
+                data: {
+                    'vehicle_id': vehicle_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.deleted) {
+                        alert("Vehicle Deleted Successfully");
+                        window.location.href = "{% url 'vehiclelist' %}";
+                        $("#vehicle_id #i-" + vehicle_id).remove();
+                    }
+                }
+            });
+        }
+    }
+
+    function EditVehicle(vehicle_id) {
+        var action = confirm("Are you sure you want to edit this vehicle?");
+        if (action !== false) {
+            window.location.href = "EditVehicle/" + vehicle_id;
+        }
+    };
+
+    function HistoryVehicle(vehicle_id) {
+        window.location.href = "adVehicleHistory/" + vehicle_id; // Add a slash here
+    };
+</script>
+{% endblock content %}

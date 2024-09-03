@@ -1,0 +1,119 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Model List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Model Id</th>
+                                    <th>Category </th>
+                                    <th>Brand </th>
+                                    <th>Model Name</th>
+                                    <!-- <th>Price per KMs</th> -->
+                                    <th>Status</th>
+                                    <th>Created On</th>
+                                    <th>Updated On</th>
+                                    <th>Created by</th>
+                                    <th>Updated by</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ i.model_id }}</td>
+                                    <td>{{ i.brand.category.category_name }}</td>
+                                    <td>{{ i.brand.brand_name }}</td>
+                                    <td>{{ i.model_name }}</td>
+                                    <!-- <td>{{i.price_per_kms }}</td> -->
+                                    <td>
+                                        <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                            {% if i.brand.category.category_status == 'inactive' or i.brand.status == 'inactive' %}
+                                            inactive
+                                        {% else %}
+                                            {{ i.status }}
+                                        {% endif %}
+                                        </span>
+                                    </td>
+                                    <td>{{ i.created_on }}</td>
+                                    <td>{{ i.updated_on }}</td>
+                                    <td>{{ i.created_by }}</td>
+                                    <td>{{ i.updated_by }}</td>
+                                    <td >
+                                        <!-- <a href="#" class="btn btn-primary"  onclick="EditModel('{{i.model_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteModel('{{i.model_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-warning" onclick="HistoryModel('{{i.model_id}}')"><i class="fa fa-clock"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeleteModel(model_id){
+        var action = confirm("Are you sure you want to delete this Model?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteModel" %}',
+              data: {
+                  'model_id': model_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Model Deleted Successfully");
+                    window.location.href = "{% url 'ModelListView' %}";
+                    $("#model_id #i-" + model_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditModel(model_id) {
+        var action = confirm("Are you sure you want to edit this Model?");
+        if (action !== false) {
+            window.location.href = "EditModel/" + model_id; // Add a slash here
+        }
+    };
+    function HistoryModel(model_id) {
+        window.location.href = "adModelHistory/" + model_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

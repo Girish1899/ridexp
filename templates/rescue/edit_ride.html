@@ -1,0 +1,278 @@
+{% extends 'rescue/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Edit Ride Details</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'rescueindex' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'rescueridelist' %}">View Rides</a></li>
+                </ol>
+            </div>
+        </div>
+        
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Edit Ride Details</h4> -->
+                </div>
+                <input type="hidden" id="ride_id" name="ride_id" value="{{ ride.0.ride_id }}">
+                <input type="hidden" id="customer_id" name="customer" value="{{ ride.0.customer.id }}">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Booking Id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ ride.0.company_format }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Ride Type</label>
+                        <div class="col-sm-10">
+                            <select id="ridetype" name="ridetype" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Ride Type</option>
+                                {% for obj in ridetypelist %}
+                                <option value="{{ obj.ridetype_id }}" {% if obj.ridetype_id == ride.0.ridetype.ridetype_id %}selected{% endif %}>{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Source</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="source" name="source" value="{{ ride.0.source }}" maxlength="1000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Destination</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="destination" name="destination" value="{{ ride.0.destination }}" maxlength="1000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Pick up Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control form-control-lg" id="pickup_date" name="pickup_date" value="{% if ride.0.pickup_date %}{{ ride.0.pickup_date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Pick up Time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control form-control-lg" id="pickup_time" name="pickup_time" value="{% if ride.0.pickup_time %}{{ ride.0.pickup_time|time:'H:i' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
+                        <div class="col-sm-10">
+                            <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == ride.0.model.brand.category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand</label>
+                        <div class="col-sm-10">
+                            <select name="select" id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
+                                <option value="" selected disabled>Select Brand</option>
+                                {% for obj in blist %}
+                                <option value="{{obj.brand_id}}" {% if obj.brand_id == ride.0.model.brand.brand_id %} selected {% endif %}>{{obj.brand_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Model</label>
+                        <div class="col-sm-10">
+                            <select id="model" name="model" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Model</option>
+                                {% for obj in modellist %}
+                                <option value="{{ obj.model_id }}" {% if obj.model_id == ride.0.model.model_id %} selected {% endif %}>{{ obj.model_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Fare</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare" value="{{ ride.0.total_fare }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Phone Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ ride.0.customer.phone_number }}" maxlength="10" placeholder="Enter Customer Phone Number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name" value="{{ ride.0.customer.customer_name }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ ride.0.customer.email }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Address</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control form-control-lg" id="address" name="address" readonly>{{ ride.0.customer.address }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Notes</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control form-control-lg" id="customer_notes" name="customer_notes">{{ ride.0.customer_notes }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function getbrand() {
+        $('#brand')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Brand</option>');
+        
+        const category = $('#category').val();
+        '{% for obj in blist %}'
+        if ('{{ obj.category.category_id }}' == category) {
+            $('#brand').append('<option value="{{ obj.brand_id }}">{{ obj.brand_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    function getmodel() {
+        $('#model')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Model</option>');
+        
+        const brand = $('#brand').val();
+        '{% for obj in modellist %}'
+        if ('{{ obj.brand.brand_id }}' == brand) {
+            $('#model').append('<option value="{{ obj.model_id }}">{{ obj.model_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+</script>
+
+
+<script>
+
+$(document).ready(function() {
+        $('#phone_number').on('blur', function() {
+            var phoneNumber = $(this).val();
+            if (phoneNumber) {
+                $.ajax({
+                    url: '{% url "global_fetch_customer_details" %}',
+                    type: "GET",
+                    data: {
+                        phone_number: phoneNumber
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $('#customer_name').val(response.customer.name);
+                            $('#email').val(response.customer.email);
+                            $('#address').val(response.customer.address);
+                            $('#customer_id').val(response.customer.id);
+                        } else {
+                            alert('Customer not found');
+                            $('#customer_name').val('');
+                            $('#email').val('');
+                            $('#address').val('');
+                            $('#customer_id').val('');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+    $("#save_action").click(function(event) {
+        event.preventDefault();
+        var ride_id = $('#ride_id').val();
+        var ridetype = $('#ridetype').val();
+        var source = $('#source').val();
+        var destination = $('#destination').val();
+        var pickup_date = $('#pickup_date').val();
+        var pickup_time = $('#pickup_time').val();
+        var model = $('#model').val();
+        var total_fare = $('#total_fare').val();
+        var customer = $('#customer_id').val();
+        var customer_notes = $('#customer_notes').val();
+
+        if ( !ridetype || !total_fare || !model || !source || !destination || !pickup_time || !pickup_date || !customer) {
+            alert("All fields are required.");
+        } else {
+            $.ajax({
+                url: "{% url 'rescueUpdateRide' %}",
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    ride_id: ride_id,
+                    ridetype: ridetype,
+                    source: source,
+                    destination: destination,
+                    pickup_date: pickup_date,
+                    pickup_time: pickup_time,
+                    model: model,
+                    total_fare: total_fare,
+                    customer: customer,
+                    customer_notes: customer_notes,
+                },
+                success: function(result) {
+                    alert("Ride details updated successfully");
+                    location.href = '{% url "rescueridelist" %}';
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    alert("Failed to update ride details. Please try again.");
+                }
+            });
+        }
+    });
+    });
+</script>
+
+{% endblock content %}

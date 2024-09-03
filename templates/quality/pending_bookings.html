@@ -1,0 +1,309 @@
+{% extends 'quality/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Current Bookings</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'qindex' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'qaddride' %}">Add Ride</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Current Bookings List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address</th>
+                                        <th>Customer PhNo</th>
+                                        <th>Ridetype</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place</th>                              
+                                        <th>Total Fare</th>
+                                        <th>Category</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Created On/Created By/Modified On/Modified By</th>
+                                        <!-- <th>Action</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                        </td>
+                                        <td style="color: red">{{ i.customer.phone_number }}</td>
+                                        <td>{{ i.ridetype.name }}</td>
+                                        <td>{{ i.source }}</td>
+                                        <td>{{ i.destination }}</td>
+                                        <td>{{ i.total_fare }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div style="color: red">{{ i.created_on }}</div>
+                                            <div style="color: red">{{ i.created_by }}</div>
+                                            <div>{{ i.updated_on }}</div>
+                                            <div>{{ i.updated_by }}</div>
+                                        </td>
+                                        <!-- <td style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 200px;">
+                                            <a href="#" class="btn btn-primary btn-sm btn-custom-sm" onclick="EditRide('{{ i.ride_id }}')"><i class="fa fa-edit"></i></a>
+                                            <a href="#" class="btn btn-warning btn-sm btn-custom-sm" onclick="HistoryRide('{{i.ride_id}}')"><i class="fa fa-clock"></i></a>
+                                            <button type="button" class="btn btn-success btn-sm btn-custom-sm" data-toggle="modal" data-target="#assignDriverModal" data-ride-id="{{ i.ride_id }}">Assign Driver</button>
+                                            <button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#cancelBookingModal" data-ride-id="{{ i.ride_id }}">Cancel Booking</button>
+                                        </td>                                                                                                                       -->
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Driver Modal -->
+<div class="modal fade" id="assignDriverModal" tabindex="-1" role="dialog" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignDriverModalLabel">Assign Driver</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="driverTable" class="table table-striped">
+                        <thead>
+                            <tr style="color: #030000;">
+                                <th>Driver Name</th>
+                                <th>Vehicle Id</th>
+                                <th>Vehicle Number</th>
+                                <th>Category</th>
+                                <th>Phone Number</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for driver in drivers %}
+                            {% if driver.status == 'active' %}
+                            <tr style="color: #030000;">
+                                <td>{{ driver.name }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary assign-driver-btn" data-driver-id="{{ driver.company_format }}">
+                                        {{ driver.vehicle.company_format }}
+                                    </button>
+                                </td>
+                                <td>{{ driver.vehicle.Vehicle_Number }}</td>
+                                <td>{{ driver.vehicle.model.brand.category.category_name }}</td>
+                                <td>{{ driver.phone_number }}</td>
+                                <td>
+                                    <span class="badge badge-success">
+                                        {{ driver.status }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Booking Modal -->
+
+<div class="modal fade" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelBookingModalLabel">Cancel Booking</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="cancelRideId">
+                    <div class="form-group">
+                        <label for="cancelComments">Comments</label>
+                        <textarea class="form-control" id="comments" name="comments" rows="3" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger cancel-btn">Cancel Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Update data-comments attribute whenever textarea value changes
+        $('#comments').on('input', function() {
+            const comments = $(this).val();
+            $('.cancel-btn').attr('data-comments', comments);
+        });
+
+        // Handle cancel button click
+        $(document).on('click', '.cancel-btn', function() {
+            console.log("Submit button clicked!");
+
+            const comments = $(this).data('comments');
+            const rideId = $('#cancelBookingModal').data('ride-id');
+
+        console.log("comments: ", comments); // Debugging statement
+        console.log("Ride ID: ", rideId);     // Debugging statement
+
+        // Check if driverId is correctly retrieved
+        if (!comments) {
+            console.error("comments is missing");
+            alert("comments is missing.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "qcancel_ride" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ comments: comments, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                alert("Submitted successfully.");
+                location.reload(); // Reload page after successful assignment
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to assign driver.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#cancelBookingModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+
+});
+</script>
+
+<script>
+    
+    $(document).ready(function() {
+    console.log("Document is ready!");
+
+    // Assign Driver Button Click Event
+    $(document).on('click', '.assign-driver-btn', function() {
+        console.log("Assign driver button clicked!");
+
+        const driverId = $(this).data('driver-id');
+        const rideId = $('#assignDriverModal').data('ride-id');
+
+        console.log("Driver ID: ", driverId); // Debugging statement
+        console.log("Ride ID: ", rideId);     // Debugging statement
+
+        // Check if driverId is correctly retrieved
+        if (!driverId) {
+            console.error("Driver ID is missing");
+            alert("Driver ID is missing.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "qassign_driver" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ driver_id: driverId, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                alert("Driver assigned successfully.");
+                location.reload(); // Reload page after successful assignment
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to assign driver.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#assignDriverModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+});
+
+
+    function EditRide(ride_id) {
+    var action = confirm("Are you sure you want to edit this ride?");
+    if (action !== false) {
+        window.location.href = "qEditRide/" + ride_id;
+    }
+
+    function HistoryRide(ride_id) {
+        window.location.href = "qRideHistory/" + ride_id; // Add a slash here
+    };
+};    
+</script>
+<style>
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+
+</style>
+{% endblock content %}

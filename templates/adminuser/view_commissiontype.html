@@ -1,0 +1,102 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Commission List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Commission Name </th>
+                                    <th>Commission Type </th>
+                                    <th>Created On</th>
+                                    <th>Updated On</th>
+                                    <th>Created by</th>
+                                    <th>Updated by</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ i.commission_name }}</td>
+                                    <td>{{ i.commission_percentage }}</td>
+                                    <td>{{ i.created_on }}</td>
+                                    <td>{{ i.updated_on }}</td>
+                                    <td>{{ i.created_by }}</td>
+                                    <td>{{ i.updated_by }}</td>
+                                    <td >
+                                        <!-- <a href="#" class="btn btn-primary"  onclick="EditCommission('{{i.commission_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteCommission('{{i.commission_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-warning" onclick="HistoryCommission('{{i.commission_id}}')"><i class="fa fa-clock"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeleteCommission(commission_id){
+        var action = confirm("Are you sure you want to delete this commission details?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteCommission" %}',
+              data: {
+                  'commission_id': commission_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Commission Deleted Successfully");
+                    window.location.href = "{% url 'adcommissionlist' %}";
+                    $("#commission_id #i-" + commission_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditCommission(commission_id) {
+        var action = confirm("Are you sure you want to edit this commission?");
+        if (action !== false) {
+            window.location.href = "editcommission/" + commission_id; // Add a slash here
+        }
+    };
+    function HistoryCommission(commission_id) {
+        window.location.href = "adcommission_history/" + commission_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

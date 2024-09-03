@@ -1,0 +1,145 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'add_localprice' %}" style="color: white;"><button  class="btn btn-primary">Add Local Price</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Local Price List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Serial No</th>
+                                    <th>City Name</th>
+                                    <th>Vehicle Type</th>
+                                    <th>Commission Type/Driver Per Km Charge/Dead Per KM Charge</th>
+                                    <th>Commission(%)</th>
+                                    <th>Tax(%)</th>
+                                    <th>Customer Day Non Ac Charge</th>
+                                    <th>Customer Night Non Ac Charge</th>
+                                    <th>Customer Day Ac Charge</th>
+                                    <th>Customer Night Ac Charge</th>
+                                    <!-- <th>Created On</th>
+                                    <th>Updated On</th> -->
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.city }}</td>
+                                    <td>{{ i.car_category.brand.category.category_name }}</td>
+                                    <td>
+                                        <div>{{ i.driver_per_km_commission_type }}</div>
+                                        <div>{{ i.driver_per_km_commission_charge }}</div>
+                                        <div>{{ i.dead_per_km_charge }}</div>
+                                    </td>
+                                    <td>
+                                        <div><h6 style="color: blue;">Company:</h6>{{ i.company_commission }}</div>
+                                        <div><h6 style="color: red;">Driver:</h6>{{ i.driver_commission_percentage }}</div>
+                                    </td>
+                                    <td>{{ i.gst_tax_percentage }}</td>
+                                    <td>
+                                        <div>Base Fare:{{ i.customer_day_base_fare_non_ac }}</div>
+                                        <div>Price(0 to 5km):{{ i.customer_day_price_0_5_km_non_ac }}</div>
+                                        <div>Price(5 to 10km):{{ i.customer_day_price_5_10_km_non_ac }}</div>
+                                        <div>Price(10 to 15km):{{ i.customer_day_price_10_15_km_non_ac }}</div>
+                                        <div>Price(Above 15km):{{ i.customer_day_price_above_15_km_non_ac }}</div>
+                                        <div>Per Min Charges:{{ i.customer_day_per_min_charge_non_ac }}</div>
+                                    </td>
+                                    <td>
+                                        <div>Base Fare:{{ i.customer_night_base_fare_non_ac }}</div>
+                                        <div>Price(0 to 5km):{{ i.customer_night_price_0_5_km_non_ac }}</div>
+                                        <div>Price(5 to 10km):{{ i.customer_night_price_5_10_km_non_ac }}</div>
+                                        <div>Price(10 to 15km):{{ i.customer_night_price_10_15_km_non_ac }}</div>
+                                        <div>Price(Above 15km):{{ i.customer_night_price_above_15_km_non_ac }}</div>
+                                        <div>Per Min Charges:{{ i.customer_night_per_min_charge_non_ac }}</div>
+                                    </td>
+                                    <td>
+                                        <div>Base Fare:{{ i.customer_day_base_fare_ac }}</div>
+                                        <div>Price(0 to 5km):{{ i.customer_day_price_0_5_km_ac }}</div>
+                                        <div>Price(5 to 10km):{{ i.customer_day_price_5_10_km_ac }}</div>
+                                        <div>Price(10 to 15km):{{ i.customer_day_price_10_15_km_ac }}</div>
+                                        <div>Price(Above 15km):{{ i.customer_day_price_above_15_km_ac }}</div>
+                                        <div>Per Min Charges:{{ i.customer_day_per_min_charge_ac }}</div>
+                                    </td>
+                                    <td>
+                                        <div>Base Fare:{{ i.customer_night_base_fare_ac }}</div>
+                                        <div>Price(0 to 5km):{{ i.customer_night_price_0_5_km_ac }}</div>
+                                        <div>Price(5 to 10km):{{ i.customer_night_price_5_10_km_ac }}</div>
+                                        <div>Price(10 to 15km):{{ i.customer_night_price_10_15_km_ac }}</div>
+                                        <div>Price(Above 15km):{{ i.customer_night_price_above_15_km_ac }}</div>
+                                        <div>Per Min Charges:{{ i.customer_night_per_min_charge_ac }}</div>
+                                    </td>
+                                    <!-- <td>{{ i.created_on }}</td>
+                                    <td>{{ i.updated_on }}</td> -->
+                                    <td style="display: flex; justify-content: center; align-items: center;">
+                                        <a href="#" class="btn btn-primary"  onclick="EditLocalPrice('{{i.ride_pricing_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteLocalPrice('{{i.ride_pricing_id}}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeleteLocalPrice(ride_pricing_id){
+        var action = confirm("Are you sure you want to delete this Local price details?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "delete_localprice" %}',
+              data: {
+                  'ride_pricing_id': ride_pricing_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Local Price Deleted Successfully");
+                    window.location.href = "{% url 'view_localprice' %}";
+                    $("#ride_pricing_id #i-" + ride_pricing_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditLocalPrice(ride_pricing_id) {
+        var action = confirm("Are you sure you want to edit this Local price?");
+        if (action !== false) {
+            window.location.href = "editlocalprice/" + ride_pricing_id; // Add a slash here
+        }
+    };
+
+</script>
+{% endblock content%}
+

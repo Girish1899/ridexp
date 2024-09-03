@@ -1,0 +1,393 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Edit Booking Details</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'ridelist' %}" style="color: white;"><button  class="btn btn-primary">View Current Booking</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Edit Ride Details</h4> -->
+                </div>
+                <input type="hidden" id="ride_id" name="ride_id" value="{{ ride.0.ride_id }}">
+                <input type="hidden" id="customer_id" name="customer" value="{{ ride.0.customer.id }}">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Booking Id</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ ride.0.company_format }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Service Type</label>
+                        <div class="col-sm-10">
+                            <select id="ridetype" name="ridetype" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Service Type</option>
+                                {% for obj in ridetypelist %}
+                                <option value="{{ obj.ridetype_id }}" {% if obj.ridetype_id == ride.0.ridetype.ridetype_id %}selected{% endif %}>{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Location</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="source" name="source" value="{{ ride.0.source }}" maxlength="1000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Location</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="destination" name="destination" value="{{ ride.0.destination }}" maxlength="1000">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control form-control-lg" id="pickup_date" name="pickup_date" value="{% if ride.0.pickup_date %}{{ ride.0.pickup_date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control form-control-lg" id="pickup_time" name="pickup_time" value="{% if ride.0.pickup_time %}{{ ride.0.pickup_time|time:'H:i' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Category</label>
+                        <div class="col-sm-10">
+                            <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == ride.0.model.brand.category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Brand</label>
+                        <div class="col-sm-10">
+                            <select name="select" id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
+                                <option value="" selected disabled>Select Brand</option>
+                                {% for obj in blist %}
+                                <option value="{{obj.brand_id}}" {% if obj.brand_id == ride.0.model.brand.brand_id %} selected {% endif %}>{{obj.brand_name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Model</label>
+                        <div class="col-sm-10">
+                            <select id="model" name="model" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Model</option>
+                                {% for obj in modellist %}
+                                <option value="{{ obj.model_id }}" {% if obj.model_id == ride.0.model.model_id %} selected {% endif %}>{{ obj.model_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Total Fare</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare" value="{{ ride.0.total_fare }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Search Customer</label>
+                        <div class="col-sm-10">
+                            <select id="single-select" class="form-control form-control-lg" onchange="fetchCustomerDetails()">
+                                <option value="" disabled selected>Select Customer</option>
+                                {% for customer in customerlist %}
+                                <option value="{{ customer.company_format }}"
+                                    data-company-format="{{ customer.company_format }}"
+                                    data-phone-number="{{ customer.phone_number }}"
+                                    data-customer-name="{{ customer.customer_name }}" 
+                                    data-email="{{ customer.email }}"
+                                    data-address="{{ customer.address }}">
+                                    {{ customer.phone_number }} - {{ customer.customer_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">* Customer Phone Number</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ ride.0.customer.phone_number }}" maxlength="10" placeholder="Enter Customer Phone Number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">* Customer Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name" value="{{ ride.0.customer.customer_name }}" readonly>
+                        </div>
+                    </div>
+                      
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">* Customer Email</label>
+                        <div class="col-sm-10">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ ride.0.customer.email }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Address</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control form-control-lg" id="address" name="address" readonly>{{ ride.0.customer.address }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">Customer Notes</label>
+                        <div class="col-sm-10">
+                            <textarea class="form-control form-control-lg" id="customer_notes" name="customer_notes">{{ ride.0.customer_notes }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    // Set the minimum date to today's date
+    document.addEventListener('DOMContentLoaded', function() {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        document.getElementById('pickup_date').setAttribute('min', today);
+    });
+</script>
+
+<script>
+    function getbrand() {
+        $('#brand')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Brand</option>');
+        
+        const category = $('#category').val();
+        '{% for obj in blist %}'
+        if ('{{ obj.category.category_id }}' == category) {
+            $('#brand').append('<option value="{{ obj.brand_id }}">{{ obj.brand_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    function getmodel() {
+        $('#model')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Model</option>');
+        
+        const brand = $('#brand').val();
+        '{% for obj in modellist %}'
+        if ('{{ obj.brand.brand_id }}' == brand) {
+            $('#model').append('<option value="{{ obj.model_id }}">{{ obj.model_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+</script>
+
+<script>
+    function fetchCustomerDetails() {
+        var customerCompanyFormat = $('#single-select').val();
+
+        if (customerCompanyFormat) {
+            $.ajax({
+                url: '{% url "global_fetch_customer_details" %}',
+                type: "GET",
+                data: {
+                    customer_company_format: customerCompanyFormat
+                },
+                success: function (response) {
+                    if (response.success) {
+                        if (response.blocked) {
+                            alert('This customer is blocked and cannot book a ride.');
+                            $('#phone_number').val('');
+                            $('#customer_name').val('');
+                            $('#email').val('');
+                            $('#address').val('');
+                            $('#customer_id').val('');
+                        } else {
+                            // Populate the form fields with customer details
+                            $('#phone_number').val(response.customer.phone_number);
+                            $('#customer_name').val(response.customer.customer_name);
+                            $('#email').val(response.customer.email);
+                            $('#address').val(response.customer.address);
+                            $('#customer_id').val(response.customer.id);
+                        }
+                    } else {
+                        alert(response.message || 'Customer not found');
+                        // Clear fields if customer is not found
+                        $('#phone_number').val('');
+                        $('#customer_name').val('');
+                        $('#email').val('');
+                        $('#address').val('');
+                        $('#customer_id').val('');
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+    
+    $("#save_action").click(function(event) {
+        event.preventDefault();
+        var ride_id = $('#ride_id').val();
+        var company_format = $('#company_format').val();
+        var ridetype = $('#ridetype').val();
+        var source = $('#source').val();
+        var destination = $('#destination').val();
+        var pickup_date = $('#pickup_date').val();
+        var pickup_time = $('#pickup_time').val();
+        var model = $('#model').val();
+        var total_fare = $('#total_fare').val();
+        var customer = $('#customer_id').val();
+        var customer_notes = $('#customer_notes').val();
+        var ride_status = 'currentbookings';  // or get the appropriate value
+        var phone_number = $('#phone_number').val();
+        var customer_name = $('#customer_name').val();
+        var email = $('#email').val();
+        var address = $('#address').val();
+
+        // Validation for required fields
+        if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !brand || !model || !total_fare || !phone_number || !customer_name || !email ) {
+            alert('Please fill out all required fields.');
+            return false;
+        }
+
+        if (total_fare <= 0 || total_fare < 10) {
+            alert('Total Fare must be a positive value greater than 0 and not a single digit.');
+            return false;
+        }
+
+        if (!customer && phone_number) {
+            $.ajax({
+                url: '{% url "global_fetch_customer_details_by_phone" %}',  // New URL for fetching customer by phone number
+                type: "GET",
+                data: {
+                    phone_number: phone_number
+                },
+                success: function (response) {
+                    if (response.success) {
+                        if (response.blocked) {
+                            alert('This customer is blocked and cannot book a ride.');
+                        } else {
+                            // Populate the fields with customer details and submit the form
+                            $('#phone_number').val(response.customer.phone_number);
+                            $('#customer_name').val(response.customer.customer_name);
+                            $('#email').val(response.customer.email);
+                            $('#address').val(response.customer.address);
+                            $('#customer_id').val(response.customer.customer_id);
+                            customer = response.customer.customer_id;  // Ensure customer ID is updated
+                            submitForm();
+                        }
+                    } else {
+                        // If customer not found, still proceed with form submission
+                        $('#phone_number').val(phone_number);
+                        $('#customer_name').val(customer_name);
+                        $('#email').val(email);
+                        $('#address').val(address);
+                        $('#customer_id').val('');  // Clear customer_id if not found
+                        submitForm();
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        } else {
+            // If customer is already selected, proceed with form submission
+            submitForm();
+        }
+
+        function submitForm() {
+            $.ajax({
+                url: "{% url 'UpdateRide' %}",
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    ride_id: ride_id,
+                    company_format: company_format,
+                    ridetype: ridetype,
+                    source: source,
+                    destination: destination,
+                    pickup_date: pickup_date,
+                    pickup_time: pickup_time,
+                    model: model,
+                    total_fare: total_fare,
+                    customer: customer,
+                    customer_notes: customer_notes,
+                    ride_status: ride_status,
+                    phone_number: phone_number,
+                    customer_name: customer_name,
+                    email: email,
+                    address: address
+                },
+                success: function(result) {
+                    alert("Ride details updated successfully");
+                    location.href = '{% url "ridelist" %}';
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    });
+
+
+
+</script>
+
+<style>
+    #phone_number_list {
+    position: absolute;
+    /* width: calc(100% - 2px);  */
+    margin-top: 5px; 
+    margin-left: 15px;
+    z-index: 1000; 
+    background: white; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+}
+</style>
+
+{% endblock content %}

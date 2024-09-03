@@ -1,0 +1,213 @@
+{% extends 'quality/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Completed Bookings</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'qindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Completed Bookings List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="mb-3">
+                                <button id="download-excel" class="btn btn-success">Download Excel</button>
+                                <button id="download-csv" class="btn btn-primary">Download CSV</button>
+                                <button id="download-pdf" class="btn btn-danger">Download PDF</button>
+                            </div>
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address/ph No</th>
+                                        <th>Ridetype</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place</th>                              
+                                        <th>Total Fare</th>
+                                        <th>Category</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Created On/Created By/Modified On/Modified By</th>
+                                        <th>Quality Comment</th>
+                                        <th>Print Invoice</th>
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <!-- <td>{{ i.company_format }}</td> -->
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div style="color: green">{{ i.customer.phone_number }}</div>
+                                        </td>
+                                        <td>{{ i.ridetype.name }}</td>
+                                        <td>{{ i.source }}</td>
+                                        <td>{{ i.destination }}</td>
+                                        <td>{{ i.total_fare }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div style="color: red">{{ i.created_on }}</div>
+                                            <div style="color: red">{{ i.created_by }}</div>
+                                            <div>{{ i.updated_on }}</div>
+                                            <div>{{ i.updated_by }}</div>
+                                        </td>  
+                                        <td>
+                                            <div id="quality-comment-{{ i.ride_id }}">
+                                                {% if i.quality_comments %}
+                                                    <div>{{ i.quality_comments }}</div>
+                                                    <div style="color: rgb(61, 148, 219);">{{ i.verified_by }}</div>
+                                                    <div style="color: rgb(61, 148, 219);">{{ i.verified_on }}</div>
+                                                {% else %}
+                                                    <button id="add-comment-{{ i.ride_id }}" type="button" class="btn btn-success btn-sm btn-custom-sm" data-toggle="modal" data-target="#qualitycommentModal" data-ride-id="{{ i.ride_id }}">Add Comment</button>
+                                                {% endif %}
+                                            </div>
+                                        </td>                              
+                                        <td>
+                                            <a href="{% url 'qinvoice_view' i.ride_id %}" class="btn btn-primary">Invoice</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quality comment Modal -->
+
+<div class="modal fade" id="qualitycommentModal" tabindex="-1" role="dialog" aria-labelledby="qualitycommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qualitycommentModalLabel">Add Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="qualityRideId">
+                    <div class="form-group">
+                        <label for="qualityComments">Comments</label>
+                        <textarea class="form-control" id="quality_comments" name="quality_comments" rows="3" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger comment-btn">Submit Comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add the necessary scripts for export functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+
+<script>
+    $(document).ready(function() {
+    // Handle submit button click
+    $(document).on('click', '.comment-btn', function() {
+        const quality_comments = $('#quality_comments').val();
+        const rideId = $('#qualitycommentModal').data('ride-id');
+
+        console.log("Quality Comments: ", quality_comments); // Debugging statement
+        console.log("Ride ID: ", rideId); // Debugging statement
+
+        if (!quality_comments) {
+            console.error("Comments are missing");
+            alert("Please enter comments.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "quality_comments" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ quality_comments: quality_comments, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                alert("Submitted successfully.");
+                // Hide the "Add Comment" button and display the comment
+                $('#add-comment-' + rideId).hide(); // Hide the button
+                $('#quality-comment-' + rideId).html(`
+                    <div>${result.quality_comments}</div>
+                    <div style="color: rgb(61, 148, 219);">${result.verified_by}</div>
+                    <div style="color: rgb(61, 148, 219);">${result.verified_on}</div>
+                `); // Update the comment section
+                $('#quality-comment-' + rideId).show(); // Ensure the element is displayed
+
+                $('#qualitycommentModal').modal('hide'); // Hide the modal after submission
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to add comment.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#qualitycommentModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+});
+</script>
+
+<script>
+    document.getElementById('download-excel').addEventListener('click', function() {
+        const table = document.querySelector('#example');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+        XLSX.writeFile(wb, 'completed_bookings.xlsx');
+    });
+
+    document.getElementById('download-csv').addEventListener('click', function() {
+        const table = document.querySelector('#example');
+        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+        XLSX.writeFile(wb, 'completed_bookings.csv', { bookType: 'csv' });
+    });
+
+    document.getElementById('download-pdf').addEventListener('click', function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.autoTable({ html: '#example' });
+        doc.save('completed_bookings.pdf');
+    });
+</script>
+{% endblock %}
+
+

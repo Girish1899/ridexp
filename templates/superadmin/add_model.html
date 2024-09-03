@@ -1,0 +1,151 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Model</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'ModelListView' %}" style="color: white;"><button  class="btn btn-primary">View Model</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header"></div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Category</label>
+                        <div class="col-sm-10">
+                            <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Brand Name</label>
+                        <div class="col-sm-10">
+                            <select id="brand" name="brand" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Brand</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Model Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="model_name" name="model_name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-10">
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function getbrand() 
+    {
+        
+        $('#brand')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="null" selected disabled>Select Brand</option>')
+        .val('null');
+        category=document.getElementById('category').value;
+        console.log("^^^im comng here", category);
+        '{% for obj in blist %}'
+        console.log("---",'{{obj}}',category)
+        if('{{obj.category.category_id}}'==category)
+        {
+            console.log("im coming inside if");
+            $('#brand')
+            .find('option')
+            .end()
+            .append('<option value="'+'{{obj.brand_id}}'+'">'+'{{obj.brand_name}}'+'</option>')
+        }
+         '{% endfor %}'
+
+        // $('#pid').selectpicker();
+    }
+
+    function normalizeName(name) {
+        return name.trim().toLowerCase().replace(/\s+/g, '');
+    }
+
+    $(document).ready(function () {
+        var existingModels = {};
+        
+        '{% for model in models %}'
+        if (!existingModels["{{ model.brand.brand_id }}"]) {
+            existingModels["{{ model.brand.brand_id }}"] = [];
+        }
+        existingModels["{{ model.brand.brand_id }}"].push(normalizeName("{{ model.model_name|escapejs }}".toLowerCase()));
+        '{% endfor %}'
+        
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+            var category = $('#category').val();
+            var brand = $('#brand').val();
+            var model_name = $('#model_name').val().trim();
+            var normalized_model_name = normalizeName(model_name);
+            var status = $('#status').val();
+
+            if (!category || !brand || !model_name || !status) {
+                alert("All fields are required.");
+                return;
+            }
+
+            if (existingModels[brand] && existingModels[brand].includes(normalized_model_name)) {
+                alert("This model already exists for the selected brand.");
+                return;
+            }
+
+            if (confirm("Are you sure you want to save this model?")) {
+                $.ajax({
+                    url: '{% url "addmodel" %}',
+                    type: "POST",
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: {
+                        brand: brand,
+                        model_name: model_name,
+                        status: status
+                    },
+                    success: function (result) {
+                        alert("Model added successfully.");
+                        window.location.href = "{% url 'ModelListView' %}";
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock content %}

@@ -1,0 +1,26 @@
+{% load static %}
+   <!--************
+            Sidebar start
+        *************-->
+        <div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+
+                    <li><a href="{% url 'driverindex' %}" aria-expanded="false"><i class="icon icon-single-04"></i><span
+                        class="nav-text">Dashboard</span></a></li>
+
+                    
+
+                        <li><a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <i class="icon icon-form"></i><span class="nav-text">Ride Details</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'assigned_rides' %}">View Ride Details</a></li>
+                            </ul>
+                        </li>
+
+                    </li>              
+            </div>
+        </div>
+        <!--************
+            Sidebar end
+        *************-->

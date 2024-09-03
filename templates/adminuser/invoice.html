@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            color: #333;
+            background-color: #fff;
+            padding: 20px;
+        }
+
+        .invoice-content {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .invoice-header h2 {
+            margin: 0;
+            color: rgb(81, 177, 81);
+        }
+
+        .invoice-header p {
+            margin: 5px 0;
+            font-size: 14px;
+        }
+
+        .invoice-header hr {
+            border-top: 2px solid rgb(81, 177, 81);
+        }
+
+        .invoice-section {
+            margin: 20px 0;
+        }
+
+        .invoice-section h3 {
+            border-bottom: 2px solid rgb(81, 177, 81);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            color: rgb(81, 177, 81);
+        }
+
+        .invoice-section .detail-item {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+
+        .invoice-section .detail-item strong {
+            display: inline-block;
+            width: 150px;
+            color: rgb(81, 177, 81);
+        }
+
+        .invoice-footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .invoice-footer p {
+            margin: 5px 0;
+            font-size: 14px;
+            color:rgb(81, 177, 81);
+        }
+
+        /* Grid Layout for Invoice Sections */
+        .invoice-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 20px;
+        }
+
+        .invoice-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #fff;
+        background-color: #007bff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .invoice-btn:hover {
+        background-color: #0056b3;
+    }
+
+        
+    </style>
+</head>
+<body>
+    <div class="invoice-content">
+        <div class="invoice-header">
+            <div class="logo-container">
+                <!-- <img src="./images/logo.png" alt="Company Logo" class="company-logo"> -->
+            </div>
+            <h2>Deepam Taxi</h2>
+            <p>BTM 2nd Stage, Bengaluru, Karnataka 560076</p>
+            <p>Email: support@deepamtaxi.com | Phone: 080 4684 4684</p>
+            <hr>
+        </div>
+        <div class="invoice-section invoice-grid">
+            <div>
+                <h3>Customer Details</h3>
+                <div class="detail-item">
+                    <strong>Customer Name:</strong> {{ ride.customer.customer_name }}
+                </div>
+                <div class="detail-item">
+                    <strong>Email:</strong> {{ ride.customer.email }}
+                </div>
+                <div class="detail-item">
+                    <strong>Phone Number:</strong> {{ ride.customer.phone_number }}
+                </div>
+                <div class="detail-item">
+                    <strong>Customer Comments:</strong> {{ ride.customer_notes }}
+                </div>
+            </div>
+            <div>
+                <h3>Booking Details</h3>
+                <div class="detail-item">
+                    <strong>Booking ID:</strong> {{ ride.company_format }}
+                </div>
+                <div class="detail-item">
+                    <strong>Pickup Place:</strong> {{ ride.source }}
+                </div>
+                <div class="detail-item">
+                    <strong>Drop Place:</strong> {{ ride.destination }}
+                </div>
+                <div class="detail-item">
+                    <strong>Pickup Date:</strong> {{ ride.pickup_date }}
+                </div>
+                <div class="detail-item">
+                    <strong>Pickup Time:</strong> {{ ride.pickup_time }}
+                </div>
+                <div class="detail-item">
+                    <strong>Total Fare:</strong> {{ ride.total_fare }}
+                </div>
+            </div>
+        </div>
+        <div class="invoice-section">
+            <h3>Other Details</h3>
+            <div class="detail-item">
+                <strong>Booking Datetime:</strong> {{ ride.booking_datetime }}
+            </div>
+            <div class="detail-item">
+                <strong>Created On:</strong> {{ ride.created_on }}
+            </div>
+            <div class="detail-item">
+                <strong>Created By:</strong> {{ ride.created_by }}
+            </div>
+            <div class="detail-item">
+                <strong>Updated On:</strong> {{ ride.updated_on }}
+            </div>
+            <div class="detail-item">
+                <strong>Updated By:</strong> {{ ride.updated_by }}
+            </div>
+        </div>
+        <div class="invoice-footer">
+            <hr>
+            <p>Thank you for your business!</p>
+            <p>Deepam Taxi | support@deepamtaxi.com</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 20px;">
+        <button class="invoice-btn" onclick="window.print()">Print Invoice</button>
+    </div>
+</body>
+</html>

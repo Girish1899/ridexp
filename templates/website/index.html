@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <!-- meta tags -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+
+    <!-- title -->
+    <title>DeepamTaxi Services</title>
+
+    <!-- favicon -->
+    <link rel="icon" type="image/x-icon" href="{% static '/img/logo/favicon.png' %}">
+
+    <!-- css -->
+    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/all-fontawesome.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/magnific-popup.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/jquery.timepicker.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/nice-select.min.css' %}">
+    <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
+
+</head>
+{% block body %}
+<body>
+
+    <!-- preloader -->
+    <div class="preloader">
+        <div class="loader-ripple">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+    <!-- preloader end -->
+
+
+    <!-- header area -->
+    {% include "./header.html" %}
+    <!-- header area end -->
+    {% block body_content %}
+
+    {% endblock body_content %}
+    
+    <!-- footer area -->
+    {% include "./footer.html" %}
+    <!-- footer area end -->
+
+
+
+    <!-- scroll-top -->
+    <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
+    <!-- scroll-top end -->
+
+    {% endblock body %}
+
+    <!-- js -->
+   
+    <script src="{% static '/js/modernizr.min.js' %}"></script>
+    <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static '/js/imagesloaded.pkgd.min.js' %}"></script>
+    <script src="{% static '/js/jquery.magnific-popup.min.js' %}"></script>
+    <script src="{% static '/js/isotope.pkgd.min.js' %}"></script>
+    <script src="{% static '/js/jquery.appear.min.js' %}"></script>
+    <script src="{% static '/js/jquery.easing.min.js' %}"></script>
+    <script src="{% static '/js/owl.carousel.min.js' %}"></script>
+    <script src="{% static '/js/counter-up.js' %}"></script>
+    <script src="{% static '/js/jquery-ui.min.js' %}"></script>
+    <script src="{% static '/js/jquery.timepicker.min.js' %}"></script>
+    <script src="{% static '/js/jquery.nice-select.min.js' %}"></script>
+    <script src="{% static '/js/wow.min.js' %}"></script>
+    <script src="{% static '/js/main.js' %}"></script>
+    <script>
+
+          // Get the modal
+    var modal = document.getElementById('myModal');
+
+// Function to open the modal and load Google Form
+function openModal() {
+    var googleFormUrl = 'https://forms.gle/EUGWHRSqYExnpyzH6';
+    document.getElementById('googleFormFrame').src = googleFormUrl;
+    modal.style.display = "block";
+}
+
+// Function to close the modal
+function closeModal() {
+    modal.style.display = "none";
+}
+
+// Close the modal if user clicks outside of it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        closeModal();
+    }
+};
+
+
+
+// function openForm() {
+//     document.getElementById('googleFormFrame').src = 'https://forms.gle/EUGWHRSqYExnpyzH6';
+//     document.getElementById('googleFormFrame').style.display = 'block';
+// }
+        function initAutocomplete() {
+          const inputs = document.querySelectorAll('.autocomeple_g');
+    
+    
+          inputs.forEach(input => {
+          const autocomplete = new google.maps.places.Autocomplete(input);
+    
+          autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            }
+            console.log('Place details for', input.id, ':', place);
+            });
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        });
+
+
+
+      // Initialize datepicker
+    $('.date-picker').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        todayHighlight: true,
+        startDate: new Date() // Set start date to today
+    });
+
+    // Datepicker change event listener
+    $('.date-picker').change(function() {
+        var selectedDate = new Date($(this).val());
+        var today = new Date();
+
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            $(this).val(''); // Clear invalid date
+            $(this).addClass('is-invalid');
+            $('#dateError').text('Please select a future date.');
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).addClass('is-valid');
+            $('#dateError').text('');
+        }
+    });
+
+    // Timepicker validation event listener
+    $('.pickup-time').change(function() {
+        var selectedDate = new Date($('.date-picker').val());
+        var today = new Date();
+        var selectedTime = $(this).val();
+
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+            var now = new Date();
+            var selectedHours = parseInt(selectedTime.split(':')[0]);
+            var selectedMinutes = parseInt(selectedTime.split(':')[1]);
+            var currentHours = now.getHours();
+            var currentMinutes = now.getMinutes();
+            var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
+
+            // Check if the selected time is earlier than the current time
+        if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
+            $(this).val(''); // Clear invalid time
+            $(this).addClass('is-invalid');
+            $('#timeError').text('Please select a current or future time.');
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).addClass('is-valid');
+            $('#timeError').text('');
+        }
+    } else {
+        // If the date is in the future, any time is valid
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#timeError').text('');
+    }
+});
+
+    
+      </script>
+
+   
+
+</body>
+
+</html>

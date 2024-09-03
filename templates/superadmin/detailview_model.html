@@ -1,0 +1,92 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+ <!--**********************************
+            Content body start
+        ***********************************-->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Detail Car Model View</h4>
+                    <!-- <span class="ml-1">Element</span> -->
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Edit Car Model</h4> -->
+                </div>
+                <div class="card-body">
+                    <!-- <div class="basic-form"> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" value="{{ mlist.brand.category.category_name }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" value="{{ mlist.brand.brand_name }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" value="{{ mlist.model_name }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
+                        <div class="col-sm-10">
+                            {% if mlist.brand.category.category_status == "inactive" or mlist.brand.status == "inactive" %}
+                            <input type="text" class="form-control form-control-lg" value="Inactive" disabled>
+                            {% else %}
+                            <input type="text" class="form-control form-control-lg" value="{{ mlist.get_status_display }}" disabled>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created On</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{% if mlist.created_on %}{{ mlist.created_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated On</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{% if mlist.updated_on %}{{ mlist.updated_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created By</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" value="{{ mlist.created_by }}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated By</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg"  value="{{ mlist.updated_by }}" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

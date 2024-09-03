@@ -1,0 +1,1736 @@
+{% extends "./index.html" %}
+{% load static %}
+
+{% block body_content %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    .btn:hover {
+            background-color: var(--theme-color); 
+            color:white !important;
+            border: none;
+        }
+
+        /* CSS for modal */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+        }
+        .close {
+            color: #aaaaaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: #000;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        iframe {
+            width: 100%;
+            height: 600px; /* Adjust height as needed */
+            border: none; /* Remove border */
+        }
+
+        
+</style>
+
+    <main class="main">
+        <!-- hero slider -->
+        <div class="hero-section">
+            <div class="hero-slider owl-carousel owl-theme">
+                <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-12 col-lg-9 mx-auto">
+                                <div class="hero-content text-center">
+                                    <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
+                                        Deepam Taxi!</h6>
+                                    <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                        Airport Taxi at your service! Starts at  
+                                        <span>₹499</span>/- Pickup, <span>₹724</span>/- Drop 
+                                    </h1>
+                                    <p data-animation="fadeInLeft" data-delay=".75s">
+                                        Airport pickup for the time of 4:00 AM - 7:45 AM would cost Rs.499/- within 35km radius.
+                                    </p>
+                                    <div class="hero-btn justify-content-center" data-animation="fadeInUp"
+                                        data-delay="1s">
+                                        <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                        <a href="/services" class="theme-btn theme-btn2">Learn More<i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-single" style="background: url('static/img/slider/sl02.avif')">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-12 col-lg-9 mx-auto">
+                                <div class="hero-content text-center">
+                                    <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
+                                        Deepam Taxi!</h6>
+                                    <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                        Affordable 24/7 <span>Local Cabs</span> in Bangalore 
+                                    </h1>
+                                    <p data-animation="fadeInLeft" data-delay=".75s">
+                                        Deepam Taxi simplifies your local travel needs within Bangalore city. We offer affordable and 
+                                        reliable local taxi services, ensuring you pay less and travel more. Whether you need a ride across
+                                         town or a quick trip within the city limits, our 24/7 service is here for you. With timely pickups
+                                          and drops, coupled with exceptional 24x7 customer support, Deepam Taxi ensures a hassle-free and 
+                                          convenient local taxi experience in Bangalore.
+                                    </p>
+                                    <div class="hero-btn justify-content-center" data-animation="fadeInUp"
+                                        data-delay="1s">
+                                        <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                        <a href="/services" class="theme-btn theme-btn2">Learn More<i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-single" style="background: url('static/img/slider/sl03.avif')">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col-md-12 col-lg-9 mx-auto">
+                                <div class="hero-content text-center">
+                                    <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
+                                        Deepam Taxi!</h6>
+                                    <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                        Outstation Cabs in  <span>Bangalore</span> 
+                                    </h1>
+                                    <p data-animation="fadeInLeft" data-delay=".75s" id="book_now">
+                                        Plan your outstation travel from Bangalore with ease and affordability! Deepam Taxi offers a range of 
+                                        vehicles to suit your needs and budget, starting at just Rs. 9 per kilometer. Choose from hatchbacks, 
+                                        sedans, Innovas, SUVs, or even tempo travelers. Plus, enjoy the convenience of no check-post charges 
+                                        on one-way or round-trip bookings (terms and conditions apply). Our 24/7 booking service and customer
+                                         support ensure a smooth and hassle-free experience, complete with timely pickups and drops for your 
+                                         outstation journey.
+                                    </p>
+                                    <div class="hero-btn justify-content-center" data-animation="fadeInUp"
+                                        data-delay="1s" >
+                                        <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                        <a href="/services" class="theme-btn theme-btn2">Learn More<i
+                                                class="fas fa-arrow-right"></i></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- hero slider end -->
+
+        <!-- booking area -->
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+    <!-- Modal content -->
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span> <!-- Close button -->
+        <!-- Google Form iframe -->
+        <iframe id="googleFormFrame" src="" frameborder="0"></iframe>
+    </div>
+</div>
+        
+<div class="booking-area" >
+    <div class="container" style="background: white;
+    border-radius: 10px;
+    padding: 1%;">
+        <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport Transfer</button>
+        <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local Drop</button>
+        <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
+        <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
+        <div class="booking-form">
+            <h4 class="booking-title">Book Your Ride</h4>
+            <div id="Airport" class="tabcontent">
+                <form action="{% url 'search_url' %}" id="airportForm">
+                    <input type="hidden" name="ridetype" value="airport">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Pick Up Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_source" name="source">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Drop Off Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"
+                                id="Airport_destination" name="destination">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Date:</label>
+                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date">                                       
+                                <div id="dateError" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Time:</label>
+                                <input type="time" class="form-control pickup-time"  id="Airport_pickup_time" name="pickup_time">                                       
+                                <div id="timeError" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 align-self-end">
+                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+              </div>
+              
+              <div id="LocalDrop" class="tabcontent">
+                <form action="{% url 'search_url' %}" id="localDropForm">
+                    <input type="hidden" name="ridetype" value="local">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Pick Up Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_source" name="source">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Drop Off Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"
+                                id="LocalDrop_destination" name="destination">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Date:</label>
+                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalDrop_pickup_date" name="pickup_date">                                       
+                                <div id="dateError" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Time:</label>
+                                <input type="time" class="form-control pickup-time "  id="LocalDrop_pickup_time" name="pickup_time">                                       
+                            </div>
+                        </div>
+                        <div class="col-lg-2 align-self-end">
+                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+              </div>
+              
+              <div id="LocalPackage" class="tabcontent">
+                <form action="{% url 'search_url' %}" id="localPackageForm">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Pick Up Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_source" name="source">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Drop Off Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"
+                                id="LocalPackage_destination" name="destination">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Date:</label>
+                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalPackage_pickup_date" name="pickup_date">                                       
+                                <div id="dateError" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Time:</label>
+                                <input type="time" class="form-control pickup-time"  id="LocalPackage_pickup_time" name="pickup_time">                                       
+                            </div>
+                        </div>
+                        <div class="col-lg-2 align-self-end">
+                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                    class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                </form>
+              </div>
+              
+              <div id="Outstation" class="tabcontent">
+                <form action="{% url 'search_url' %}" id="outstationForm">
+                    <!-- Radio Buttons for Trip Type (Single Row) -->
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label>Trip Type:</label>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="one_way" name="trip_type" value="one_way" checked class="form-check-input">
+                                    <label for="one_way" class="form-check-label">One Way</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input type="radio" id="round_trip" name="trip_type" value="round_trip" class="form-check-input">
+                                    <label for="round_trip" class="form-check-label">Round Trip</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            
+                    <!-- Other Fields -->
+                    <div class="row">
+                        <!-- Pick Up Location -->
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Pick Up Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_source" name="source">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+            
+                        <!-- Drop Off Location -->
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Drop Off Location:</label>
+                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_destination" name="destination">
+                                <i class="far fa-location-dot"></i>
+                            </div>
+                        </div>
+            
+                        <!-- Pick Up Date -->
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Date:</label>
+                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_pickup_date" name="pickup_date">
+                                <div id="dateError" class="invalid-feedback"></div>
+                            </div>
+                        </div>
+            
+                        <!-- Pick Up Time -->
+                        <div class="col-lg-2">
+                            <div class="form-group">
+                                <label>Pick Up Time:</label>
+                                <input type="time" class="form-control pickup-time" id="Outstation_pickup_time" name="pickup_time">
+                            </div>
+                        </div>
+            
+                        <!-- Submit Button -->
+                        <div class="col-lg-2 align-self-end">
+                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+            
+                    <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
+                    <div class="row drop-fields" style="display:none;">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Drop Date:</label>
+                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_drop_date" name="drop_date">
+                            </div>
+                        </div>
+            
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label>Drop Time:</label>
+                                <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+                              
+        </div>
+    </div>
+</div>
+<!-- booking area end -->
+
+
+        <!-- about area -->
+        <div class="about-area py-120">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="about-left wow fadeInLeft" data-wow-delay=".25s">
+                            <div class="about-img">
+                                <img src="{% static '/img/about/01.png' %}" alt="">
+                            </div>
+                            <div class="about-experience">
+                                <div class="about-experience-icon">
+                                    <img src="{% static '/img/icon/taxi-booking.svg' %}" alt="">
+                                </div>
+                                <b>15+ Years Of <br> Quality Service</b>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="about-right wow fadeInRight" data-wow-delay=".25s">
+                            <div class="site-heading mb-3">
+                                <span class="site-title-tagline justify-content-start">
+                                    <i class="flaticon-drive"></i> About Us
+                                </span>
+                                <h2 class="site-title">
+                                    Your <span>Trusted</span> Transportation Partner in Bangalore  
+                                </h2>
+                            </div>
+                            <!-- <p class="about-text">
+                                There are many variations of passages of Lorem Ipsum available, but the majority have
+                                suffered alteration in some form, by injected humour.
+                            </p> -->
+                            <div class="about-list-wrapper">
+                                <ul class="about-list list-unstyled">
+                                    <li>
+                                        Founded in 2007, Deepam Taxi is a leading taxi and cab service in Bangalore, known for its commitment to customer satisfaction.
+                                    </li>
+                                    <li>
+                                        Choose from a wide range of vehicles to suit your needs, from A/C and Non A/C hatchbacks and sedans to Innovas, tempo travelers, and more.
+                                    </li>
+                                    <li>
+                                        Deepam Taxi understands the needs of corporate clients and offers tailored solutions for a hassle-free rental experience.
+                                    </li>
+                                    <li>
+                                        Deepam Taxi leverages its extensive experience to deliver top-quality car hire and leasing services.
+                                    </li>
+                                </ul>
+                            </div>
+                            <a href="/about" class="theme-btn mt-4">Discover More<i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- about area end -->
+
+        
+
+        <!-- service area -->
+        <div class="service-area bg py-120" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Services</span>
+                            <h2 class="site-title">Our Best Services For You</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/service04.jpg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/taxi.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/outstationcabs">Outstation Booking</a>
+                                </h3>
+                                <p class="service-text">
+                                    Book Outstation cabs in Bangalore at a reasonable cost to enjoy your holidays hassle-free drive.
+										
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/outstationcabs" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/service02.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/city-taxi.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/localtaxi">City Transport</a>
+                                </h3>
+                                <p class="service-text">
+                                    Rent car/cab at affordable rates for local trips from anywhere and at anytime @ Deepam Taxi.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/localtaxi" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/05.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/airport.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/airporttaxi">Airport Transport</a>
+                                </h3>
+                                <p class="service-text">
+                                    Hire Bangalore Airport taxi for Airport pickup & drop, Airport Round Trip in Bangalore at cheapest prices.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/airporttaxi" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/04.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/business.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/services">Business Transport</a>
+                                </h3>
+                                <p class="service-text">
+                                    We understand the importance of your business. Get an affordable & luxurious car rental service anywhere in the city.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/services" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/05.avif' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/taxi-2.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/services">Holiday Packages</a>
+                                </h3>
+                                <p class="service-text">
+                                    Deepam Cab provides the most reliable and economical rental car in the city for best holiday package.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/services" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/06.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/taxi.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/services">Wedding Parties</a>
+                                </h3>
+                                <p class="service-text">
+                                    Book a Cab for best wedding car rental to celebrate the wedding party in style and elegance.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/services" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- service area end-->
+
+
+        <!-- taxi area -->
+        <div class="taxi-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Our Taxi</span>
+                            <h2 class="site-title">Let's Check Available Taxi</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-controls">
+                    <ul class="filter-btns">
+                        <li class="active" data-filter="*">All Taxi</li>
+                        <li data-filter=".cat1">Hatchback Taxi</li>
+                        <li data-filter=".cat2">Sedan Taxi</li>
+                        <li data-filter=".cat3">Suv Taxi</li>
+                        <li data-filter=".cat4">Large Vehicles</li>
+                    </ul>
+                </div>
+                <div class="row filter-box">
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/01.png' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Hatchback Models</h4>
+                                    <span>250 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-car-side-bolt"></i> Taxi Doors: <span>4</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>3/4</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/022.jpg' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Sedan Model</h4>
+                                    <span>250 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-car-side-bolt"></i> Taxi Doors: <span>4</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>3/4</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/04.avif' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Sedan Model</h4>
+                                    <span>250 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-car-side-bolt"></i> Taxi Doors: <span>4</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>3/4</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat3">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/05555.jpg' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>SUV Model</h4>
+                                    <span>300 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-car-side-bolt"></i> Taxi Doors: <span>4</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>5/6</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>3/4</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat3">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/05555.jpg' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>SUV Model</h4>
+                                    <span>250 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-car-side-bolt"></i> Taxi Doors: <span>4</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>5/6</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/06tempo.jpg' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Large Vehicles (Tempo Travelers)</h4>
+                                    <span>300 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-car-side-bolt"></i> Taxi Doors: <span>1/2</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>10-12</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>8</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- taxi area end -->
+
+
+        <!-- counter area -->
+        <div class="counter-area">
+            <div class="container">
+                <div class="counter-wrapper">
+                    <div class="row">
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="counter-box">
+                                <div class="icon">
+                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="">
+                                </div>
+                                <div>
+                                    <span class="counter" data-count="+" data-to="800" data-speed="9000">800</span>
+                                    <h6 class="title">+ Available Taxi </h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="counter-box">
+                                <div class="icon">
+                                    <img src="{% static '/img/icon/happy.svg' %}" alt="">
+                                </div>
+                                <div>
+                                    <span class="counter" data-count="+" data-to="290000" data-speed="9000">2,90,000</span>
+                                    <h6 class="title">+ Happy Clients</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="counter-box">
+                                <div class="icon">
+                                    <img src="{% static '/img/icon/driver.svg' %}" alt="">
+                                </div>
+                                <div>
+                                    <span class="counter" data-count="+" data-to="1100" data-speed="9000">1100</span>
+                                    <h6 class="title">+ Our Drivers</h6>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-sm-6">
+                            <div class="counter-box">
+                                <div class="icon">
+                                    <img src="{% static '/img/icon/trip.svg' %}" alt="">
+                                </div>
+                                <div>
+                                    <span class="counter" data-count="+" data-to="1095000" data-speed="9000">10,95,000</span>
+                                    <h6 class="title">+ Road Trip Done</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- counter area end -->
+
+
+        <!-- feature area -->
+        <div class="feature-area feature-bg py-120">
+            <div class="container mt-150">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Feature</span>
+                            <h2 class="site-title text-white">Our Awesome Feature</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="feature-icon">
+                                <img src="{% static '/img/icon/taxi-safety.svg' %}" alt="">
+                            </div>
+                            <div class="feature-content">
+                                <h4>Safety Guarantee</h4>
+                               <p style="text-align:justify;">At Deepam Taxi, your safety is our top priority.  Ride with confidence, knowing that we prioritize your security every step of the way. Trust Deepam Taxi for a safe and comfortable journey, every time.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-item mt-lg-5 wow fadeInDown" data-wow-delay=".25s">
+                            <div class="feature-icon">
+                                <img src="{% static '/img/icon/pickup.svg' %}" alt="">
+                            </div>
+                            <div class="feature-content">
+                                <h4>Fast Pickup</h4>
+                               <p style="text-align:justify;">At Deepam Taxi, we understand the value of your time. Our fast pickup service ensures that a taxi is always just minutes away.
+                                Choose Deepam Taxi for a prompt and hassle-free start to your journey.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="feature-icon">
+                                <img src="{% static '/img/icon/money.svg' %}" alt="">
+                            </div>
+                            <div class="feature-content">
+                                <h4>Affordable Rate</h4>
+                               <p style="text-align:justify;">At Deepam Taxi, we believe in providing top-quality service at a price that won't break the bank. 
+                                
+                                 We offer transparent pricing with no hidden fees.
+                                  Ride with Deepam Taxi for quality service at an unbeatable price.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="feature-item mt-lg-5 wow fadeInDown" data-wow-delay=".25s">
+                            <div class="feature-icon">
+                                <img src="{% static '/img/icon/support.svg' %}" alt="">
+                            </div>
+                            <div class="feature-content">
+                                <h4>24/7 Support</h4>
+                               <p style="text-align:justify;">Deepam Taxi is committed to providing exceptional customer service around the clock. 
+                                Our dedicated support team is available 24/7 to assist you with any inquiries, bookings, or concerns.  
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- feature area end -->
+
+
+        <!-- taxi rate -->
+        <div class="taxi-rate py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Taxi Rate</span>
+                            <h2 class="site-title">Our Taxi Rate For You</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="rate-header">
+                                <div class="rate-img">
+                                    <img src="{% static '/img/rate/01.png' %}" alt="">
+                                </div>
+                            </div>
+                            <div class="rate-header-content">
+                                <h4>Airport Taxi</h4>
+                                <!-- <p class="rate-duration">One Time Payment</p> -->
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="">
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i> Pickup Charges: 499/- onwards </li>
+                                        <!-- <li><i class="far fa-check-double"></i> Pickup Starts from 4am to 7:45am: <span>INR: 499/- Note: within 30 to 35kms</span></li> -->
+                                        <li><i class="far fa-check-double"></i> Drop Charges: 1004/- onwards</li>
+                                        <!-- <li><i class="far fa-check-double"></i> Up To 50 kms: <span>$1.38/km</span></li> -->
+                                        <li><i class="far fa-check-double"></i> Toll Charges: 115</li>
+                                        <!-- <li><i class="far fa-check-double"></i> Extra Passangers: <span>$0.45</span></li> -->
+                                    </ul>
+                                    <a href="#" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
+                            <div class="rate-header">
+                                <div class="rate-img">
+                                    <img src="{% static '/img/rate/01.png' %}" alt="">
+                                </div>
+                            </div>
+                            <div class="rate-header-content">
+                                <h4>Local Taxi</h4>
+                                <!-- <p class="rate-duration">One Time Payment</p> -->
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="">
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i> Base Charge:2295/- onwards</li>
+                                        <li><i class="far fa-check-double"></i> Distance/Time: 12hrs(150kms)</li>
+                                        <!-- <li><i class="far fa-check-double"></i> Up To 50 kms: <span>$1.38/km</span></li> -->
+                                        <li><i class="far fa-check-double"></i> Toll Fee: as per routes/actuals</li>
+                                        <!-- <li><i class="far fa-check-double"></i> Extra Passangers: <span>$0.45</span></li> -->
+                                    </ul>
+                                    <a href="#" class="theme-btn">Choose Plan<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="rate-header">
+                                <div class="rate-img">
+                                    <img src="{% static '/img/rate/01.png' %}" alt="">
+                                </div>
+                            </div>
+                            <div class="rate-header-content">
+                                <h4>Outstation Cabs</h4>
+                                <!-- <p class="rate-duration">One Time Payment</p> -->
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="">
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i> Base Charge: 14rs onwards</span></li>
+                                        <li><i class="far fa-check-double"></i> Charges Calculated: km basis</li>
+                                        <li><i class="far fa-check-double"></i> Extra: Toll/Beta/Permit</li>
+                                        <!-- <li><i class="far fa-check-double"></i> Toll Fee: <span>$0.99</span></li> -->
+                                        <!-- <li><i class="far fa-check-double"></i> Extra Passangers: <span>$0.45</span></li> -->
+                                    </ul>
+                                    <a href="#" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- taxi rate end -->
+
+
+        <!-- team-area -->
+        <!-- <div class="team-area pb-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Drivers</span>
+                            <h2 class="site-title">Our Expert Drivers</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="team-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="team-img">
+                                <img src="{% static '/img/team/01.jpg' %}" alt="thumb">
+                            </div>
+                            <div class="team-content">
+                                <div class="team-bio">
+                                    <h5><a href="#">Alma Mcelroy</a></h5>
+                                    <span>Expert Driver</span>
+                                </div>
+                            </div>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="team-item wow fadeInDown" data-wow-delay=".25s">
+                            <div class="team-img">
+                                <img src="{% static '/img/team/02.jpg' %}" alt="thumb">
+                            </div>
+                            <div class="team-content">
+                                <div class="team-bio">
+                                    <h5><a href="#">Marie Hooks</a></h5>
+                                    <span>Expert Driver</span>
+                                </div>
+                            </div>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="team-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="team-img">
+                                <img src="{% static '/img/team/03.jpg' %}" alt="thumb">
+                            </div>
+                            <div class="team-content">
+                                <div class="team-bio">
+                                    <h5><a href="#">Daniel Nesmith</a></h5>
+                                    <span>Expert Driver</span>
+                                </div>
+                            </div>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="team-item wow fadeInDown" data-wow-delay=".25s">
+                            <div class="team-img">
+                                <img src="{% static '/img/team/04.jpg' %}" alt="thumb">
+                            </div>
+                            <div class="team-content">
+                                <div class="team-bio">
+                                    <h5><a href="#">Gertrude Barrow</a></h5>
+                                    <span>Expert Driver</span>
+                                </div>
+                            </div>
+                            <div class="team-social">
+                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                                <a href="#"><i class="fab fa-youtube"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- team-area end -->
+
+
+        <!-- video area -->
+        <!-- <div class="video-area vda-2">
+            <div class="container">
+                <div class="video-content" style="background-image: url(assets/img/video/01.jpg);">
+                    <div class="row align-items-center">
+                        <div class="col-lg-12">
+                            <div class="video-wrapper">
+                                <a class="play-btn popup-youtube" href="https://www.youtube.com/watch?v=ckHzmP1evNU">
+                                    <i class="fas fa-play"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- video area end -->
+
+
+        <!-- choose area -->
+        <div class="choose-area cha-2 py-120">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-6">
+                        <div class="choose-content">
+                            <div class="site-heading wow fadeInDown mb-4" data-wow-delay=".25s">
+                                <span class="site-title-tagline text-white justify-content-start">
+                                    <i class="flaticon-drive"></i> Why Choose Us
+                                </span>
+                                <h2 class="site-title text-white mb-10">We are dedicated <span>to provide</span> quality service</h2>
+                                <p class="text-white">
+                                    At Deepam Taxi, we are dedicated to providing quality service that exceeds your expectations. Here’s why you should choose us:
+                                </p>
+                            </div>
+                            <div class="choose-img wow fadeInUp" data-wow-delay=".25s">
+                                <img src="{% static '/img/choose/chose01.png' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="choose-content-wrapper wow fadeInRight" data-wow-delay=".25s">
+                            <div class="choose-item">
+                                <span class="choose-count">01</span>
+                                <div class="choose-item-icon">
+                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="">
+                                </div>
+                                <div class="choose-item-info">
+                                    <h3>Best Quality Taxi</h3>
+                                   <p style="text-align:justify;">Your safety is our top priority. Our drivers are thoroughly vetted and trained, and our vehicles are well-maintained and equipped with the latest safety features.</p>
+                                </div>
+                            </div>
+                            <div class="choose-item ms-lg-5">
+                                <span class="choose-count">02</span>
+                                <div class="choose-item-icon">
+                                    <img src="{% static '/img/icon/driver.svg' %}" alt="">
+                                </div>
+                                <div class="choose-item-info">
+                                    <h3>Affordable Rates</h3>
+                                   <p style="text-align:justify;">Enjoy top-quality service at prices that won’t break the bank. We offer transparent and competitive pricing with no hidden fees.</p>
+                                </div>
+                            </div>
+                            <div class="choose-item mb-lg-0">
+                                <span class="choose-count">03</span>
+                                <div class="choose-item-icon">
+                                    <img src="{% static '/img/icon/taxi-location.svg' %}" alt="">
+                                </div>
+                                <div class="choose-item-info">
+                                    <h3>Fast Pickup</h3>
+                                   <p style="text-align:justify;">We value your time. Our efficient dispatch system ensures quick pickups, so you’re never left waiting.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- choose area end -->
+
+
+        <!-- faq area -->
+        <div class="faq-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="faq-right">
+                            <div class="site-heading mb-3">
+                                <span class="site-title-tagline justify-content-start">Faq's</span>
+                                <h2 class="site-title my-3">General <span>frequently</span> asked questions</h2>
+                            </div>
+                            <p class="about-text">Our customer support team is available 24/7. You can reach us via phone, email, or through the live chat option on our website.</p>
+                            <div class="faq-img mt-3">
+                                <img src="{% static '/img/faq/faq001.jpg' %}" alt="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="accordion" id="accordionExample">
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingOne">
+                                    <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        <span><i class="far fa-question"></i></span> How do I book a ride with Deepam Taxi?
+                                    </button>
+                                </h2>
+                                <div id="collapseOne" class="accordion-collapse collapse show"
+                                    aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        Booking a ride is simple! You can book through our website, mobile app, or by calling our customer service. Just provide your pickup location, destination, and preferred time.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingTwo">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        <span><i class="far fa-question"></i></span> Are your drivers background-checked?
+                                    </button>
+                                </h2>
+                                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                                    data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        Yes, all our drivers undergo thorough background checks and regular training to ensure your safety and provide a high-quality service.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingThree">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseThree" aria-expanded="false"
+                                        aria-controls="collapseThree">
+                                        <span><i class="far fa-question"></i></span> What if I need to cancel my ride?
+                                    </button>
+                                </h2>
+                                <div id="collapseThree" class="accordion-collapse collapse"
+                                    aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        You can cancel your ride through our website or app. Please refer to our cancellation policy for more details on any applicable charges.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFour">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseFour" aria-expanded="false"
+                                        aria-controls="collapseFour">
+                                        <span><i class="far fa-question"></i></span> How can I provide feedback about my ride?
+                                    </button>
+                                </h2>
+                                <div id="collapseFour" class="accordion-collapse collapse"
+                                    aria-labelledby="headingFour" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        We value your feedback! After your ride, you can rate your experience and leave comments through our app or website. This helps us improve our services.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="headingFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#collapseFive" aria-expanded="false"
+                                        aria-controls="collapseFive">
+                                        <span><i class="far fa-question"></i></span> Can I pre-book a ride for a future date?
+                                    </button>
+                                </h2>
+                                <div id="collapseFive" class="accordion-collapse collapse"
+                                    aria-labelledby="headingFive" data-bs-parent="#accordionExample">
+                                    <div class="accordion-body">
+                                        Absolutely! You can schedule a ride for a future date and time through our website or app.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- faq area end -->
+
+
+        <!-- testimonial area -->
+        <div class="testimonial-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline"><i class="flaticon-drive"></i> Testimonials</span>
+                            <h2 class="site-title text-white">What Our Client <span>Say's</span></h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-slider owl-carousel owl-theme">
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <!-- <div class="testimonial-author-img">
+                                <img src="{% static '/img/testimonial/01.jpg' %}" alt="">
+                            </div> -->
+                            <div class="testimonial-author-info">
+                                <h4>Anup Patra</h4>
+                               <p style="text-align:justify;">Customer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-quote">
+                            <span class="testimonial-quote-icon"><i class="far fa-quote-right"></i></span>
+                           <p style="text-align:justify;">
+                            Absolutely the best cab service in Bangalore. Have booked them 7-8 times, never missed a flight. One driver came up to my door and rang the bell to wake me up. I have no idea why people have negative reviews here. Guess ive been lucky. Am writing this review on the back of a fantastic cab drive to the airport in Naveen’s car.
+                            </p>
+                        </div>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <!-- <i class="fas fa-star"></i> -->
+                        </div>
+                    </div>
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <!-- <div class="testimonial-author-img">
+                                <img src="{% static '/img/testimonial/02.jpg' %}" alt="">
+                            </div> -->
+                            <div class="testimonial-author-info">
+                                <h4>Brajendu Patnaik</h4>
+                               <p style="text-align:justify;">Customer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-quote">
+                            <span class="testimonial-quote-icon"><i class="far fa-quote-right"></i></span>
+                           <p style="text-align:justify;">
+                            I heard from a friend that despite of negative reviews, he always uses the service from Deepam Taxi. I also tried it and was astonished why such negative reviews for such a wonderful taxi experience. The driver was punctual and courteous. The drop time was also within the specified time.
+                            </p>
+                        </div>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <!-- <div class="testimonial-author-img">
+                                <img src="{% static '/img/testimonial/03.jpg' %}" alt="">
+                            </div> -->
+                            <div class="testimonial-author-info">
+                                <h4>Vinay G</h4>
+                               <p style="text-align:justify;">Customer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-quote">
+                            <span class="testimonial-quote-icon"><i class="far fa-quote-right"></i></span>
+                           <p style="text-align:justify;">
+                            I recently used this taxi service, and I'm impressed! The driver was courteous, the cab was clean, and they arrived promptly. The fare was reasonable, and overall, it was a smooth and pleasant ride. I'll definitely choose them again for my future transportation needs.
+                            </p>
+                        </div>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <!-- <div class="testimonial-author-img">
+                                <img src="{% static '/img/testimonial/04.jpg' %}" alt="">
+                            </div> -->
+                            <div class="testimonial-author-info">
+                                <h4>Ummehani</h4>
+                               <p style="text-align:justify;">Customer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-quote">
+                            <span class="testimonial-quote-icon"><i class="far fa-quote-right"></i></span>
+                           <p style="text-align:justify;">
+                            Best priced and best cab service for airport pickup and drop, I always choose Deepam Taxi for my need. Keep up the good work.
+                            </p>
+                        </div>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <div class="testimonial-single">
+                        <div class="testimonial-content">
+                            <!-- <div class="testimonial-author-img">
+                                <img src="{% static '/img/testimonial/05.jpg' %}" alt="">
+                            </div> -->
+                            <div class="testimonial-author-info">
+                                <h4>Rajiv Warrier</h4>
+                               <p style="text-align:justify;">Customer</p>
+                            </div>
+                        </div>
+                        <div class="testimonial-quote">
+                            <span class="testimonial-quote-icon"><i class="far fa-quote-right"></i></span>
+                           <p style="text-align:justify;">
+                            I have had a wonderful two day travel experience with Deepam Taxi. The two drivers, Mr. Shekar and Mr. Charan, who came for the two days provided comfort to us in an extremely professional manner. They did not get into any unnecessary loose talks
+                            </p>
+                        </div>
+                        <div class="testimonial-rate">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- testimonial area end -->
+
+
+        <!-- cta-area -->
+        <div class="cta-area">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-7 text-center text-lg-start">
+                        <div class="cta-text cta-divider">
+                            <h1>Book Your Cab It's Simple And Affordable</h1>
+                           <p style="text-align:justify;">
+                            Booking a cab with Deepam Taxi is quick and easy. Our user-friendly platform allows you to reserve a ride in just a few clicks. With affordable rates and a focus on customer satisfaction, we make your travel experience seamless and budget-friendly. Choose Deepam Taxi for a simple, affordable, and reliable ride.
+
+
+                        </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-5 text-center text-lg-end">
+                        <div class="mb-20">
+                            <a href="#" class="cta-number"><i class="far fa-headset"></i>080-46844684</a>
+                        </div>
+                        <div class="cta-btn">
+                            <a href="/bookride" class="theme-btn">Book Your Cab<i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- cta-area end -->
+
+
+        <!-- blog area -->
+        <div class="blog-area pt-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline"><i class="flaticon-drive"></i> Our Blog</span>
+                            <h2 class="site-title">Latest News & Blog</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/service/05.jpeg' %}" alt="Thumb">
+                            </div>
+                            <div class="blog-item-info">
+                                <div class="blog-item-meta">
+                                    <ul>
+                                        <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
+                                        <li><a href="#"><i class="far fa-calendar-alt"></i> February 23, 2023</a></li>
+                                    </ul>
+                                </div>
+                                <h4 class="blog-title">
+                                    <a href="#">There are many variations of passage available.</a>
+                                </h4>
+                                <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/service/06.jpeg' %}" alt="Thumb">
+                            </div>
+                            <div class="blog-item-info">
+                                <div class="blog-item-meta">
+                                    <ul>
+                                        <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
+                                        <li><a href="#"><i class="far fa-calendar-alt"></i> February 23, 2023</a></li>
+                                    </ul>
+                                </div>
+                                <h4 class="blog-title">
+                                    <a href="#">There are many variations of passage available.</a>
+                                </h4>
+                                <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/service/service02.jpeg' %}" alt="Thumb">
+                            </div>
+                            <div class="blog-item-info">
+                                <div class="blog-item-meta">
+                                    <ul>
+                                        <li><a href="#"><i class="far fa-user-circle"></i> By Alicia Davis</a></li>
+                                        <li><a href="#"><i class="far fa-calendar-alt"></i> February 23, 2023</a></li>
+                                    </ul>
+                                </div>
+                                <h4 class="blog-title">
+                                    <a href="#">There are many variations of passage available.</a>
+                                </h4>
+                                <a class="theme-btn" href="#">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- blog area end -->
+
+
+        <!-- partner -->
+        <!-- <div class="partner pt-80 pb-80">
+            <div class="container">
+                <div class="partner-slider owl-carousel owl-theme">
+                    <div class="partner-item">
+                        <div class="partner-img">
+                            <img src="{% static '/img/partner/01.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-img">
+                            <img src="{% static '/img/partner/02.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-img">
+                            <img src="{% static '/img/partner/03.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-img">
+                            <img src="{% static '/img/partner/01.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-img">
+                            <img src="{% static '/img/partner/02.png' %}" alt="">
+                        </div>
+                    </div>
+                    <div class="partner-item">
+                        <div class="partner-img">
+                            <img src="{% static '/img/partner/03.png' %}" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+        <!-- partner end-->
+
+
+        <!-- download area -->
+        <div class="download-area mb-120">
+            <div class="container">
+                <div class="download-wrapper">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="download-content">
+                                <div class="site-heading mb-4">
+                                    <span class="site-title-tagline justify-content-start">
+                                        <i class="flaticon-drive"></i> Get Our App
+                                    </span>
+                                    <h2 class="site-title mb-10">Download <span>Our Deepam</span> App For Free</h2>
+                                   <p style="text-align:justify;">
+                                    Experience the convenience of booking a taxi at your fingertips with the Deepam Taxi app. Download our app for free on both iOS and Android platforms to enjoy easy booking, real-time tracking, and exclusive offers. Get started today and make your travel hassle-free with Deepam Taxi. </p>
+                                </div>
+                                <div class="download-btn">
+                                    <a href="/">
+                                        <i class="fab fa-google-play"></i>
+                                        <div class="download-btn-content">
+                                            <span>Get It On</span>
+                                            <strong>Google Play</strong>
+                                        </div>
+                                    </a>
+                                    <!-- <a href="#">
+                                        <i class="fab fa-app-store"></i>
+                                        <div class="download-btn-content">
+                                            <span>Get It On</span>
+                                            <strong>App Store</strong>
+                                        </div>
+                                    </a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="download-img">
+                        <img src="{% static '/img/download/01.png' %}" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- download area end -->
+
+    </main>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// var page = "Airport"; // Default page
+
+// Function to open the selected tab and set the page variable
+// Function to open the selected tab and highlight the active button
+function openPage(pageName, btn_id) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablink");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].style.backgroundColor = "";
+        tablinks[i].style.color = "black";
+    }
+    document.getElementById(pageName).style.display = "block";
+
+    if (pageName == "Airport") {
+        document.getElementById('Airport_source').value = "Kempegowda International Airport Bengaluru";
+    }
+
+    $("#" + btn_id).css('background', 'var(--theme-color)');
+    $("#" + btn_id).css('color', 'white');
+}
+
+// Automatically click the default tab on page load
+document.getElementById("defaultOpen").click();
+
+// Save action click event handler
+// $("#save_action").click(function(event) {
+//     event.preventDefault();
+
+//     var source = "";
+//     var destination = "";
+//     var pickup_date = "";
+//     var pickup_time = "";
+//     var ridetype = "";
+//     var searchUrl = ""; // Initialize the base URL
+
+//     // Determine which tab is visible and use the corresponding form fields
+//     if ($('#Airport').is(':visible')) {
+//         source = $('#Airport_source').val();
+//         destination = $('#Airport_destination').val();
+//         pickup_date = $('#Airport_pickup_date').val();
+//         pickup_time = $('#Airport_pickup_time').val();
+//         searchUrl = `airportcabs_list`;
+//         ridetype = 'airport';
+//     } else if ($('#LocalDrop').is(':visible')) {
+//         source = $('#LocalDrop_source').val();
+//         destination = $('#LocalDrop_destination').val();
+//         pickup_date = $('#LocalDrop_pickup_date').val();
+//         pickup_time = $('#LocalDrop_pickup_time').val();
+//         searchUrl = `localcabs_list`;
+//         ridetype = 'local';
+//     } else if ($('#LocalPackage').is(':visible')) {
+//         source = $('#LocalPackage_source').val();
+//         destination = $('#LocalPackage_destination').val();
+//         pickup_date = $('#LocalPackage_pickup_date').val();
+//         pickup_time = $('#LocalPackage_pickup_time').val();
+//         searchUrl = `cabs_list`;
+//     } else if ($('#Outstation').is(':visible')) {
+//         source = $('#Outstation_source').val();
+//         destination = $('#Outstation_destination').val();
+//         pickup_date = $('#Outstation_pickup_date').val();
+//         pickup_time = $('#Outstation_pickup_time').val();
+//         searchUrl = `outstationcabs_list`;
+//     }
+
+//     if (!source || !destination || !pickup_date) {
+//         alert("All fields are required.");
+//     } else {
+//         searchUrl += `?location1=${encodeURIComponent(source)}&location2=${encodeURIComponent(destination)}&pickup_date=${encodeURIComponent(pickup_date)}&pickup_time=${encodeURIComponent(pickup_time)}&ridetype=${encodeURIComponent(ridetype)}`;
+//         window.location.href = searchUrl;
+//     }
+// });
+
+    
+        // window.redirect
+        // $.ajax({
+        //     url: '{% url "addride" %}',
+        //     type: "POST",
+        //     headers: {
+        //         'X-CSRFToken': '{{ csrf_token }}'
+        //     },
+        //     data: {
+        //         source: source,
+        //         destination: destination,
+        //         pickup_date: pickup_date,
+        //     },
+        //     success: function(result) {
+        //         alert("Ride details added successfully");
+        //         location.href = '{% url "home" %}';
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error(xhr.responseText);
+        //     }
+        // });
+//     }
+// });
+
+</script>
+<script>
+    
+</script>
+    
+<script>
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const oneWayRadio = document.getElementById('oneWay');
+    //     const roundTripRadio = document.getElementById('roundTrip');
+    //     const dropDateField = document.getElementById('dropDateField');
+    //     const dropTimeField = document.getElementById('dropTimeField');
+
+    //     function toggleFields() {
+    //         if (roundTripRadio.checked) {
+    //             dropDateField.style.display = 'block';
+    //             dropTimeField.style.display = 'block';
+    //         } else {
+    //             dropDateField.style.display = 'none';
+    //             dropTimeField.style.display = 'none';
+    //         }
+    //     }
+
+    //     // Add event listeners to radio buttons
+    //     oneWayRadio.addEventListener('change', toggleFields);
+    //     roundTripRadio.addEventListener('change', toggleFields);
+
+    //     // Initialize fields visibility on page load
+    //     toggleFields();
+    // });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const oneWayRadio = document.getElementById('one_way');
+        const roundTripRadio = document.getElementById('round_trip');
+        const dropFields = document.querySelector('.drop-fields');
+
+        oneWayRadio.addEventListener('change', function() {
+            if (oneWayRadio.checked) {
+                dropFields.style.display = 'none';
+            }
+        });
+
+        roundTripRadio.addEventListener('change', function() {
+            if (roundTripRadio.checked) {
+                dropFields.style.display = 'flex'; // 'flex' to ensure the fields display in a row
+            }
+        });
+    });
+</script>
+
+    {% endblock body_content %}

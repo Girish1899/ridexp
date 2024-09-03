@@ -1,0 +1,296 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="{% url 'indexd' %}">Dashboard</a></li>
+                            <li class="breadcrumb-item active"><a href="{% url 'distributerviewdriver' %}">View Driver</a></li>
+                        </ol>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4 class="card-title">Edit driver</h4>
+                            </div>
+                            <div class="card-body">
+                                <input type="hidden" id="vehicle_id" name="vehicle_id" value="">
+                                <div class="form-group row">
+                                    <input type="hidden" class="form-control" id="driver_id" name="driver_id" value="{{ driverlist.0.driver_id }}"> 
+                                    <input type="hidden" class="form-control" id="original_phone_number" name="original_phone_number" value="{{ driverlist.0.phone_number }}">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Edit Driver</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ driverlist.0.company_format }}" readonly>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="vehicle_company_format" name="vehicle_company_format" maxlength="10" placeholder="search vehicle by vehicle id" value="{{ driverlist.0.vehicle.company_format }}">
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="vehicle_number" name="vehicle_number" value="{{ driverlist.0.vehicle.Vehicle_Number }}" readonly>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="category" name="category" value="{{ driverlist.0.vehicle.model.brand.category.category_name }}" readonly>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="brand" name="brand" value="{{ driverlist.0.vehicle.model.brand.brand_name }}" readonly>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Model</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="model" name="model" value="{{ driverlist.0.vehicle.model.model_name }}" readonly>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Name</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ driverlist.0.name }}">
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                                    <div class="col-sm-10">
+                                        <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ driverlist.0.phone_number }}">
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                                    <div class="col-sm-10">
+                                        <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ driverlist.0.email }}">
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                                    <div class="col-sm-10">                                            
+                                        <textarea class="form-control" rows="2" id="address" name="address">{{ driverlist.0.address }}</textarea>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Document Verification Type</label>
+                                    <div class="col-sm-10">    
+                                    <select class="form-control form-control-lg" id="document_verification_type" name="document_verification_type">
+                                        <option value="" selected disabled>Select Document Verification Type</option>
+                                        <option value="Aadhar card" {% if driverlist.0.document_verification_type == "Aadhar card" %} selected {% endif %}>Aadhar card</option>
+                                        <option value="PanCard" {% if driverlist.0.document_verification_type == "PanCard" %} selected {% endif %}>PanCard</option>
+                                        <option value="Driving License" {% if driverlist.0.document_verification_type == "Driving License" %} selected {% endif %}>Driving License</option>
+                                        <option value="All" {% if driverlist.0.document_verification_type == "All" %} selected {% endif %}>All</option>
+                                    </select>
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Document Link</label>
+                                    <div class="col-sm-10">
+                                        <input type="file" class="form-control form-control-lg" id="document_link" name="document_link" >
+                                        {% if driverlist.0.document_link %}
+                                        <img id="preview1" src="{{ driverlist.0.document_link.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                                        {% else %}
+                                        <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        {% endif %}
+                                    </div>
+                                </div>
+            
+                                <div class="form-group row">
+                                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                                    <div class="col-sm-10">    
+                                        <select class="form-control form-control-lg" id="status" name="status">
+                                            <option value="" selected disabled>Select Status</option>
+                                            <option value="active" {% if driverlist.0.status == "active" %} selected {% endif %}>Active</option>
+                                            <option value="inactive" {% if driverlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+            
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+            
+            <script>
+                $(document).ready(function() {
+                $('#vehicle_company_format').on('blur', function() {
+                    var vehicleCompanyFormat = $(this).val();
+                    if (vehicleCompanyFormat) {
+                        $.ajax({
+                            url: '{% url "global_fetch_vehicle_details" %}',
+                            type: "GET",
+                            data: {
+                                vehicle_company_format: vehicleCompanyFormat
+                            },
+                            success: function(response) {
+                                if (response.success) {
+                                    $('#vehicle_number').val(response.vehicle.Vehicle_Number);
+                                    $('#category').val(response.vehicle.category_name);
+                                    $('#brand').val(response.vehicle.brand_name);
+                                    $('#model').val(response.vehicle.model_name);
+                                    $('#vehicle_id').val(response.vehicle.id);
+                                } else {
+                                    alert('Vehicle not found');
+                                    $('#vehicle_number').val('');
+                                    $('#category').val('');
+                                    $('#brand').val('');
+                                    $('#model').val('');
+                                    $('#vehicle_id').val('');
+                                }
+                            },
+                            error: function(xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                });
+            });
+                $(document).ready(function () {
+                    $("#save_action").click(function (event) {
+                        event.preventDefault();
+                        var driver_id = document.getElementById('driver_id').value;
+                        var vehicle_id = document.getElementById('vehicle_id').value;
+                        var company_format = document.getElementById('company_format').value;
+                        var name = document.getElementById('name').value;
+                        var phone_number = document.getElementById('phone_number').value;
+                        var email = document.getElementById('email').value;
+                        var address = document.getElementById('address').value;
+                        var document_verification_type = document.getElementById('document_verification_type').value;
+                        var status = document.getElementById('status').value;
+                        var original_phone_number = $('#original_phone_number').val();
+                        var formData = new FormData();
+                        formData.append('driver_id', driver_id);
+                        formData.append('vehicle_id',vehicle_id);
+                        formData.append('name', name);
+                        formData.append('phone_number', phone_number);
+                        formData.append('email', email);
+                        formData.append('address', address);
+                        formData.append('status', status);
+                        formData.append('company_format', company_format);
+                        formData.append('document_verification_type', document_verification_type);
+                        formData.append('original_phone_number', original_phone_number);
+                        formData.append('document_link', $('#document_link')[0].files[0]);
+                        if ($('#document_link')[0].files[0]) {
+                            formData.append('document_link', $('#document_link')[0].files[0]);
+                        }
+            
+                        if (!name || !phone_number || !email || !address || !document_verification_type || !status) {
+                            alert("All fields are required.");
+                            return;
+                        }
+            
+                        // Validate phone number format
+                        var phonePattern = /^[0-9]{10}$/;
+                        if (!phonePattern.test(phone_number)) {
+                            alert("Please enter a valid 10-digit phone number.");
+                            return;
+                        }
+            
+                        // Validate email format
+                        var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                        if (!emailPattern.test(email)) {
+                            alert("Please enter a valid email address.");
+                            return;
+                        }
+            
+                        $.ajax({
+                            url: "{% url 'check_dphonenumber' %}",
+                            type: "GET",
+                            data: { 'phone_number': phone_number },
+                            success: function (response) {
+                                if (phone_number.trim() !== original_phone_number.trim() && response.exists) {
+                                    alert("Phone number already exists.");
+                                } else {
+                                    if (confirm("Are you sure you want to save this driver?")) {
+                                        submitForm(driver_id,vehicle_id, name, company_format, phone_number, address, email, status, document_verification_type, formData);
+                                    }
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                console.log('AJAX error:', error);
+                            }
+                        });
+                    });
+                    
+            
+                    function submitForm(driver_id,vehicle_id, name, company_format, phone_number, address, email, status, document_verification_type, formData) {
+                    
+                    $.ajax({
+                        url: "{% url 'distributerupdatedriver' %}",
+                        type: "POST",
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        success: function(result) {
+                            if (result['success']) {
+                                alert("Driver details edited successfully");
+                                window.location.href = "{% url 'distributerviewdriver' %}";
+                            } else {
+                                alert("Failed to edit driver details: " + result['message']);
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.log('AJAX error:', error);
+                        }
+                    });
+                }
+            
+                $("#document_link").change(function () {
+                    readURL(this);
+                });
+            
+                function readURL(input) {
+                    if (input.files && input.files[0]) {
+                        var reader = new FileReader();
+                        reader.onload = function(e) {
+                            $(input).next('img').attr('src', e.target.result).show();
+                        }
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+            });
+            </script>
+            
+            {% endblock content %}
+            

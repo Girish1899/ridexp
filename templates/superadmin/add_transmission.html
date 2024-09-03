@@ -1,0 +1,99 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+ <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Car Transmission Type</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'TransmissionListView' %}" style="color: white;"><button  class="btn btn-primary">View Transmission</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <!-- <h4 class="card-title">Add Category</h4> -->
+                            </div>
+                            <div class="card-body">
+                                <!-- <div class="basic-form"> -->
+                                    
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Transmission Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="transmission_name" name="transmission_name">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                        </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault(); // Prevent form submission
+            var transmission_name = $('#transmission_name').val().trim().toLowerCase();
+
+            if (transmission_name.trim() === '') {
+                alert("Please enter transmission name.");
+                return;
+            }
+
+            $.ajax({
+                url: '{% url "check_transmission" %}',
+                type: "GET",
+                data: { transmission_name: transmission_name },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("transmission name already exists.");
+                    } else {
+                        // Proceed with form submission
+                        $.ajax({
+                            url: '{% url "addtransmission" %}',
+                            type: "POST",
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            data: { transmission_name: transmission_name },
+                            success: function (result) {
+                                alert("Transmission added Successfully");
+                                location.href = "{% url 'TransmissionListView' %}";
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content%}

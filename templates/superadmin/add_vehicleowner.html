@@ -1,0 +1,255 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--************
+            Content body start
+        *************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Vehicle Owner</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'viewvehicleowner' %}" style="color: white;"><button  class="btn btn-primary">View Vehicle Owner</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <!-- <h4 class="card-title">Add Vehicle Owner</h4> -->
+                            </div>
+                            <div class="card-body">
+                                <!-- <div class="basic-form"> -->
+                                    
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Owner Id</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Vehicle Owner Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="name" name="name">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                                            <div class="col-sm-10">
+                                                <input type="email" class="form-control form-control-lg" id="email" name="email">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Address</label>
+                                            <div class="col-sm-10">                                            
+                                                <textarea class="form-control" rows="2" id="address" name="address"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
+                                            <div class="col-sm-4">
+                                                <input type="file" class="form-control form-control-lg" id="image" name="image">
+                                                <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                            </div>
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
+                                            <div class="col-sm-4">
+                                                <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
+                                                <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
+                                            <div class="col-sm-4">
+                                                <input type="file" class="form-control form-control-lg" id="identity" name="identity">
+                                                <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                                            <div class="col-sm-10">    
+                                            <select class="form-control form-control-lg" id="status" name="status">
+                                                <option value="" selected disabled>Select Status</option>
+                                                <option value="active" selected>Active</option>
+                                                <option value="inactive">Inactive</option>
+                                            </select>
+                                            </div>
+                                        </div>
+                                        <hr>
+                                        <div class="welcome-text">
+                                           <center><h4 style="color: blue;">Account Details</h4></center>
+                                            <!-- <span class="ml-1">Element</span> -->
+                                        </div>
+                                        <hr>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Holder Name</label>
+                                                <input type="text" class="form-control form-control-lg" id="holdername" name="holdername">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">A/C Number</label>
+                                                <input type="text" class="form-control form-control-lg" id="ac_number" name="ac_number">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-sm-6">
+                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Bank Name</label>
+                                                <input type="text" class="form-control form-control-lg" id="bankname" name="bankname">
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">IFSC Code</label>
+                                                <input type="text" class="form-control form-control-lg" id="ifsc_code" name="ifsc_code">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                        </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function () {
+            var name = $('#name').val();
+            var phone_number = $('#phone_number').val();
+            var email = $('#email').val();
+            var address = $('#address').val();
+            var status = $('#status').val();
+            var holdername = $('#holdername').val();
+            var ac_number = $('#ac_number').val();
+            var bankname = $('#bankname').val();
+            var ifsc_code = $('#ifsc_code').val();
+            var company_format = $('#company_format').val();
+            var formData = new FormData();
+            formData.append('name', name);
+            formData.append('phone_number', phone_number);
+            formData.append('email', email);
+            formData.append('address', address);
+            formData.append('status', status);
+            formData.append('holdername',holdername);
+            formData.append('ac_number',ac_number);
+            formData.append('bankname',bankname);
+            formData.append('ifsc_code',ifsc_code);
+            formData.append('company_format', company_format);
+            formData.append('image', $('#image')[0].files[0]);
+            formData.append('address_proof', $('#address_proof')[0].files[0]);
+            formData.append('identity', $('#identity')[0].files[0]);   
+            
+            if (!name || !phone_number || !address || !company_format ) {
+                alert("All fields are required.");
+                return;
+            }
+
+             // Validate phone number format
+             var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone_number)) {
+                alert("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+             // Validate email format
+             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            var acNumberPattern = /^[0-9]{9,18}$/;
+            if (!acNumberPattern.test(ac_number)) {
+                alert("Please enter a valid account number (9-18 digits).");
+                return;
+            }
+
+            // Validate IFSC code format (4 letters followed by 7 digits)
+            var ifscPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+            if (!ifscPattern.test(ifsc_code)) {
+                alert("Please enter a valid IFSC code.");
+                return;
+            }
+            
+            // Check if phone number already exists
+            $.ajax({
+                url: '{% url "check_ownerphonenumber" %}',
+                type: "GET",
+                data: { phone_number: phone_number },
+                success: function (data) {
+                    if (data.exists) {
+                        alert(" phone_number already exists.");
+                    } else {
+                        // Proceed with the form submission
+                        $.ajax({
+                            url: '{% url "addvehicleowner" %}',
+                            type: "POST",
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            success: function (result) {
+                                alert("Vehicle Owner added successfully");
+                                location.href = "{% url 'viewvehicleowner' %}";
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+        $("#image,#address_proof,#identity").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result).show();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+</script>
+
+{% endblock content %}

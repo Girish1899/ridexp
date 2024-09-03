@@ -1,0 +1,149 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'addvehicleowner' %}" style="color: white;"><button  class="btn btn-primary">Add Vehicle Owner</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Vehicle Owner List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Vehicle Owner Id</th>
+                                        <th>Owner Name/Verification Status</th>
+                                        <th>Phone Number/Email</th>
+                                        <th>Address</th>
+                                        <th>Status</th>
+                                        <th>Download</th>
+                                        <th>Registered On</th>
+                                        <th>Verified On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ i.company_format }}</td>
+                                        <td><div>{{ i.name }}</div>
+                                            <div><span  class="badge badge-pill badge-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" onclick="VerifyOwner('{{ i.owner_id }}', '{{ i.verification_status }}')">
+                                                {% if i.verification_status == 'verified' %}
+                                                Verified
+                                                {% else %}
+                                                Not Verified
+                                                {% endif %}
+                                            </span></div>
+                                        </td>
+                                        <td>
+                                            <div style="color: blue;">{{ i.phone_number }}</div>
+                                            <div>{{ i.email }}</div>
+                                        </td>
+                                        <td>{{ i.address }}</td>
+                            
+                                        <td>
+                                            <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                                {{ i.status }}
+                                            </span>
+                                        </td>
+                                        <td><a href="{% url 'download_owner_documents' i.owner_id %}" class="btn btn-warning"><i class="fa fa-download"></i></a></td>
+                                        <td>{{ i.created_on }}</td>
+                                        
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <a href="#" class="btn btn-primary" onclick="EditVehicleowner('{{ i.owner_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-secondary" onclick="DeleteVehicleowner('{{ i.owner_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="HistoryVehicleowner('{{ i.owner_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'owner' i.owner_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
+                                        </td>
+                                        <td>
+                                            {% if i.verified_on %}
+                                            {{ i.verified_on }}
+                                            {% else %}
+                                            N/A
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function DeleteVehicleowner(owner_id) {
+        var action = confirm("Are you sure you want to delete this owner?");
+        if (action != false) {
+            $.ajax({
+                url: '{% url "DeleteVehicleowner" %}',
+                data: {
+                    'owner_id': owner_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.deleted) {
+                        alert("Owner Deleted Successfully");
+                        window.location.href = "{% url 'viewvehicleowner' %}";
+                        $("#owner_id #i-" + owner_id).remove();
+                    }
+                }
+            });
+        }
+    }
+
+    function EditVehicleowner(owner_id) {
+        var action = confirm("Are you sure you want to edit this owner?");
+        if (action !== false) {
+            window.location.href = "EditVehicleowner/" + owner_id; // Add a slash here
+        }
+    }
+
+    function HistoryVehicleowner(owner_id) {
+        window.location.href = "VehicleownerHistory/" + owner_id; // Add a slash here
+    }
+
+    function VerifyOwner(owner_id, current_status) {
+        var message = current_status === 'verified' ? "This owner is already verified." : "Have you verified this owner?";
+        if (current_status !== 'verified' && confirm(message)) {
+            $.ajax({
+                url: '{% url "VerifyOwner" %}',
+                data: {
+                    'owner_id': owner_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.verified) {
+                        alert("Owner Verified Successfully");
+                        location.reload(); // Reload the page to update the status
+                    }
+                }
+            });
+        }
+    }
+</script>
+{% endblock content %}

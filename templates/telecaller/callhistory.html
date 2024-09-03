@@ -1,0 +1,100 @@
+{% extends 'telecaller/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active"><a href="{% url 'telecalleraddride' %}">Add Ride</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Ride List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Booking ID</th>         
+                                        <th>Customer name</th>
+                                        <th>Customer phone number</th>
+                                        <th>Customer email</th>                               
+                                        <th>Ridetype</th>
+                                        <th>Source</th>
+                                        <th>Destination</th>
+                                        <th>Pickup date</th>
+                                        <th>Pickup time</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>model</th>                                       
+                                        <th>Total Fare</th>
+                                        <th>Customer address</th>
+                                        <th>Customer Notes</th>
+                                        <th>Status</th>
+                                        <th>booking datetime</th>
+                                        <th>Updated On</th>
+                                        <th>Updated by</th>
+
+                                    </tr>
+                                </thead>
+                                <tbody id="callHistoryBody" style="color: #030000;">
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <!-- Data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function EditRide(ride_id) {
+        var action = confirm("Are you sure you want to edit this ride?");
+        if (action !== false) {
+            window.location.href = "telecallerEditRide/" + ride_id;
+        }
+    };
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let callHistoryData = JSON.parse(localStorage.getItem('callHistoryData'));
+        if (callHistoryData) {
+            let tbody = document.getElementById('callHistoryBody');
+            callHistoryData.forEach(function(rowData) {
+                let row = document.createElement('tr');
+                rowData.forEach(function(cellData) {
+                    let cell = document.createElement('td');
+                    cell.textContent = cellData;
+                    row.appendChild(cell);
+                });
+                tbody.appendChild(row);
+            });
+        }
+    });
+</script>
+
+    
+{% endblock content %}
+

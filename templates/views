@@ -1,0 +1,2628 @@
+from datetime import timezone
+from decimal import Decimal
+import json
+import re
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from rest_framework.views import APIView
+from django.views.generic import TemplateView,ListView,View
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Brand, BrandHistory,Category, CategoryHistory, Commission, CommissionHistory, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth import authenticate, login as auth_login ,logout
+from django.contrib.auth import update_session_auth_hash
+from django.db.utils import IntegrityError
+from django.core.exceptions import ObjectDoesNotExist
+from django.urls import path
+from django.db.models import Q
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Sum
+from django.db.models import Count
+TIME_ZONE =  'Asia/Kolkata'
+from datetime import datetime
+from decimal import Decimal
+from bson.decimal128 import Decimal128
+import matplotlib.pyplot as plt
+import io
+import base64
+import urllib
+import os
+import json
+import google.auth
+from googleapiclient.discovery import build
+from google.auth.transport.requests import Request
+from google_auth_oauthlib.flow import InstalledAppFlow
+# from .views import RideList, assign_driver, AssignedRideList, OngoingRideList, CancelledListView, cancel_ride
+
+
+
+@login_required(login_url='login')
+def index(request):
+    cust_count = Customer.objects.count()
+    driver_count = Driver.objects.count()
+    booking_count = RideDetails.objects.count()
+    vehicle_count = Vehicle.objects.count()
+    # today_entries = Ridetype.objects.filter(YOUR_DATE_FIELD__date=timezone.now().date())
+    # today_booking_count = RideDetails.objects.filter(YOUR_DATE_FIELD__date=timezone.now().date()).count()
+    
+    context = {
+        'cust_count': cust_count,
+        'driver_count': driver_count,
+        'booking_count': booking_count,
+        'vehicle_count': vehicle_count,
+    }
+
+    return render(request,'superadmin/index.html', context)
+
+
+def getweeklyfare(APIView):
+    end_date = timezone.now().date()
+    start_date = end_date - timedelta(days=7)
+    
+    fare_summary = RideDetails.objects.filter(created_on__range=[start_date, end_date]) \
+                                       .values('created_on') \
+                                       .annotate(total_fare=Sum('total_fare')) \
+                                       .order_by('created_on')
+    labels1 = [entry['created_on'].strftime('%Y-%m-%d') for entry in fare_summary]
+    bar1 = [entry['total_fare'] for entry in fare_summary]
+    
+    data_fare_weekly = {
+        'labels': labels1,
+        'bar1': bar1
+    }
+    #monthly
+    start_date_month = end_date - timedelta(days=30)
+    fare_summary_month = RideDetails.objects.filter(created_on__range=[start_date_month, end_date]) \
+                                       .values('created_on') \
+                                       .annotate(total_fare=Sum('total_fare')) \
+                                       .order_by('created_on')
+    labels3 = [entry['created_on'].strftime('%Y-%m-%d') for entry in fare_summary_month]
+    bar3 = [entry['total_fare'] for entry in fare_summary_month]
+    
+    data_fare_weekly_month = {
+        'labels': labels3,
+        'bar1': bar3
+    }
+
+    reg_summary = Customer.objects.filter(created_on__range=[start_date, end_date]) \
+                                       .values('created_on') \
+                                       .annotate(total_count=Count('customer_id')) \
+                                       .order_by('created_on')
+    labels2 = [reg['created_on'].strftime('%Y-%m-%d') for reg in reg_summary]
+    bar2 = [reg['total_count'] for reg in reg_summary]
+    
+    reg_summary = {
+        'labels': labels2,
+        'bar1': bar2
+    }
+    #monthly
+    reg_summary_monthly = Customer.objects.filter(created_on__range=[start_date_month, end_date]) \
+                                       .values('created_on') \
+                                       .annotate(total_count=Count('customer_id')) \
+                                       .order_by('created_on')
+    labels4 = [reg['created_on'].strftime('%Y-%m-%d') for reg in reg_summary_monthly]
+    bar4 = [reg['total_count'] for reg in reg_summary_monthly]
+    
+    reg_summary_month = {
+        'labels': labels4,
+        'bar1': bar4
+    }
+    return JsonResponse({"data_fare_weekly":data_fare_weekly,"reg_summary":reg_summary,"data_fare_weekly_month":data_fare_weekly_month,"reg_summary_month":reg_summary_month})
+
+
+# login #####################################
+class login(TemplateView,APIView):
+    template_name = "website/login.html" 
+
+@csrf_exempt
+def login_view(request):
+    print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+    if request.method == 'POST':
+        username = request.POST.get('Username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            auth_login(request, user)
+            if user.is_superuser:
+                redirect_url = '/superadmin/index'
+                request.session['user_type'] = "Superadmin"
+                request.session['user_id'] = user.id
+            elif user.profile.type == 'admin':
+                request.session['user_type'] = user.profile.type
+                request.session['user_id'] = user.id
+                redirect_url = '/adminuser/adindex'
+            elif user.profile.type == 'quality':
+                request.session['user_type'] = user.profile.type
+                request.session['user_id'] = user.id
+                redirect_url = '/quality/qindex'
+            elif user.profile.type == 'telecaller':
+                request.session['user_type'] = user.profile.type
+                request.session['user_id'] = user.id
+                redirect_url = '/telecaller'
+            elif user.profile.type == 'distributer':
+                request.session['user_type'] = user.profile.type
+                request.session['user_id'] = user.id
+                redirect_url = '/distributer/'
+            elif user.profile.type == 'rescue':
+                request.session['user_type'] = user.profile.type
+                request.session['user_id'] = user.id
+                redirect_url = '/rescue/'
+            else:
+                redirect_url = '/'
+            return JsonResponse({'success': True, 'redirect_url': redirect_url})
+        else:
+            return JsonResponse({'success': False, 'message': 'Invalid username or password'})
+    return render(request, 'login.html')
+
+def logout_view(request):
+    logout(request)
+    request.session.flush()
+    return redirect('login')
+
+
+
+# brand ########################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+def check_brand(request):
+    brand_name = request.GET.get('brand_name')
+    category_id = request.GET.get('category')
+
+    if not brand_name or not category_id:
+        return JsonResponse({'error': 'Both brand_name and category are required.'}, status=400)
+
+    try:
+        category = Category.objects.get(pk=category_id)
+    except Category.DoesNotExist:
+        return JsonResponse({'error': 'Invalid category ID.'}, status=400)
+
+    # Check if a brand with the same name exists in the specified category
+    brand_exists = Brand.objects.filter(brand_name=brand_name, category=category).exists()
+    data = {'exists': brand_exists}
+
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addbrand(TemplateView):
+    template_name = "superadmin/add_brand.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')  # Filter only active categories
+        context['catlist'] = catlist
+        return context
+
+    def post(self, request):
+        user_type = self.request.session.get('user_type')
+        if user_type != "Superadmin":
+            return redirect('login')
+        
+        category = request.POST['category']
+        brand_name = request.POST['brand_name']
+        status = request.POST['status']
+
+        brand = Brand()
+        brand.category = Category.objects.get(category_id=category)
+        brand.brand_name = brand_name
+        brand.status = status
+        brand.created_by = request.user 
+        brand.updated_by=request.user
+        brand.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class BrandListView(ListView):
+
+    model = Brand
+    template_name = "superadmin/view_brand.html"
+
+    def get(self, request, *args, **kwargs):
+        user_typ = self.request.session.get('user_type')
+        if user_typ !="Superadmin":
+            return redirect('login')
+        else:
+            return super().get(request, *args, **kwargs)
+        
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteBrand(View):
+    def  get(self, request):
+        
+        brand_id = request.GET.get('brand_id', None)
+        Brand.objects.get(brand_id=brand_id).delete()
+        data = {
+            'deleted': True
+            }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')   
+class EditBrand(TemplateView):
+    template_name = 'superadmin/edit_brand.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')  # Filter only active categories
+        try:
+            context['brand_id'] = self.kwargs['id']
+            brandlist = Brand.objects.filter(brand_id=context['brand_id'])
+        except:
+            brandlist = Brand.objects.filter(brand_id=context['brand_id'])
+
+        context = {'brandlist': list(brandlist), 'catlist': list(catlist)}
+        return context    
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateBrand(APIView):  
+    def post(self, request):
+        brand_id = request.POST['brand_id']
+        brand = Brand.objects.get(brand_id=brand_id)
+
+        # Create a BrandHistory entry before updating the brand
+        # BrandHistory.objects.create(
+        #     brand_id=brand.brand_id,
+        #     category=brand.category,
+        #     brand_name=brand.brand_name,
+        #     status=brand.status,
+        #     created_on=brand.created_on,
+        #     updated_on=brand.updated_on,
+        #     created_by=brand.created_by.username if brand.created_by else None,
+        #     updated_by=brand.updated_by.username if brand.updated_by else None
+        # )
+
+        # Update the brand with new data
+        brand.brand_name = request.POST['brand_name']
+        brand.status = request.POST['status']
+        brand.updated_by = request.user
+        brand.save()
+
+        # Create another BrandHistory entry after updating the brand
+        BrandHistory.objects.create(
+            brand_id=brand.brand_id,
+            category=brand.category,
+            brand_name=brand.brand_name,
+            status=brand.status,
+            created_on=brand.created_on,
+            updated_on=brand.updated_on,
+            created_by=brand.created_by.username if brand.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class BrandHistoryView(TemplateView):
+    template_name = 'superadmin/history_brand.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        brand_id = self.kwargs['brand_id']
+        brand = get_object_or_404(Brand, brand_id=brand_id)
+        history = BrandHistory.objects.filter(brand_id=brand_id).order_by('-updated_on')
+        context['brand'] = brand
+        context['history'] = history
+        return context  
+    
+# category#################################################
+@login_required(login_url='login')
+def check_category(request):
+    category_name = request.GET.get('category_name', None)
+    categories = Category.objects.filter(category_name=category_name)
+    data = {
+        'exists': categories.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addcategory(TemplateView):
+    template_name = "superadmin/add_category.html"
+
+    def post(self, request):
+        category_name = request.POST['category_name']
+        category_status = request.POST['category_status']
+        cat = Category(
+            category_name=category_name,
+            category_status=category_status,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        cat.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CategoryListView(ListView):
+    model = Category
+    template_name = "superadmin/view_category.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCategory(View):
+    def get(self, request):
+        category_id = request.GET.get('category_id', None)
+        Category.objects.get(category_id=category_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')   
+class EditCategory(TemplateView):
+    template_name = 'superadmin/edit_category.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['category_id'] = self.kwargs['id']
+            catlist = Category.objects.filter(category_id=context['category_id'])
+        except:
+            catlist = Category.objects.filter(category_id=context['category_id'])
+            
+        context['catlist']= list(catlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCategory(APIView):
+    def post(self, request):
+        category_id = request.POST['category_id']
+        category = Category.objects.get(category_id=category_id)
+
+        # # Create a CategoryHistory entry before updating the category
+        # CategoryHistory.objects.create(
+        #     category_id=category.category_id,
+        #     category_name=category.category_name,
+        #     category_status=category.category_status,
+        #     created_on=category.created_on,
+        #     updated_on=category.updated_on,
+        #     created_by=category.created_by.username if category.created_by else None,
+        #     updated_by=category.updated_by.username if category.updated_by else None
+        # )
+
+        # Update the category with new data
+        category.category_name = request.POST['category_name']
+        category.category_status = request.POST['category_status']
+        category.updated_by = request.user
+        category.save()
+
+        # Create another CategoryHistory entry after updating the category
+        CategoryHistory.objects.create(
+            category_id=category.category_id,
+            category_name=category.category_name,
+            category_status=category.category_status,
+            created_on=category.created_on,
+            updated_on=category.updated_on,
+            created_by=category.created_by.username if category.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class CategoryHistoryView(TemplateView):
+    template_name = 'superadmin/history_category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs['category_id']
+        category = get_object_or_404(Category, category_id=category_id)
+        history = CategoryHistory.objects.filter(category_id=category_id).order_by('-updated_on')
+        context['category'] = category
+        context['history'] = history
+        return context
+
+# model ########################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addmodel(TemplateView):
+    template_name = "superadmin/add_model.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        blist = Brand.objects.filter(status='active')
+        context = {'catlist': list(catlist),'blist':list(blist)}
+        return context
+
+    def post(self, request):
+        brand = request.POST['brand']
+        model_name = request.POST['model_name']
+        # price_per_kms = request.POST['price_per_kms']
+        status = request.POST['status']
+
+
+        br = Model(
+            brand=Brand.objects.get(brand_id=brand),
+            model_name=model_name,
+            # price_per_kms=price_per_kms,
+            status=status,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        br.save()
+        return JsonResponse({'status':"Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ModelListView(ListView):
+    model = Model
+    template_name = "superadmin/view_model.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteModel(View):
+    def get(self, request):
+        model_id = request.GET.get('model_id', None)
+        Model.objects.get(model_id=model_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditModel(TemplateView):
+    template_name = 'superadmin/edit_model.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        blist = Brand.objects.filter(status='active')
+        try:
+            context['model_id'] = self.kwargs['id']
+            mlist = Model.objects.filter(model_id=context['model_id'])
+        except:
+            mlist = Model.objects.filter(model_id=context['model_id'])
+            
+        context = {'blist':list(blist),'catlist':list(catlist),'mlist':list(mlist)}
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateModel(APIView):
+    def post(self, request):
+        model_id = request.POST['model_id']
+        model = Model.objects.get(model_id=model_id)
+
+        # Create a ModelHistory entry before updating the model
+        # ModelHistory.objects.create(
+        #     model_id=model.model_id,
+        #     brand=model.brand,
+        #     model_name=model.model_name,
+        #     price_per_kms=model.price_per_kms,
+        #     status=model.status,
+        #     created_on=model.created_on,
+        #     updated_on=model.updated_on,
+        #     created_by=model.created_by.username if model.created_by else None,
+        #     updated_by=model.updated_by.username if model.updated_by else None
+        # )
+
+        # Update the model with new data
+        model.model_name = request.POST['model_name']
+        # model.price_per_kms = request.POST['price_per_kms']
+        model.status = request.POST['status']
+        model.updated_by = request.user
+        model.save()
+
+        # Create another ModelHistory entry after updating the model
+        ModelHistory.objects.create(
+            model_id=model.model_id,
+            brand=model.brand,
+            model_name=model.model_name,
+            # price_per_kms=model.price_per_kms,
+            status=model.status,
+            created_on=model.created_on,
+            updated_on=model.updated_on,
+            created_by=model.created_by.username if model.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class ModelHistoryView(TemplateView):
+    template_name = 'superadmin/history_model.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        model_id = self.kwargs['model_id']
+        model = get_object_or_404(Model, model_id=model_id)
+        history = ModelHistory.objects.filter(model_id=model_id).order_by('-updated_on')
+        context['model'] = model
+        context['history'] = history
+        return context
+    
+# vehicletype ############################
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addvehicletype(TemplateView):
+    template_name = "superadmin/add_vehicletype.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_vehicletype = VehicleType.objects.all().order_by('-vehicle_type_id').first()
+        if last_vehicletype:
+            last_company_format = int(last_vehicletype.company_format.replace('VT', ''))
+            next_company_format = f'VT{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VT01'
+        context['next_company_format'] = next_company_format
+        return context
+
+    def post(self, request):
+        vehicle_type_name = request.POST['vehicle_type_name']
+        company_format = request.POST.get('company_format', '')
+
+        vt = VehicleType(
+            vehicle_type_name=vehicle_type_name,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        vt.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class vehicletypeList(ListView):
+    model = VehicleType
+    template_name = "superadmin/view_vehicletype.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Deletevehicletype(View):
+    def get(self, request):
+        vehicle_type_id = request.GET.get('vehicle_type_id', None)
+        VehicleType.objects.get(vehicle_type_id=vehicle_type_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Editvehicletype(TemplateView):
+    template_name = 'superadmin/edit_vehicletype.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['vehicle_type_id'] = self.kwargs['id']
+            vtlist = VehicleType.objects.filter(vehicle_type_id=context['vehicle_type_id'])
+        except:
+            vtlist = VehicleType.objects.filter(vehicle_type_id=context['vehicle_type_id'])
+            
+        context['vtlist']= list(vtlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Updatevehicletype(APIView):
+    def post(self, request):
+        vehicle_type_id = request.POST['vehicle_type_id']
+        vehicle_type = VehicleType.objects.get(vehicle_type_id=vehicle_type_id)
+
+        # Create a VehicleTypeHistory entry before updating the vehicle type
+        # VehicleTypeHistory.objects.create(
+        #     vehicle_type_id=vehicle_type.vehicle_type_id,
+        #     company_format=vehicle_type.company_format,
+        #     vehicle_type_name=vehicle_type.vehicle_type_name,
+        #     created_by=vehicle_type.created_by.username if vehicle_type.created_by else None,
+        #     updated_by=vehicle_type.updated_by.username if vehicle_type.updated_by else None
+        # )
+
+        # Update the vehicle type with new data
+        vehicle_type.company_format = request.POST['company_format']
+        vehicle_type.vehicle_type_name = request.POST['vehicle_type_name']
+        vehicle_type.updated_by = request.user
+        vehicle_type.save()
+
+        # Create another VehicleTypeHistory entry after updating the vehicle type
+        VehicleTypeHistory.objects.create(
+            vehicle_type_id=vehicle_type.vehicle_type_id,
+            company_format=vehicle_type.company_format,
+            vehicle_type_name=vehicle_type.vehicle_type_name,
+            created_by=vehicle_type.created_by.username if vehicle_type.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class VehicleTypeHistoryView(TemplateView):
+    template_name = 'superadmin/history_vehicletype.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_type_id = self.kwargs['vehicle_type_id']
+        vehicle_type = get_object_or_404(VehicleType, vehicle_type_id=vehicle_type_id)
+        history = VehicleTypeHistory.objects.filter(vehicle_type_id=vehicle_type_id)
+        context['vehicle_type'] = vehicle_type
+        context['history'] = history
+        return context
+
+@login_required(login_url='login')   
+def check_vehicletype(request):
+    vehicle_type_name = request.GET.get('vehicle_type_name', None)
+    vehicletypes = VehicleType.objects.filter(vehicle_type_name=vehicle_type_name)
+    data = {
+        'exists': vehicletypes.count() > 0
+    }
+    return JsonResponse(data)
+    
+# ridetype #########################################
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addridetype(TemplateView):
+    template_name = "superadmin/add_ridetype.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_ridetype = Ridetype.objects.all().order_by('-ridetype_id').first()
+        if last_ridetype:
+            last_company_format = int(last_ridetype.company_format.replace('RT', ''))
+            next_company_format = f'RT{last_company_format + 1:02}'
+        else:
+            next_company_format = 'RT01'
+        context['next_company_format'] = next_company_format
+        return context
+
+    def post(self, request):
+        name = request.POST['name']
+        company_format = request.POST.get('company_format', '')
+
+        rt = Ridetype(
+            name=name,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        rt.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ridetypeList(ListView):
+    model = Ridetype
+    template_name = "superadmin/view_ridetype.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Deleteridetype(View):
+    def get(self, request):
+        ridetype_id = request.GET.get('ridetype_id', None)
+        Ridetype.objects.get(ridetype_id=ridetype_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Editridetype(TemplateView):
+    template_name = 'superadmin/edit_ridetype.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['ridetype_id'] = self.kwargs['id']
+            rtlist = Ridetype.objects.filter(ridetype_id=context['ridetype_id'])
+        except:
+            rtlist = Ridetype.objects.filter(ridetype_id=context['ridetype_id'])
+            
+        context['rtlist']= list(rtlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Updateridetype(APIView):
+    def post(self, request):
+        ridetype_id = request.POST['ridetype_id']
+        ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
+
+        # Create a RidetypeHistory entry before updating the ride type
+        # RidetypeHistory.objects.create(
+        #     ridetype_id=ridetype.ridetype_id,
+        #     company_format=ridetype.company_format,
+        #     name=ridetype.name,
+        #     created_on=ridetype.created_on,
+        #     updated_on=ridetype.updated_on,
+        #     created_by=ridetype.created_by.username if ridetype.created_by else None,
+        #     updated_by=ridetype.updated_by.username if ridetype.updated_by else None
+        # )
+
+        # Update the ride type with new data
+        ridetype.company_format = request.POST['company_format']
+        ridetype.name = request.POST['name']
+        ridetype.updated_by = request.user
+        ridetype.save()
+
+        # Create another RidetypeHistory entry after updating the ride type
+        RidetypeHistory.objects.create(
+            ridetype_id=ridetype.ridetype_id,
+            company_format=ridetype.company_format,
+            name=ridetype.name,
+            created_on=ridetype.created_on,
+            updated_on=ridetype.updated_on,
+            created_by=ridetype.created_by.username if ridetype.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class RidetypeHistoryView(TemplateView):
+    template_name = 'superadmin/history_ridetype.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ridetype_id = self.kwargs['ridetype_id']
+        ridetype = get_object_or_404(Ridetype, ridetype_id=ridetype_id)
+        history = RidetypeHistory.objects.filter(ridetype_id=ridetype_id).order_by('-updated_on')
+        context['ridetype'] = ridetype
+        context['history'] = history
+        return context
+
+@login_required(login_url='login')   
+def check_ridetype(request):
+    name = request.GET.get('name', None)
+    ridetypes = Ridetype.objects.filter(name=name)
+    data = {
+        'exists': ridetypes.count() > 0
+    }
+    return JsonResponse(data)
+    
+# driver ###################################################################################
+
+def fetch_vehicle_details(request):
+    if request.method == "GET":
+        vehicle_company_format = request.GET.get('vehicle_company_format')
+        try:
+            vehicle = Vehicle.objects.select_related(
+                'model__brand__category'
+            ).get(company_format=vehicle_company_format)
+            response = {
+                'success': True,
+                'vehicle': {
+                    'id': vehicle.vehicle_id,
+                    'Vehicle_Number': vehicle.Vehicle_Number,
+                    'category_name': vehicle.model.brand.category.category_name,
+                    'brand_name': vehicle.model.brand.brand_name,
+                    'model_name': vehicle.model.model_name
+                }
+            }
+        except Vehicle.DoesNotExist:
+            response = {
+                'success': False,
+                'message': 'Vehicle not found'
+            }
+        return JsonResponse(response)
+
+@login_required(login_url='login')
+def check_dphonenumber(request):
+    phone_number = request.GET.get('phone_number', None)
+    ph = Driver.objects.filter(phone_number=phone_number)
+    data = {
+        'exists': ph.count() > 0
+    }
+    return JsonResponse(data)
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddDriverView(TemplateView):
+    template_name = "superadmin/add_driver.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_driver = Driver.objects.order_by('-driver_id').first()
+        if last_driver and last_driver.company_format:
+            last_company_format = int(last_driver.company_format.replace('DRIV', ''))
+            next_company_format = f'DRIV{last_company_format + 1:02}'
+        else:
+            next_company_format = 'DRIV01'
+        context['next_company_format'] = next_company_format
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            vehicle_id = request.POST['vehicle']
+            company_format = request.POST['company_format']
+            driver_name = request.POST['name']
+            phone_number = request.POST['phone_number']
+            email = request.POST['email']
+            address = request.POST['address']
+            document_verification_type = request.POST['document_verification_type']
+            document_link = request.FILES.get('document_link')
+            status = request.POST['status']
+            
+            # Ensure objects exist in database before saving
+            try:
+                vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+            except ObjectDoesNotExist:
+                return JsonResponse({'status': 'Error', 'message': f'Vehicle with ID {vehicle_id} does not exist.'}, status=400)
+            
+            driver = Driver(
+                vehicle=vehicle,
+                company_format=company_format,
+                name=driver_name,
+                phone_number=phone_number,
+                email=email,
+                address=address,
+                document_verification_type=document_verification_type,
+                document_link=document_link,
+                status=status,
+                created_by=request.user,
+                updated_by=request.user
+            )
+            driver.save()
+            
+            return JsonResponse({'status': 'Success', 'message': 'Driver details added successfully'})
+        
+        except KeyError as e:
+            return JsonResponse({'status': 'Error', 'message': f'Missing required parameter: {e}'}, status=400)
+        
+        except Exception as e:
+            return JsonResponse({'status': 'Error', 'message': str(e)}, status=400)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DriverListView(ListView):
+    model = Driver
+    template_name = "superadmin/view_driver.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteDriverView(View):
+    def get(self, request):
+        driver_id = request.GET.get('driver_id', None)
+        Driver.objects.get(driver_id=driver_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditDriverView(TemplateView):
+    template_name = 'superadmin/edit_driver.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehiclelist = Vehicle.objects.filter(vehicle_status='active')
+        try:
+            context['driver_id'] = self.kwargs['id']
+            driverlist = Driver.objects.filter(driver_id=context['driver_id'])
+        except:
+            driverlist = Driver.objects.filter(driver_id=context['driver_id'])
+            
+        context = {'driverlist': list(driverlist), 'vehiclelist': list(vehiclelist)}
+        return context   
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateDriverView(APIView):
+    @csrf_exempt
+    def post(self, request):
+        try:
+            # Fetch and validate inputs
+            driver_id = request.POST.get('driver_id')
+            vehicle_id = request.POST.get('vehicle_id', None)
+
+            if not driver_id:
+                return JsonResponse({'success': False, 'error': 'Missing driver_id'}, status=400)
+
+            try:
+                driver_id = int(driver_id)
+            except ValueError:
+                return JsonResponse({'success': False, 'error': 'Invalid driver_id format'}, status=400)
+            
+            # Fetch the driver instance
+            try:
+                driver = Driver.objects.get(driver_id=driver_id)
+            except Driver.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Driver not found'}, status=404)
+
+            # Fetch the vehicle instance if vehicle_id is provided
+            if vehicle_id:
+                try:
+                    vehicle_id = int(vehicle_id)
+                    vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+                    driver.vehicle = vehicle
+                except (ValueError, Vehicle.DoesNotExist):
+                    return JsonResponse({'success': False, 'error': 'Vehicle not found'}, status=404)
+
+            # Create a DriverHistory entry before updating the driver
+            DriverHistory.objects.create(
+                driver_id=driver.driver_id,
+                vehicle=driver.vehicle,
+                name=driver.name,
+                phone_number=driver.phone_number,
+                email=driver.email,
+                address=driver.address,
+                status=driver.status,
+                company_format=driver.company_format,
+                document_verification_type=driver.document_verification_type,
+                document_link=driver.document_link.url if driver.document_link else None,
+                created_on=driver.created_on,
+                updated_by=driver.updated_by.username if driver.updated_by else None,
+                created_by=driver.created_by.username if driver.created_by else None
+            )
+
+            # Update the driver with new data
+            driver.name = request.POST.get('name', driver.name)
+            driver.phone_number = request.POST.get('phone_number', driver.phone_number)
+            driver.email = request.POST.get('email', driver.email)
+            driver.address = request.POST.get('address', driver.address)
+            driver.status = request.POST.get('status', driver.status)
+            driver.company_format = request.POST.get('company_format', driver.company_format)
+            driver.document_verification_type = request.POST.get('document_verification_type', driver.document_verification_type)
+
+            if 'document_link' in request.FILES:
+                driver.document_link = request.FILES['document_link']
+
+            driver.updated_by = request.user
+            driver.save()
+
+            # Create another DriverHistory entry after updating the driver
+            DriverHistory.objects.create(
+                driver_id=driver.driver_id,
+                vehicle=driver.vehicle,
+                name=driver.name,
+                phone_number=driver.phone_number,
+                email=driver.email,
+                address=driver.address,
+                status=driver.status,
+                company_format=driver.company_format,
+                document_verification_type=driver.document_verification_type,
+                document_link=driver.document_link.url if driver.document_link else None,
+                created_on=driver.created_on,
+                updated_by=request.user.username,
+                created_by=driver.created_by.username if driver.created_by else None
+            )
+
+            return JsonResponse({'success': True}, status=200)
+
+        except ValueError as e:
+            return JsonResponse({'success': False, 'error': f'Invalid input data: {e}'}, status=400)
+        except Driver.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Driver not found'}, status=404)
+        except Vehicle.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Vehicle not found'}, status=404)
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': f'An unexpected error occurred: {e}'}, status=500)
+  
+
+class DriverHistoryView(TemplateView):
+    template_name = 'superadmin/history_driver.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        driver_id = self.kwargs['driver_id']
+        driver = get_object_or_404(Driver, driver_id=driver_id)
+        history = DriverHistory.objects.filter(driver_id=driver_id)
+        context['driver'] = driver
+        context['history'] = history
+        return context
+    
+# users###################################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class adduser(TemplateView):
+    template_name = "superadmin/add_user.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_user = Profile.objects.all().order_by('-id').first()
+        if last_user:
+            last_company_format = int(last_user.company_format.replace('USR', ''))
+            next_company_format = f'USR{last_company_format + 1:02}'
+        else:
+            next_company_format = 'USR01'
+        context['next_company_format'] = next_company_format
+        return context
+
+    def post(self, request):
+        user_name = request.POST['user_name']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+        password = request.POST['password']
+        address = request.POST['address']
+        user_type = request.POST['type']
+        status = request.POST['status']
+        company_format = request.POST.get('company_format', '')
+
+        user = User.objects.create_user(username=user_name, email=email, password=password)
+        profile = Profile.objects.create(
+            user=user,
+            phone_number=phone_number,
+            address=address,
+            type=user_type,
+            status=status,
+            company_format=company_format
+        )
+
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UserList(ListView):
+    model = Profile
+    template_name = "superadmin/view_user.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteUser(View):
+    def get(self, request):
+        user_id = request.GET.get('user_id', None)
+        Profile.objects.get(user_id=user_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditUser(TemplateView):
+    template_name = 'superadmin/edit_user.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['user_id'] = self.kwargs['id']
+            userlist = Profile.objects.filter(user_id=context['user_id'])
+        except:
+            userlist = Profile.objects.filter(user_id=context['user_id'])
+            
+        context['userlist']= list(userlist)
+        return context
+
+# @login_required(login_url='login')
+def check_phno(request):
+    phone_number = request.GET.get('phone_number', None)
+    ph = Profile.objects.filter(phone_number=phone_number)
+    data = {
+        'exists': ph.count() > 0
+    }
+    return JsonResponse(data)
+
+# @login_required(login_url='login')
+def check_useremail(request):
+    email = request.GET.get('email', None)
+    em = User.objects.filter(email=email)
+    data = {
+        'exists': em.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateUser(APIView):  
+    def post(self, request):
+        user_id = request.POST.get('user_id')
+        profile = Profile.objects.get(user=user_id)
+        # # Check if profile_id is provided
+        # if not profile_id:
+        #     return JsonResponse({'error': 'Profile ID not provided'}, status=400)
+
+        # # Fetch the Profile object or return a 404 error
+        # try:
+        #     profile = Profile.objects.get(profile_id=profile_id)
+        # except Profile.DoesNotExist:
+        #     return JsonResponse({'error': 'Profile not found'}, status=404)
+
+        # Create a history entry before updating
+        try:
+            ProfileHistory.objects.create(
+            user=User.objects.get(username=request.user),
+            phone_number=profile.phone_number,
+            address=profile.address,
+            type=profile.type,
+            status=profile.status,
+            company_format=profile.company_format,
+            created_on=profile.created_on,
+            updated_by=request.user.username,
+            created_by=profile.created_by.username if profile.created_by else None
+        )
+        except:
+            ProfileHistory.objects.filter(user=request.user).update(
+                user=User.objects.get(username=request.user),
+                phone_number=profile.phone_number,
+                address=profile.address,
+                type=profile.type,
+                status=profile.status,
+                company_format=profile.company_format,
+                created_on=profile.created_on,
+                updated_by=request.user.username,
+                created_by=profile.created_by.username if profile.created_by else None
+            )
+
+        # profil=ProfileHistory()
+        # # profile_id=profile.profile_id,
+        # profil.user=User.objects.get(username=profile.user)
+        # profil.phone_number=profile.phone_number
+        # profil.address=profile.address
+        # profil.type=profile.type
+        # profil.status=profile.status
+        # profil.company_format=profile.company_format
+        # profil.created_on=profile.created_on
+        # profil.updated_by=
+        # profil.created_by=profile.created_by.username if profile.created_by else None
+        # profil.save()
+        
+
+        # Update the profile with new data
+        profile.phone_number = request.POST['phone_number']
+        profile.address = request.POST['address']
+        profile.type = request.POST['type']
+        profile.status = request.POST['status']
+        profile.company_format = request.POST['company_format']
+        profile.updated_by = request.user
+        profile.save()
+
+        
+        # Create another ProfileHistory entry after updating the profile
+        # ProfileHistory.objects.create(
+        #     user=User.objects.get(username=request.user),
+        #     phone_number=profile.phone_number,
+        #     address=profile.address,
+        #     type=profile.type,
+        #     status=profile.status,
+        #     company_format=profile.company_format,
+        #     created_on=profile.created_on,
+        #     updated_by=User.objects.get(username=request.user),
+        #     created_by=profile.created_by.username if profile.created_by else None
+        # )
+
+        return JsonResponse({'success': True}, status=200)
+    
+class ProfileHistoryView(TemplateView):
+    template_name = 'superadmin/history_profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile_id = self.kwargs['profile_id']
+        profile = get_object_or_404(Profile, profile_id=profile_id)
+        history = ProfileHistory.objects.filter(profile_id=profile_id)
+        context['profile'] = profile
+        context['history'] = history
+        return context
+
+
+# customer###################################
+
+def check_phonenumber(request):
+    phone_number = request.GET.get('phone_number', None)
+    ph = Customer.objects.filter(phone_number=phone_number)
+    data = {
+        'exists': ph.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addcustomer(TemplateView):
+    template_name = "superadmin/add_customer.html"
+
+    def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            last_cust = Customer.objects.all().order_by('-customer_id').first()
+            if last_cust:
+                last_company_format = int(last_cust.company_format.replace('CUST', ''))
+                next_company_format = f'CUST{last_company_format + 1:02}'
+            else:
+                next_company_format = 'CUST01'
+            context['next_company_format'] = next_company_format
+            return context
+
+    def post(self, request):
+        customer_name = request.POST['customer_name']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+        address = request.POST['address']
+        status = request.POST['status']
+        company_format = request.POST.get('company_format', '')
+
+        cust = Customer(
+            customer_name=customer_name,
+            phone_number=phone_number,
+            email=email,
+            address=address,
+            status=status,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        cust.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CustomerList(ListView):
+    model = Customer
+    template_name = "superadmin/view_customer.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCustomer(View):
+    def get(self, request):
+        customer_id = request.GET.get('customer_id', None)
+        Customer.objects.get(customer_id=customer_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditCustomer(TemplateView):
+    template_name = 'superadmin/edit_customer.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['customer_id'] = self.kwargs['id']
+            customerlist = Customer.objects.filter(customer_id=context['customer_id'])
+        except:
+            customerlist = Customer.objects.filter(customer_id=context['customer_id'])
+            
+        context['customerlist']= list(customerlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCustomer(APIView):  
+    def post(self, request):
+        customer_id = request.POST['customer_id']
+        customer = Customer.objects.get(customer_id=customer_id)
+
+        # Create a CustomerHistory entry before updating the customer
+        # CustomerHistory.objects.create(
+        #     customer_id=customer.customer_id,
+        #     company_format=customer.company_format,
+        #     customer_name=customer.customer_name,
+        #     phone_number=customer.phone_number,
+        #     address=customer.address,
+        #     email=customer.email,
+        #     status=customer.status,
+        #     created_on=customer.created_on,
+        #     updated_on=customer.updated_on,
+        #     created_by=customer.created_by.username if customer.created_by else None,
+        #     updated_by=customer.updated_by.username if customer.updated_by else None
+        # )
+
+        # Update the customer with new data
+        customer.company_format = request.POST['company_format']
+        customer.customer_name = request.POST['customer_name']
+        customer.phone_number = request.POST['phone_number']
+        customer.address = request.POST['address']
+        customer.email = request.POST['email']
+        customer.status = request.POST['status']
+        customer.updated_by = request.user
+        customer.save()
+
+        # Create another CustomerHistory entry after updating the customer
+        CustomerHistory.objects.create(
+            customer_id=customer.customer_id,
+            company_format=customer.company_format,
+            customer_name=customer.customer_name,
+            phone_number=customer.phone_number,
+            address=customer.address,
+            email=customer.email,
+            status=customer.status,
+            created_on=customer.created_on,
+            updated_on=customer.updated_on,
+            created_by=customer.created_by.username if customer.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class CustomerHistoryView(TemplateView):
+    template_name = 'superadmin/history_customer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer_id = self.kwargs['customer_id']
+        customer = get_object_or_404(Customer, customer_id=customer_id)
+        history = CustomerHistory.objects.filter(customer_id=customer_id).order_by('-updated_on')
+        context['customer'] = customer
+        context['history'] = history
+        return context
+    
+# owner ################################
+@login_required(login_url='login')
+def check_ownerphonenumber(request):
+    phone_number = request.GET.get('phone_number', None)
+    ph = VehicleOwner.objects.filter(phone_number=phone_number)
+    data = {
+        'exists': ph.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddOwnerView(TemplateView):
+    template_name = "superadmin/add_vehicleowner.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_owner = VehicleOwner.objects.all().order_by('-owner_id').first()
+        if last_owner:
+            last_company_format = int(last_owner.company_format.replace('VO', ''))
+            next_company_format = f'VO{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VO01'
+        context['next_company_format'] = next_company_format
+        return context
+
+    def post(self, request):
+        name = request.POST['name']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+        address = request.POST['address']
+        status = request.POST['status']
+        company_format = request.POST.get('company_format', '')
+        document_verification_type = request.POST['document_verification_type']
+        document_link = request.FILES['document_link']
+
+        vo = VehicleOwner(
+            name=name,
+            phone_number=phone_number,
+            email=email,
+            address=address,
+            status=status,
+            company_format=company_format,
+            document_verification_type=document_verification_type,
+            document_link=document_link,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        vo.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class OwnerListView(ListView):
+    model = VehicleOwner
+    template_name = "superadmin/view_vehicleowner.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteOwnerView(View):
+    def get(self, request):
+        owner_id = request.GET.get('owner_id', None)
+        VehicleOwner.objects.get(owner_id=owner_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditOwnerView(TemplateView):
+    template_name = 'superadmin/edit_vehicleowner.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['owner_id'] = self.kwargs['id']
+            ownerlist = VehicleOwner.objects.filter(owner_id=context['owner_id'])
+        except:
+            ownerlist = VehicleOwner.objects.filter(owner_id=context['owner_id'])
+            
+        context['ownerlist'] = list(ownerlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateOwnerView(APIView):  
+    def post(self, request):
+        owner_id = request.POST['owner_id']
+        owner = VehicleOwner.objects.get(owner_id=owner_id)
+
+        # Create a VehicleOwnerHistory entry before updating the owner
+        # VehicleOwnerHistory.objects.create(
+        #     owner_id=owner.owner_id,
+        #     company_format=owner.company_format,
+        #     name=owner.name,
+        #     phone_number=owner.phone_number,
+        #     address=owner.address,
+        #     email=owner.email,
+        #     document_verification_type=owner.document_verification_type,
+        #     document_link=owner.document_link.url if owner.document_link else None,
+        #     status=owner.status,
+        #     created_on=owner.created_on,
+        #     updated_on=owner.updated_on,
+        #     created_by=owner.created_by.username if owner.created_by else None,
+        #     updated_by=owner.updated_by.username if owner.updated_by else None
+        # )
+
+        # Update the owner with new data
+        owner.company_format = request.POST['company_format']
+        owner.name = request.POST['name']
+        owner.phone_number = request.POST['phone_number']
+        owner.address = request.POST['address']
+        owner.email = request.POST['email']
+        owner.document_verification_type = request.POST['document_verification_type']
+        if 'document_link' in request.FILES:
+            owner.document_link = request.FILES['document_link']
+        owner.status = request.POST['status']
+        owner.updated_by = request.user
+        owner.save()
+
+        # Create another VehicleOwnerHistory entry after updating the owner
+        VehicleOwnerHistory.objects.create(
+            owner_id=owner.owner_id,
+            company_format=owner.company_format,
+            name=owner.name,
+            phone_number=owner.phone_number,
+            address=owner.address,
+            email=owner.email,
+            document_verification_type=owner.document_verification_type,
+            document_link=owner.document_link.url if owner.document_link else None,
+            status=owner.status,
+            created_on=owner.created_on,
+            updated_on=owner.updated_on,
+            created_by=owner.created_by.username if owner.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class VehicleOwnerHistoryView(TemplateView):
+    template_name = 'superadmin/history_vehicleowner.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        owner_id = self.kwargs['owner_id']
+        owner = get_object_or_404(VehicleOwner, owner_id=owner_id)
+        history = VehicleOwnerHistory.objects.filter(owner_id=owner_id).order_by('-updated_on')
+        context['owner'] = owner
+        context['history'] = history
+        return context
+    
+
+# vehicle ######################
+@login_required(login_url='login')
+def check_vehicleno(request):
+    Vehicle_Number = request.GET.get('Vehicle_Number', None)
+    vehicleno = Vehicle.objects.filter(Vehicle_Number=Vehicle_Number)
+    data = {
+        'exists': vehicleno.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddVehicle(TemplateView):
+    template_name = "superadmin/add_vehicle.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Fetching data for dropdowns
+        context['catlist'] = Category.objects.filter(category_status='active')
+        context['blist'] = Brand.objects.filter(status='active')
+        context['ownerlist'] = VehicleOwner.objects.filter(status='active')
+        context['modellist'] = Model.objects.filter(status='active')
+        context['vtypelist'] = VehicleType.objects.all()
+        context['comm'] = Commission.objects.all()
+        
+        # Setting next company format
+        last_vehicle = Vehicle.objects.all().order_by('-vehicle_id').first()
+        if last_vehicle:
+            last_company_format = int(last_vehicle.company_format.replace('VEH', ''))
+            next_company_format = f'VEH{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VEH01'
+        context['next_company_format'] = next_company_format
+        
+        return context
+    
+    def post(self, request):
+        vehicle_number = request.POST['Vehicle_Number']
+        model_id = request.POST['model']
+        color = request.POST['color']
+        owner_id = request.POST['owner']
+        vehicle_type_id = request.POST['vehicle_type']
+        vehicle_status = request.POST['vehicle_status']
+        company_format = request.POST.get('company_format', '')
+        comm = request.POST['comm']
+
+        vehicle = Vehicle(
+            Vehicle_Number=vehicle_number,
+            model=Model.objects.get(model_id=model_id),
+            color=color,
+            owner=VehicleOwner.objects.get(owner_id=owner_id),
+            vehicle_type=VehicleType.objects.get(vehicle_type_id=vehicle_type_id),
+            vehicle_status=vehicle_status,
+            company_format=company_format,
+            commission=Commission.objects.get(comission_id=comm),
+            created_by=request.user,
+            updated_by=request.user
+        )
+
+        vehicle.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class VehicleList(ListView):
+    model = Vehicle
+    template_name = "superadmin/view_vehicle.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteVehicle(View):
+    def get(self, request):
+        vehicle_id = request.GET.get('vehicle_id', None)
+        Vehicle.objects.get(vehicle_id=vehicle_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditVehicle(TemplateView):
+    template_name = 'superadmin/edit_vehicle.html'
+  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        blist = Brand.objects.filter(status='active')
+        modellist = Model.objects.filter(status='active')
+        ownerlist = VehicleOwner.objects.filter(status='active')
+        vtypelist = VehicleType.objects.all()
+        comm = Commission.objects.all()
+
+        try:
+            context['vehicle_id'] = self.kwargs['id']
+            vehiclelist = Vehicle.objects.filter(vehicle_id=context['vehicle_id'])
+        except:
+            vehiclelist = Vehicle.objects.filter(vehicle_id=context['vehicle_id'])
+            
+        context = {'blist':list(blist),'catlist':list(catlist),'modellist':list(modellist),'ownerlist':list(ownerlist),'vtypelist':list(vtypelist),'vehiclelist':list(vehiclelist),'comm':list(comm)}
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateVehicle(APIView):
+    def post(self, request):
+        print("Req",request.POST)
+        vehicle_id = request.POST['vehicle_id']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        # Create a VehicleHistory entry before updating the vehicle
+        VehicleHistory.objects.create(
+            vehicle_id=vehicle.vehicle_id,
+            company_format=vehicle.company_format,
+            Vehicle_Number=vehicle.Vehicle_Number,
+            model=vehicle.model,
+            color=vehicle.color,
+            owner=vehicle.owner,
+            vehicle_type=vehicle.vehicle_type,
+            vehicle_status=vehicle.vehicle_status,
+            commission=vehicle.commission,
+            created_on=vehicle.created_on,
+            updated_on=vehicle.updated_on,
+            created_by=vehicle.created_by.username if vehicle.created_by else None,
+            updated_by=vehicle.updated_by.username if vehicle.updated_by else None
+        )
+
+        # Update the vehicle with new data
+        vehicle.company_format = request.POST['company_format']
+        vehicle.Vehicle_Number = request.POST['Vehicle_Number']
+        # vehicle.model = request.POST['model']
+        vehicle.color = request.POST['color']
+        vehicle.commission=Commission.objects.get(comission_id=request.POST['comm'])
+        # vehicle.owner = request.POST['owner']
+        # vehicle.vehicle_type = request.POST['vehicle_type']
+        vehicle.vehicle_status = request.POST['vehicle_status']
+        vehicle.updated_by = request.user
+        vehicle.save()
+
+        # Create another VehicleHistory entry after updating the vehicle
+        VehicleHistory.objects.create(
+            vehicle_id=vehicle.vehicle_id,
+            company_format=vehicle.company_format,
+            Vehicle_Number=vehicle.Vehicle_Number,
+            model=vehicle.model,
+            color=vehicle.color,
+            owner=vehicle.owner,
+            commission=Commission.objects.get(comission_id=request.POST['comm']),
+            vehicle_type=vehicle.vehicle_type,
+            vehicle_status=vehicle.vehicle_status,
+            created_on=vehicle.created_on,
+            updated_on=vehicle.updated_on,
+            created_by=vehicle.created_by.username if vehicle.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True,'message':"Vehicle has been updated"}, status=200)
+
+class VehicleHistoryView(TemplateView):
+    template_name = 'superadmin/history_vehicle.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = get_object_or_404(Vehicle, vehicle_id=vehicle_id)
+        history = VehicleHistory.objects.filter(vehicle_id=vehicle_id).order_by('-updated_on')
+        context['vehicle'] = vehicle
+        context['history'] = history
+        return context
+
+    
+# ride details ##########################################
+
+import requests
+from datetime import date
+class AddNewBooking(APIView):
+
+    def post(self, request):
+        try:
+            
+            pickup_date = datetime.strptime(request.POST['pickup_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            pickup_time = datetime.strptime(request.POST['pickup_time'], '%H:%M').strftime('%H:%M:%S')
+            # Get current system time
+            current_time = datetime.now()
+
+            # Format the time as a string with hours, minutes, and seconds
+            time_str = current_time.strftime('%H%M%S')
+            company_format = "WB" + time_str
+            ride_type_id = "1"
+            source = request.POST['source']
+            destination = request.POST['destination']
+            customer_phone_number = request.POST['phone_number']
+            # customer_address = request.POST['customer_address']
+            customer_name = request.POST['customer_name']
+            customer_email = request.POST['customer_email']
+            ride_status = "pending"
+            price=request.POST['price']
+            # Ensure objects exist in database before saving
+            customer_exits = Customer.objects.filter(phone_number=customer_phone_number).count()
+            if customer_exits>0:
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+                print(customer.email!=customer_email,customer.email,customer_email)
+                if customer.email!=customer_email:
+                    print("going back")
+                    return JsonResponse({'status': 'Error', 'message': "Customer's email or phone number does not match"})
+            else:
+                last_cust = Customer.objects.all().order_by('-customer_id').first()
+                if last_cust:
+                    last_company_format = int(last_cust.company_format.replace('CUST', ''))
+                    next_company_format = f'CUST{last_company_format + 1:02}'
+                else:
+                    next_company_format = 'CUST01'
+                cust = Customer(
+                        customer_name=customer_name,
+                        phone_number=customer_phone_number,
+                        email=customer_email,
+                        address="",
+                        status="Active",
+                        company_format=next_company_format,
+                        created_by=request.user,
+                        updated_by=request.user)
+                cust.save()
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+            ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
+            #model = Model.objects.get(model_id=model_id)
+            try:
+                ride_details = RideDetails()
+                ride_details.company_format=company_format
+                ride_details.customer=Customer.objects.get(phone_number=customer_phone_number)
+                ride_details.ridetype=ridetype
+                #ride_details.model=model
+                ride_details.price=price
+                ride_details.source=source
+                ride_details.destination=destination
+                ride_details.pickup_date=pickup_date
+                ride_details.pickup_time=pickup_time
+                ride_details.customer_notes=""
+                ride_details.ride_status="currentbookings"
+                ride_details.assigned_by=request.user
+                ride_details.created_by=request.user
+                ride_details.updated_by=request.user
+                ride_details.save()
+                print("source ^^^: ",request.POST['source'] )
+                print("source ^^^: ", request.POST['destination'])
+                whatsapp = {
+                    "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWRiZWZhNTA0NzhkMjc0MGM0OWI2MyIsIm5hbWUiOiJEZWVwYW0gVGF4aSIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NGVkYmVmYTUwNDc4ZDI3NDBjNDliNWUiLCJhY3RpdmVQbGFuIjoiQkFTSUNfTU9OVEhMWSIsImlhdCI6MTY5MzMwMjUyMn0.-oNpicqPahvPSuR-hI9F7i3l2YMZVaPs5Z7Hqk0JjyU",
+                    "campaignName": "newbooking_confirmation_local",
+                    "destination": customer_phone_number,
+                    "userName": "Deepam Taxi",
+                    "templateParams": [
+                        customer_name,
+                        "WB" + time_str,
+                        date.today(),
+                        datetime.now().strftime('%H:%M'),
+                        request.POST['source'],
+                        request.POST['destination'],
+                        pickup_date +'  ' +pickup_time,
+                        price
+                    ],
+                    "source": "new-landing-page form",
+                    "media": {},
+                    "buttons": [],
+                    "carouselCards": [],
+                    "location": {}
+                    }
+                # Send the POST request
+                gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+                try:
+                    response = requests.post(gateway_url, data=whatsapp)
+                    if response.status_code == 200:
+                        print("Message sent successfully")
+                    else:
+                        print(f"Failed to send message. Status code: {response.status_code}")
+                        print(response.text)  # Print response body for debugging
+                except requests.RequestException as e:
+                    print(f"Error sending message: {e}")
+            except IntegrityError as e:
+                # Log the specific IntegrityError
+                print("IntegrityError:", e)
+            
+            except Exception as e:
+                print("Error ^^^: ", str(e))
+            return JsonResponse({'status': "Success", 'message': 'Ride details added successfully'})
+        except Customer.DoesNotExist:
+            print(f"Customer with phone {customer_phone_number} does not exist.")
+            return JsonResponse({'status': 'Error', 'message': f'Customer with phone {customer_phone_number} does not exist.'})
+        except Exception as e:
+            print("^^^^^^: ", str(e))
+            print(f"Error saving ride details: {e}")
+            return JsonResponse({'status': 'Error', 'message': str(e)})
+
+
+class deepamcabs_get_location(APIView):
+    def post(self, request):
+        GOOGLE_PLACES_API_KEY = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+        body = json.loads(request.body)
+        pickup = body.get('pickup', '')
+
+         # Call the Google Places API
+        url = f'https://maps.googleapis.com/maps/api/place/autocomplete/json?input={pickup}&key={GOOGLE_PLACES_API_KEY}'
+
+        response = requests.get(url)
+        data = response.json()
+
+        if 'predictions' not in data:
+            return JsonResponse({'error': 'Error fetching location data'}, status=500)
+
+        locations = [{'pickup_area_name': place['description']} for place in data['predictions']]
+
+        return JsonResponse(locations, safe=False)
+
+class GetRidePricingDetails(APIView):
+    def post(self, request):
+        import googlemaps
+        from decimal import Decimal
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date = request.POST['pickup_date']
+        api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+        # Initialize the Google Maps client with your API key
+        gmaps = googlemaps.Client(key=api_key)
+
+        # Request directions via driving mode
+        result = gmaps.distance_matrix(origins=[source],
+                                   destinations=[destination],
+                                   mode="driving",
+                                   departure_time=datetime.now())
+
+        # Extract the distance in kilometers
+        distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
+
+        print("distance: ", distance)
+
+        pricing = Pricing.objects.all()
+        costs = {}
+
+        for price in pricing:
+            print("***: ", price)
+            category_distance = distance
+            # Convert Decimal128 to Decimal
+            price_per_km_decimal = Decimal(str(price.price_per_km))
+            temp_cost = Decimal(distance) * price_per_km_decimal
+            temp_cost = temp_cost + price.permit + price.toll_price + price.driver_beta
+            category_cost = round(temp_cost, 0)
+            costs[str(price.category.category_name)] = {
+                'distance_km': category_distance,
+                'cost': category_cost,
+                'permit': price.permit,
+                'toll': price.toll_price,
+                'beta': price.driver_beta,
+                'category': price.category.category_name,
+            }
+        print(costs)
+        return JsonResponse({'costs': costs})
+        # return distance
+
+
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+
+@csrf_exempt
+def fetch_customer_details(request):
+    phone_number = request.GET.get('phone_number', None)
+    if phone_number:
+        try:
+            customer = Customer.objects.get(phone_number=phone_number)
+            customer_details = {
+                'id': customer.customer_id,  # Ensure the customer ID is included
+                'name': customer.customer_name,
+                'email': customer.email,
+                'address': customer.address
+            }
+            return JsonResponse({'success': True, 'customer': customer_details})
+        except Customer.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Customer not found'})
+    return JsonResponse({'success': False, 'message': 'Invalid request'})
+
+
+class AddRide(TemplateView):
+    template_name = "add_ride.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['customerlist'] = Customer.objects.all()
+        context['ridetypelist'] = Ridetype.objects.all()
+        context['catlist'] = Category.objects.all()
+        context['blist'] = Brand.objects.all()
+        context['modellist'] = Model.objects.all()
+        
+        last_ride = RideDetails.objects.all().order_by('-ride_id').first()
+        if last_ride:
+            last_company_format = int(last_ride.company_format.replace('RID', ''))
+            next_company_format = f'RID{last_company_format + 1:02}'
+        else:
+            next_company_format = 'RID01'
+        context['next_company_format'] = next_company_format
+        
+        return context
+    
+    def post(self, request):
+        try:
+            pickup_date = datetime.strptime(request.POST['pickup_date'], '%m/%d/%Y').strftime('%Y-%m-%d')
+            pickup_time = datetime.strptime(request.POST['pickup_time'], '%I:%M %p').strftime('%H:%M:%S')
+            company_format = request.POST['company_format']
+            ride_type_id = request.POST['ridetype']
+            source = request.POST['source']
+            destination = request.POST['destination']
+            #category = request.POST['category']
+            #total_fare = request.POST['total_fare']
+            # customer_id = request.POST['customer']
+            customer_phone_number = request.POST['phone_number']
+            customer_address = request.POST['customer_address']
+            customer_name = request.POST['customer_name']
+            customer_email = request.POST['customer_email']
+            customer_notes = request.POST['customer_notes']
+            ride_status = request.POST['ride_status']
+            price=request.POST['price']
+            
+            print(f"Received Data: {company_format}, {price}, {ride_type_id}, {source}, {destination}, {pickup_date}, {pickup_time},  {customer_notes}, {ride_status}")
+
+            # Ensure objects exist in database before saving
+            customer_exits = Customer.objects.filter(phone_number=customer_phone_number).count()
+            if customer_exits>0:
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+            else:
+                last_cust = Customer.objects.all().order_by('-customer_id').first()
+                if last_cust:
+                    last_company_format = int(last_cust.company_format.replace('CUST', ''))
+                    next_company_format = f'CUST{last_company_format + 1:02}'
+                else:
+                    next_company_format = 'CUST01'
+                cust = Customer(
+                        customer_name=customer_name,
+                        phone_number=customer_phone_number,
+                        email=customer_email,
+                        address=customer_address,
+                        status="Active",
+                        company_format=next_company_format,
+                        created_by=request.user,
+                        updated_by=request.user)
+                cust.save()
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+            ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
+            #model = Model.objects.get(model_id=model_id)
+            ride_details = RideDetails()
+            ride_details.company_format=company_format
+            ride_details.customer=Customer.objects.get(phone_number=customer_phone_number)
+            ride_details.ridetype=ridetype
+            #ride_details.model=model
+            ride_details.price=price
+            ride_details.source=source
+            ride_details.destination=destination
+            ride_details.pickup_date=pickup_date
+            ride_details.pickup_time=pickup_time
+            ride_details.customer_notes=customer_notes
+            ride_details.ride_status="currentbookings"
+            ride_details.assigned_by=request.user
+            ride_details.created_by=request.user
+            ride_details.updated_by=request.user
+            ride_details.save()
+            return JsonResponse({'status': "Success", 'message': 'Ride details added successfully'})
+        except Customer.DoesNotExist:
+            print(f"Customer with phone {customer_phone_number} does not exist.")
+            return JsonResponse({'status': 'Error', 'message': f'Customer with phone {customer_phone_number} does not exist.'})
+        except Exception as e:
+            print(f"Error saving ride details: {e}")
+            return JsonResponse({'status': 'Error', 'message': str(e)})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class RideList(ListView):
+    model = RideDetails
+    template_name = "superadmin/view_ride.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['drivers'] = Driver.objects.all()
+        # Pass a sample ride_id or adjust based on your logic
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        return context
+    
+    def get_queryset(self):
+        return RideDetails.objects.filter(ride_status='currentbookings')
+    
+    # def get_queryset(self):
+    #     # Filter out rides that are assigned ('cancelledbookings')
+    #     return RideDetails.objects.exclude(ride_status='cancelledbookings')
+    
+# assigned ride list##################################################################################################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AssignedRideList(ListView):
+    model = RideDetails
+    template_name = "superadmin/assigned_rides.html"
+
+    def get_queryset(self):
+        # Get only rides that are assigned
+        return RideDetails.objects.filter(Q(ride_status='assignbookings') & Q(assigned_by=self.request.user)).select_related('driver')
+
+# ongoing rides########################################################################################################
+class OngoingRideList(ListView):
+    model = RideDetails
+    template_name = "superadmin/ongoing_rides.html"
+
+    def get_queryset(self):
+        return RideDetails.objects.filter(ride_status='ongoingbookings') 
+    
+# completed rides########################################################################################################
+class CompletedRideList(ListView):
+    model = RideDetails
+    template_name = "superadmin/completed_rides.html"
+
+    def get_queryset(self):
+        return RideDetails.objects.filter(ride_status='completedbookings') 
+
+
+# assign driver###########################################################################################################
+def assign_driver(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        driver_id = data.get('driver_id')  # This will be company_format
+        ride_id = data.get('ride_id')
+
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
+            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
+            ride.driver = driver  # Assign the driver object
+            ride.ride_status = 'assignbookings'
+            
+            ride.save()
+
+            return JsonResponse({'status': 'success'})
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Ride not found.'}, status=404)
+        except Driver.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Driver not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'failed'}, status=400)
+
+class AssignDriverView(ListView):
+    model = Driver
+    template_name = 'superadmin/view_ride.html'
+    context_object_name = 'drivers'
+
+    def get_queryset(self):
+        return Driver.objects.filter(status='active')
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteRide(View):
+    def get(self, request):
+        ride_id = request.GET.get('ride_id', None)
+        RideDetails.objects.get(ride_id=ride_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditRide(TemplateView):
+    template_name = 'superadmin/edit_ride.html'
+  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customerlist = Customer.objects.all()
+        ridetypelist = Ridetype.objects.all()
+        modellist = Model.objects.all()
+        catlist = Category.objects.all()
+        blist = Brand.objects.all()
+
+        try:
+            context['ride_id'] = self.kwargs['id']
+            ride = RideDetails.objects.filter(ride_id=context['ride_id'])
+        except:
+            ride = RideDetails.objects.filter(ride_id=context['ride_id'])
+            
+        context = {
+            'customerlist': list(customerlist),
+            'ridetypelist': list(ridetypelist),
+            'modellist': list(modellist),
+            'catlist': list(catlist),
+            'blist': list(blist),
+            'ride': list(ride)
+
+        }
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateRide(APIView):
+    @csrf_exempt
+    def post(self, request):
+            ride_id = request.POST['ride_id']
+            ride = RideDetails.objects.get(ride_id=ride_id)
+            customer_id = request.POST.get('customer',None)
+
+            if not ride_id:
+                return JsonResponse({'success':False,'error':'Missing ride_id'},status=400)
+
+            try:
+                ride_id = int(ride_id)
+            except ValueError:
+                return JsonResponse({'success':False,'error':'Invalid ride_id'},status=400)
+            
+            try:
+                ride = RideDetails.objects.get(ride_id=ride_id)
+            except RideDetails.DoesNotExist:
+                return JsonResponse({'success':False,'error':'Ride not found'},status=404)
+            
+            if customer_id:
+                try:
+                    customer_id = int(customer_id)
+                    customer = Customer.objects.get(customer_id=customer_id)
+                    ride.customer = customer
+                except (ValueError,Customer.DoesNotExist):
+                    return JsonResponse({'success':False,'error':'Invalid customer_id'},status=400)
+        
+            # Create a RideDetailsHistory entry before updating the ride
+            if not hasattr(ride, 'model'):
+                model_obj=None
+            else:
+                model_obj=ride.model
+            
+            RideDetailsHistory.objects.create(
+                ride_id=ride.ride_id,
+                company_format=ride.company_format+"^"+str(datetime.now()),
+                ridetype=ride.ridetype,
+                source=ride.source,
+                destination=ride.destination,
+                pickup_date=ride.pickup_date,
+                pickup_time=ride.pickup_time,
+                model= model_obj,
+                driver=ride.driver,
+                assigned_by=ride.assigned_by.username if ride.assigned_by else None,
+                cancelled_by=ride.cancelled_by.username if ride.cancelled_by else None,
+                total_fare=ride.total_fare,
+                customer=ride.customer,
+                customer_notes=ride.customer_notes,
+                ride_status=ride.ride_status,
+                booking_datetime=ride.booking_datetime,
+                created_on=ride.created_on,
+                updated_on=ride.updated_on,
+                created_by=ride.created_by.username if ride.created_by else None,
+                updated_by=ride.updated_by.username if ride.updated_by else None,
+                comments=ride.comments
+            )
+            
+
+            # Update the ride with new data
+            ride.source = request.POST['source']
+            ride.destination = request.POST['destination']
+            ride.pickup_date = request.POST['pickup_date']
+            ride.pickup_time = request.POST['pickup_time']
+            ride.model = Model.objects.get(model_id=request.POST['model'])
+            # ride.driver_id = request.POST['driver_id']
+            # ride.assigned_by_id = request.POST['assigned_by_id']
+            # ride.cancelled_by_id = request.POST['cancelled_by_id']
+            ride.total_fare = request.POST['total_fare']
+            ride.customer_notes = request.POST['customer_notes']
+            ride.updated_by = request.user
+            # ride.comments = request.POST['comments']
+            ride.save()
+
+            if not hasattr(ride, 'model'):
+                model_obj_after=None
+            else:
+                model_obj_after=ride.model
+
+            # Create another RideDetailsHistory entry after updating the ride
+            RideDetailsHistory.objects.create(
+                ride_id=ride.ride_id,
+                company_format=ride.company_format+"^"+str(datetime.now()),
+                ridetype=ride.ridetype,
+                source=ride.source,
+                destination=ride.destination,
+                pickup_date=ride.pickup_date,
+                pickup_time=ride.pickup_time,
+                model=model_obj_after,
+                driver=ride.driver,
+                assigned_by=ride.assigned_by.username if ride.assigned_by else None,
+                cancelled_by=ride.cancelled_by.username if ride.cancelled_by else None,
+                total_fare=ride.total_fare,
+                customer=ride.customer,
+                customer_notes=ride.customer_notes,
+                ride_status=ride.ride_status,
+                booking_datetime=ride.booking_datetime,
+                created_on=ride.created_on,
+                updated_on=ride.updated_on,
+                created_by=ride.created_by.username if ride.created_by else None,
+                updated_by=request.user,
+                comments=ride.comments
+            )
+            
+
+            return JsonResponse({'success': True}, status=200)
+    
+class RideDetailsHistoryView(TemplateView):
+    template_name = 'superadmin/history_ride.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ride_id = self.kwargs['ride_id']
+        ride = get_object_or_404(RideDetails, ride_id=ride_id)
+        history = RideDetailsHistory.objects.filter(ride_id=ride_id).order_by('-updated_on')
+        context['ride'] = ride
+        context['history'] = history
+        return context    
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class profile(TemplateView):
+    template_name = 'superadmin/app-profile.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            user_id = self.request.session.get('user_id')
+            userlist = User.objects.filter(id=user_id)
+        except:
+            userlist = User.objects.filter(id=user_id)
+            
+        context['userlist']= list(userlist)
+        return context
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateUserView(View):
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        if request.user:
+            user = request.user
+            print("^^^^^^^^^^^^^^^^^^^^^^^",user)
+            # Simple validation
+            if username and password:
+                user.username = username
+                user.set_password(password)
+                user.save()
+                #user = authenticate(username=user.username, password=password)
+                print("user------------------------------------------------",user)
+                if user is not None:
+                    return JsonResponse({'status': 'success'}, status=200)
+                return JsonResponse({'status': 'error', 'message': 'Authentication failed'}, status=400)
+            return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
+        return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+    
+
+
+##################################################################################################################### 
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CancelledListView(ListView):
+    model = RideDetails
+    template_name = "superadmin/view_cancelbookings.html"
+
+    def get_queryset(self):
+        return RideDetails.objects.filter(ride_status='cancelledbookings') 
+
+def cancel_ride(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        comments = data.get('comments')
+        ride_id = data.get('ride_id')
+
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)
+            ride.comments = comments
+            ride.ride_status = 'cancelledbookings'
+            ride.cancelled_by =request.user
+            ride.save()
+
+            return JsonResponse({'status': 'success'})
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'status': 'error', 'essage': 'Ride not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'essage': str(e)}, status=500)
+
+    return JsonResponse({'status': 'failed'}, status=400)
+
+####################################   pricing    ######################### ########################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addprice(TemplateView):
+    template_name = "superadmin/add_pricing.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.all()
+        rlist = Ridetype.objects.all()
+        context = {'catlist': list(catlist),'rlist':list(rlist)}
+        return context
+
+    def post(self, request):
+        category = request.POST['category']
+        ridetype = request.POST['ridetype']
+        slots = request.POST['slots']
+        driver_beta = request.POST['driver_beta']
+        toll_price = request.POST['toll_price']
+        tip = request.POST['tip']
+        permit = request.POST['permit']
+        price_per_km = request.POST['price_per_km']
+
+        br = Pricing(
+            category=Category.objects.get(category_id=category),
+            ridetype=Ridetype.objects.get(ridetype_id=ridetype),
+            slots=slots,
+            driver_beta=driver_beta,
+            toll_price=toll_price,
+            tip=tip,
+            permit=permit,
+            price_per_km=price_per_km,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        br.save()
+        return JsonResponse({'status':"Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PriceList(ListView):
+    model = Pricing
+    template_name = "superadmin/view_pricing.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeletePrice(View):
+    def get(self, request):
+        pricing_id = request.GET.get('pricing_id', None)
+        Pricing.objects.get(pricing_id=pricing_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditPrice(TemplateView):
+    template_name = 'superadmin/edit_pricing.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.all()
+        rlist = Ridetype.objects.all()
+        try:
+            context['pricing_id'] = self.kwargs['id']
+            plist = Pricing.objects.filter(pricing_id=context['pricing_id'])
+        except:
+            plist = Pricing.objects.filter(pricing_id=context['pricing_id'])
+            
+        context = {'plist':list(plist),'catlist':list(catlist),'rlist':list(rlist)}
+        return context
+    
+
+# Function to convert Decimal to float
+def convert_decimal128_to_decimal(value):
+    if isinstance(value, Decimal128):
+        return value.to_decimal()
+    return value
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdatePricing(APIView):
+    def post(self, request):
+        pricing_id = request.POST['pricing_id']
+        pricing = Pricing.objects.get(pricing_id=pricing_id)
+
+        print("--pricing.ridetype",pricing.ridetype.ridetype_id)
+        # Create a PricingHistory entry before updating the pricing
+        PricingHistory.objects.create(
+            pricing_id=pricing.pricing_id,
+            ridetype=pricing.ridetype,
+            category=pricing.category,
+            slots=pricing.slots,
+            driver_beta=int(pricing.driver_beta),
+            toll_price=int(pricing.toll_price),
+            tip=int(pricing.tip),
+            permit=int(pricing.permit),
+            price_per_km=convert_decimal128_to_decimal(pricing.price_per_km),
+            created_on=pricing.created_on,
+            updated_on=pricing.updated_on,
+            created_by=pricing.created_by.username if pricing.created_by else None,
+            updated_by=pricing.updated_by.username if pricing.updated_by else None
+        )
+
+        # Update the pricing with new data
+        pricing.ridetype = Ridetype.objects.get(ridetype_id=request.POST['ridetype'])
+        pricing.category = Category.objects.get(category_id=request.POST['category'])
+        pricing.slots = request.POST['slots']
+        pricing.driver_beta = request.POST['driver_beta']
+        pricing.toll_price = request.POST['toll_price']
+        pricing.tip = request.POST['tip']
+        pricing.permit = request.POST['permit']
+        pricing.price_per_km =  Decimal(request.POST['price_per_km'])
+        pricing.updated_by = request.user
+        pricing.save()
+
+        # Create another PricingHistory entry after updating the pricing
+        PricingHistory.objects.create(
+            pricing_id=pricing.pricing_id,
+            ridetype=pricing.ridetype,
+            category=pricing.category,
+            slots=pricing.slots,
+            driver_beta=pricing.driver_beta,
+            toll_price=pricing.toll_price,
+            tip=pricing.tip,
+            permit=pricing.permit,
+            price_per_km=pricing.price_per_km,
+            created_on=pricing.created_on,
+            updated_on=pricing.updated_on,
+            created_by=pricing.created_by.username if pricing.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+    
+class PricingHistoryView(TemplateView):
+    template_name = 'superadmin/history_pricing.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pricing_id = self.kwargs['pricing_id']
+        pricing = get_object_or_404(Pricing, pricing_id=pricing_id)
+        history = PricingHistory.objects.filter(pricing_id=pricing_id).order_by('-updated_on')
+        context['pricing'] = pricing
+        context['history'] = history
+        return context
+
+
+#############################commission############################################################
+
+@login_required(login_url='login')
+def check_commission(request):
+    commision = request.GET.get('comm_name', None)
+
+    if not commision :
+        return JsonResponse({'error': 'commision info are required.'}, status=400)
+    comm = Commission.objects.filter(comm_name=commision)
+    data = {'exists': comm.count() > 0}
+
+    return JsonResponse(data)
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addCommission(TemplateView):
+    template_name = "superadmin/add_commission.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comm_list = Commission.objects.all()
+        context['comm_list'] = comm_list
+        return context
+
+    def post(self, request):
+        user_type = self.request.session.get('user_type')
+        if user_type != "Superadmin":
+            return redirect('login')
+        
+        comm_name = request.POST['comm_name']
+        comission = request.POST['comission']
+
+        comm = Commission()
+        comm.comm_name = comm_name
+        comm.comission = comission
+        comm.created_by = request.user 
+        comm.updated_by=request.user
+        comm.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class commission_list(ListView):
+
+    model = Commission
+    template_name = "superadmin/view_commission.html"
+
+    def get(self, request, *args, **kwargs):
+        user_typ = self.request.session.get('user_type')
+        if user_typ !="Superadmin":
+            return redirect('login')
+        else:
+            return super().get(request, *args, **kwargs)
+        
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCommission(View):
+    def  get(self, request):
+        
+        comm_id = request.GET.get('comission_id', None)
+        Commission.objects.get(comission_id=comm_id).delete()
+        data = {
+            'deleted': True
+            }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')   
+class edit_Commission(TemplateView):
+    template_name = 'superadmin/edit_commission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        commlist = Commission.objects.all()
+        try:
+            context['com_id'] = self.kwargs['id']
+            comm_list = Commission.objects.filter(comission_id=context['com_id'])
+        except:
+            comm_list = Commission.objects.filter(comission_id=context['com_id'])
+
+        context = {'comm_list': list(comm_list)}
+        return context    
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCommission(APIView):  
+    def post(self, request):
+        comm_id = request.POST['comm_id']
+        comm = Commission.objects.get(comission_id=comm_id)
+
+        # Update the brand with new data
+        comm.comm_name = request.POST['comm_name']
+        comm.comission = request.POST['comission']
+        comm.updated_by = request.user.username
+        comm.save()
+
+        # Create another BrandHistory entry after updating the brand
+        CommissionHistory.objects.create(
+            comission_id=comm.comission_id,
+            comm_name=comm.comm_name,
+            comission=comm.comission,
+            created_on=comm.created_on,
+            updated_on=comm.updated_on,
+            created_by=comm.created_by if comm.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class commissionhistoryView(TemplateView):
+    template_name = 'superadmin/history_commission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        comm_id = self.kwargs['comm_id']
+        comm = get_object_or_404(Commission, comission_id=comm_id)
+        history = CommissionHistory.objects.filter(comission_id=comm_id).order_by('-updated_on')
+        context['commission'] = comm
+        context['history'] = history
+        return context  
+    
+
+##########################################reports####################################
+class vehicle_no_commission(TemplateView):
+    template_name = 'superadmin/vehiclenocommission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_counts = Vehicle.objects.values('commission__comm_name').annotate(vehicle_count=Count('vehicle_id'))
+        
+        # Merging both aggregations
+        commission_data = []
+        for commission in Commission.objects.all():
+            vehicle_count = next((item['vehicle_count'] for item in vehicle_counts if item['commission__comm_name'] == commission.comm_name), 0)
+            commission_data.append({
+            'commission_name': commission.comm_name,
+            'vehicle_count': vehicle_count
+        })
+        
+        context = {'commission_data': commission_data}
+
+        # Generate the graph
+        commission_names = [item['commission_name'] for item in commission_data]
+        vehicle_counts = [item['vehicle_count'] for item in commission_data]
+
+        plt.figure(figsize=(10, 5))
+        plt.bar(commission_names, vehicle_counts, color='skyblue')
+        plt.xlabel('Commission Name')
+        plt.ylabel('Number of Vehicles')
+        plt.title('Number of Vehicles per Commission')
+        plt.xticks(rotation=45)
+
+        buf = io.BytesIO()
+        plt.savefig(buf, format='png')
+        buf.seek(0)
+        string = base64.b64encode(buf.read())
+        uri = 'data:image/png;base64,' + urllib.parse.quote(string)
+
+        context['graph'] = uri
+        return context
+
+
+class vehicle_commission_sales(TemplateView):
+    template_name = 'superadmin/vehiclecommissionsales.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rides = RideDetails.objects.select_related('driver__vehicle__commission').all()
+        commission_data = []
+
+        for ride in rides:
+            if  hasattr(ride, 'driver') and hasattr(ride.driver, 'vehicle') and ride.total_fare :
+                vehicle = ride.driver.vehicle
+                commission_rate = vehicle.commission.comission /100 
+                commission_sale = ride.total_fare * commission_rate
+                company_share = ride.total_fare - commission_sale
+                # date_str = ride.created_on.strftime('%Y-%m-%d')
+
+                # if date_str in commission_data:
+                #     commission_data[date_str] += commission_sale
+                # else:
+                #     commission_data[date_str] = commission_sale
+
+                commission_data.append({
+            'ride_id': ride.ride_id,
+            'vehicle_number': vehicle.Vehicle_Number,
+            'total_fare': ride.total_fare,
+            'commission_rate': commission_rate,
+            'commission_sale': commission_sale,
+            'date': ride.created_on.strftime('%Y-%m-%d'),
+            'company_share':company_share
+        })
+            else:
+                print("no driver is assigned or vehicle:")
+        
+        # Prepare data for plotting
+        dates = [item['date'] for item in commission_data]
+        commission_sales = [item['commission_sale'] for item in commission_data]
+        company_shares = [item['company_share'] for item in commission_data]
+
+        # Create the plot
+        plt.figure(figsize=(10, 5))
+        plt.plot(dates, commission_sales, label='Commission Sales', marker='o')
+        plt.plot(dates, company_shares, label='Company Share', marker='x')
+        plt.xlabel('Date')
+        plt.ylabel('Amount')
+        plt.title('Commission Sales and Company Share Over Time')
+        plt.legend()
+        plt.grid(True)
+        plt.xticks(rotation=45)
+
+        # Save the plot to a BytesIO object
+        buffer = io.BytesIO()
+        plt.savefig(buffer, format='png')
+        buffer.seek(0)
+        image_png = buffer.getvalue()
+        buffer.close()
+
+        # Encode the image to base64 string
+        graph = base64.b64encode(image_png).decode('utf-8')
+
+
+        context = {
+            'commission_data': commission_data,
+            'graph': graph,
+        }
+        return context
+    
+
+
+
+# If modifying these SCOPES, delete the file token.json.
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
+
+def get_google_sheets_data(spreadsheet_id, range_name):
+    creds = None
+    if os.path.exists('token.json'):
+        creds = google.auth.load_credentials_from_file('token.json', SCOPES)[0]
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            flow = InstalledAppFlow.from_client_secrets_file('/Users/girish/Desktop/Projects/deepamtaxi/deepam_main_/superadmin/client.json', SCOPES)
+            creds = flow.run_local_server(port=0)
+        with open('token.json', 'w') as token:
+            token.write(creds.to_json())
+
+    service = build('sheets', 'v4', credentials=creds)
+    sheet = service.spreadsheets()
+
+    result = sheet.values().get(spreadsheetId=spreadsheet_id, range=range_name).execute()
+    return result.get('values', [])
+
+
+class enquiry_list(TemplateView):
+    template_name = 'superadmin/enquiries.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        spreadsheet_id = '1iehOovR-ahnJThE8NTnevBFYXNTd3KSMRnH157rWgEs'
+        range_name = 'Sheet1!A1:E'
+        enquiries = get_google_sheets_data(spreadsheet_id, range_name)
+        print("$$$$$$$$$$$: ", enquiries)
+        context = {
+            'enquiries': enquiries
+        }
+        return context

@@ -1,0 +1,293 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Airport Pricing</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'view_airportprice' %}" style="color: white;"><button class="btn btn-primary">View Ride Pricings</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">        
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Type</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="car_category" name="car_category">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                {% endfor %}                            
+                            </select>
+                        </div>
+                  
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="trip_type" name="trip_type">
+                                <option value="Airport Pickup">Airport Pickup</option>
+                                <option value="Airport Drop">Airport Drop</option>
+                                <option value="Airport Round Trip">Airport Round Trip</option>
+                            </select>
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">City</label>
+                        <div class="col-sm-2">
+                            <input type="text" class="form-control form-control-lg" id="city" name="city">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Amount (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_amount_ac" name="customer_min_amount_ac">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Min Amount (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_min_amount_ac" name="driver_min_amount_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Amount (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_amount_non_ac" name="customer_min_amount_non_ac">
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Min Amount (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_min_amount_non_ac" name="driver_min_amount_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Km/Day (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_km_day_ac" name="customer_min_km_day_ac">
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Min Km/Day (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_min_km_day_ac" name="driver_min_km_day_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Km/Day (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_km_day_non_ac" name="customer_min_km_day_non_ac">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Min Km/Day (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_min_km_day_non_ac" name="driver_min_km_day_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Extra Hour/Km Charge (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_extra_hour_km_charge_ac" name="customer_extra_hour_km_charge_ac">
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Extra Hour/Km Charge (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_extra_hour_km_charge_ac" name="driver_extra_hour_km_charge_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Extra Hour/Km Charge (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_extra_hour_km_charge_non_ac" name="customer_extra_hour_km_charge_non_ac">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Extra Hour/Km Charge (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_extra_hour_km_charge_non_ac" name="driver_extra_hour_km_charge_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Extra Km Charge AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="customer_extra_km_charge_ac" name="customer_extra_km_charge_ac">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Extra Km Charge AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="driver_extra_km_charge_ac" name="driver_extra_km_charge_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Extra Km Charge Non AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="customer_extra_km_charge_non_ac" name="customer_extra_km_charge_non_ac">
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Extra Km Charge Non AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="driver_extra_km_charge_non_ac" name="driver_extra_km_charge_non_ac">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_commission_percentage" name="driver_commission_percentage">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">GST Tax Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="gst_tax_percentage" name="gst_tax_percentage">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Company Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="company_commission" name="company_commission">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Additional Information</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control form-control-lg" id="additional_info" name="additional_info" ></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Type</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="driver_per_km_commission_type" name="driver_per_km_commission_type">
+                                <option value="No">No</option>
+                                <option value="Yes">Yes</option>
+                            </select>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Charge</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_per_km_commission_charge" name="driver_per_km_commission_charge">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Dead Per KM Charge</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="dead_per_km_charge" name="dead_per_km_charge">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Toll Charge</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="toll_charge" name="toll_charge">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var price_type = 'airport';  // Define ride_status here or fetch its value appropriately
+
+        $("#save_action").click(function () {
+            var city = $('#city').val();
+            var trip_type = $('#trip_type').val();
+            var car_category = $('#car_category').val();
+            var company_commission = $('#company_commission').val();
+            var driver_commission_percentage = $('#driver_commission_percentage').val();
+            var customer_min_amount_ac = $('#customer_min_amount_ac').val();
+            var driver_min_amount_ac = $('#driver_min_amount_ac').val();
+            var customer_min_amount_non_ac = $('#customer_min_amount_non_ac').val();
+            var driver_min_amount_non_ac = $('#driver_min_amount_non_ac').val();
+            var customer_min_km_day_ac = $('#customer_min_km_day_ac').val();
+            var driver_min_km_day_ac = $('#driver_min_km_day_ac').val();
+            var customer_min_km_day_non_ac = $('#customer_min_km_day_non_ac').val();
+            var driver_min_km_day_non_ac = $('#driver_min_km_day_non_ac').val();
+            var customer_extra_hour_km_charge_ac = $('#customer_extra_hour_km_charge_ac').val();
+            var driver_extra_hour_km_charge_ac = $('#driver_extra_hour_km_charge_ac').val();
+            var customer_extra_hour_km_charge_non_ac = $('#customer_extra_hour_km_charge_non_ac').val();
+            var driver_extra_hour_km_charge_non_ac = $('#driver_extra_hour_km_charge_non_ac').val();
+            var customer_extra_km_charge_ac = $('#customer_extra_km_charge_ac').val();
+            var driver_extra_km_charge_ac = $('#driver_extra_km_charge_ac').val();
+            var customer_extra_km_charge_non_ac = $('#customer_extra_km_charge_non_ac').val();
+            var driver_extra_km_charge_non_ac = $('#driver_extra_km_charge_non_ac').val();
+            var gst_tax_percentage = $('#gst_tax_percentage').val();
+            var additional_info = $('#additional_info').val();
+            var driver_per_km_commission_type = $('#driver_per_km_commission_type').val();
+            var driver_per_km_commission_charge = $('#driver_per_km_commission_charge').val();
+            var dead_per_km_charge = $('#dead_per_km_charge').val();
+            var toll_charge = $('#toll_charge').val();
+            
+            // Add validation checks here
+            // if (!price_type || !city || !car_category || !company_commission || !driver_commission_percentage || !customer_min_amount_ac || !driver_min_amount_ac) {
+            //     alert("All fields are required.");
+            //     return;
+            // }
+
+            $.ajax({
+                url: '{% url "add_airportpricing" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    price_type: price_type,
+                    city: city,
+                    trip_type: trip_type,
+                    car_category: car_category,
+                    company_commission: company_commission,
+                    driver_commission_percentage: driver_commission_percentage,
+                    customer_min_amount_ac: customer_min_amount_ac,
+                    driver_min_amount_ac: driver_min_amount_ac,
+                    customer_min_amount_non_ac: customer_min_amount_non_ac,
+                    driver_min_amount_non_ac: driver_min_amount_non_ac,
+                    customer_min_km_day_ac: customer_min_km_day_ac,
+                    driver_min_km_day_ac: driver_min_km_day_ac,
+                    customer_min_km_day_non_ac: customer_min_km_day_non_ac,
+                    driver_min_km_day_non_ac: driver_min_km_day_non_ac,
+                    customer_extra_hour_km_charge_ac: customer_extra_hour_km_charge_ac,
+                    driver_extra_hour_km_charge_ac: driver_extra_hour_km_charge_ac,
+                    customer_extra_hour_km_charge_non_ac: customer_extra_hour_km_charge_non_ac,
+                    driver_extra_hour_km_charge_non_ac: driver_extra_hour_km_charge_non_ac,
+                    customer_extra_km_charge_ac: customer_extra_km_charge_ac,
+                    driver_extra_km_charge_ac: driver_extra_km_charge_ac,
+                    customer_extra_km_charge_non_ac: customer_extra_km_charge_non_ac,
+                    driver_extra_km_charge_non_ac: driver_extra_km_charge_non_ac,
+                    gst_tax_percentage: gst_tax_percentage,
+                    additional_info: additional_info,
+                    driver_per_km_commission_type: driver_per_km_commission_type,
+                    driver_per_km_commission_charge: driver_per_km_commission_charge,
+                    dead_per_km_charge: dead_per_km_charge,
+                    toll_charge: toll_charge,
+                },
+                success: function (response) {
+                    // Handle success response
+                    alert("Airport Pricing added successfully.");
+                    window.location.href = "{% url 'view_airportprice' %}";
+                },
+                error: function (response) {
+                    // Handle error response
+                    alert("Failed to add Ride Pricing.");
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

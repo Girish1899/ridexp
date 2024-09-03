@@ -1,0 +1,84 @@
+{% extends 'rescue/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Ride History for Ride ID: {{ ride.ride_id }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'rescueindex' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'rescueridelist' %}">Ride List</a></li>
+                    <li class="breadcrumb-item active">Ride History</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Booking Id</th>
+                                        <th>Ride Type</th>
+                                        <th>Source</th>
+                                        <th>Destination</th>
+                                        <th>Pickup Date</th>
+                                        <th>Pickup Time</th>
+                                        <th>Model</th>
+                                        <th>Driver</th>
+                                        <th>Total Fare</th>
+                                        <th>Customer</th>
+                                        <th>Customer Notes</th>
+                                        <th>Ride Status</th>
+                                        <th>Booking DateTime</th>
+                                        <th>Comments</th>
+                                        <th>Created On</th>
+                                        <th>Created By</th>
+                                        <th>Updated By</th>
+                                        <th>Updated On</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ record.company_format }}</td>
+                                        <td>{{ record.ride_type }}</td>
+                                        <td>{{ record.source }}</td>
+                                        <td>{{ record.destination }}</td>
+                                        <td>{{ record.pickup_date }}</td> 
+                                        <td>{{ record.pickup_time }}</td>
+                                        <td>{{ record.model }}</td>
+                                        <td>{{ record.driver }}</td>
+                                        <td>{{ record.total_fare }}</td>
+                                        <td>{{ record.customer }}</td>
+                                        <td>{{ record.customer_notes }}</td>
+                                        <td>{{ record.ride_status }}</td>
+                                        <td>{{ record.booking_datetime }}</td>
+                                        <td>{{ record.comments }}</td>
+                                        <td>{{ record.created_on }}</td>
+                                        <td>{{ record.created_by }}</td>
+                                        <td>{{ record.updated_by }}</td>
+                                        <td>{{ record.updated_on }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

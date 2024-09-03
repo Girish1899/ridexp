@@ -1,0 +1,381 @@
+{% extends 'rescue/base.html' %}
+{% load static %}
+{% block content%}
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <!-- row -->
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-two card-body">
+                                <div class="stat-content">
+                                    <div class="stat-text">Total Customers</div>
+                                    <div class="stat-digit"> <i class="fa fa-user"></i> {{ cust_count }}</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-success w-85" role="progressbar" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-two card-body">
+                                <div class="stat-content">
+                                    <div class="stat-text">Total Drivers</div>
+                                    <div class="stat-digit"> <i class="fa fa-user"></i>{{ driver_count }}</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-primary w-75" role="progressbar" aria-valuenow="78" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-two card-body">
+                                <div class="stat-content">
+                                    <div class="stat-text">Total Bookings</div>
+                                    <div class="stat-digit"> <i class="fa fa-calendar"></i> {{ booking_count }}</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-warning w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="card">
+                            <div class="stat-widget-two card-body">
+                                <div class="stat-content">
+                                    <div class="stat-text">Total Vehicles</div>
+                                    <div class="stat-digit"> <i class="fa fa-car"></i>{{ vehicle_count }}</div>
+                                </div>
+                                <div class="progress">
+                                    <div class="progress-bar progress-bar-danger w-65" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /# card -->
+                    </div>
+                    <!-- /# column -->
+                </div>
+                
+                <div class="form-group" style="width: 20%;">
+                    <select class="form-control" id="duration-select">
+                        <option value="weekly">Weekly</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
+                    </select>
+                </div>    
+                <div class="row">
+                    <div class="col-12">
+                        <div class="row">
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title">Number Of Booking</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="barChart_1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title"> Total Customer Registered</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="barChart_2"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title"> No of Car Bookings</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="morris_donught" class="morris_chart_height"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-sm-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h4 class="card-title"> No of Bookings</h4>
+                                    </div>
+                                    <div class="card-body">
+                                        <div id="morris_donught_2" class="morris_chart_height"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h4>Average Value Of Sales In The Past Duration</h4><br>
+
+                                        <div class="profile-tab">
+                                            <div class="custom-tab-1">
+                                                <ul class="nav nav-tabs">
+                                                    <li class="nav-item"><a href="#my-posts" data-toggle="tab" class="nav-link active show">Today</a>
+                                                    </li>
+                                                    <li class="nav-item"><a href="#about-me" data-toggle="tab" class="nav-link">Weekly</a>
+                                                    </li>
+                                                    <li class="nav-item"><a href="#profile-settings" data-toggle="tab" class="nav-link">Monthly</a>
+                                                    </li>
+                                                    <li class="nav-item"><a href="#profile" data-toggle="tab" class="nav-link">Yearly</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div id="my-posts" class="tab-pane fade active show">
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-striped verticle-middle table-responsive-sm">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Weeks</th>
+                                                                            <th scope="col">No of Customer</th>
+                                                                            <th scope="col">No of Driver</th>
+                                                                            <th scope="col">No of Booking</th>
+                                                                            <th scope="col">Total Amount</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>1</td>
+                                                                            <td>1</td>
+                                                                            <td>1</td>
+                                                                            <td>1</td>
+                                                                            <td>1</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="about-me" class="tab-pane fade">
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-striped verticle-middle table-responsive-sm">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Weeks</th>
+                                                                            <th scope="col">No of Customer</th>
+                                                                            <th scope="col">No of Driver</th>
+                                                                            <th scope="col">No of Booking</th>
+                                                                            <th scope="col">Total Amount</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>2</td>
+                                                                            <td>2</td>
+                                                                            <td>2</td>
+                                                                            <td>2</td>
+                                                                            <td>2</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="profile-settings" class="tab-pane fade">
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-striped verticle-middle table-responsive-sm">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Weeks</th>
+                                                                            <th scope="col">No of Customer</th>
+                                                                            <th scope="col">No of Driver</th>
+                                                                            <th scope="col">No of Booking</th>
+                                                                            <th scope="col">Total Amount</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>3</td>
+                                                                            <td>3</td>
+                                                                            <td>3</td>
+                                                                            <td>3</td>
+                                                                            <td>3</td>                                                                           
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div id="profile" class="tab-pane fade">
+                                                        <div class="card-body">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered table-striped verticle-middle table-responsive-sm">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Weeks</th>
+                                                                            <th scope="col">No of Customer</th>
+                                                                            <th scope="col">No of Driver</th>
+                                                                            <th scope="col">No of Booking</th>
+                                                                            <th scope="col">Total Amount</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td>4</td>
+                                                                            <td>4</td>
+                                                                            <td>4</td>
+                                                                            <td>4</td>
+                                                                            <td>4</td>                                                                           
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+        </div>
+
+    </div>
+    <script>
+    
+    document.addEventListener('DOMContentLoaded', function() {
+    const barChart_1 = document.getElementById("barChart_1").getContext('2d');
+    const barChart_2 = document.getElementById("barChart_2").getContext('2d');
+    let chart1, chart2, donut1, donut2;
+
+    const drawCharts = (duration) => {
+        const data = getData(duration);
+
+        if (chart1) chart1.destroy();
+        if (chart2) chart2.destroy();
+        if (donut1) donut1.setData([]);
+        if (donut2) donut2.setData([]);
+
+        chart1 = new Chart(barChart_1, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: "Number of Bookings",
+                    data: data.bar1,
+                    backgroundColor: 'rgba(26, 51, 213, 1)'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{ ticks: { beginAtZero: true } }],
+                    xAxes: [{ barPercentage: 0.5 }]
+                }
+            }
+        });
+
+        chart2 = new Chart(barChart_2, {
+            type: 'bar',
+            data: {
+                labels: data.labels,
+                datasets: [{
+                    label: "Total Customer Registered",
+                    data: data.bar2,
+                    backgroundColor: 'rgba(26, 51, 213, 1)'
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{ ticks: { beginAtZero: true } }],
+                    xAxes: [{ barPercentage: 0.5 }]
+                }
+            }
+        });
+
+        donut1 = Morris.Donut({
+            element: 'morris_donught',
+            data: data.donut1,
+            resize: true,
+            colors: ['#75B432', 'rgb(192, 10, 39)', '#4400eb']
+        });
+
+        donut2 = Morris.Donut({
+            element: 'morris_donught_2',
+            data: data.donut2,
+            resize: true,
+            colors: ['#75B432', 'rgb(192, 10, 39)', '#4400eb']
+        });
+    };
+
+    const getData = (duration) => {
+        // Sample data for demonstration, replace with actual data
+        const weeklyData = {
+            labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+            bar1: [12, 19, 3, 5, 2, 3, 7],
+            bar2: [2, 3, 20, 5, 1, 4, 10],
+            donut1: [{label: "Group A", value: 10}, {label: "Group B", value: 20}, {label: "Group C", value: 30}],
+            donut2: [{label: "Group X", value: 15}, {label: "Group Y", value: 25}, {label: "Group Z", value: 35}]
+        };
+
+        const monthlyData = {
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
+            bar1: [65, 59, 80, 81, 56, 55, 40],
+            bar2: [28, 48, 40, 19, 86, 27, 90],
+            donut1: [{label: "Group A", value: 40}, {label: "Group B", value: 30}, {label: "Group C", value: 20}],
+            donut2: [{label: "Group X", value: 35}, {label: "Group Y", value: 25}, {label: "Group Z", value: 15}]
+        };
+
+        const yearlyData = {
+            labels: ["2020","2021", "2022", "2023", "2024"],
+            bar1: [50,65, 59, 80, 81],
+            bar2: [15,28, 48, 40, 19],
+            donut1: [{label: "Group A", value: 25}, {label: "Group B", value: 15}, {label: "Group C", value: 45}],
+            donut2: [{label: "Group X", value: 20}, {label: "Group Y", value: 30}, {label: "Group Z", value: 50}]
+        };
+
+        switch (duration) {
+            case 'weekly':
+                return weeklyData;
+            case 'monthly':
+                return monthlyData;
+            case 'yearly':
+                return yearlyData;
+            default:
+                return weeklyData;
+        }
+    };
+
+    document.getElementById('duration-select').addEventListener('change', function() {
+        const selectedDuration = this.value;
+        drawCharts(selectedDuration);
+    });
+
+    // Initial load
+    drawCharts('weekly');
+});
+
+
+    </script>
+    
+    <!--**********************************
+        Main wrapper end
+    ***********************************-->
+    {% endblock content%}
+   

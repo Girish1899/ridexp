@@ -1,0 +1,173 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<!--************
+        Content body start
+    *************-->
+    <div class="content-body">
+        <div class="container-fluid">
+            <div class="row page-titles mx-0">
+                <div class="col-sm-6 p-md-0">
+                    <div class="welcome-text">
+                        <h4>Edit Car Category</h4>
+                    </div>
+                </div>
+                
+                <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                    <a href="{% url 'CategoryListView' %}" style="color: white;"><button  class="btn btn-primary">View Category</button></a>
+                    <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                </div>
+            </div>
+            <div class="col-xl-12">
+                <div class="card">
+                    <div class="card-header">
+                        <!-- <h4 class="card-title">Edit Category</h4> -->
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <input type="hidden" class="form-control" id="category_id" name="category_id" value="{{ catlist.0.category_id }}">
+                            <input type="hidden" class="form-control" id="original_category_name" name="original_category_name" value="{{ catlist.0.category_name }}">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car/Taxi Name</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control form-control-lg" id="category_name" name="category_name" value="{{ catlist.0.category_name }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* No of Persons</label>
+                            <div class="col-sm-10">
+                                <input type="number" class="form-control form-control-lg" id="seats" name="seats" value="{{ catlist.0.seats }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Image</label>
+                            <div class="col-sm-10">
+                                <input type="file" class="form-control form-control-lg" id="image" name="image">
+                                {% if catlist.0.image %}
+                                <img id="preview1" src="{{ catlist.0.image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                                {% else %}
+                                <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                            <div class="col-sm-10">    
+                            <select class="form-control form-control-lg" id="category_status" name="category_status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" {% if catlist.0.category_status == "active" %} selected {% endif %}>Active</option>
+                                <option value="inactive" {% if catlist.0.category_status == "inactive" %} selected {% endif %}>Inactive</option>
+                            </select>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+        var category_name = $('#category_name').val().trim().toLowerCase();
+        var category_id = $('#category_id').val();
+        var category_status = $('#category_status').val();
+        var original_category_name = $('#original_category_name').val();
+        var seats = $('#seats').val();
+        var image = $('#image')[0].files[0];
+        
+        if (category_name === '' || seats === '' ) {
+            alert("All fields are required");
+            return;
+        }
+
+        if (category_name.trim() === original_category_name.trim().toLowerCase()) {
+            submitForm(category_name, category_id, category_status);
+        } else {
+            $.ajax({
+                url: "{% url 'check_category' %}",
+                type: "GET",
+                data: { 'category_name': category_name },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("Category name already exists.");
+                    } else {
+                        if (confirm("Are you sure you want to save this category?")) {
+                            submitForm(category_name, category_id, category_status);
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+
+    function submitForm(category_name, category_id, category_status) {
+        var formData = new FormData();
+        formData.append('category_name', category_name);
+        formData.append('category_id', category_id);
+        formData.append('seats', $('#seats').val());
+        formData.append('category_status', category_status);
+        var imageFile = $('#image')[0].files[0];
+        if (imageFile) {
+            formData.append('image', imageFile);
+        } else {
+            // Pass an indicator that no new image is uploaded
+            formData.append('image', ''); 
+        }
+
+        $.ajax({
+            url: "{% url 'UpdateCategory' %}",
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function (result) {
+                console.log("result val: ", result);
+                if (result['success']) {
+                    alert("Category details edited successfully");
+                    window.location.href = "{% url 'CategoryListView' %}";
+                } else {
+                    alert("Failed to edit category details: " + result['message']);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.log('AJAX error:', error);
+            }
+        });
+    }
+
+    // Preview images
+    $("#image").change(function () {
+        readURL(this);
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $(input).next('img').attr('src', e.target.result).show();
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+});
+</script>
+{% endblock content %}

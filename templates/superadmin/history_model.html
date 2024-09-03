@@ -1,0 +1,64 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Model History for {{ model.model_name }}</h4>
+                </div>
+            </div>
+            
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'ModelListView' %}" style="color: white;"><button  class="btn btn-primary">View Model</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Model Name</th>
+                                        <th>Status</th>
+                                        <th>Created On</th>
+                                        <th>Created by</th>
+                                        <th>Updated By</th>
+                                        <th>Updated On</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.brand.category.category_name }}</td>
+                                        <td>{{ record.brand.brand_name }}</td>
+                                        <td>{{ record.model_name }}</td>
+                                        <td>{{ record.status }}</td>
+                                        <td>{{ record.created_on }}</td>
+                                        <td>{{ record.created_by }}</td>
+                                        <td>{{ record.updated_by }}</td>
+                                        <td>{{ record.updated_on }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

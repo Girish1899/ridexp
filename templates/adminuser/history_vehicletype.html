@@ -1,0 +1,59 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Vehicle Type History for {{ vehicle_type.vehicle_type_name }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Vehicle Type History</li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Vehicle Type Name</th>
+                                        <th>Company Format</th>
+                                        <!-- <th>Created On</th> -->
+                                        <th>Created by</th>
+                                        <th>Updated By</th>
+                                        <!-- <th>Updated On</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ record.vehicle_type_name }}</td>
+                                        <td>{{ record.company_format }}</td>
+                                        <!-- <td>{{ record.created_on }}</td> -->
+                                        <td>{{ record.created_by }}</td>
+                                        <td>{{ record.updated_by }}</td>
+                                        <!-- <td>{{ record.updated_on }}</td> -->
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Vehicle Owner History for {{ owner.name }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'viewvehicleowner' %}" style="color: white;"><button  class="btn btn-primary">View Vehicle Owner</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Vehicle Owner Id</th>
+                                        <th>Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Address</th>
+                                        <th>Email</th>
+                                        <th>Profile Image</th>
+                                        <th>Address Proof</th>
+                                        <th>Identity Proof</th>
+                                        <th>Status</th>
+                                        <th>Created On/ Created by</th>
+                                        <th>Modified On/ Modified by</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.company_format }}</td>
+                                        <td>{{ record.name }}</td>
+                                        <td>{{ record.phone_number }}</td>
+                                        <td>{{ record.address }}</td>
+                                        <td>{{ record.email }}</td>
+                                        <td><img src="{{ record.image }}" alt="Image" style="max-width: 100px;"></td>
+                                        <td><img src="{{ record.address_proof }}" alt="Image" style="max-width: 100px;"></td>
+                                        <td><img src="{{ record.identity }}" alt="Image" style="max-width: 100px;"></td>
+                                        <td>{{ record.status }}</td>
+                                        <td>
+                                            <div>{{ record.created_on }}</div>
+                                            <div>{{ record.created_by }}</div>
+                                        </td>
+                                        <td style="color: red;">
+                                            <div>{{ record.updated_on }}</div>
+                                            <div>{{ record.updated_by }}</div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

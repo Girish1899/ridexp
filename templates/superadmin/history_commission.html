@@ -1,0 +1,64 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Commission History for Commission ID: {{ commission.commission_id }}</h4>
+                </div>
+            </div>
+            
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'commissionlist' %}" style="color: white;"><button  class="btn btn-primary">View Commission</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Commission Name </th>
+                                        <th>Commission Type </th>
+                                        <th>Created On</th>
+                                        <th>Updated On</th>
+                                        <th>Created by</th>
+                                        <th>Updated by</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.commission_name }}</td>
+                                        <td>{{ record.commission_percentage }}</td>
+                                        <td>{{ record.created_on }}</td>
+                                        <td>{{ record.updated_on }}</td>
+                                        <td>{{ record.created_by }}</td>
+                                        <td>{{ record.updated_by }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+    
+    
+    
+    

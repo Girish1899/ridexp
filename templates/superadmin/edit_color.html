@@ -1,0 +1,120 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Edit Color</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'colorList' %}" style="color: white;"><button  class="btn btn-primary">View Car Color </button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Edit Color</h4> -->
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="color_id" name="color_id"
+                            value="{{ clist.0.color_id }}">
+                            <input type="hidden" class="form-control" id="original_color_name" name="original_color_name" value="{{ clist.0.name }}">
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Car Color Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name"
+                                value="{{ clist.0.name }}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function () {
+            event.preventDefault();
+
+            var name = $('#name').val().trim().toLowerCase();
+            var color_id = $('#color_id').val();
+            var original_color_name = $('#original_color_name').val();
+
+            if (name.trim() === '') {
+                alert("Please enter color name.");
+                return;
+            }
+
+            // Assuming you have a variable original_name to compare with the edited name
+            var original_name = "{{ clist.0.name }}";
+
+            if (name.trim() === original_color_name.trim()) {
+                submitForm(name, color_id);
+            } else {
+                $.ajax({
+                    url: "{% url 'check_color' %}",
+                    type: "GET",
+                    data: { 'name': name },
+                    success: function (data) {
+                        if (data.exists) {
+                            alert("color name already exists.");
+                        } else {
+                            if (confirm("Are you sure you want to save this color?")) {
+                                submitForm(name, color_id);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+        });
+
+        function submitForm(name, color_id) {
+            $.ajax({
+                url: "{% url 'Updatecolor' %}",
+                type: "POST",
+                data: {
+                    'name': name,
+                    'color_id': color_id,
+                },
+                headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("color details edited successfully");
+                        window.location.href = "{% url 'colorList' %}";
+                    } else {
+                        alert("Failed to edit color details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+
+</script>
+
+{% endblock content%}

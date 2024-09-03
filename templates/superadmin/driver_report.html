@@ -1,0 +1,268 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'adddriver' %}" style="color: white;"><button class="btn btn-primary">Add
+                        Drivers</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Driver List</h4>
+                        <button id="toggleFilterReport" class="btn btn-primary">Show</button>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="filter_report" style="display:none;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date</p>
+                                        <input id="single-date-picker" class="form-control" type="text"
+                                            placeholder="Select Date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date Range</p>
+                                        <input id="date-range-picker" class="form-control" type="text"
+                                            placeholder="Select Date Range">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle ID</p>
+                                        <select id="vehicle-id" class="form-control form-control-lg">
+                                            <option value="" disabled selected>Select Vehicle ID</option>
+                                            {% for vehicle in vehicles %}
+                                            <option value="{{ vehicle.vehicle_id }}">{{ vehicle.company_format }}
+                                            </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Mobile No/Total Bookings</p>
+                                        <select id="driver-id" class="form-control form-control-lg">
+                                            <option value="">Select Mobile No/Total Bookings</option>
+                                            {% for driver in drivers %}
+                                            <option value="{{ driver.driver_id }}">{{ driver.phone_number }} ({{ driver.number_of_rides }})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><br>
+
+
+                        <div class="table-responsive">
+                            <div class="mb-3">
+                                <button id="download-excel" class="btn btn-success">Download Excel</button>
+                                <button id="download-csv" class="btn btn-primary">Download CSV</button>
+                                <button id="download-pdf" class="btn btn-danger">Download PDF</button>
+                            </div>
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Driver Name</th>
+                                        <th>Mobile Number</th>
+                                        <th>Email</th>
+                                        <th>No of Rides</th>
+                                        <th>Registered On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;" data-vehicleid="{{ i.vehicle.vehicle_id }}" data-driverid="{{ i.driver_id }}">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ i.name }}</td>
+                                        <td>{{ i.phone_number }}</td>
+                                        <td>{{ i.email }}</td>
+                                        <td>{{ i.number_of_rides }}</td>
+                                        <td>{{ i.created_on }}</td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <a href="{% url 'driver' i.driver_id %}" class="btn btn-info"><i
+                                                    class="fa fa-eye"></i></a>&nbsp;
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add the necessary scripts for export functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<script>
+document.getElementById('download-excel').addEventListener('click', function() {
+    const table = document.querySelector('#example');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+    XLSX.writeFile(wb, 'completed_bookings.xlsx');
+});
+
+document.getElementById('download-csv').addEventListener('click', function() {
+    const table = document.querySelector('#example');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+    XLSX.writeFile(wb, 'completed_bookings.csv', { bookType: 'csv' });
+});
+
+document.getElementById('download-pdf').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.autoTable({ html: '#example' });
+    doc.save('completed_bookings.pdf');
+});
+
+// Toggle Filter Report visibility
+$('#toggleFilterReport').click(function() {
+    var filterReport = $('.filter_report');
+    if (filterReport.is(':visible')) {
+        filterReport.hide();
+        $(this).text('Show');
+    } else {
+        filterReport.show();
+        $(this).text('Hide');
+    }
+});
+
+$(document).ready(function() {
+    // Initialize Select2 for select elements
+    $("#vehicle-id, #driver-id").select2();
+
+    // Initialize Flatpickr for date pickers
+    flatpickr("#single-date-picker", {
+        dateFormat: "Y-m-d",
+        onChange: filterTable
+    });
+
+    flatpickr("#date-range-picker", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        onChange: filterTable
+    });
+
+    // Initialize DataTable
+    var table = $('#example').DataTable();
+
+    // Event listener for Select2 elements
+    $('#vehicle-id, #driver-id').on('change', filterTable);
+
+    function filterTable() {
+        var vehicleId = $('#vehicle-id').val();
+        var driverId = $('#driver-id').val();
+        var singleDate = $('#single-date-picker').val();
+        var dateRange = $('#date-range-picker').val();
+        var startDate = null;
+        var endDate = null;
+
+        if (dateRange) {
+            var dateParts = dateRange.split(" to ");
+            if (dateParts.length === 2) {
+                startDate = new Date(dateParts[0]);
+                endDate = new Date(dateParts[1]);
+                // Adjust endDate to include the entire day
+                endDate.setHours(23, 59, 59, 999);
+            }
+        }
+
+        // Custom search function for filtering based on selected criteria
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            var row = $(table.row(dataIndex).node());
+            var rowVehicleId = row.data('vehicleid');
+            var rowDriverId = row.data('driverid');
+            var pickupDateText = row.find('td:nth-child(6)').text().trim();
+
+            // Parse the pickup date
+            var pickupDate = parseDate(pickupDateText);
+            if (!pickupDate || isNaN(pickupDate)) {
+                return false; // Skip rows with invalid dates
+            }
+
+            var showRow = true;
+
+            // Date filtering
+            if (singleDate) {
+                var selectedDate = new Date(singleDate);
+                showRow = (pickupDate.toDateString() === selectedDate.toDateString());
+            } else if (startDate && endDate) {
+                showRow = (pickupDate >= startDate && pickupDate <= endDate);
+            }
+
+            // Vehicle ID and Driver ID filtering
+            if (vehicleId && rowVehicleId != vehicleId) {
+                showRow = false;
+            }
+            if (driverId && rowDriverId != driverId) {
+                showRow = false;
+            }
+
+            return showRow;
+        });
+
+        table.draw(); // Redraw the table to apply the new search criteria
+
+        // Remove the custom search function after filtering
+        $.fn.dataTable.ext.search.pop();
+    }
+
+    // Function to parse date in the format "MMM. D, YYYY"
+    function parseDate(dateString) {
+        const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
+        const parts = dateString.split(' ');
+        if (parts.length !== 3) {
+            return new Date(""); // Invalid date
+        }
+        const month = months.indexOf(parts[0]);
+        const day = parseInt(parts[1].replace(',', ''), 10);
+        const year = parseInt(parts[2], 10);
+        if (month === -1 || isNaN(day) || isNaN(year)) {
+            return new Date(""); // Invalid date
+        }
+        return new Date(year, month, day);
+    }
+});
+
+</script>
+
+<style>
+.mb-1 {
+    color: black;
+}
+</style>
+
+{% endblock %}

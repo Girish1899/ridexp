@@ -1,0 +1,93 @@
+{% extends 'telecaller/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Cancelled Booking</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'indextel' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Cancelled Bookings List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>                                       
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address/PhNo</th>
+                                        <th>Ridetype</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place</th>                              
+                                        <th>Total Fare</th>
+                                        <th>Category</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Created On/Created By/Modified On/Modified By</th>
+                                        <th>Comments /Canelled By/Cancelled on</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div style="color: red">{{ i.customer.phone_number }}</div>
+                                        </td>
+                                        <td>{{ i.ridetype.name }}</td>
+                                        <td>{{ i.source }}</td>
+                                        <td>{{ i.destination }}</td>
+                                        <td>{{ i.total_fare }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div style="color: red">{{ i.created_on }}</div>
+                                            <div style="color: red">{{ i.created_by }}</div>
+                                            <div>{{ i.updated_on }}</div>
+                                            <div>{{ i.updated_by }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: red;">{{ i.comments }}</div>
+                                            <div>{{ i.cancelled_by }}</div>
+                                            <div>{{ i.cancelled_on }}</div>
+
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock content %}

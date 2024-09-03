@@ -1,0 +1,213 @@
+{% extends 'customer/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Current Bookings</h4>
+                </div>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Current Bookings List</h4>
+                        <!-- <button id="toggleFilterReport" class="btn btn-primary">Show</button> -->
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address/ph No</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place/ Ride Type</th>
+                                        <th>Total Fare</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Vehicle Id/ Vehicle No/ Type/ Name/ ph No</th>
+                                        <th>Ride Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;" data-ridetype="{{ i.ridetype_id }}" data-rideid="{{ i.ride_id }}" data-categoryid="{{ i.model.brand.category.category_id }}" data-vehicleid="{{ i.driver.vehicle.vehicle_id }}" data-driverid="{{ i.driver_id }}">
+                                        <td>{{forloop.counter}}</td>
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div style="color: red">{{ i.customer.phone_number }}</div>
+                                        </td>
+                                        <td>{{ i.source }}</td>
+                                        <td>
+                                            <div>{{ i.destination }}</div>
+                                            <div style="color: green;">{{ i.ridetype.name }}</div>
+                                        </td>
+                                        <td><button class="btn btn-warning text-white" disabled>
+                                            {{ i.total_fare }}
+                                        </button></td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div>
+                                                <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.company_format }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.Vehicle_Number }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-warning text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-danger text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
+                                            </div>
+                                            
+                                            <div>{{ i.driver.name }}</div>
+                                            <div>{{ i.driver.phone_number }}</div>
+                                        </td>
+                                        <td>
+                                            <div><span class="badge badge-pill badge-success">{{ i.ride_status }}</span></div><br>                                            
+                                            {% if i.ride_status == 'advancebookings' or i.ride_status == 'currentbookings' or i.ride_status == 'assignbookings' or i.ride_status == 'assignlaterbookings' %}
+                                            <div><button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#cancelBookingModal" data-ride-id="{{ i.ride_id }}">Cancel Booking</button></div>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Cancel Booking Modal -->
+
+<div class="modal fade" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cancelBookingModalLabel">Cancel Booking</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="cancelRideId">
+                    <div class="form-group">
+                        <label for="cancelComments">Comments</label>
+                        <textarea class="form-control" id="comments" name="comments" rows="3" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger cancel-btn">Cancel Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add the necessary scripts for export functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        // Update data-comments attribute whenever textarea value changes
+        $('#comments').on('input', function() {
+            const comments = $(this).val();
+            $('.cancel-btn').attr('data-comments', comments);
+        });
+
+        // Handle cancel button click
+        $(document).on('click', '.cancel-btn', function() {
+            console.log("Submit button clicked!");
+
+            const comments = $(this).data('comments');
+            const rideId = $('#cancelBookingModal').data('ride-id');
+
+        console.log("comments: ", comments); // Debugging statement
+        console.log("Ride ID: ", rideId);     // Debugging statement
+
+        // Check if driverId is correctly retrieved
+        if (!comments) {
+            console.error("comments is missing");
+            alert("comments is missing.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "cuscancel_ride" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ comments: comments, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                alert("Submitted successfully.");
+                location.reload(); // Reload page after successful assignment
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to cancel the booking.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#cancelBookingModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+
+});
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    // Loop over each ride to set the display status
+    '{% for i in object_list %}'
+        let rideStatus = "{{ i.ride_status }}";
+        let displayStatus = "Unknown";  // Default value
+        
+        if (rideStatus === "advancebookings" || rideStatus === "currentbookings") {
+            displayStatus = "Driver not assigned";
+        } else if (rideStatus === "assignbookings" || rideStatus === "assignlaterbookings") {
+            displayStatus = "Driver assigned";
+        } else if (rideStatus === "ongoingbookings") {
+            displayStatus = "Ongoing";
+        }
+
+        document.getElementById("display-status-{{ i.ride_id }}").textContent = displayStatus;
+    '{% endfor %}'
+});
+
+</script>
+<style>
+.mb-1 {
+    color: black;
+}
+</style>
+{% endblock content %}

@@ -1,0 +1,154 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'adddriver' %}" style="color: white;"><button  class="btn btn-primary">Add Drivers</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Driver List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Vehicle Id/Owner Details</th>
+                                        <th>Driver Details/Verification Status</th>
+                                        <th>Download</th>
+                                        <th>Registered On</th>
+                                        <th>Verified On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div style="color: red;">{{ i.vehicle.company_format }}</div>
+                                            <div style="color: blue;">{{ i.vehicle.owner.name }}</div>
+                                            <div style="color: green;">{{ i.vehicle.owner.phone_number }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: red;">{{ i.name }}</div>
+                                            <div style="color: blue;">{{ i.email }}</div>
+                                            <div style="color: green;">{{ i.phone_number }}</div>
+                                            <div><span  class="badge badge-pill badge-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" onclick="VerifyDriver('{{ i.driver_id }}', '{{ i.verification_status }}')">
+                                                {% if i.verification_status == 'verified' %}
+                                                Verified
+                                                {% else %}
+                                                Not Verified
+                                                {% endif %}
+                                            </span></div>
+                                        </td>
+                                        <td><a href="{% url 'download_driver_documents' i.driver_id %}" class="btn btn-warning"><i class="fa fa-download"></i></a></td>
+                                        <td>{{ i.created_on }}</td>
+                                        <!-- <td>
+                                            <button class="btn btn-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" onclick="VerifyDriver('{{ i.driver_id }}', '{{ i.verification_status }}')">
+                                                {% if i.verification_status == 'verified' %}
+                                                Verified
+                                                {% else %}
+                                                Not Verified
+                                                {% endif %}
+                                            </button>
+
+                                        </td> -->
+                                        <td>
+                                            {% if i.verified_on %}
+                                            {{ i.verified_on }}
+                                            {% else %}
+                                            N/A
+                                            {% endif %}
+                                        </td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <a href="#" class="btn btn-primary" onclick="EditDriver('{{ i.driver_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-danger" onclick="DeleteDriver('{{ i.driver_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="DriverHistory('{{ i.driver_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'driver' i.driver_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function DeleteDriver(driver_id){
+        var action = confirm("Are you sure you want to delete this driver?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteDriver" %}',
+              data: {
+                  'driver_id': driver_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Driver Deleted Successfully");
+                    window.location.href = "{% url 'viewdriver' %}";
+                    $("#driver_id #i-" + driver_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditDriver(driver_id) {
+        var action = confirm("Are you sure you want to edit this driver?");
+        if (action !== false) {
+            window.location.href = "EditDriver/" + driver_id; // Add a slash here
+        }
+    };
+
+    function DriverHistory(driver_id) {
+        window.location.href = "DriverHistory/" + driver_id; // Add a slash here
+    };
+
+    function VerifyDriver(driver_id, current_status) {
+        var message = current_status === 'verified' ? "This driver is already verified." : "Have you verified this driver?";
+        if (current_status !== 'verified' && confirm(message)) {
+            $.ajax({
+                url: '{% url "VerifyDriver" %}',
+                data: {
+                    'driver_id': driver_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.verified) {
+                        alert("Driver Verified Successfully");
+                        location.reload(); // Reload the page to update the status
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+{% endblock content%}
+

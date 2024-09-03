@@ -1,0 +1,167 @@
+{% extends "./index.html" %}
+{% load static %}
+
+{% block body_content %}
+    <main class="main">
+
+        <!-- breadcrumb -->
+        <!-- <div class="site-breadcrumb" style="background: url(assets/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Service</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Service</li>
+                </ul>
+            </div>
+        </div> -->
+        <!-- breadcrumb end -->
+
+
+        <!-- service area -->
+        <div class="service-area bg py-120" >
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Services</span>
+                            <h2 class="site-title">Our Best Services For You</h2>
+                            <div class="heading-divider"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/service04.jpg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/taxi.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/outstationcabs">Outstation Booking</a>
+                                </h3>
+                                <p class="service-text">
+                                    Book Outstation cabs in Bangalore at a reasonable cost to enjoy your holidays hassle-free drive.
+										
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/outstationcabs" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/service02.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/city-taxi.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/localtaxi">City Transport</a>
+                                </h3>
+                                <p class="service-text">
+                                    Rent car/cab at affordable rates for local trips from anywhere and at anytime @ Deepam Taxi.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/localtaxi" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/05.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/airport.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/airporttaxi">Airport Transport</a>
+                                </h3>
+                                <p class="service-text">
+                                    Hire Bangalore Airport taxi for Airport pickup & drop, Airport Round Trip in Bangalore at cheapest prices.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/airporttaxi" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/04.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/business.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/services">Business Transport</a>
+                                </h3>
+                                <p class="service-text">
+                                    We understand the importance of your business. Get an affordable & luxurious car rental service anywhere in the city.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/services" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/05.avif' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/taxi-2.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/services">Holiday Packages</a>
+                                </h3>
+                                <p class="service-text">
+                                    Deepam Cab provides the most reliable and economical rental car in the city for best holiday package.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/services" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="service-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="service-img">
+                                <img src="{% static '/img/service/06.jpeg' %}" alt="">
+                            </div>
+                            <div class="service-icon">
+                                <img src="{% static '/img/icon/taxi.svg' %}" alt="">
+                            </div>
+                            <div class="service-content">
+                                <h3 class="service-title">
+                                    <a href="/services">Wedding Parties</a>
+                                </h3>
+                                <p class="service-text">
+                                    Book a Cab for best wedding car rental to celebrate the wedding party in style and elegance.
+                                </p>
+                                <div class="service-arrow">
+                                    <a href="/services" class="theme-btn">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- service area end-->
+
+    </main>
+    {% endblock body_content %}
+

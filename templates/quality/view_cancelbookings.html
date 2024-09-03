@@ -1,0 +1,294 @@
+{% extends 'quality/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Cancelled Booking</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'qindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Cancelled Bookings List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>                                       
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address/PhNo</th>
+                                        <th>Ridetype</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place</th>                              
+                                        <th>Total Fare</th>
+                                        <th>Category</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Created On/Created By/Modified On/Modified By</th>
+                                        <th>Comments /Canelled By/Cancelled on</th>
+                                        <th>Quality Commrnt</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div style="color: red">{{ i.customer.phone_number }}</div>
+                                        </td>
+                                        <td>{{ i.ridetype.name }}</td>
+                                        <td>{{ i.source }}</td>
+                                        <td>{{ i.destination }}</td>
+                                        <td>{{ i.total_fare }}</td>
+                                        <td>{{ i.model.brand.category.category_name }}</td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div style="color: red">{{ i.created_on }}</div>
+                                            <div style="color: red">{{ i.created_by }}</div>
+                                            <div>{{ i.updated_on }}</div>
+                                            <div>{{ i.updated_by }}</div>
+                                        </td> 
+                                        <td>
+                                            <div style="color: red;">{{ i.comments }}</div>
+                                            <div>{{ i.cancelled_by }}</div>
+                                            <div>{{ i.cancelled_on }}</div>
+                                        </td>
+                                        <td>
+                                            <div id="quality-comment-{{ i.ride_id }}">
+                                                {% if i.quality_comments %}
+                                                    <div>{{ i.quality_comments }}</div>
+                                                    <div style="color: rgb(61, 148, 219);">{{ i.verified_by }}</div>
+                                                    <div style="color: rgb(61, 148, 219);">{{ i.verified_on }}</div>
+                                                {% else %}
+                                                    <button id="add-comment-{{ i.ride_id }}" type="button" class="btn btn-success btn-sm btn-custom-sm" data-toggle="modal" data-target="#qualitycommentModal" data-ride-id="{{ i.ride_id }}">Add Comment</button>
+                                                {% endif %}
+                                            </div>
+                                        </td> 
+                                        <td><button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#assignDriverModal" data-ride-id="{{ i.ride_id }}">Reassign Driver</button></td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Assign Driver Modal -->
+<div class="modal fade" id="assignDriverModal" tabindex="-1" role="dialog" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="assignDriverModalLabel">Assign Driver</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="driverTable" class="table table-striped">
+                        <thead>
+                            <tr style="color: #030000;">
+                                <th>Driver Name</th>
+                                <th>Vehicle Id</th>
+                                <th>Vehicle Number</th>
+                                <th>Category</th>
+                                <th>Phone Number</th>
+                                <th>Driver Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for driver in drivers %}
+                            {% if driver.status == 'active' %}
+                            <tr style="color: #030000;">
+                                <td>{{ driver.name }}</td>
+                                <td>
+                                    <button type="button" class="btn btn-primary assign-driver-btn {% if driver.driver_status == 'occupied' %}btn-danger disabled{% endif %}" data-driver-id="{{ driver.company_format }}" {% if driver.driver_status == 'occupied' %}disabled{% endif %}>
+                                        {{ driver.vehicle.company_format }}
+                                    </button>
+                                </td>
+                                <td>{{ driver.vehicle.Vehicle_Number }}</td>
+                                <td>{{ driver.vehicle.model.brand.category.category_name }}</td>
+                                <td>{{ driver.phone_number }}</td>
+                                <td>
+                                    {% if driver.driver_status == 'free' %}
+                                        <span class="badge badge-success">{{ driver.driver_status }}</span>
+                                    {% elif driver.driver_status == 'occupied' %}
+                                        <span class="badge badge-warning">{{ driver.driver_status }}</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quality comment Modal -->
+
+<div class="modal fade" id="qualitycommentModal" tabindex="-1" role="dialog" aria-labelledby="qualitycommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="qualitycommentModalLabel">Add Comment</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="qualityRideId">
+                    <div class="form-group">
+                        <label for="qualityComments">Comments</label>
+                        <textarea class="form-control" id="quality_comments" name="quality_comments" rows="3" required></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger comment-btn">Submit Comment</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    
+    $(document).ready(function() {
+    console.log("Document is ready!");
+
+    // Assign Driver Button Click Event
+    $(document).on('click', '.assign-driver-btn', function() {
+        console.log("Assign driver button clicked!");
+
+        const driverId = $(this).data('driver-id');
+        const rideId = $('#assignDriverModal').data('ride-id');
+
+        console.log("Driver ID: ", driverId); // Debugging statement
+        console.log("Ride ID: ", rideId);     // Debugging statement
+
+        // Check if driverId is correctly retrieved
+        if (!driverId) {
+            console.error("Driver ID is missing");
+            alert("Driver ID is missing.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "assign_driver" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ driver_id: driverId, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                alert("Driver assigned successfully.");
+                location.reload(); // Reload page after successful assignment
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to assign driver.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#assignDriverModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+});
+</script>
+
+<script>
+    $(document).ready(function() {
+    // Handle submit button click
+    $(document).on('click', '.comment-btn', function() {
+        const quality_comments = $('#quality_comments').val();
+        const rideId = $('#qualitycommentModal').data('ride-id');
+
+        console.log("Quality Comments: ", quality_comments); // Debugging statement
+        console.log("Ride ID: ", rideId); // Debugging statement
+
+        if (!quality_comments) {
+            console.error("Comments are missing");
+            alert("Please enter comments.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "quality_comments" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ quality_comments: quality_comments, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                alert("Submitted successfully.");
+                // Hide the "Add Comment" button and display the comment
+                $('#add-comment-' + rideId).hide(); // Hide the button
+                $('#quality-comment-' + rideId).html(`
+                    <div>${result.quality_comments}</div>
+                    <div style="color: rgb(61, 148, 219);">${result.verified_by}</div>
+                    <div style="color: rgb(61, 148, 219);">${result.verified_on}</div>
+                `); // Update the comment section
+                $('#quality-comment-' + rideId).show(); // Ensure the element is displayed
+
+                $('#qualitycommentModal').modal('hide'); // Hide the modal after submission
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to add comment.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#qualitycommentModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+});
+</script>
+
+
+{% endblock content %}

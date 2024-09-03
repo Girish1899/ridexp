@@ -1,0 +1,110 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">User List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Company Id </th>
+                                    <th>User Name </th>
+                                    <th>Phone Number</th>
+                                    <!-- <th>Email</th> -->
+                                    <!-- <th>password</th> -->
+                                    <th>Address</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Created On</th>
+                                    <th>Updated On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ i.company_format }}</td>
+                                    <td>{{ i.user }}</td>
+                                    <td>{{ i.phone_number }}</td>
+                                    <!-- <td>{{ i.user.email }}</td> -->
+                                    <!-- <td>{{ i.user.password }}</td> -->
+                                    <td>{{ i.address }}</td>
+                                    <td>{{ i.type }}</td>
+                                    <td><span class="badge badge-success">{{i.status}}</span></td>
+                                    <td>{{ i.created_on }}</td>
+                                    <td>{{ i.updated_on }}</td>
+                                    <td >
+                                        <!-- <a href="#" class="btn btn-primary"  onclick="EditUser('{{i.user_id}}')"><i class="fa fa-edit"></i></a>&nbsp; -->
+                                        <!-- <a href="#" class="btn btn-secondary" onclick="DeleteUser('{{i.user_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-warning" onclick="HistoryUser('{{i.user_id}}')"><i class="fa fa-clock"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+<script>
+    function DeleteUser(user_id){
+        var action = confirm("Are you sure you want to delete this user?");
+        if (action != false) {
+          $.ajax({
+              url: "DeleteUser",
+              data: {
+                  'user_id': user_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("User Deleted Successfully");
+                    window.location.href = "{% url 'userlist' %}";
+                    $("#user_id #i-" + user_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditUser(user_id) {
+        var action = confirm("Are you sure you want to edit this user?");
+        if (action !== false) {
+            window.location.href = "EditUser/" + user_id; // Add a slash here
+        }
+    };
+    function HistoryUser(user_id) {
+        window.location.href = "adUserHistory/" + user_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

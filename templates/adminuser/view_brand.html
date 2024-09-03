@@ -1,0 +1,115 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Brand List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Brand Id</th>
+                                    <th>Category </th>
+                                    <th>Brand Name</th>
+                                    <th>Status</th>
+                                    <th>Created On</th>
+                                    <th>Updated On</th>
+                                    <th>Created by</th>
+                                    <th>Updated by</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ i.brand_id }}</td>
+                                    <td>{{ i.category.category_name }}</td>
+                                    <td>{{ i.brand_name }}</td>
+                                    <td>
+                                        <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                            {% if i.category.category_status == 'inactive' %}
+                                                inactive
+                                            {% else %}
+                                                {{ i.status }}
+                                            {% endif %}
+                                        </span>
+                                    </td>                                    
+                                    <td>{{ i.created_on }}</td>
+                                    <td>{{ i.updated_on }}</td>
+                                    <td>{{ i.created_by }}</td>
+                                    <td>{{ i.updated_by }}</td>
+                                    <td >
+                                        <!-- <a href="#" class="btn btn-primary"  onclick="EditBrand('{{i.brand_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeleteBrand('{{i.brand_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                        <a href="#" class="btn btn-warning" onclick="HistoryBrand('{{i.brand_id}}')"><i class="fa fa-clock"></i></a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeleteBrand(brand_id){
+        var action = confirm("Are you sure you want to delete this brand?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteBrand" %}',
+              data: {
+                  'brand_id': brand_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Brand Deleted Successfully");
+                    window.location.href = "{% url 'BrandListView' %}";
+                    $("#brand_id #i-" + brand_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditBrand(brand_id) {
+        var action = confirm("Are you sure you want to edit this brand?");
+        if (action !== false) {
+            window.location.href = "EditBrand/" + brand_id; // Add a slash here
+        }
+    };
+    function HistoryBrand(brand_id) {
+        window.location.href = "adBrandHistory/" + brand_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+

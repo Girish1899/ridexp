@@ -1,0 +1,104 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Ongoing Bookings</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+                </ol>
+            </div>
+        </div>
+        <!-- row -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Ongoing Bookings List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <!-- <th>Company format</th> -->
+                                        <th>Booking Id/Pickup time/Pickup date</th>
+                                        <th>Customer Name/email/address/ph No</th>
+                                        <th>Pickup Place</th>
+                                        <th>Drop Place/ Ride Type</th>
+                                        <th>Total Fare</th>
+                                        <th>Customer Comments</th>
+                                        <th>Booking datetime</th>
+                                        <th>Vehicle Id/ Vehicle No/ Type/ Name/ ph No</th>
+                                        <th>Dispatched By/ Dispatched On</th>
+                                        <!-- <th>Ride Status</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>
+                                            <div>{{ i.company_format }}</div>
+                                            <div style="color: blue;">{{ i.pickup_time }}</div>
+                                            <div style="color: blue;">{{ i.pickup_date }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
+                                            <div >{{ i.customer.email }}</div>
+                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div style="color: red">{{ i.customer.phone_number }}</div>
+                                        </td>
+                                        <td>{{ i.source }}</td>
+                                        <td>
+                                            <div>{{ i.destination }}</div>
+                                            <div style="color: green;">{{ i.ridetype.name }}</div>
+                                        </td>
+                                        <td><button class="btn btn-warning text-white" disabled>
+                                            {{ i.total_fare }}
+                                        </button></td>
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>{{ i.booking_datetime }}</td>
+                                        <td>
+                                            <div>
+                                                <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.company_format }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.Vehicle_Number }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-warning text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.model.brand.brand_name }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-danger text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.model.model_name }}</button>
+                                            </div>
+                                            <div>
+                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.model.brand.category.category_name }}</button>
+                                            </div>
+                                            
+                                            <div>{{ i.driver.name }}</div>
+                                            <div>{{ i.driver.phone_number }}</div>
+                                        </td>
+                                        <td>
+                                            <div>{{ i.assigned_by }}</div>
+                                            <div>{{ i.assigned_on }}</div>
+                                        </td>
+                                        <!-- <td style="color: green;">{{ i.ride_status }}</td> -->
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

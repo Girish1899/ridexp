@@ -1,0 +1,228 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Report</h4>
+                </div>
+            </div>
+        </div>
+        <form method="get" id="report-form">
+            <div class="form-row align-items-center">
+                <!-- Report Type Selector -->
+                <div class="col-auto">
+                    <div class="form-group">
+                        <label for="report-type" class="sr-only">Select Report Type:</label>
+                        <select class="form-control" id="report-type" name="report_type" onchange="updateDateInput()">
+                            <option value="daily" {% if report_type == "daily" %} selected {% endif %}>Daily</option>
+                            <option value="weekly" {% if report_type == "weekly" %} selected {% endif %}>Weekly</option>
+                            <option value="monthly" {% if report_type == "monthly" %} selected {% endif %}>Monthly</option>
+                            <option value="yearly" {% if report_type == "yearly" %}selected{% endif %}>Yearly</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Date Picker -->
+                <div class="col-auto">
+                    <div class="form-group">
+                        <label for="date" class="sr-only">Select Date:</label>
+                        <div class="input-group date" id="datetimepicker" data-target-input="nearest">
+                            <input type="text" name="date" class="form-control datetimepicker-input"
+                                data-target="#datetimepicker" value="{{ selected_date }}" />
+                            <div class="input-group-append" data-target="#datetimepicker" data-toggle="datetimepicker">
+                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Generate Report Button -->
+                <div class="col-auto">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+            
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header" >
+                        <h4 class="card-title">Results</h4>
+                        <p style="color: green; font-size: large;">Total Bookings: {{ total_rides }}</p>
+                        <p style="color: green; font-size: large;">Completed Bookings: {{ completed }}</p>
+                        <p style="color: green; font-size: large;">Cancelled Bookings: {{ cancelled }}</p>
+                        <p style="color: green; font-size: large;">Total Fare: {{ total_fare }}</p>
+                        <p style="color: green; font-size: large;">Total OutStation: {{ outstation }}</p>
+                        <p style="color: green; font-size: large;">Total Airport PickUp: {{ airportpickup }}</p>
+                        <p style="color: green; font-size: large;">Total Airport Drop: {{ airportdrop }}</p>
+                    </div>
+                    <hr>
+                    <!-- <center><h4 style="color: blue;">Weekly Report</h4></center>  -->
+                    <div class="card-header" >
+                        {% if report_type == 'weekly' %} 
+                        <table class="table table-striped" style="color: #030000;">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Total Rides</th>
+                                    <th>Completed Rides</th>
+                                    <th>Cancelled Rides</th>
+                                    <th>Ongoing Rides</th>
+                                    <th>OutStation</th>
+                                    <th>Airport PickUp</th>
+                                    <th>Airport Drop</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for day in daily_data %}
+                                <tr>
+                                    <td>{{ day.date|date:"l" }} ({{ day.date }})</td>
+                                    <td>{{ day.total_rides }}</td>
+                                    <td>{{ day.completed_rides }}</td>
+                                    <td>{{ day.cancelled_rides }}</td>
+                                    <td>{{ day.ongoing_rides }}</td>
+                                    <td>{{ day.outstation }}</td>
+                                    <td>{{ day.airportpickup }}</td>
+                                    <td>{{ day.airportdrop }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <div class="mb-3">
+                                <button id="download-excel" class="btn btn-success">Download Excel</button>
+                                <button id="download-csv" class="btn btn-primary">Download CSV</button>
+                                <button id="download-pdf" class="btn btn-danger">Download PDF</button>
+                            </div>
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                <th>Booking Id/Pickup time/Pickup date</th>
+                                <th>Customer Name/email/address</th>
+                                <th>Customer PhNo</th>
+                                <th>Ridetype</th>
+                                <th>Pickup Place</th>
+                                <th>Drop Place</th>
+                                <th>Total Fare</th>
+                                <th>Category</th>
+                                <th>Customer Comments</th>
+                                <th>Booking datetime</th>
+                                <th>Created On/Created By/Modified On/Modified By</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ride in rides %}
+                            <tr style="color: #030000;">
+                                <td>
+                                    <div>{{ ride.company_format }}</div>
+                                    <div style="color: blue;">{{ ride.pickup_time }}</div>
+                                    <div style="color: blue;">{{ ride.pickup_date }}</div>
+                                    <div style="color: blue;">{{ ride.pickup_date }}</div>
+                                </td>
+                                <td>
+                                    <div style="color: rgb(61, 148, 219);">{{ ride.customer.customer_name }}</div>
+                                    <div>{{ ride.customer.email }}</div>
+                                    <div style="color: rgb(61, 148, 219);">{{ ride.customer.address }}</div>
+                                </td>
+                                <td style="color: red">{{ ride.customer.phone_number }}</td>
+                                <td>{{ ride.ridetype.name }}</td>
+                                <td>{{ ride.source }}</td>
+                                <td>{{ ride.destination }}</td>
+                                <td>{{ ride.total_fare }}</td>
+                                <td>{{ ride.model.brand.category.category_name }}</td>
+                                <td>{{ ride.customer_notes }}</td>
+                                <td>{{ ride.booking_datetime }}</td>
+                                <td>
+                                    <div style="color: red">{{ ride.created_on }}</div>
+                                    <div style="color: red">{{ ride.created_by }}</div>
+                                    <div>{{ ride.updated_on }}</div>
+                                    <div>{{ ride.updated_by }}</div>
+                                </td>
+
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Add the necessary scripts for export functionality -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> 
+
+<script>
+document.getElementById('download-excel').addEventListener('click', function() {
+    const table = document.querySelector('#example');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+    XLSX.writeFile(wb, 'completed_bookings.xlsx');
+});
+
+document.getElementById('download-csv').addEventListener('click', function() {
+    const table = document.querySelector('#example');
+    const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
+    XLSX.writeFile(wb, 'completed_bookings.csv', { bookType: 'csv' });
+});
+
+document.getElementById('download-pdf').addEventListener('click', function() {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    doc.autoTable({ html: '#example' });
+    doc.save('completed_bookings.pdf');
+});
+</script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript">
+    function updateDateInput() {
+        var reportType = document.getElementById("report-type").value;
+        $('#datetimepicker').datetimepicker('destroy'); // Destroy previous instance
+
+        if (reportType === "weekly") {
+            $('#datetimepicker').datetimepicker({
+                format: 'YYYY-MM-DD',
+                viewMode: 'days'
+            });
+        } else if (reportType === "monthly") {
+            $('#datetimepicker').datetimepicker({
+                format: 'YYYY-MM',
+                viewMode: 'months'
+            });
+        } else if (reportType === "yearly") {
+            $('#datetimepicker').datetimepicker({
+                format: 'YYYY',
+                viewMode: 'years'
+            });
+        } else {
+            $('#datetimepicker').datetimepicker({
+                format: 'YYYY-MM-DD'
+            });
+        }
+    }
+
+    $(function () {
+        updateDateInput(); // Initialize based on current selection
+    });
+</script>
+<!-- report -->
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+
+{% endblock content %}

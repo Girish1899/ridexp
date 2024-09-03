@@ -1,0 +1,49 @@
+{% load static %}
+   <!--************
+            Sidebar start
+        *************-->
+        <div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+
+                    <li><a href="{% url 'rescueindex' %}" aria-expanded="false"><i class="icon icon-single-04"></i><span
+                        class="nav-text">Dashboard</span></a></li>
+
+                        <li><a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <i class="icon icon-form"></i><span class="nav-text">Bookings</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'rescueaddbooking' %}">Add Bookings</a></li>
+                                <li><a href="{% url 'rescueridelist' %}">View Current Bookings</a></li>
+                                <li><a href="{% url 'rescueadvance_bookings' %}">View Advance Bookings</a></li>
+                                <li><a href="{% url 'rescuepending_bookings' %}">View Pending Bookings</a></li>
+                                <li><a href="{% url 'rescueview_assigned_rides' %}">View Assigned Bookings</a></li>
+                                <li><a href="{% url 'rescuecancelledbookings' %}">View Cancelled Bookings</a></li>
+                                <li><a href="{% url 'rescueongoing_rides' %}">View Ongoing Bookings</a></li>
+                                <li><a href="{% url 'rescuecompleted_rides' %}">View Completed Bookings</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Customer</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="rescuecustomerlist">View Customer</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Drivers</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'rescuedriverlist' %}">View Drivers</a></li>
+                            </ul>
+                        </li>
+
+                        <!-- <div class="col-12">
+                            <a href="{% url 'logout' %}"><button type="submit" class="btn btn-primary mb-2" >Logut</button></a>
+                        </div> -->
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--************
+            Sidebar end
+        *************-->

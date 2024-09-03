@@ -1,0 +1,141 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'addbrand' %}" style="color: white;"><button  class="btn btn-primary">Add Brand</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Brand List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Serial No</th>
+                                    <th>Car Category </th>
+                                    <th>Car Brand </th>
+                                    <th>Created On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.category.category_name }}</td>
+                                    <td>{{ i.brand_name }}</td>                                                                       
+                                    <td>{{ i.created_on }}</td>
+                                    <td style="display: flex; justify-content: center; align-items: center;">
+                                        {% if i.status == 'active' %}
+                                        <a href="#" class="btn btn-primary" onclick="EditBrand('{{i.brand_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        {% endif %}
+                                        <a href="#" class="btn btn-danger" onclick="DeleteBrand('{{i.brand_id}}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-warning" onclick="HistoryBrand('{{i.brand_id}}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                        <a href="{% url 'ViewBrand' i.brand_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
+                                        {% if i.category.category_status != 'inactive' %}
+                                        <button class="btn btn-link p-0" onclick="toggleBrandStatus('{{ i.brand_id }}', '{{ i.status }}')" title="Change Status (block/unblock)">
+                                            <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                                <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white fa-2x"></i> <!-- Adjust icon size here -->
+                                            </span>
+                                        </button>
+                                        {% else %}
+                                        <button class="btn btn-link p-0 disabled" title="Cannot Change Status">
+                                            <span class="badge badge-danger">
+                                                <i class="fa fa-thumbs-down text-white fa-2x"></i> <!-- Adjust icon size here -->
+                                            </span>
+                                        </button>
+                                        {% endif %}
+                                    </td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeleteBrand(brand_id){
+        var action = confirm("Are you sure you want to delete this brand?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "DeleteBrand" %}',
+              data: {
+                  'brand_id': brand_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Brand Deleted Successfully");
+                    window.location.href = "{% url 'BrandListView' %}";
+                    $("#brand_id #i-" + brand_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditBrand(brand_id) {
+        var action = confirm("Are you sure you want to edit this brand?");
+        if (action !== false) {
+            window.location.href = "EditBrand/" + brand_id; // Add a slash here
+        }
+    };
+    function HistoryBrand(brand_id) {
+        window.location.href = "BrandHistory/" + brand_id; // Add a slash here
+    };
+
+    function toggleBrandStatus(brand_id, current_status) {
+    var new_status = current_status === 'active' ? 'inactive' : 'active';
+    var action = confirm("Are you sure you want to change the status to " + new_status + "?");
+    if (action) {
+        $.ajax({
+            url: '{% url "toggle_brand_status" %}',  // Update this URL to match your URL pattern for toggling status
+            method: 'POST',
+            data: {
+                'brand_id': brand_id,
+                'status': new_status,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            success: function(data) {
+                if (data.success) {
+                    alert("Brand status updated successfully.");
+                    location.reload(); // Reload the page to reflect the changes
+                } else {
+                    alert("Failed to update brand status.");
+                }
+            }
+        });
+    }
+}
+
+
+</script>
+{% endblock content%}
+

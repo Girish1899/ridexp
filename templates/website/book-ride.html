@@ -1,0 +1,445 @@
+{% extends "./index.html" %}
+{% load static %}
+
+{% block body_content %}
+<style>
+    .hidden-column {
+        display: none;
+    }
+</style>
+    <main class="main" style="background: url('static/img/slider/sl1.jpg')">
+
+        <!-- breadcrumb -->
+        <!-- <div class="site-breadcrumb" style="background: url(assets/img/breadcrumb/01.jpg)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Book A Ride</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li class="active">Book A Ride</li>
+                </ul>
+            </div>
+        </div> -->
+        <!-- breadcrumb end -->
+
+
+
+        <!-- book ride -->
+        <div class="book-ride py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 mx-auto">
+                        <div class="booking-form">
+                            <div class="book-ride-head">
+                                <h4 class="booking-title">Make Your Booking Today</h4>
+                            </div>
+                            <form action="#">
+                                <div class="row">
+
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Location</label>
+                                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source">
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Off Location</label>
+                                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"  id="destination" name="destination">
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Date:</label>
+                                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date">
+                                                <!-- <i class="far fa-calendar-days"></i> -->
+                                                <div id="dateError" class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Time:</label>
+                                                <input type="time" class="form-control "  id="pickup_time" name="pickup_time">
+                                            </div>
+                                        </div>
+                        
+                                        <div class="col-lg-3">
+                                            <button class="theme-btn" type="submit" id="save_action">Check Fares<i
+                                                    class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <br><br>
+                            <div id="costs-table-container" style="display: none;">
+                                <table id="costs-table" class="table table-bordered table-striped">
+                                    <thead class="thead-dark" style="background-color: #1c2b39; color: white;">
+                                        <tr>
+                                            <th>Category</th>
+                                            <th>Seats</th>
+                                            <th>Images</th>
+                                            <th>Distance (km)</th>
+                                            <th>Permit</th>
+                                            <th>Toll</th>
+                                            <th>Beta</th>
+                                            <th>Total Trip Cost</th>
+                                            <th> Action </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- Table rows will be populated dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- book ride end -->
+
+
+        <!-- Modal for customer details -->
+<div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color: #1c2b39; color: white;">
+                <h5 class="modal-title" id="bookingModalLabel" style="color: white;">Booking Details</h5>
+            </div>
+            <div class="modal-body">
+                <form id="bookingForm">
+                    <div class="form-group">
+                        <label for="customerName">Name:</label>
+                        <input type="text" class="form-control" id="customerName" name="customerName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerMobile">Mobile Number:</label>
+                        <input type="text" class="form-control" id="customerMobile" name="customerMobile" required>
+                        <div id="mobileError" class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEmail">Email Address:</label>
+                        <input type="email" class="form-control" id="customerEmail" name="customerEmail" required>
+                        <div id="emailError" class="invalid-feedback"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerEmail">Pickup Date:</label>
+                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pdate" name="pdate" required>
+                        <div id="dateError" class="invalid-feedback"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Pick Up Time</label>
+                        <input type="time" class="form-control" placeholder="00:00 AM" id="pickuptime" required>
+                    </div>
+
+                    
+                    <!-- Hidden inputs for category, cost, source, destination -->
+                    <input type="hidden" id="bookingCategory" name="bookingCategory">
+                    <input type="hidden" id="bookingCost" name="bookingCost">
+                    <input type="hidden" id="bookingSource" name="bookingSource">
+                    <input type="hidden" id="bookingDestination" name="bookingDestination">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-dark" id="confirmBookingBtn">Confirm Booking</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        
+<script>
+    var ridetype="";
+    $(document).ready(function()
+    { 
+        const params = {};
+        const queryString = window.location.search.slice(1);
+        const pairs = queryString.split('&');
+
+        pairs.forEach(pair => {
+          const [key, value] = pair.split('=');
+          params[key] = decodeURIComponent(value || '');
+        });
+
+        console.log("params: ", params);
+
+        if(params["location1"])
+        {
+          document.getElementById('source').value = params.location1;
+        }
+        if (params.location2) 
+        {
+          document.getElementById('destination').value = params.location2;
+        }
+        if (params.pickup_date) 
+        {
+          document.getElementById('pickup_date').value = params.pickup_date;
+        }
+        if (params.pickup_time) 
+        {
+          document.getElementById('pickup_time').value = params.pickup_time;
+          $("#save_action").click(); 
+        }   
+    });
+
+    function populateTable(costs) {
+    var tableBody = $('#costs-table tbody');
+    tableBody.empty();  // Clear existing table rows
+
+    $.each(costs, function(category, data) {
+        var row = $('<tr>');
+
+        // Category name
+        row.append($('<td>').text(data.category ));
+
+        // Category image
+        var img = $('<img>').attr('src', data.image_url).attr('alt', data.category_name).css('width', '50px');
+        row.append($('<td>').append(img));
+
+        // Number of seats
+        row.append($('<td>').text(data.seats));
+
+        // Distance, permit, toll, beta, and cost
+        row.append($('<td>').text(data.distance_km));
+        row.append($('<td>').text(data.permit));
+        row.append($('<td>').text(data.toll));
+        row.append($('<td>').text(data.beta));
+        row.append($('<td>').text(data.cost));
+
+        // Action button to show modal with input fields
+        var actionBtn = $('<button>').addClass('btn btn-dark').text('Book Now').click(function() {
+            // Fill modal inputs with data
+            $('#bookingCategory').val(data.category_name);
+            $('#bookingCost').val(data.cost);
+            $('#bookingSource').val($('#source').val());  // Replace with actual source
+            $('#bookingDestination').val($('#destination').val());  // Replace with actual destination
+            $('#bookingModal').modal('show');
+        });
+
+        // Append action button to the row
+        var actionCell = $('<td>').append(actionBtn);
+        row.append(actionCell);
+
+        // Append row to the table
+        tableBody.append(row);
+
+        $('#costs-table-container').css('display', 'block');
+    });
+}
+
+
+
+      // Handle booking form submission
+      $('#confirmBookingBtn').click(function() {
+        // Example: Perform Ajax submission of booking form data
+        var formData = $('#bookingForm').serialize();
+        console.log('Booking form data:', formData);
+        // Uncomment the following line to submit the form via Ajax
+        // $.post('your_booking_endpoint_url', formData, function(response) {
+        //     console.log('Booking submitted successfully:', response);
+        // }).fail(function(error) {
+        //     console.error('Error submitting booking:', error);
+        // });
+
+        // Close modal after submission
+        $('#bookingModal').modal('hide');
+    });
+
+
+
+    $('#confirmBookingBtn').click(function(event)
+    {
+        event.preventDefault();
+        var bookingCategory = $('#bookingCategory').val();
+        var bookingCost = $('#bookingCost').val();
+        var bookingSource = $('#bookingSource').val();
+        var bookingDestination = $('#bookingDestination').val();
+        var pickup_date = $('#pickup_date').val();
+        var customerName = $('#customerName').val();
+        var customerEmail = $('#customerEmail').val();
+        var customerMobile = $('#customerMobile').val();
+        var pickuptime = $('#pickuptime').val();
+        var pickup_date = $('#pdate').val();
+
+
+
+        $.ajax({
+            url: '{% url "add_new_booking" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                pickup_date: pickup_date,
+                pickup_time: pickuptime,
+                source: bookingSource,
+                destination: bookingDestination,
+                phone_number: customerMobile,
+                customer_name: customerName,
+                customer_email: customerEmail,
+                price: bookingCost,
+
+
+            },
+            success: function(result) {
+                if(result["status"]!="Error")
+                {
+                    alert("thank you for booking with us. information will be shared with you over whats app.")
+
+                }
+                else
+                {
+                    alert("Oops something went wrong. Please try again. "+result['message'])
+                }
+                $('#costs-table-container').css('display', 'none');
+                // Function to populate table with JSON data
+            // populateTable(result.costs);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+
+
+
+
+    });
+    
+
+
+    $("#save_action").click(function(event) 
+    {
+           
+    event.preventDefault();
+    var source = $('#source').val();
+    var destination = $('#destination').val();
+    var pickup_date = $('#pickup_date').val();
+    if (!source || !destination || !pickup_date) 
+    {
+        alert("All fields are required.");
+    } else {
+        $.ajax({
+            url: '{% url "get_ride_pricing_details" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                source: source,
+                destination: destination,
+                pickup_date: pickup_date,
+            },
+            success: function(result) {
+                console.log("^^^^^: ", result);
+                // Function to populate table with JSON data
+            populateTable(result.costs);
+            check_ride();
+            if(ridetype=="")
+            hideColumns("costs-table",[3,4,6]);
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr.responseText);
+            }
+        });
+    }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    var mobileInput = document.getElementById('customerMobile');
+    var emailInput = document.getElementById('customerEmail');
+    var mobileError = document.getElementById('mobileError');
+    var emailError = document.getElementById('emailError');
+
+    mobileInput.addEventListener('input', function() {
+        var mobileNumber = this.value.trim();
+        if (!isValidMobileNumber(mobileNumber)) {
+            mobileInput.classList.add('is-invalid');
+            mobileError.textContent = 'Please enter a valid 10-digit mobile number.';
+        } else {
+            mobileInput.classList.remove('is-invalid');
+            mobileInput.classList.add('is-valid');
+            mobileError.textContent = '';
+        }
+    });
+
+    emailInput.addEventListener('input', function() {
+        var email = this.value.trim();
+        if (!isValidEmail(email)) {
+            emailInput.classList.add('is-invalid');
+            emailError.textContent = 'Please enter a valid email address.';
+        } else {
+            emailInput.classList.remove('is-invalid');
+            emailInput.classList.add('is-valid');
+            emailError.textContent = '';
+        }
+    });
+
+    function isValidMobileNumber(mobile) {
+        var regex = /^[6-9]\d{9}$/; // Regular expression for 10-digit Indian mobile numbers
+        return regex.test(mobile);
+    }
+
+    function isValidEmail(email) {
+        // Regular expression for basic email validation
+        var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
+
+  
+});
+
+
+function hideColumns(tableId, columns) {
+ 
+            var table = document.getElementById(tableId);
+          
+            if (table) {
+                
+                var rows = table.rows;
+                for (var i = 0; i < rows.length; i++) {
+                    for (var j = 0; j < columns.length; j++) {
+                        if (rows[i].cells[columns[j] - 1]) {
+                            rows[i].cells[columns[j] - 1].classList.add('hidden-column');
+                        }
+                    }
+                }
+            }
+        }
+
+
+   
+
+function check_ride()
+{
+      //////////////////////////
+      var pickup=($("#source").val()).toString();
+    pickup=pickup.toLowerCase()
+    var drop=($("#destination").val()).toString();
+    drop=drop.toLowerCase()
+    ///////////////////////////////
+    console.log("--",( pickup.includes("bengaluru")  && !drop.includes("bengaluru") ),pickup.includes("bengaluru"),!drop.includes("bengaluru"));
+    if(( pickup.includes("bengaluru")  && !drop.includes("bengaluru") )||
+    ( !pickup.includes("bengaluru")  && drop.includes("bengaluru") ))
+    {
+        ridetype="Outstation";
+}          
+}       
+
+  
+
+
+</script>
+</main>
+    {% endblock body_content %}
+
+
+
+  

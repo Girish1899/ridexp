@@ -1,0 +1,281 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Edit Outstation Pricing</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'view_outstationprice' %}" style="color: white;"><button class="btn btn-primary">View Ride Pricings</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
+                        <input type="hidden" class="form-control" id="ride_pricing_id" name="ride_pricing_id" value="{{ rp.0.ride_pricing_id }}">
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="trip_type" name="trip_type">
+                                <option value="one_way" {% if rp.0.trip_type == "one_way" %}selected{% endif %}>One Way</option>
+                                <option value="round_trip" {% if rp.0.trip_type == "round_trip" %}selected{% endif %}>Round Trip</option>
+                            </select>
+                        </div>
+                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">City</label>
+                        <div class="col-sm-4">
+                            <input type="text" class="form-control form-control-lg" id="city" name="city" value="{{ rp.0.city }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Type</label>
+                        <div class="col-sm-4">
+                            <select class="form-control form-control-lg" id="car_category" name="car_category">
+                                <option value="" disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == rp.0.car_category %}selected{% endif %}>{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                       
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">GST Tax Percentage</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="gst_tax_percentage" name="gst_tax_percentage" value="{{ rp.0.gst_tax_percentage }}">
+                        </div>
+                    </div>
+                    
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Amount (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_amount_ac" name="customer_min_amount_ac" value="{{ rp.0.customer_min_amount_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Min Amount (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_min_amount_ac" name="driver_min_amount_ac" value="{{ rp.0.driver_min_amount_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Amount (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_amount_non_ac" name="customer_min_amount_non_ac" value="{{ rp.0.customer_min_amount_non_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Min Amount (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_min_amount_non_ac" name="driver_min_amount_non_ac" value="{{ rp.0.driver_min_amount_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Extra Km Charge AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="customer_extra_km_charge_ac" name="customer_extra_km_charge_ac" value="{{ rp.0.customer_extra_km_charge_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Extra Km Charge AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="driver_extra_km_charge_ac" name="driver_extra_km_charge_ac" value="{{ rp.0.driver_extra_km_charge_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Extra Km Charge Non AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="customer_extra_km_charge_non_ac" name="customer_extra_km_charge_non_ac" value="{{ rp.0.customer_extra_km_charge_non_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Extra Km Charge Non AC</label>
+                        <div class="col-sm-4">
+                            <input type="number" class="form-control form-control-lg" id="driver_extra_km_charge_non_ac" name="driver_extra_km_charge_non_ac" value="{{ rp.0.driver_extra_km_charge_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Km/Day (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_km_per_day_ac" name="customer_min_km_per_day_ac" value="{{ rp.0.customer_min_km_per_day_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Max Km/Day (AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_max_km_per_day_ac" name="driver_max_km_per_day_ac" value="{{ rp.0.driver_max_km_per_day_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Min Km/Day (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="customer_min_km_per_day_non_ac" name="customer_min_km_per_day_non_ac" value="{{ rp.0.customer_min_km_per_day_non_ac }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Max Km/Day (Non-AC)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_max_km_per_day_non_ac" name="driver_max_km_per_day_non_ac" value="{{ rp.0.driver_max_km_per_day_non_ac }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_commission_percentage" name="driver_commission_percentage" value="{{ rp.0.driver_commission_percentage }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Company Commission (%)</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="company_commission" name="company_commission" value="{{ rp.0.company_commission }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Type</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="driver_per_km_commission_type" name="driver_per_km_commission_type">
+                                <option value="No" {% if rp.0.driver_per_km_commission_type == 'No' %}selected{% endif %}>No</option>
+                                <option value="Yes" {% if rp.0.driver_per_km_commission_type == 'Yes' %}selected{% endif %}>Yes</option>
+                            </select>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Per KM Commission Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_per_km_commission_charge" name="driver_per_km_commission_charge" value="{{ rp.0.driver_per_km_commission_charge }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Dead Per KM Charge</label>
+                        <div class="col-sm-2">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="dead_per_km_charge" name="dead_per_km_charge" value="{{ rp.0.dead_per_km_charge }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Allowance</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_allowance" name="driver_allowance" value="{{ rp.0.driver_allowance }}">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Night Bata</label>
+                        <div class="col-sm-4">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="driver_night_bata" name="driver_night_bata" value="{{ rp.0.driver_night_bata }}">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Additional Information</label>
+                        <div class="col-sm-4">
+                            <textarea class="form-control form-control-lg" id="additional_info" name="additional_info">{{ rp.0.additional_info }}</textarea>
+                        </div>
+                    </div>
+                    
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var price_type = 'outstation';  // Define ride_status here or fetch its value appropriately
+
+        $("#save_action").click(function () {
+            var ride_pricing_id = document.getElementById('ride_pricing_id').value;
+            var city = document.getElementById('city').value;
+            var trip_type = document.getElementById('trip_type').value;
+            var car_category = document.getElementById('car_category').value;
+            var company_commission = document.getElementById('company_commission').value;
+            var driver_commission_percentage = document.getElementById('driver_commission_percentage').value;
+            var customer_min_amount_ac = document.getElementById('customer_min_amount_ac').value;
+            var driver_min_amount_ac = document.getElementById('driver_min_amount_ac').value;
+            var customer_min_amount_non_ac = document.getElementById('customer_min_amount_non_ac').value;
+            var driver_min_amount_non_ac = document.getElementById('driver_min_amount_non_ac').value;
+            var customer_min_km_per_day_ac = document.getElementById('customer_min_km_per_day_ac').value;
+            var driver_max_km_per_day_ac = document.getElementById('driver_max_km_per_day_ac').value;
+            var customer_min_km_per_day_non_ac = document.getElementById('customer_min_km_per_day_non_ac').value;
+            var driver_max_km_per_day_non_ac = document.getElementById('driver_max_km_per_day_non_ac').value;
+            var customer_extra_km_charge_ac = document.getElementById('customer_extra_km_charge_ac').value;
+            var driver_extra_km_charge_ac = document.getElementById('driver_extra_km_charge_ac').value;
+            var customer_extra_km_charge_non_ac = document.getElementById('customer_extra_km_charge_non_ac').value;
+            var driver_extra_km_charge_non_ac = document.getElementById('driver_extra_km_charge_non_ac').value;
+            var gst_tax_percentage = document.getElementById('gst_tax_percentage').value;
+            var additional_info = document.getElementById('additional_info').value;
+            var driver_per_km_commission_type = document.getElementById('driver_per_km_commission_type').value;
+            var driver_per_km_commission_charge = document.getElementById('driver_per_km_commission_charge').value;
+            var dead_per_km_charge = document.getElementById('dead_per_km_charge').value;
+            var driver_allowance = document.getElementById('driver_allowance').value;
+            var driver_night_bata = document.getElementById('driver_night_bata').value;
+
+            
+            // Add validation checks here
+            // if (!price_type || !city || !car_category || !company_commission || !driver_commission_percentage || !customer_min_amount_ac || !driver_min_amount_ac) {
+            //     alert("All fields are required.");
+            //     return;
+            // }
+
+            if (confirm("Are you sure you want to save these outstation price?")) {
+            $.ajax({
+                url: '{% url "updateoutstationprice" %}',  // Update this URL to match your Django view
+                type: "POST",
+                data: {
+                    'ride_pricing_id':ride_pricing_id,
+                    'price_type': price_type,
+                    'city': city,
+                    'trip_type': trip_type,
+                    'car_category': car_category,
+                    'company_commission': company_commission,
+                    'driver_commission_percentage': driver_commission_percentage,
+                    'customer_min_amount_ac': customer_min_amount_ac,
+                    'driver_min_amount_ac': driver_min_amount_ac,
+                    'customer_min_amount_non_ac': customer_min_amount_non_ac,
+                    'driver_min_amount_non_ac': driver_min_amount_non_ac,
+                    'customer_min_km_per_day_ac': customer_min_km_per_day_ac,
+                    'driver_max_km_per_day_ac': driver_max_km_per_day_ac,
+                    'customer_min_km_per_day_non_ac': customer_min_km_per_day_non_ac,
+                    'driver_max_km_per_day_non_ac': driver_max_km_per_day_non_ac,
+                    'customer_extra_km_charge_ac': customer_extra_km_charge_ac,
+                    'driver_extra_km_charge_ac': driver_extra_km_charge_ac,
+                    'customer_extra_km_charge_non_ac': customer_extra_km_charge_non_ac,
+                    'driver_extra_km_charge_non_ac': driver_extra_km_charge_non_ac,
+                    'gst_tax_percentage': gst_tax_percentage,
+                    'additional_info': additional_info,
+                    'driver_per_km_commission_type': driver_per_km_commission_type,
+                    'driver_per_km_commission_charge': driver_per_km_commission_charge,
+                    'dead_per_km_charge': dead_per_km_charge,
+                    'driver_allowance': driver_allowance,
+                    'driver_night_bata': driver_night_bata,                },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("outstation updated successfully");
+                        window.location.href = "{% url 'view_outstationprice' %}";
+                    } else {
+                        alert("Failed to update local price: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                    alert("An error occurred: " + xhr.responseText);
+                }
+            });
+        }
+    });
+});
+</script>
+{% endblock content %}

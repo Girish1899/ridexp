@@ -1,0 +1,78 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Driver History for {{ driver.name }}</h4>
+                </div>
+            </div>
+            
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'viewdriver' %}" style="color: white;"><button  class="btn btn-primary">View Drivers</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Vehicle Id/owner Details</th>
+                                        <th>Driver Name</th>
+                                        <th>Phone Number</th>
+                                        <th>Email</th>
+                                        <th>Address</th>
+                                        <!-- <th>Profile</th> -->
+                                        <th>Status</th>
+                                        <th>Reason</th>
+                                        <th>Created On/ Created by</th>
+                                        <th>Modified On/ Modified by</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div>{{ record.vehicle.company_format }}</div>
+                                            <div>{{ record.vehicle.owner.name }}</div>
+                                            <div>{{ record.vehicle.owner.phone_number }}</div>
+                                        </td>
+                                        <td>{{ record.name }}</td>
+                                        <td>{{ record.phone_number }}</td>
+                                        <td>{{ record.email }}</td>
+                                        <td>{{ record.address }}</td>
+                                        <!-- <td><img src="{{ record.profile_image.url }}" alt="Image" style="max-width: 100px;"></td> -->
+
+                                        <td>{{ record.status }}</td>
+                                        <td>{{ record.block_reason}}</td>
+                                        <td>
+                                            <div>{{ record.created_on }}</div>
+                                            <div>{{ record.created_by }}</div>
+                                        </td>
+                                        <td style="color: red;">
+                                            <div>{{ record.updated_by }}</div>
+                                            <div>{{ record.updated_on }}</div>
+                                        </td>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

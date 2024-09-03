@@ -1,0 +1,86 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Vehicle History for {{ vehicle.Vehicle_Number }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'vehiclelist' %}" style="color: white;"><button  class="btn btn-primary">View Vehicle</button></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">History Records</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Vehicle Id</th>
+                                        <th>Owner Name / Owner Mobile</th>
+                                        <!-- <th>Owner Mobile</th> -->
+                                        <th>Commission Type</th>
+                                        <th>Vehicle Number</th>
+                                        <th>Category/Brand/ Model</th>
+                                        <th>Image</th>
+                                        <th>Vehicle Status</th>
+                                        <th>Reason</th>
+                                        <th>Created On/ Created by</th>
+                                        <th>Modified On/ Modified by</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.company_format }}</td>
+                                        <td>
+                                            <div>{{ record.owner.name }}</div>
+                                            <div>{{ record.owner.phone_number }}</div>
+                                        </td>
+                                        <td>{{ record.commission_type.commission_name }}</td>
+                                        <td>{{ record.Vehicle_Number }}</td>
+                                        <td>
+                                            <div>{{ record.model.brand.category.category_name }}</div>
+                                            <div>{{ record.model.brand.brand_name }}</div>
+                                            <div>{{ record.model.model_name }}</div>
+                                        </td>
+                                        <td>
+                                            {% if record.model.brand.category.image %}
+                                                <img src="{{ record.model.brand.category.image.url }}" alt="Image" style="max-width: 100px;">
+                                            {% else %}
+                                                No Image
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ record.vehicle_status }}</td>
+                                        <td>{{ record.block_reason }}</td>
+                                        <td>
+                                            <div>{{ record.created_on }}</div>
+                                            <div>{{ record.created_by }}</div>
+                                        </td>
+                                        <td style="color: red;">
+                                            <div>{{ record.updated_by }}</div>
+                                            <div>{{ record.updated_on }}</div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

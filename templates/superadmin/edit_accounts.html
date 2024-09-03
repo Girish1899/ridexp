@@ -1,0 +1,217 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Edit Accounts</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'accounts_list' %}" style="color: white;"><button  class="btn btn-primary">View Accounts</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" id="account_id" name="account_id" value="{{ alist.0.account_id }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control form-control-lg" id="date" name="date" value="{% if alist.0.date %}{{ alist.0.date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Day Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="day_name" name="day_name" value="{{ alist.0.day_name }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle ATM</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="vehicle_atm" name="vehicle_atm" value="{{ alist.0.vehicle_atm }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tripsheet</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="tripsheet" name="tripsheet" value="{{ alist.0.tripsheet }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Credit</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="total_credit" name="total_credit" value="{{ alist.0.total_credit }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Cash Received</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="cash_recieved" name="cash_recieved" value="{{ alist.0.cash_recieved }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Balance BD</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="balance_bd" name="balance_bd" value="{{ alist.0.balance_bd }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Balance</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="total_balance" name="total_balance" value="{{ alist.0.total_balance }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Expense</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="expense" name="expense" value="{{ alist.0.expense }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Cash Transfer</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="cash_transfer" name="cash_transfer" value="{{ alist.0.cash_transfer }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Expense</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="total_expense" name="total_expense" value="{{ alist.0.total_expense }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Balance</label>
+                        <div class="col-sm-10">
+                            <input type="number" step="0.01" class="form-control form-control-lg" id="balance" name="balance" value="{{ alist.0.balance }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        // Automatically fill the day name based on the selected date
+        $('#date').change(function () {
+            var date = new Date($(this).val());
+            var options = { weekday: 'long' };
+            var dayName = new Intl.DateTimeFormat('en-US', options).format(date);
+            $('#day_name').val(dayName);
+        });
+        
+        function calculateTotals() {
+            var vehicle_atm = parseFloat($('#vehicle_atm').val()) || 0;
+            var tripsheet = parseFloat($('#tripsheet').val()) || 0;
+            var cash_recieved = parseFloat($('#cash_recieved').val()) || 0;
+            var balance_bd = parseFloat($('#balance_bd').val()) || 0;
+            var expense = parseFloat($('#expense').val()) || 0;
+            var cash_transfer = parseFloat($('#cash_transfer').val()) || 0;
+
+            var total_credit = vehicle_atm + tripsheet;
+            $('#total_credit').val(total_credit.toFixed(2));
+
+            var total_balance = total_credit + cash_recieved + balance_bd;
+            $('#total_balance').val(total_balance.toFixed(2));
+
+            var total_expense = expense + cash_transfer;
+            $('#total_expense').val(total_expense.toFixed(2));
+
+            var balance = total_balance - total_expense;
+            $('#balance').val(balance.toFixed(2));
+        }
+
+        $('#vehicle_atm, #tripsheet, #cash_recieved, #balance_bd, #expense, #cash_transfer').on('input', function () {
+            calculateTotals();
+        });
+
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+            var account_id = document.getElementById('account_id').value;
+            var date = document.getElementById('date').value;
+            var day_name = document.getElementById('day_name').value;
+            var vehicle_atm = document.getElementById('vehicle_atm').value;
+            var tripsheet = document.getElementById('tripsheet').value;
+            var total_credit = document.getElementById('total_credit').value;
+            var cash_recieved = document.getElementById('cash_recieved').value;
+            var balance_bd = document.getElementById('balance_bd').value;
+            var total_balance = document.getElementById('total_balance').value;
+            var expense = document.getElementById('expense').value;
+            var cash_transfer = document.getElementById('cash_transfer').value;
+            var total_expense = document.getElementById('total_expense').value;
+            var balance = document.getElementById('balance').value;
+    
+            if (!date || !day_name || !vehicle_atm || !tripsheet || !cash_recieved || !balance_bd || !expense || !cash_transfer) {
+                alert("All fields are required.");
+                return;
+            }
+    
+            if (confirm("Are you sure you want to save this account?")) {
+                $.ajax({
+                    url: '{% url "UpdateAccounts" %}',
+                    type: "POST",
+                    data: {
+                        'account_id': account_id,
+                        'date': date,
+                        'day_name': day_name,
+                        'vehicle_atm': vehicle_atm,
+                        'tripsheet': tripsheet,
+                        'total_credit': total_credit,
+                        'cash_recieved': cash_recieved,
+                        'balance_bd': balance_bd,
+                        'total_balance': total_balance,
+                        'expense': expense,
+                        'cash_transfer': cash_transfer,
+                        'total_expense': total_expense,
+                        'balance': balance,
+                    },
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function (result) {
+                        console.log("result val: ", result);
+                        if (result['success']) {
+                            alert("Accounts details edited successfully");
+                            window.location.href = "{% url 'accounts_list' %}";
+                        } else {
+                            alert("Failed to edit account details: " + result['message']);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                        alert("An error occurred: " + xhr.responseText);
+                    }
+                });
+            }
+        });
+    });
+    
+    </script>
+
+
+
+{% endblock content %}
