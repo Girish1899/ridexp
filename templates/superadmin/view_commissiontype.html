@@ -33,9 +33,7 @@
                                     <th>Commission Name </th>
                                     <th>Commission Type </th>
                                     <th>Created On</th>
-                                    <th>Updated On</th>
-                                    <th>Created by</th>
-                                    <th>Updated by</th>
+                                   
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -46,9 +44,7 @@
                                     <td>{{ i.commission_name }}</td>
                                     <td>{{ i.commission_percentage }}</td>
                                     <td>{{ i.created_on }}</td>
-                                    <td>{{ i.updated_on }}</td>
-                                    <td>{{ i.created_by }}</td>
-                                    <td>{{ i.updated_by }}</td>
+                                   
                                     <td >
                                         <a href="#" class="btn btn-primary"  onclick="EditCommission('{{i.commission_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
                                         <a href="#" class="btn btn-secondary" onclick="DeleteCommission('{{i.commission_id}}')"><i class="fa fa-trash"></i></a>&nbsp;

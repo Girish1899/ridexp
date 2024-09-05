@@ -114,7 +114,7 @@ LOGIN_URL = '/login/'
 DATABASES = {
        'default': {
            'ENGINE': 'djongo',
-           'NAME': 'Deepam',
+           'NAME': 'RideExpress',
            'USER': '',
            'PASSWORD': '',
            'HOST': 'localhost',

@@ -1,0 +1,57 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Vehicle {{ company_format }} Details</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Completed Rides</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Pickup Date</th>
+                                        <th>Ride ID</th>
+                                        <th>Pickup Location</th>
+                                        <th>Drop Location</th>
+                                        <th>Total Fare</th>
+                                        <th>Driver Commission</th>
+                                        <th>Company Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for ride in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ ride.pickup_date }}</td>
+                                        <td>{{ ride.company_format }}</td>
+                                        <td>{{ ride.source}}</td>
+                                        <td>{{ ride.destination}}</td>
+                                        <td>{{ ride.total_fare }}</td>
+                                        <td>{{ ride.driver_commission }}</td>
+                                        <td>{{ ride.company_commission }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

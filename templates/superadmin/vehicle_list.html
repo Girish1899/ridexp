@@ -1,0 +1,68 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Vehicle {{ company_format }} Details</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Vehicles</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Vehicle Details</th>
+                                        <th>Owner Details</th>
+                                        <th>Driver Details</th>
+                                        <th>Commission percentage</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for vehicle in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div><span class="badge badge-pill badge-danger">{{ vehicle.company_format }}</span></div>
+                                            <div>{{ vehicle.Vehicle_Number }}</div>
+                                        </td>
+                                        <td>
+                                            <div><span class="badge badge-pill badge-warning">{{ vehicle.owner.name }}</span></div>
+                                            <div>{{ vehicle.owner.phone_number }}</div>
+                                        </td>
+                                        <td>
+                                            {% for driver in vehicle.driver_set.all %}
+                                            <div><span class="badge badge-pill badge-danger">{{ driver.name }}</span></div>
+                                            <div>{{ driver.phone_number }}</div>
+                                            {% endfor %}
+                                        </td>
+                                        <td><span class="badge badge-pill badge-success">{{ vehicle.commission_type.commission_name }}</span></td>
+                                        <td>
+                                            <a href="{% url 'vehicle_daily_summary' vehicle.vehicle_id %}" class="btn btn-primary">View Summary</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

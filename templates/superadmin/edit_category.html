@@ -79,10 +79,10 @@
         $("#save_action").click(function (event) {
             event.preventDefault();
 
-        var category_name = $('#category_name').val().trim().toLowerCase();
+        var category_name = $('#category_name').val().trim().toLowerCase().replace(/ /g, '_');
         var category_id = $('#category_id').val();
         var category_status = $('#category_status').val();
-        var original_category_name = $('#original_category_name').val();
+        var original_category_name = $('#original_category_name').val().replace(/ /g, '_');
         var seats = $('#seats').val();
         var image = $('#image')[0].files[0];
         

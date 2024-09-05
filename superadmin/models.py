@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.db import models
 # models.py
 from djongo import models
@@ -887,4 +888,13 @@ class RidePricing(models.Model):
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
 
+class DailyVehicleComm(models.Model):
+    comm_id = models.AutoField(primary_key=True)
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE)
+    date = models.DateField()
+    total_fare = models.DecimalField(max_digits=10, decimal_places=2)
+    total_driver_commission = models.DecimalField(max_digits=10, decimal_places=2)
+    total_company_commission = models.DecimalField(max_digits=10, decimal_places=2)
 
+    class Meta:
+        unique_together = ('vehicle', 'date')

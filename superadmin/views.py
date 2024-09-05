@@ -6,19 +6,16 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, RidePricing,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, DailyVehicleComm, RidePricing,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth import authenticate, login as auth_login ,logout
-from django.contrib.auth import update_session_auth_hash
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import path
 from django.db.models import Q
-from django.db.utils import IntegrityError
 from django.utils import timezone
-from django.core.serializers import serialize
-from django.db.models import Sum, Count,FloatField, Case, When
+from django.db.models import Sum, Count
 from datetime import date, timedelta
 import zipfile
 from django.http import HttpResponse
@@ -27,9 +24,7 @@ import logging
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
-
-
-
+from django.db.models import OuterRef, Subquery, Max
 
 def report(request):
     report_type = request.GET.get('report_type', 'daily')
@@ -2708,6 +2703,7 @@ class RideList(ListView):
         context['categories'] = Category.objects.all() 
         context['vehicles'] = Vehicle.objects.all()  
         context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        
         return context
 
     def get_queryset(self):
@@ -2723,7 +2719,7 @@ class RideList(ListView):
         if service_type:
             current_rides = current_rides.filter(ridetype_id=service_type)
         return current_rides
-
+    
 #################################### advance bookings ###########################################
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -4612,3 +4608,213 @@ class UpdateOutstationPrice(APIView):
 
         return JsonResponse({'success': True}, status=200)
     
+
+# Commission details ##############################################
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CommVehicleListView(ListView):
+    model = RideDetails
+    template_name = "superadmin/comm_vehiclelist.html"
+    
+    def get_queryset(self):
+        # Get the latest pickup_date for each driver where the ride status is 'completedbookings'
+        latest_bookings = RideDetails.objects.filter(
+            ride_status='completedbookings'
+        ).values('driver').annotate(
+            latest_pickup_date=Max('pickup_date')
+        )
+
+        # Filter RideDetails to include only those with the latest pickup_date per driver
+        queryset = RideDetails.objects.filter(
+            driver__in=[booking['driver'] for booking in latest_bookings],
+            pickup_date__in=[booking['latest_pickup_date'] for booking in latest_bookings],
+            ride_status='completedbookings'
+        ).select_related('driver', 'driver__vehicle', 'driver__vehicle__owner')
+
+        # Add commission calculations to each RideDetails object in the queryset
+        for ride in queryset:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = self.calculate_company_commission(ride)
+
+        return queryset
+
+    def calculate_driver_commission(self, ride):
+        """
+        Calculate the driver's commission based on the total fare and the vehicle's commission percentage.
+        """
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage_str = str(ride.driver.vehicle.commission_type.commission_percentage)
+            vehicle_commission_percentage = Decimal(vehicle_commission_percentage_str)
+
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def calculate_company_commission(self, ride):
+        """
+        Calculate the company's commission based on the total fare and the calculated driver commission.
+        """
+        driver_commission = self.calculate_driver_commission(ride)
+        return ride.total_fare - driver_commission
+
+
+class VehicleDetailView(ListView):
+    model = RideDetails
+    template_name = "superadmin/vehicle_commission_detail.html"
+    
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        queryset = RideDetails.objects.filter(
+            driver__vehicle__vehicle_id=vehicle_id,
+            ride_status='completedbookings'
+        ).select_related('driver', 'driver__vehicle')
+
+        # Add commission calculations to each RideDetails object in the queryset
+        for ride in queryset:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = self.calculate_company_commission(ride)
+
+        return queryset
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage_str = str(ride.driver.vehicle.commission_type.commission_percentage)
+            vehicle_commission_percentage = Decimal(vehicle_commission_percentage_str)
+
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def calculate_company_commission(self, ride):
+        driver_commission = self.calculate_driver_commission(ride)
+        return ride.total_fare - driver_commission
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+        context['company_format'] = vehicle.company_format  # Pass company format to the context
+        return context
+
+
+class VehicleListView(ListView):
+    model = Vehicle
+    template_name = "superadmin/vehicle_list.html"
+
+    def get_queryset(self):
+        # Use select_related to fetch related driver and owner details in one query
+        return Vehicle.objects.select_related('owner').prefetch_related('driver_set').all()
+
+
+class VehicleDailySummaryView(ListView):
+    model = DailyVehicleComm
+    template_name = "superadmin/vehicle_daily_summary.html"
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        # Get all unique dates with completed bookings for this vehicle
+        completed_rides_dates = RideDetails.objects.filter(
+            driver__vehicle=vehicle,
+            ride_status='completedbookings'
+        ).values_list('pickup_date', flat=True).distinct()
+
+        for date in completed_rides_dates:
+            # Filter rides by vehicle, status, and specific date
+            rides = RideDetails.objects.filter(
+                driver__vehicle=vehicle,
+                ride_status='completedbookings',
+                pickup_date=date
+            )
+
+            total_fare = Decimal(0)
+            total_driver_commission = Decimal(0)
+            total_company_commission = Decimal(0)
+
+            # Calculate totals for each date
+            for ride in rides:
+                driver_commission = self.calculate_driver_commission(ride)
+                company_commission = ride.total_fare - driver_commission
+
+                total_fare += ride.total_fare
+                total_driver_commission += driver_commission
+                total_company_commission += company_commission
+
+            # Debugging output
+            print(f"vehicle: {vehicle}, date: {date}")
+            print(f"total_fare: {total_fare}, total_driver_commission: {total_driver_commission}, total_company_commission: {total_company_commission}")
+
+            # Update or create DailyVehicleComm records for each date
+            try:
+                daily_summary, created = DailyVehicleComm.objects.update_or_create(
+                    vehicle=vehicle,
+                    date=date,
+                    defaults={
+                        'total_fare': total_fare,
+                        'total_driver_commission': total_driver_commission,
+                        'total_company_commission': total_company_commission
+                    }
+                )
+            except Exception as e:
+                import traceback
+                print(f"Error updating or creating DailyVehicleComm: {e}")
+                print(traceback.format_exc())
+
+        # Return the queryset of all DailyVehicleComm records for this vehicle, ordered by date
+        return DailyVehicleComm.objects.filter(vehicle=vehicle).order_by('-date')
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage = Decimal(str(ride.driver.vehicle.commission_type.commission_percentage))
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle_id'] = self.kwargs['vehicle_id']
+        context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
+        return context
+    
+
+class BookingDetailsView(ListView):
+    model = RideDetails
+    template_name = "superadmin/booking_details.html"
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        date = self.kwargs['date']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        # Filter rides by vehicle and date
+        rides = RideDetails.objects.filter(
+            driver__vehicle=vehicle,
+            ride_status='completedbookings',
+            pickup_date=date
+        ).order_by('pickup_time')
+
+        # Calculate driver and company commissions for each ride
+        for ride in rides:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = ride.total_fare - ride.driver_commission
+
+        return rides
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage = Decimal(str(ride.driver.vehicle.commission_type.commission_percentage))
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
+        context['date'] = self.kwargs['date']
+        return context  

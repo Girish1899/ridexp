@@ -61,9 +61,9 @@
             event.preventDefault();
 
             var company_format = $('#company_format').val();
-            var name = $('#name').val().trim().toLowerCase();
+            var name = $('#name').val().trim().toLowerCase().replace(/[\s_]+/g, '');
             var ridetype_id = $('#ridetype_id').val();
-            var original_name = $('#original_name').val().trim().toLowerCase();
+            var original_name = $('#original_name').val().trim().toLowerCase().replace(/[\s_]+/g, '');
 
             if (name.trim() === '') {
                 alert("Please enter ride type name.");

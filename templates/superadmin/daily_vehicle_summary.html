@@ -1,0 +1,50 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Daily Vehicle Summary for {{ pickup_date }}</h4>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Summary</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr >
+                                        <th>Date</th>
+                                        <th>Vehicle ID</th>
+                                        <th>Total Fare</th>
+                                        <th>Total Driver Commission</th>
+                                        <th>Total Company Commission</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for summary in summaries %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ summary.date }}</td>
+                                        <td>{{ summary.vehicle.company_format }}</td>
+                                        <td>{{ summary.total_fare }}</td>
+                                        <td>{{ summary.total_driver_commission }}</td>
+                                        <td>{{ summary.total_company_commission }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

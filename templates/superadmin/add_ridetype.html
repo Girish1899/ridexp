@@ -64,7 +64,7 @@
         $("#save_action").click(function (event) {
             event.preventDefault();
 
-            var name = $('#name').val().trim().toLowerCase();
+            var name = $('#name').val().trim().toLowerCase().replace(/[\s_]+/g, '');
             var company_format = $('#company_format').val();
             
             if (name.trim() === '') {

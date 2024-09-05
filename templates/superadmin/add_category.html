@@ -76,7 +76,7 @@
     $(document).ready(function () {
         $("#save_action").click(function (event) {
             event.preventDefault(); // Prevent form submission
-            var category_name = $('#category_name').val().trim().toLowerCase();
+            var category_name = $('#category_name').val().trim().toLowerCase().replace(/ /g, '_');
             var seats = $('#seats').val();
             var category_status = $('#category_status').val();
             var formData = new FormData();

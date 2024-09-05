@@ -1,0 +1,70 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Bookings for Vehicle {{ vehicle.company_format }} - {{ vehicle.Vehicle_Number }}</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Bookings on {{ date }}</h2>
+
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Pickup Time</th>
+                                        <th>Pickup Location</th>
+                                        <th>Drop Location</th>
+                                        <th>Total Fare</th>
+                                        <th>Driver Commission</th>
+                                        <th>Company Commission</th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                {% for ride in object_list %}
+                                <tr style="color: black;">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ ride.pickup_time }}</td>
+                                    <td>{{ ride.source}}</td>
+                                    <td>{{ ride.destination}}</td>
+                                    <td>{{ ride.total_fare|floatformat:2 }}</td>
+                                    <td>{{ ride.driver_commission|floatformat:2 }}</td>
+                                    <td>{{ ride.company_commission|floatformat:2 }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No bookings found for this date.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+{% endblock content%}
+
+

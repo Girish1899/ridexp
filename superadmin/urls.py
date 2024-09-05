@@ -6,7 +6,7 @@ urlpatterns = [
 
     path('index',index,name='index'),
 
-    path('report', report, name='report'),
+    # path('report', report, name='report'),
       
     # Brand #####################
     path('addbrand',addbrand.as_view(),name='addbrand'),
@@ -19,8 +19,6 @@ urlpatterns = [
 
     path('toggle_brand_status/', toggle_brand_status, name='toggle_brand_status'),
     path('brand/<int:brand_id>/view/', ViewBrand.as_view(), name='ViewBrand'),
-
-
 
     # category##################
     path('addcategory',addcategory.as_view(),name='addcategory'),
@@ -258,6 +256,16 @@ urlpatterns = [
     path('view_outstationprice', OutstationPriceList.as_view(), name='view_outstationprice'),
     path('updateoutstationprice',UpdateOutstationPrice.as_view(),name="updateoutstationprice"),
     path('editoutstationprice/<int:id>/',EditOutstationPrice.as_view(),name="editoutstationprice"),
+
+    # Commission details ##################################
+
+    path('CommVehicleListView',CommVehicleListView.as_view(),name="CommVehicleListView"),
+    path('vehicle/<int:vehicle_id>/', VehicleDetailView.as_view(), name='vehicle_detail'),
+    
+    path('vehicles/', VehicleListView.as_view(), name='vehicles'),
+    path('vehicles/<str:vehicle_id>/daily-summary/', VehicleDailySummaryView.as_view(), name='vehicle_daily_summary'),
+    path('vehicle/<int:vehicle_id>/details/<str:date>/', BookingDetailsView.as_view(), name='booking_details'),
+
 
 ]
 

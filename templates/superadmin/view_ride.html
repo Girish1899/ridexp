@@ -165,7 +165,7 @@
                                         <td>
                                             <div><button class="btn btn-warning text-white" >{{ i.total_fare }}</button></div>
                                             <div>{{i.driver.vehicle.car_type}}</div>
-                                            <div style="margin-top: 3px;"><span class="badge badge-pill badge-danger text-white">{{ i.driver.vehicle.model.brand.category.category_name }}</span></div>
+                                            <div style="margin-top: 3px;"><span class="badge badge-pill badge-danger text-white">{{ i.category.category_name }}</span></div>
                                         </td>
                                         <td>
                                             <div style="color: red">{{ i.created_by }}</div>
@@ -208,6 +208,7 @@
                                 <th>Vehicle Id</th>
                                 <th>Vehicle Number</th>
                                 <th>Category</th>
+                                <th>A/c or Non A/c</th>
                                 <th>Phone Number</th>
                                 <th>Driver Status</th>
                             </tr>
@@ -224,6 +225,7 @@
                                 </td>
                                 <td>{{ driver.vehicle.Vehicle_Number }}</td>
                                 <td>{{ driver.vehicle.model.brand.category.category_name }}</td>
+                                <td><span class="badge badge-success">{{ driver.vehicle.car_type }}</span></td>
                                 <td>{{ driver.phone_number }}</td>
                                 <td>
                                     {% if driver.driver_status == 'free' %}

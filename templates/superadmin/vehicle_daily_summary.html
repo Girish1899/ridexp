@@ -1,0 +1,62 @@
+
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Vehicle {{ company_format }} Details</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h2>Daily Summary for {{ vehicle.company_format }} - {{ vehicle.Vehicle_Number }}</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Date</th>
+                                        <th>Total Fare</th>
+                                        <th>Total Driver Commission</th>
+                                        <th>Total Company Commission</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for summary in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ summary.date }}</td>
+                                        <td>{{ summary.total_fare }}</td>
+                                        <td>{{ summary.total_driver_commission }}</td>
+                                        <td>{{ summary.total_company_commission }}</td>
+                                        <td>
+                                            <!-- <a href="{% url 'booking_details' vehicle_id=vehicle.vehicle_id date=summary.date %}">
+                                                <i class="fa fa-eye" aria-hidden="true" style="color: blue;"></i> 
+                                            </a> -->
+                                            <a href="{% url 'booking_details' vehicle_id=vehicle.vehicle_id date=summary.date %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
+
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
