@@ -63,6 +63,24 @@
                                 <input type="hidden" id="price_hidden" name="price" value="{{ price }}">
                             </div>
                         </div>
+
+                        <div class="col-md-2">
+                            <div class="date" data-target-input="nearest">
+                                <label>Car Type</label>
+                                <h6>{{ car_type }}</h6>
+                                <input type="hidden" id="car_type_hidden" name="car_type" value="{{ car_type }}">
+                            </div>
+                        </div>
+
+                        <div class="col-md-2"></div>
+                            <div class="date" data-target-input="nearest">
+                                <!-- <label>Time Slot</label> -->
+                                <h6>{{ time_slot }}</h6> <!-- Ensure time_slot is available here -->
+                                <input type="hidden" id="time_slot_hidden" name="time_slot" value="{{ time_slot }}">
+                            </div>
+                        </div>
+
+
                     </div>
                 </div>
                
@@ -113,6 +131,7 @@
                                     <label for="message">Address</label>
                                 </div>
                             </div>
+                            
                             <div class="col-6">
                                 <div class="form-floating">
                                     <textarea class="form-control" placeholder="Special Request" id="customer_notes" rows="3"></textarea>
@@ -184,6 +203,8 @@
         var source = $('#source_hidden').val();
         var destination = $('#destination_hidden').val();
         var pickup_date = $('#pickup_date_hidden').val();
+        var car_type = $('#car_type_hidden').val();
+        
         var date_parts = pickup_date.split('/');
         if (date_parts.length === 3) {
             pickup_date = date_parts[2] + '-' + date_parts[0] + '-' + date_parts[1]; // Convert MM/DD/YYYY to YYYY-MM-DD
@@ -207,6 +228,7 @@
             },
             data: {
                 ridetype: ridetype,
+                car_type: car_type,
                 pickup_date: pickup_date,
                 pickup_time: pickup_time,
                 source: source,

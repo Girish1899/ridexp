@@ -1612,107 +1612,11 @@ function openPage(pageName, btn_id) {
 // Automatically click the default tab on page load
 document.getElementById("defaultOpen").click();
 
-// Save action click event handler
-// $("#save_action").click(function(event) {
-//     event.preventDefault();
-
-//     var source = "";
-//     var destination = "";
-//     var pickup_date = "";
-//     var pickup_time = "";
-//     var ridetype = "";
-//     var searchUrl = ""; // Initialize the base URL
-
-//     // Determine which tab is visible and use the corresponding form fields
-//     if ($('#Airport').is(':visible')) {
-//         source = $('#Airport_source').val();
-//         destination = $('#Airport_destination').val();
-//         pickup_date = $('#Airport_pickup_date').val();
-//         pickup_time = $('#Airport_pickup_time').val();
-//         searchUrl = `airportcabs_list`;
-//         ridetype = 'airport';
-//     } else if ($('#LocalDrop').is(':visible')) {
-//         source = $('#LocalDrop_source').val();
-//         destination = $('#LocalDrop_destination').val();
-//         pickup_date = $('#LocalDrop_pickup_date').val();
-//         pickup_time = $('#LocalDrop_pickup_time').val();
-//         searchUrl = `localcabs_list`;
-//         ridetype = 'local';
-//     } else if ($('#LocalPackage').is(':visible')) {
-//         source = $('#LocalPackage_source').val();
-//         destination = $('#LocalPackage_destination').val();
-//         pickup_date = $('#LocalPackage_pickup_date').val();
-//         pickup_time = $('#LocalPackage_pickup_time').val();
-//         searchUrl = `cabs_list`;
-//     } else if ($('#Outstation').is(':visible')) {
-//         source = $('#Outstation_source').val();
-//         destination = $('#Outstation_destination').val();
-//         pickup_date = $('#Outstation_pickup_date').val();
-//         pickup_time = $('#Outstation_pickup_time').val();
-//         searchUrl = `outstationcabs_list`;
-//     }
-
-//     if (!source || !destination || !pickup_date) {
-//         alert("All fields are required.");
-//     } else {
-//         searchUrl += `?location1=${encodeURIComponent(source)}&location2=${encodeURIComponent(destination)}&pickup_date=${encodeURIComponent(pickup_date)}&pickup_time=${encodeURIComponent(pickup_time)}&ridetype=${encodeURIComponent(ridetype)}`;
-//         window.location.href = searchUrl;
-//     }
-// });
-
-    
-        // window.redirect
-        // $.ajax({
-        //     url: '{% url "addride" %}',
-        //     type: "POST",
-        //     headers: {
-        //         'X-CSRFToken': '{{ csrf_token }}'
-        //     },
-        //     data: {
-        //         source: source,
-        //         destination: destination,
-        //         pickup_date: pickup_date,
-        //     },
-        //     success: function(result) {
-        //         alert("Ride details added successfully");
-        //         location.href = '{% url "home" %}';
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.error(xhr.responseText);
-        //     }
-        // });
-//     }
-// });
 
 </script>
-<script>
-    
-</script>
+
     
 <script>
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const oneWayRadio = document.getElementById('oneWay');
-    //     const roundTripRadio = document.getElementById('roundTrip');
-    //     const dropDateField = document.getElementById('dropDateField');
-    //     const dropTimeField = document.getElementById('dropTimeField');
-
-    //     function toggleFields() {
-    //         if (roundTripRadio.checked) {
-    //             dropDateField.style.display = 'block';
-    //             dropTimeField.style.display = 'block';
-    //         } else {
-    //             dropDateField.style.display = 'none';
-    //             dropTimeField.style.display = 'none';
-    //         }
-    //     }
-
-    //     // Add event listeners to radio buttons
-    //     oneWayRadio.addEventListener('change', toggleFields);
-    //     roundTripRadio.addEventListener('change', toggleFields);
-
-    //     // Initialize fields visibility on page load
-    //     toggleFields();
-    // });
 
     document.addEventListener('DOMContentLoaded', function() {
         const oneWayRadio = document.getElementById('one_way');

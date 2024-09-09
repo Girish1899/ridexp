@@ -614,6 +614,9 @@ class Pricing(models.Model):
     created_by = models.ForeignKey(User, related_name='pricing_created', on_delete=models.SET_NULL, null=True, blank=True)
     updated_by = models.ForeignKey(User, related_name='pricing_updated', on_delete=models.SET_NULL, null=True, blank=True)
 
+    class Meta:
+        unique_together = ('category', 'ridetype', 'car_type')
+
 class PricingHistory(models.Model):
     STATUS_CHOICES = [
     ('12AM - 6AM', '12AM - 6AM'),
@@ -660,6 +663,7 @@ class RideDetails(models.Model):
 ]
     ride_id = models.AutoField(primary_key=True)
     company_format = models.CharField(max_length=100, unique=True, blank=True)
+    pricing = models.ForeignKey(Pricing,on_delete=models.CASCADE,null=True)
     ridetype = models.ForeignKey(Ridetype,on_delete=models.CASCADE)
     source = models.CharField(max_length=1000)
     destination = models.CharField(max_length=1000)

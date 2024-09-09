@@ -137,59 +137,70 @@
             </div>
         </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-
-<script>
-    $(document).ready(function () {
-        $('#trip_type_section').hide();
-
-        $('#ridetype').change(function () {
-            var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
-            if (selectedRideType.includes('outstation')) {
-                $('#trip_type_section').show();
-            } else {
+        <script>
+            $(document).ready(function () {
                 $('#trip_type_section').hide();
-            }
-        });
-
-        $("#save_action").click(function () {
-            var category = $('#category').val();
-            var ridetype = $('#ridetype').val();
-            var slots = $('#slots').val();
-            var driver_beta = $('#driver_beta').val();
-            var toll_price = $('#toll_price').val();
-            var car_type = $('#car_type').val();
-            var permit = $('#permit').val();
-            var price_per_km = $('#price_per_km').val();
-            var trip_type = $('input[name="trip_type"]:checked').val();
-
-            
-            if (!category || !ridetype || !price_per_km || !slots ) {
-                alert("All fields are required.");
-                return;
-            }
-            console.log("price_per_km :", price_per_km);
-
-          
-            $.ajax({
-                url: '{% url "addpricing" %}',
-                type: "POST",
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                data: { ridetype : ridetype , category : category , price_per_km:price_per_km, slots: slots, driver_beta:driver_beta, toll_price:toll_price, car_type:car_type, trip_type:trip_type, permit:permit},
-                success: function (result) {
-                    console.log("result ***: ", result);
-                    alert("Prcing details added");
-                    location.href = "{% url 'pricinglist' %}";
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-             });
-        });
-    });
-</script>
+        
+                $('#ridetype').change(function () {
+                    var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
+                    if (selectedRideType.includes('outstation')) {
+                        $('#trip_type_section').show();
+                    } else {
+                        $('#trip_type_section').hide();
+                    }
+                });
+        
+                $("#save_action").click(function () {
+                    var category = $('#category').val();
+                    var ridetype = $('#ridetype').val();
+                    var slots = $('#slots').val();
+                    var driver_beta = $('#driver_beta').val();
+                    var toll_price = $('#toll_price').val();
+                    var car_type = $('#car_type').val();
+                    var permit = $('#permit').val();
+                    var price_per_km = $('#price_per_km').val();
+                    var trip_type = $('input[name="trip_type"]:checked').val();
+        
+                    if (!category || !ridetype || !price_per_km || !slots) {
+                        alert("All fields are required.");
+                        return;
+                    }
+        
+                    $.ajax({
+                        url: '{% url "addpricing" %}',
+                        type: "POST",
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        data: {
+                            ridetype: ridetype,
+                            category: category,
+                            price_per_km: price_per_km,
+                            slots: slots,
+                            driver_beta: driver_beta,
+                            toll_price: toll_price,
+                            car_type: car_type,
+                            trip_type: trip_type,
+                            permit: permit
+                        },
+                        success: function (result) {
+                            alert("Pricing details added successfully.");
+                            location.href = "{% url 'pricinglist' %}";
+                        },
+                        error: function (xhr, status, error) {
+                            if (xhr.status === 400 && xhr.responseJSON.status === "Duplicate") {
+                                alert("A pricing entry with the same category, ride type, car type, and time slot already exists.");
+                            } else {
+                                alert("An error occurred while adding pricing details.");
+                                console.error(xhr.responseText);
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+        
 
  {% endblock content%}    

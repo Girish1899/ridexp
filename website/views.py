@@ -1,7 +1,7 @@
 # website/views.py
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
@@ -56,27 +56,27 @@ def home(request):
 def about(request):
     return render(request, 'website/about.html')
 
-def cabs_list(request):
-    # Retrieve query parameters from the URL
-    source = request.GET.get('source', '')
-    destination = request.GET.get('destination', '')
-    pickup_date = request.GET.get('pickup_date', '')
-    pickup_time = request.GET.get('pickup_time', '')
+# def cabs_list(request):
+#     # Retrieve query parameters from the URL
+#     source = request.GET.get('source', '')
+#     destination = request.GET.get('destination', '')
+#     pickup_date = request.GET.get('pickup_date', '')
+#     pickup_time = request.GET.get('pickup_time', '')
 
-    # Query the Category table to get all active categories
-    categories = Category.objects.filter(category_status='active')
+#     # Query the Category table to get all active categories
+#     categories = Category.objects.filter(category_status='active')
 
-    # Prepare context with the retrieved values and categories
-    context = {
-        'source': source,
-        'destination': destination,
-        'pickup_date': pickup_date,
-        'pickup_time': pickup_time,
-        'categories': categories,  # Pass the categories to the template
-    }
+#     # Prepare context with the retrieved values and categories
+#     context = {
+#         'source': source,
+#         'destination': destination,
+#         'pickup_date': pickup_date,
+#         'pickup_time': pickup_time,
+#         'categories': categories,  # Pass the categories to the template
+#     }
 
-    # Render the template with the context data
-    return render(request, 'website/cabs_list.html', context)
+#     # Render the template with the context data
+#     return render(request, 'website/cabs_list.html', context)
 
 def search_url(request):
     source = request.GET.get('source')
@@ -112,6 +112,7 @@ def airportcabs_list(request):
     destination = request.GET.get('destination', '')
     pickup_date = request.GET.get('pickup_date', '')
     pickup_time = request.GET.get('pickup_time', '')
+    car_type = request.GET.get('car_type', '')  # Capture car_type
     ridetype = 'airport'
 
     ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
@@ -146,6 +147,7 @@ def airportcabs_list(request):
         'destination': destination,
         'pickup_date': pickup_date,
         'pickup_time': pickup_time,
+        'car_type': car_type,  # Pass car_type to the context
         'pricing_dict': pricing_dict,
         'ridetype':ridetype,
     }
@@ -158,6 +160,7 @@ def localcabs_list(request):
     destination = request.GET.get('destination', '')
     pickup_date = request.GET.get('pickup_date', '')
     pickup_time = request.GET.get('pickup_time', '')
+    car_type = request.GET.get('car_type', '')  # Capture car_type
     ridetype = 'local'
 
     ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
@@ -192,6 +195,7 @@ def localcabs_list(request):
         'destination': destination,
         'pickup_date': pickup_date,
         'pickup_time': pickup_time,
+        'car_type': car_type,  # Pass car_type to the context
         'pricing_dict': pricing_dict,
         'ridetype':ridetype,
     }
@@ -208,11 +212,32 @@ def booking_list(request):
     pickup_time = request.GET.get('pickup_time')
     category = request.GET.get('category')
     ridetype = request.GET.get('ridetype')
-    price = request.GET.get('price')  # Add this line
+    car_type = request.GET.get('car_type', '')  # Capture the car_type from the request
+    price = request.GET.get('price')
+    slots = request.GET.get('time_slot')
 
+    # Debugging prints
     print("Price received in view:", price)
+    print("car_type received in view:", car_type)
     print("----------", ridetype)
 
+    # Fetch matching pricing instances
+    pricing_instances = Pricing.objects.filter(
+        category__category_name=category,
+        ridetype__name=ridetype,
+        car_type=car_type,
+        slots=slots  # Pass time_slot to the template
+
+    )
+
+    # Handle cases where multiple instances are found
+    if pricing_instances.count() == 1:
+        pricing_instance = pricing_instances.first()
+    else:
+        # Handle the case where there are multiple or no instances
+        # For example, choose the first instance or handle as needed
+        pricing_instance = pricing_instances.first() if pricing_instances.exists() else None
+        print("Multiple or no Pricing instances found.")
 
     return render(request, 'website/booking_list.html', {
         'source': source,
@@ -221,8 +246,11 @@ def booking_list(request):
         'pickup_time': pickup_time,
         'category': category,
         'ridetype': ridetype,
-        'price': price,  # Add this line
+        'car_type': car_type,
+        'price': price,
+        'pricing': pricing_instance,  # Associate the correct Pricing instance
     })
+
 
 @csrf_exempt
 def search_phone_numbers(request):
@@ -419,8 +447,11 @@ class AddNewBooking(APIView):
             customer_email = request.POST['email']
             customer_notes = request.POST['customer_notes']
             total_fare=request.POST['total_fare']
-
+            car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
             ridetype_name = request.POST.get('ridetype', '').strip()
+            slots = determine_time_slot(pickup_time_str)  # Function to determine the slot based on pickup_time
+
+
             if not ridetype_name:
                 return JsonResponse({"status": "Error", "message": "Ride type is required."})
 
@@ -435,6 +466,18 @@ class AddNewBooking(APIView):
             except Category.DoesNotExist:
                 # Handle the case where the Ridetype does not exist
                 return JsonResponse({"status": "Error", "message": "Category does not exist."})
+            
+            # Updated logic to include ridetype in pricing instance retrieval
+            try:
+                pricing_instance = Pricing.objects.get(
+                    category=category_instance,
+                    car_type=car_type,
+                    ridetype=ridetype_instance,  # Include ridetype in the query
+                    slots=slots
+
+                )
+            except Pricing.DoesNotExist:
+                return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
 
             # Ensure objects exist in database before saving
             customer_exits = Customer.objects.filter(phone_number=customer_phone_number).count()
@@ -483,6 +526,8 @@ class AddNewBooking(APIView):
                 ride_details.assigned_by=request.user
                 ride_details.created_by=request.user
                 ride_details.updated_by=request.user
+                ride_details.pricing = pricing_instance  # Set the Pricing instance
+
                 ride_details.save()
                 print("source ^^^: ",request.POST['source'] )
                 print("source ^^^: ", request.POST['destination'])
@@ -533,6 +578,17 @@ class AddNewBooking(APIView):
             print(f"Error saving ride details: {e}")
             return JsonResponse({'status': 'Error', 'message': str(e)})
 
+def determine_time_slot(pickup_time_str):
+    # Determine the time slot based on pickup_time_str
+    pickup_time = datetime.strptime(pickup_time_str, '%H:%M').time()
+    if time(0, 0) <= pickup_time < time(6, 0):
+        return '12AM - 6AM'
+    elif time(6, 0) <= pickup_time < time(12, 0):
+        return '6AM - 12PM'
+    elif time(12, 0) <= pickup_time < time(18, 0):
+        return '12PM - 6PM'
+    else:
+        return '6PM - 12AM'
 
 class GetRidePricingDetails(APIView):
     def post(self, request):

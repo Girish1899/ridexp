@@ -58,8 +58,6 @@
 </div>
 <!-- book ride end -->
 
-
-
 <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
@@ -123,16 +121,16 @@
                                 {% endif %}
                             </small> -->
                             <small class="border-end me-3 pe-3">
-                                <p><strong>Permit A/c:</strong> ₹<span id="permit_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Non A/c:</strong> ₹<span id="permit_non_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Permit:</strong> ₹<span id="permit_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Permit Non A/C:</strong> ₹<span id="permit_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
                             <small class="border-end me-3 pe-3">
-                                <p><strong>Toll A/c:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Non A/c:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
                             <small class="border-end me-3 pe-3">
-                                <p><strong>Driver Beta A/c:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Non A/c:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Driver Beta:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
                         </div>
 
@@ -146,6 +144,8 @@
                                 <input type="hidden" name="category" value="{{ prices.non_ac.category.category_name }}">
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
+                                <input type="hidden" name="car_type" value="non_ac"> 
+                                <input type="hidden" name="time_slot" id="time_slot_non_ac_{{ category|slugify }}" value=""> <!-- Time Slot Hidden Input -->
                                 <button type="submit" class="btn btn-sm btn-danger w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
                                     Non A/c Not Available
                                 </button>
@@ -160,6 +160,8 @@
                                 <input type="hidden" name="category" value="{{ prices.ac.category.category_name }}">
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
+                                <input type="hidden" name="car_type" value="ac"> 
+                                <input type="hidden" name="time_slot" id="time_slot_ac_{{ category|slugify }}" value=""> <!-- Time Slot Hidden Input -->
                                 <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #41C324; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
                                     A/c Not Available
                                 </button>
@@ -207,6 +209,21 @@
 // Function to update category details
 function updateCategoryDetails(category, costData) {
     var categorySlug = category.toLowerCase();
+
+    // Calculate the time slot based on pickup time
+    var pickup_time = document.getElementById('pickup_time').value;
+    var time_slot = getTimeSlot(pickup_time);
+
+    // Update hidden time slot fields for both AC and Non AC
+    var timeSlotAcElement = document.getElementById("time_slot_ac_" + categorySlug);
+    var timeSlotNonAcElement = document.getElementById("time_slot_non_ac_" + categorySlug);
+
+    if (timeSlotAcElement) {
+        timeSlotAcElement.value = time_slot;
+    }
+    if (timeSlotNonAcElement) {
+        timeSlotNonAcElement.value = time_slot;
+    }
 
     console.log("Updating details for category:", category, costData);
 

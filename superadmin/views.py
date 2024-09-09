@@ -2697,7 +2697,7 @@ class RideList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['drivers'] = Driver.objects.all()
+        context['drivers'] = Driver.objects.filter(verification_status='verified')
         context['services'] = Ridetype.objects.all()
         context['bookings'] = RideDetails.objects.filter(ride_status='currentbookings')
         context['categories'] = Category.objects.all() 
@@ -2729,7 +2729,7 @@ class AdvanceBookingsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['drivers'] = Driver.objects.all()
+        context['drivers'] = Driver.objects.filter(verification_status='verified')
         context['services'] = Ridetype.objects.all()
         context['bookings'] = RideDetails.objects.filter(ride_status='advancebookings')
         context['categories'] = Category.objects.all() 
@@ -4818,3 +4818,4 @@ class BookingDetailsView(ListView):
         context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
         context['date'] = self.kwargs['date']
         return context  
+        
