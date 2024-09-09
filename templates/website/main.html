@@ -52,7 +52,219 @@
 
     <main class="main">
         <!-- hero slider -->
-        <div class="hero-section">
+        <div class="container" id="book_now">
+            <div class="container" style="background: white;border-radius: 10px;padding: 1%;">
+                <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport Transfer</button>
+                <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local Drop</button>
+                <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
+                <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
+                <div class="booking-form">
+                    <h4 class="booking-title">Book Your Ride</h4>
+                    <div id="Airport" class="tabcontent">
+                        <form action="{% url 'search_url' %}" id="airportForm">
+                            <input type="hidden" name="ridetype" value="airport">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_source" name="source" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Off Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_destination" name="destination" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Date:</label>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date" required>                                       
+                                        <div id="dateError" class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+        
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Time:</label>
+                                        <input type="time" class="form-control pickup-time"  id="Airport_pickup_time" name="pickup_time" required>                                       
+                                        <div id="timeError" class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+        
+                                <div class="col-lg-2 align-self-end">
+                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                      
+                      <div id="LocalDrop" class="tabcontent">
+                        <form action="{% url 'search_url' %}" id="localDropForm">
+                            <input type="hidden" name="ridetype" value="local">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_source" name="source" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Off Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_destination" name="destination" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Date:</label>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalDrop_pickup_date" name="pickup_date" required>                                       
+                                        <div id="dateError" class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Time:</label>
+                                        <input type="time" class="form-control pickup-time "  id="LocalDrop_pickup_time" name="pickup_time" required>                                       
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 align-self-end">
+                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                      
+                      <div id="LocalPackage" class="tabcontent">
+                        <form action="{% url 'search_url' %}" id="localPackageForm">
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_source" name="source">
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Off Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_destination" name="destination" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Date:</label>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalPackage_pickup_date" name="pickup_date" required>                                       
+                                        <div id="dateError" class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Time:</label>
+                                        <input type="time" class="form-control pickup-time"  id="LocalPackage_pickup_time" name="pickup_time" required>                                       
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 align-self-end">
+                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                            class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                        </form>
+                      </div>
+                      
+                      <div id="Outstation" class="tabcontent">
+                        <form action="{% url 'search_url' %}" id="outstationForm">
+                            <!-- Radio Buttons for Trip Type (Single Row) -->
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group">
+                                        <label>Trip Type:</label>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="one_way" name="trip_type" value="one_way" checked class="form-check-input">
+                                            <label for="one_way" class="form-check-label">One Way</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input type="radio" id="round_trip" name="trip_type" value="round_trip" class="form-check-input">
+                                            <label for="round_trip" class="form-check-label">Round Trip</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    
+                            <!-- Other Fields -->
+                            <div class="row">
+                                <!-- Pick Up Location -->
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_source" name="source" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                    
+                                <!-- Drop Off Location -->
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Off Location:</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_destination" name="destination" required>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
+                                </div>
+                    
+                                <!-- Pick Up Date -->
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Date:</label>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_pickup_date" name="pickup_date" required>
+                                        <div id="dateError" class="invalid-feedback"></div>
+                                    </div>
+                                </div>
+                    
+                                <!-- Pick Up Time -->
+                                <div class="col-lg-2">
+                                    <div class="form-group">
+                                        <label>Pick Up Time:</label>
+                                        <input type="time" class="form-control pickup-time" id="Outstation_pickup_time" name="pickup_time" required>
+                                    </div>
+                                </div>
+                    
+                                <!-- Submit Button -->
+                                <div class="col-lg-2 align-self-end">
+                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
+                                </div>
+                            </div>
+                    
+                            <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
+                            <div class="row drop-fields" style="display:none;">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Date:</label>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_drop_date" name="drop_date" required>
+                                    </div>
+                                </div>
+                    
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Time:</label>
+                                        <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time" required>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                                      
+                </div>
+            </div>
+        </div>
+        <!-- booking area end -->
+        <div class="hero-section"> 
             <div class="hero-slider owl-carousel owl-theme">
                 <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
                     <div class="container">
@@ -117,7 +329,7 @@
                                     <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
                                         Outstation Cabs in  <span>Bangalore</span> 
                                     </h1>
-                                    <p data-animation="fadeInLeft" data-delay=".75s" id="book_now">
+                                    <p data-animation="fadeInLeft" data-delay=".75s">
                                         Plan your outstation travel from Bangalore with ease and affordability! Deepam Taxi offers a range of 
                                         vehicles to suit your needs and budget, starting at just Rs. 9 per kilometer. Choose from hatchbacks, 
                                         sedans, Innovas, SUVs, or even tempo travelers. Plus, enjoy the convenience of no check-post charges 
@@ -152,225 +364,6 @@
     </div>
 </div>
         
-<div class="booking-area" >
-    <div class="container" style="background: white;
-    border-radius: 10px;
-    padding: 1%;">
-        <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport Transfer</button>
-        <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local Drop</button>
-        <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
-        <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
-        <div class="booking-form">
-            <h4 class="booking-title">Book Your Ride</h4>
-            <div id="Airport" class="tabcontent">
-                <form action="{% url 'search_url' %}" id="airportForm">
-                    <input type="hidden" name="ridetype" value="airport">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Pick Up Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_source" name="source">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Drop Off Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"
-                                id="Airport_destination" name="destination">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Date:</label>
-                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date">                                       
-                                <div id="dateError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Time:</label>
-                                <input type="time" class="form-control pickup-time"  id="Airport_pickup_time" name="pickup_time">                                       
-                                <div id="timeError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
-
-                        <div class="col-lg-2 align-self-end">
-                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                    class="fas fa-arrow-right"></i></button>
-                        </div>
-                    </div>
-                </form>
-              </div>
-              
-              <div id="LocalDrop" class="tabcontent">
-                <form action="{% url 'search_url' %}" id="localDropForm">
-                    <input type="hidden" name="ridetype" value="local">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Pick Up Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_source" name="source">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Drop Off Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"
-                                id="LocalDrop_destination" name="destination">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Date:</label>
-                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalDrop_pickup_date" name="pickup_date">                                       
-                                <div id="dateError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Time:</label>
-                                <input type="time" class="form-control pickup-time "  id="LocalDrop_pickup_time" name="pickup_time">                                       
-                            </div>
-                        </div>
-                        <div class="col-lg-2 align-self-end">
-                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                    class="fas fa-arrow-right"></i></button>
-                        </div>
-                    </div>
-                </form>
-              </div>
-              
-              <div id="LocalPackage" class="tabcontent">
-                <form action="{% url 'search_url' %}" id="localPackageForm">
-                    <div class="row">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Pick Up Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_source" name="source">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Drop Off Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location"
-                                id="LocalPackage_destination" name="destination">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Date:</label>
-                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalPackage_pickup_date" name="pickup_date">                                       
-                                <div id="dateError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Time:</label>
-                                <input type="time" class="form-control pickup-time"  id="LocalPackage_pickup_time" name="pickup_time">                                       
-                            </div>
-                        </div>
-                        <div class="col-lg-2 align-self-end">
-                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                    class="fas fa-arrow-right"></i></button>
-                        </div>
-                    </div>
-                </form>
-              </div>
-              
-              <div id="Outstation" class="tabcontent">
-                <form action="{% url 'search_url' %}" id="outstationForm">
-                    <!-- Radio Buttons for Trip Type (Single Row) -->
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label>Trip Type:</label>
-                                <div class="form-check form-check-inline">
-                                    <input type="radio" id="one_way" name="trip_type" value="one_way" checked class="form-check-input">
-                                    <label for="one_way" class="form-check-label">One Way</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input type="radio" id="round_trip" name="trip_type" value="round_trip" class="form-check-input">
-                                    <label for="round_trip" class="form-check-label">Round Trip</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-            
-                    <!-- Other Fields -->
-                    <div class="row">
-                        <!-- Pick Up Location -->
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Pick Up Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_source" name="source">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-            
-                        <!-- Drop Off Location -->
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Drop Off Location:</label>
-                                <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_destination" name="destination">
-                                <i class="far fa-location-dot"></i>
-                            </div>
-                        </div>
-            
-                        <!-- Pick Up Date -->
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Date:</label>
-                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_pickup_date" name="pickup_date">
-                                <div id="dateError" class="invalid-feedback"></div>
-                            </div>
-                        </div>
-            
-                        <!-- Pick Up Time -->
-                        <div class="col-lg-2">
-                            <div class="form-group">
-                                <label>Pick Up Time:</label>
-                                <input type="time" class="form-control pickup-time" id="Outstation_pickup_time" name="pickup_time">
-                            </div>
-                        </div>
-            
-                        <!-- Submit Button -->
-                        <div class="col-lg-2 align-self-end">
-                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
-                        </div>
-                    </div>
-            
-                    <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
-                    <div class="row drop-fields" style="display:none;">
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Drop Date:</label>
-                                <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_drop_date" name="drop_date">
-                            </div>
-                        </div>
-            
-                        <div class="col-lg-3">
-                            <div class="form-group">
-                                <label>Drop Time:</label>
-                                <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time">
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </div>
-                              
-        </div>
-    </div>
-</div>
-<!-- booking area end -->
-
-
         <!-- about area -->
         <div class="about-area py-120">
             <div class="container">
@@ -1612,11 +1605,107 @@ function openPage(pageName, btn_id) {
 // Automatically click the default tab on page load
 document.getElementById("defaultOpen").click();
 
+// Save action click event handler
+// $("#save_action").click(function(event) {
+//     event.preventDefault();
 
-</script>
+//     var source = "";
+//     var destination = "";
+//     var pickup_date = "";
+//     var pickup_time = "";
+//     var ridetype = "";
+//     var searchUrl = ""; // Initialize the base URL
+
+//     // Determine which tab is visible and use the corresponding form fields
+//     if ($('#Airport').is(':visible')) {
+//         source = $('#Airport_source').val();
+//         destination = $('#Airport_destination').val();
+//         pickup_date = $('#Airport_pickup_date').val();
+//         pickup_time = $('#Airport_pickup_time').val();
+//         searchUrl = `airportcabs_list`;
+//         ridetype = 'airport';
+//     } else if ($('#LocalDrop').is(':visible')) {
+//         source = $('#LocalDrop_source').val();
+//         destination = $('#LocalDrop_destination').val();
+//         pickup_date = $('#LocalDrop_pickup_date').val();
+//         pickup_time = $('#LocalDrop_pickup_time').val();
+//         searchUrl = `localcabs_list`;
+//         ridetype = 'local';
+//     } else if ($('#LocalPackage').is(':visible')) {
+//         source = $('#LocalPackage_source').val();
+//         destination = $('#LocalPackage_destination').val();
+//         pickup_date = $('#LocalPackage_pickup_date').val();
+//         pickup_time = $('#LocalPackage_pickup_time').val();
+//         searchUrl = `cabs_list`;
+//     } else if ($('#Outstation').is(':visible')) {
+//         source = $('#Outstation_source').val();
+//         destination = $('#Outstation_destination').val();
+//         pickup_date = $('#Outstation_pickup_date').val();
+//         pickup_time = $('#Outstation_pickup_time').val();
+//         searchUrl = `outstationcabs_list`;
+//     }
+
+//     if (!source || !destination || !pickup_date) {
+//         alert("All fields are required.");
+//     } else {
+//         searchUrl += `?location1=${encodeURIComponent(source)}&location2=${encodeURIComponent(destination)}&pickup_date=${encodeURIComponent(pickup_date)}&pickup_time=${encodeURIComponent(pickup_time)}&ridetype=${encodeURIComponent(ridetype)}`;
+//         window.location.href = searchUrl;
+//     }
+// });
 
     
+        // window.redirect
+        // $.ajax({
+        //     url: '{% url "addride" %}',
+        //     type: "POST",
+        //     headers: {
+        //         'X-CSRFToken': '{{ csrf_token }}'
+        //     },
+        //     data: {
+        //         source: source,
+        //         destination: destination,
+        //         pickup_date: pickup_date,
+        //     },
+        //     success: function(result) {
+        //         alert("Ride details added successfully");
+        //         location.href = '{% url "home" %}';
+        //     },
+        //     error: function(xhr, status, error) {
+        //         console.error(xhr.responseText);
+        //     }
+        // });
+//     }
+// });
+
+</script>
 <script>
+    
+</script>
+    
+<script>
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const oneWayRadio = document.getElementById('oneWay');
+    //     const roundTripRadio = document.getElementById('roundTrip');
+    //     const dropDateField = document.getElementById('dropDateField');
+    //     const dropTimeField = document.getElementById('dropTimeField');
+
+    //     function toggleFields() {
+    //         if (roundTripRadio.checked) {
+    //             dropDateField.style.display = 'block';
+    //             dropTimeField.style.display = 'block';
+    //         } else {
+    //             dropDateField.style.display = 'none';
+    //             dropTimeField.style.display = 'none';
+    //         }
+    //     }
+
+    //     // Add event listeners to radio buttons
+    //     oneWayRadio.addEventListener('change', toggleFields);
+    //     roundTripRadio.addEventListener('change', toggleFields);
+
+    //     // Initialize fields visibility on page load
+    //     toggleFields();
+    // });
 
     document.addEventListener('DOMContentLoaded', function() {
         const oneWayRadio = document.getElementById('one_way');

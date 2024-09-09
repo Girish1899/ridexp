@@ -590,6 +590,161 @@ def determine_time_slot(pickup_time_str):
     else:
         return '6PM - 12AM'
 
+def get_owner_details(request):
+    phone_number = request.GET.get('phone_number')
+    try:
+        owner = VehicleOwner.objects.get(phone_number=phone_number)
+        data = {
+            'owner_id': owner.owner_id,
+            'name': owner.name,
+            'email': owner.email,
+            'address': owner.address,
+            'image': owner.image.url if owner.image else None,  # Get URL for image
+            'address_proof': owner.address_proof.url if owner.address_proof else None,
+            'identity': owner.identity.url if owner.identity else None,
+            'holdername': owner.holdername,
+            'ac_number': owner.ac_number,
+            'bankname': owner.bankname,
+            'ifsc_code': owner.ifsc_code,
+        }
+        return JsonResponse(data)
+    except Customer.DoesNotExist:
+        return JsonResponse({'error': 'owner not found'}, status=404)
+
+def check_vehicleno(request):
+    Vehicle_Number = request.GET.get('Vehicle_Number', None)
+    vehicleno = Vehicle.objects.filter(Vehicle_Number=Vehicle_Number)
+    data = {
+        'exists': vehicleno.count() > 0
+    }
+    return JsonResponse(data)
+
+class AddVehicle(TemplateView):
+    template_name = "website/addvehicle.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Fetching data for dropdowns
+        context['catlist'] = Category.objects.filter(category_status='active')
+        context['blist'] = Brand.objects.filter(status='active')
+        context['ownerlist'] = VehicleOwner.objects.filter(status='active',verification_status='verified')
+        context['modellist'] = Model.objects.filter(status='active')
+        context['vtypelist'] = VehicleType.objects.all()
+        context['ctypelist'] = CommissionType.objects.all()
+        context['colorlist'] = Color.objects.all()
+        context['tlist'] = Transmission.objects.all()
+        
+        return context
+    
+    def post(self, request):
+        last_vehicle = Vehicle.objects.all().order_by('-vehicle_id').first()
+        if last_vehicle:
+            try:
+                last_company_format = int(last_vehicle.company_format.replace('VEH', ''))
+            except ValueError:
+                last_company_format = last_vehicle.vehicle_id
+            next_company_format = f'VEH{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VEH01'
+
+        name = request.POST['name']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+        address = request.POST['address']
+        image = request.FILES.get('image', None)
+        address_proof = request.FILES.get('address_proof', None)
+        identity = request.FILES.get('identity', None)
+        holdername = request.POST['holdername']
+        ac_number = request.POST['ac_number']
+        bankname = request.POST['bankname']
+        ifsc_code = request.POST['ifsc_code']
+
+        vehicle_number = request.POST['Vehicle_Number']
+        model_id = request.POST['model']
+        year = request.POST['year']
+        insurance_expiry = request.POST['insurance_expiry']
+        car_type = request.POST['car_type']
+        color_id = request.POST['color']
+        transmission_id = request.POST['transmission']
+        owner_id = request.POST['owner']
+        vehicle_type_id = request.POST['vehicle_type']
+        registration_certificate = request.FILES.get('registration_certificate')
+        fc_certificate = request.FILES.get('fc_certificate')
+        insurance_policy = request.FILES.get('insurance_policy')
+        permit_details = request.FILES.get('permit_details')
+        tax_details = request.FILES.get('tax_details')
+        emission_test = request.FILES.get('emission_test')
+        vehicle_status = "active"
+        drive_status = request.POST['drive_status']
+        company_format = next_company_format
+
+        # Ensure objects exist in database before saving
+        owner_exits = VehicleOwner.objects.filter(phone_number=phone_number).count()
+        if owner_exits>0:
+            owner = VehicleOwner.objects.get(phone_number=phone_number)
+            print(owner.ac_number!=ac_number,owner.ac_number,ac_number)
+            if owner.ac_number!=ac_number:
+                print("going back")
+                return JsonResponse({'status': 'Error', 'message': "Owner's account number or phone number does not match"})
+        else:
+            last_owner = VehicleOwner.objects.all().order_by('-owner_id').first()
+            if last_owner:
+                last_company_format = int(last_owner.company_format.replace('VO', ''))
+                next_company_format = f'VO{last_company_format + 1:02}'
+            else:
+                next_company_format = 'VO01'
+
+            owner = VehicleOwner(
+                    name=name,
+                    phone_number=phone_number,
+                    email=email,
+                    address=address,
+                    image=image,
+                    address_proof=address_proof,
+                    identity=identity,
+                    holdername=holdername,
+                    bankname=bankname,
+                    ac_number=ac_number,
+                    ifsc_code=ifsc_code,
+                    status="active",
+                    company_format=next_company_format,
+                    created_by=request.user,
+                    updated_by=request.user)
+            owner.save()
+            owner = VehicleOwner.objects.get(phone_number=phone_number)
+
+        vehicle = Vehicle(
+            Vehicle_Number=vehicle_number,
+            model=Model.objects.get(model_id=model_id),
+            year=year,
+            insurance_expiry=insurance_expiry,
+            car_type=car_type,
+            color=Color.objects.get(color_id=color_id),
+            transmission=Transmission.objects.get(transmission_id=transmission_id),
+            owner=VehicleOwner.objects.get(phone_number=phone_number),
+            vehicle_type=VehicleType.objects.get(vehicle_type_id=vehicle_type_id),
+            vehicle_status=vehicle_status,
+            drive_status=drive_status,
+            company_format=company_format,
+        )
+
+        if registration_certificate:
+            vehicle.registration_certificate=registration_certificate
+        if fc_certificate:
+            vehicle.fc_certificate=fc_certificate
+        if insurance_policy:
+            vehicle.insurance_policy=insurance_policy
+        if tax_details:
+            vehicle.tax_details=tax_details
+        if permit_details:
+            vehicle.permit_details=permit_details
+        if emission_test:
+            vehicle.emission_test=emission_test
+
+        vehicle.save()
+        return JsonResponse({'status': "Success"})
+
 class GetRidePricingDetails(APIView):
     def post(self, request):
         import googlemaps
