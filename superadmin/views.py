@@ -1,8 +1,10 @@
-from datetime import date, datetime
+from datetime import date, datetime,time
 from decimal import Decimal
 import json
 import os
 from django.http import JsonResponse
+from django.db import IntegrityError
+import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
@@ -2591,6 +2593,96 @@ class AddRidee(TemplateView):
         
 # add bookings inside superadmin##########################################
 
+class customerGetRidePricingDetails(APIView):
+    def post(self, request):
+        import googlemaps
+        from decimal import Decimal
+        from django.http import JsonResponse
+        from datetime import datetime
+        
+        ridetype_id = request.POST['ridetype']
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date = request.POST['pickup_date']
+        pickup_time = request.POST['pickup_time']
+        time_slot = request.POST['time_slot']  # Get the time slot from the request
+        
+        try:
+            ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
+        except Ridetype.DoesNotExist:
+            return Response({'error': 'Ride type not found'}, status=400)
+        api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+        
+        # Initialize the Google Maps client with your API key
+        gmaps = googlemaps.Client(key=api_key)
+
+        try:
+            result = gmaps.distance_matrix(
+                origins=[source],
+                destinations=[destination],
+                mode="driving",
+                departure_time=datetime.now()
+            )
+            print(result)
+
+            # Check if the response status is OK
+            if result['status'] == 'OK' and result['rows'][0]['elements'][0]['status'] == 'OK':
+                distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
+            else:
+                # Handle cases where the distance is not found
+                if result['rows'][0]['elements'][0]['status'] == 'NOT_FOUND':
+                    return Response({'error': 'Address not found'}, status=404)
+                else:
+                    return Response({'error': 'Unable to retrieve distance'}, status=500)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
+        
+        if distance is None:
+            return Response({'error': 'Unable to retrieve distance'}, status=500)
+
+        print("distance: ", distance)
+
+        # Initialize the costs dictionary
+        pricing_dict = {}
+
+        # Fetch all pricing details filtered by the selected time slot
+        pricing_details = Pricing.objects.select_related('category').filter(
+            ridetype=ridetype,  # Filter by ridetype
+            slots=time_slot
+        )
+       
+        # Organize pricing data by category and car type
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name  # Remove spaces and convert to lowercase
+            car_type = price.car_type.lower()  # 'ac' or 'non ac'
+
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            # Calculate cost based on distance and pricing details
+            price_per_km_decimal = Decimal(str(price.price_per_km))
+            permit_decimal = Decimal(str(price.permit))
+            toll_price_decimal = Decimal(str(price.toll_price))
+            driver_beta_decimal = Decimal(str(price.driver_beta))
+
+            temp_cost = Decimal(distance) * price_per_km_decimal
+            temp_cost += permit_decimal + toll_price_decimal + driver_beta_decimal
+            category_cost = round(temp_cost, 0)
+
+            pricing_dict[category_name][car_type] = {
+                'distance_km': distance,
+                'cost': category_cost,
+                'permit': permit_decimal,
+                'toll': toll_price_decimal,
+                'beta': driver_beta_decimal,
+                'category': price.category.category_name,
+            }
+        
+        print("Pricing Dict: ", pricing_dict)
+        return JsonResponse({'costs': pricing_dict})
+
 class AddRide(TemplateView):
     template_name = "superadmin/add_ride.html"
     
@@ -2616,21 +2708,26 @@ class AddRide(TemplateView):
     
     def post(self, request):
         try:
+            print("Fetching POST data")
             company_format = request.POST['company_format']
             ride_type_id = request.POST['ridetype']
-            source = request.POST['source']
-            destination = request.POST['destination']
-            pickup_date = request.POST['pickup_date']
-            pickup_time = request.POST['pickup_time']
-            category_id = request.POST['category']
-            total_fare = request.POST['total_fare']
+            source = request.POST.get('source')
+            destination = request.POST.get('destination')
+            pickup_date = request.POST.get('pickup_date')
+            pickup_time = request.POST.get('pickup_time')
+            category = request.POST.get('category')
+            total_fare = request.POST.get('total_fare')
             customer_id = request.POST['customer']
             customer_notes = request.POST['customer_notes']
+            # car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            slots = determine_time_slot(pickup_time)
             ride_status = request.POST['ride_status']
             phone_number = request.POST['phone_number']
             customer_name = request.POST['customer_name']
             email = request.POST['email']
             address = request.POST['address']
+
+            print(f"Parsed data: {company_format}, {ride_type_id}, {source}, {destination}, {pickup_date}, {pickup_time}")
 
             try:
                 customer = Customer.objects.get(phone_number=phone_number)
@@ -2651,11 +2748,22 @@ class AddRide(TemplateView):
                     updated_by=request.user
                 )
                 customer.save()
-                customer_id = customer.customer_id
+            print(f"Created new customer: {customer}")
 
             # Ensure objects exist in database before saving
             ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
-            category = Category.objects.get(category_id=category_id)
+            category_name = category.split('|')[0]
+            car_type_name = category.split('|')[1]
+            category_instance = Category.objects.get(category_name=category_name)
+
+            # Retrieve pricing instance
+            pricing_instance = Pricing.objects.get(
+                category=category_instance,
+                car_type=car_type_name,
+                ridetype=ridetype,
+                slots=slots,
+            )
+            print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
             # Determine ride status based on pickup date
             today = date.today().isoformat()
@@ -2663,12 +2771,24 @@ class AddRide(TemplateView):
 
             # Use the next company format for the ride
             next_company_format = self.get_context_data()['next_company_format']
+
+            print(f'company_format: {next_company_format}')
+            print(f'ridetype: {ridetype}')
+            print(f'source: {source}')
+            print(f'destination: {destination}')
+            print(f'pickup_date: {pickup_date}')
+            print(f'pickup_time: {pickup_time}')
+            print(f'category: {category_instance}')
+            print(f'total_fare: {total_fare}')
+            print(f'customer: {customer}')
+            print(f'customer_notes: {customer_notes}')
+            print(f'pricing: {pricing_instance}')
             
             ride_details = RideDetails(
                 company_format=next_company_format,
                 customer=customer,
                 ridetype=ridetype,
-                category=category,
+                category=category_instance,
                 source=source,
                 destination=destination,
                 pickup_date=pickup_date,
@@ -2679,15 +2799,65 @@ class AddRide(TemplateView):
                 assigned_by=request.user,
                 cancelled_by=request.user,
                 created_by=request.user,
-                updated_by=request.user
+                updated_by=request.user,
+                pricing = pricing_instance,  # Set the Pricing instance
+
             )
             ride_details.save()
+            print("Ride details saved successfully.")
             
-            return JsonResponse({'status': "Success", 'message': 'Ride details added successfully'})
-        except Customer.DoesNotExist:
-            return JsonResponse({'status': 'Error', 'message': f'Customer with ID {customer_id} does not exist.'})
+            whatsapp = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWRiZWZhNTA0NzhkMjc0MGM0OWI2MyIsIm5hbWUiOiJEZWVwYW0gVGF4aSIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NGVkYmVmYTUwNDc4ZDI3NDBjNDliNWUiLCJhY3RpdmVQbGFuIjoiQkFTSUNfTU9OVEhMWSIsImlhdCI6MTY5MzMwMjUyMn0.-oNpicqPahvPSuR-hI9F7i3l2YMZVaPs5Z7Hqk0JjyU",
+                "campaignName": "newbooking_confirmation_local",
+                "destination": customer.phone_number,
+                "userName": "Deepam Taxi",
+                "templateParams": [
+                    customer.customer_name,
+                    next_company_format,
+                    date.today(),
+                    datetime.now().strftime('%H:%M'),
+                    source,
+                    destination,
+                    f"{pickup_date} {pickup_time}",
+                    total_fare
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {}
+            }
+            
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=whatsapp)
+
+            if response.status_code == 200:
+                print("Message sent successfully")
+            else:
+                print(f"Failed to send message: {response.status_code}")
+                print(response.text)
+
+            return JsonResponse({'status': 'Success', 'message': 'Ride details added successfully'})
+
+        except IntegrityError as e:
+            print(f"IntegrityError occurred: {e}")
+            return JsonResponse({'status': 'Error', 'message': 'Data integrity error occurred.'})
+
         except Exception as e:
+            print(f"An unexpected error occurred: {e}")
             return JsonResponse({'status': 'Error', 'message': str(e)})
+
+def determine_time_slot(pickup_time):
+    # Determine the time slot based on pickup_time_str
+    pickup_time = datetime.strptime(pickup_time, '%H:%M').time()
+    if time(0, 0) <= pickup_time < time(6, 0):
+        return '12AM - 6AM'
+    elif time(6, 0) <= pickup_time < time(12, 0):
+        return '6AM - 12PM'
+    elif time(12, 0) <= pickup_time < time(18, 0):
+        return '12PM - 6PM'
+    else:
+        return '6PM - 12AM'
                 
         
 @method_decorator(login_required(login_url='login'), name='dispatch')

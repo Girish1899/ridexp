@@ -18,21 +18,21 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source">
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" disabled>
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Drop Off Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination">
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination" disabled>
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date">
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" disabled>
                                         <div id="dateError" class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -40,9 +40,24 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time">
+                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="d-flex align-items-center">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="toll_option" id="add_toll" value="add_toll" >
+                                                <label class="form-check-label" for="add_toll">Add Toll</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="toll_option" id="no_toll" value="no_toll" checked>
+                                                <label class="form-check-label" for="no_toll">No Toll</label>
+                                            </div>                                            
+                                        </div>
+                                    </div>
+                                </div>                                
                 
                                 <div class="col-lg-3">
                                     <button class="theme-btn" type="submit" id="save_action">Check Fares<i
@@ -120,10 +135,10 @@
                                     N/A
                                 {% endif %}
                             </small> -->
-                            <small class="border-end me-3 pe-3">
+                            <!-- <small class="border-end me-3 pe-3">
                                 <p><strong>Permit:</strong> ₹<span id="permit_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Permit Non A/C:</strong> ₹<span id="permit_non_ac_{{ category|slugify }}">0</span></p>
-                            </small>
+                            </small> -->
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
@@ -175,8 +190,7 @@
         </div>
     </div>
 </div>
-                        
-                
+                                    
 <script>
     var ridetype = "airport";
     $(document).ready(function() {
@@ -241,13 +255,13 @@ function updateCategoryDetails(category, costData) {
 // Function to update price details and book button for AC/Non-AC
 function updatePriceAndButton(categorySlug, carType, costDetails) {
     var priceElement = document.getElementById("price_" + carType + "_" + categorySlug);
-    var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
+    // var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
     var tollElement = document.getElementById("toll_" + carType + "_" + categorySlug);
     var betaElement = document.getElementById("beta_" + carType + "_" + categorySlug);
     var bookButton = document.querySelector(`button[data-category="${categorySlug}"][data-type="${carType}"]`);
     var hiddenPriceInput = document.getElementById(`hidden_price_${carType}_${categorySlug}`);
 
-    if (!priceElement || !permitElement || !tollElement || !betaElement || !bookButton || !hiddenPriceInput) {
+    if (!priceElement  || !tollElement || !betaElement || !bookButton || !hiddenPriceInput) {
         console.warn("Some elements are missing for category:", categorySlug, carType);
         return;
     }
@@ -257,7 +271,7 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     if (costDetails && costDetails.cost) {
         // Update price details
         priceElement.textContent = costDetails.cost;
-        permitElement.textContent = costDetails.permit || "-";
+        // permitElement.textContent = costDetails.permit || "-";
         tollElement.textContent = costDetails.toll || "-";
         betaElement.textContent = costDetails.beta || "-";
 
@@ -269,7 +283,7 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     } else {
         // If price details are not available
         priceElement.textContent = "Not Available";
-        permitElement.textContent = "-";
+        // permitElement.textContent = "-";
         tollElement.textContent = "-";
         betaElement.textContent = "-";
 
@@ -296,57 +310,75 @@ function getTimeSlot(pickupTime) {
     }
 }
 
-// AJAX request to get pricing details
-$("#save_action").click(function(event) {
-    event.preventDefault();
+// Capture the change event for the toll option radio buttons
+$('input[name="toll_option"]').change(function() {
+    var tollOption = $('input[name="toll_option"]:checked').val();
+    console.log("Toll option changed to: ", tollOption); 
+    fetchPricingDetails(tollOption);  // Trigger a new calculation with the updated toll option
+});
+
+// Function to handle the AJAX request for fetching pricing details
+function fetchPricingDetails(tollOption) {
     var ridetype = "airport";
     var source = $('#source').val();
     var destination = $('#destination').val();
     var pickup_date = $('#pickup_date').val();
     var pickup_time = $('#pickup_time').val();
 
-    
     if (!source || !destination || !pickup_date) {
         alert("All fields are required.");
-    } else {
-        var time_slot = getTimeSlot(pickup_time);
-
-        if (!time_slot) {
-            alert("Invalid pickup time.");
-            return;
-        }
-
-        $.ajax({
-            url: '{% url "get_ride_pricing_details" %}',
-            type: "POST",
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            data: {
-                ridetype: ridetype,
-                source: source,
-                destination: destination,
-                pickup_date: pickup_date,
-                pickup_time: pickup_time,
-                time_slot: time_slot  
-            },
-            success: function(result) {
-                console.log("Received data: ", result); 
-                costs = result.costs;  // Store the costs data
-
-                // Loop through costs and update each category
-                for (var category in costs) {
-                    if (costs.hasOwnProperty(category)) {
-                        updateCategoryDetails(category, costs[category]);
-                    }
-                }
-            },
-            error: function(xhr, status, error) {
-                console.error("Error in AJAX request:", error);
-            }
-        });
+        return;
     }
+
+    var time_slot = getTimeSlot(pickup_time);
+
+    if (!time_slot) {
+        alert("Invalid pickup time.");
+        return;
+    }
+
+    console.log("Sending toll option in AJAX request: ", tollOption);
+
+    $.ajax({
+        url: '{% url "airport_ride_pricing_details" %}',
+        type: "POST",
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        data: {
+            ridetype: ridetype,
+            source: source,
+            destination: destination,
+            pickup_date: pickup_date,
+            pickup_time: pickup_time,
+            time_slot: time_slot,
+            toll_option: tollOption,
+        },
+        success: function(result) {
+            console.log("Received data: ", result); 
+            costs = result.costs;  // Store the costs data
+
+            // Loop through costs and update each category
+            for (var category in costs) {
+                if (costs.hasOwnProperty(category)) {
+                    updateCategoryDetails(category, costs[category]);
+                }
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error("Error in AJAX request:", error);
+        }
+    });
+}
+
+// Trigger the fetchPricingDetails function on button click as well
+$("#save_action").click(function(event) {
+    event.preventDefault();
+    var tollOption = $('input[name="toll_option"]:checked').val(); // Get the selected toll option
+    fetchPricingDetails(tollOption);
 });
+
+// });
 
 
 </script>

@@ -62,6 +62,7 @@
                                         <td>{{ i.customer_notes }}</td>
                                         <td>{{ i.booking_datetime }}</td>
                                         <td>
+                                            {% if i.driver %}
                                             <div>
                                                 <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.company_format }}</button>
                                             </div>
@@ -80,6 +81,9 @@
                                             
                                             <div>{{ i.driver.name }}</div>
                                             <div>{{ i.driver.phone_number }}</div>
+                                            {% else %}
+                                             <div style="color: red;">Driver not assigned</div>
+                                            {% endif %}
                                         </td>
                                         <td>
                                             <div><span class="badge badge-pill badge-success">{{ i.ride_status }}</span></div><br>                                            

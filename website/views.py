@@ -5,8 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Customer, Model, Pricing, Profile, RideDetails, Ridetype
-
+from superadmin.models import Brand, Category, Color, CommissionType, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -745,7 +744,7 @@ class AddVehicle(TemplateView):
         vehicle.save()
         return JsonResponse({'status': "Success"})
 
-class GetRidePricingDetails(APIView):
+class AirportGetRidePricingDetails(APIView):
     def post(self, request):
         import googlemaps
         from decimal import Decimal
@@ -757,7 +756,9 @@ class GetRidePricingDetails(APIView):
         pickup_date = request.POST['pickup_date']
         pickup_time = request.POST['pickup_time']
         time_slot = request.POST['time_slot']
-        ridetype = request.POST['ridetype']  # Ensure the ridetype is fetched correctly
+        ridetype = request.POST['ridetype']
+        toll_option = request.POST.get('toll_option')
+        print("Backend received toll option: ", toll_option)  # Debugging
 
         # Initialize the Google Maps client with your API key
         api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
@@ -773,7 +774,7 @@ class GetRidePricingDetails(APIView):
 
         # Extract the distance in kilometers
         distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
-        print("Distance calculated:", distance)
+        print("Distance calculated: ", distance)  # Debugging
 
         # Initialize the costs dictionary
         costs = {}
@@ -786,9 +787,6 @@ class GetRidePricingDetails(APIView):
         # Fetch all pricing details filtered by the selected time slot and ridetype
         pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance)
 
-        # Debugging statement
-        print("Fetched Pricing Details: ", pricing_details)
-
         # Organize pricing data by category and car type
         pricing_dict = {}
         for price in pricing_details:
@@ -798,31 +796,117 @@ class GetRidePricingDetails(APIView):
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
+            toll_price = Decimal(str(price.toll_price)) if toll_option == 'add_toll' else Decimal(0)
+            print(f"Toll option: {toll_option}, Toll price applied: {toll_price}")  # Check if this correctly shows 0 for no_toll
 
-        # Debugging statement to confirm pricing data
-        print("Pricing Dict after calculation: ", pricing_dict)
+
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price, toll_price)
+
         return JsonResponse({'costs': pricing_dict})
-    
-    def calculate_cost(self, distance, price):
+
+    def calculate_cost(self, distance, price, toll_price):
         """Helper method to calculate cost based on distance and pricing details."""
         from decimal import Decimal
 
         # Convert all fields to Decimal before operations
         price_per_km_decimal = Decimal(str(price.price_per_km))
         permit_decimal = Decimal(str(price.permit))
-        toll_price_decimal = Decimal(str(price.toll_price))
         driver_beta_decimal = Decimal(str(price.driver_beta))
 
         temp_cost = Decimal(distance) * price_per_km_decimal
-        temp_cost += permit_decimal + toll_price_decimal + driver_beta_decimal
+        temp_cost += permit_decimal + toll_price + driver_beta_decimal
         category_cost = round(temp_cost, 0)
+
+        print(f"Calculated cost: {category_cost}, Permit: {permit_decimal}, Toll: {toll_price}, Beta: {driver_beta_decimal}")  # Debugging
 
         return {
             'distance_km': distance,
             'cost': category_cost,
             'permit': permit_decimal,
-            'toll': toll_price_decimal,
+            'toll': toll_price,
             'beta': driver_beta_decimal,
             'category': price.category.category_name,
         }
+
+# class GetRidePricingDetails(APIView):
+#     def post(self, request):
+#         import googlemaps
+#         from decimal import Decimal
+#         from django.http import JsonResponse
+#         from datetime import datetime
+
+#         source = request.POST['source']
+#         destination = request.POST['destination']
+#         pickup_date = request.POST['pickup_date']
+#         pickup_time = request.POST['pickup_time']
+#         time_slot = request.POST['time_slot']
+#         ridetype = request.POST['ridetype']  # Ensure the ridetype is fetched correctly
+
+#         # Initialize the Google Maps client with your API key
+#         api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+#         gmaps = googlemaps.Client(key=api_key)
+
+#         # Request directions via driving mode
+#         result = gmaps.distance_matrix(
+#             origins=[source],
+#             destinations=[destination],
+#             mode="driving",
+#             departure_time=datetime.now()
+#         )
+
+#         # Extract the distance in kilometers
+#         distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
+#         print("Distance calculated:", distance)
+
+#         # Initialize the costs dictionary
+#         costs = {}
+
+#         # Fetch the ridetype instance
+#         ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+#         if not ride_type_instance:
+#             return JsonResponse({'error': 'Invalid ridetype'}, status=400)
+
+#         # Fetch all pricing details filtered by the selected time slot and ridetype
+#         pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance)
+
+#         # Debugging statement
+#         print("Fetched Pricing Details: ", pricing_details)
+
+#         # Organize pricing data by category and car type
+#         pricing_dict = {}
+#         for price in pricing_details:
+#             category_name = price.category.category_name
+#             car_type = price.car_type.lower()  # 'ac' or 'non ac'
+
+#             if category_name not in pricing_dict:
+#                 pricing_dict[category_name] = {}
+
+#             pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
+
+#         # Debugging statement to confirm pricing data
+#         print("Pricing Dict after calculation: ", pricing_dict)
+#         return JsonResponse({'costs': pricing_dict})
+    
+#     def calculate_cost(self, distance, price):
+#         """Helper method to calculate cost based on distance and pricing details."""
+#         from decimal import Decimal
+
+#         # Convert all fields to Decimal before operations
+#         price_per_km_decimal = Decimal(str(price.price_per_km))
+#         permit_decimal = Decimal(str(price.permit))
+#         toll_price_decimal = Decimal(str(price.toll_price))
+#         driver_beta_decimal = Decimal(str(price.driver_beta))
+
+#         temp_cost = Decimal(distance) * price_per_km_decimal
+#         temp_cost += permit_decimal + toll_price_decimal + driver_beta_decimal
+#         category_cost = round(temp_cost, 0)
+
+#         return {
+#             'distance_km': distance,
+#             'cost': category_cost,
+#             'permit': permit_decimal,
+#             'toll': toll_price_decimal,
+#             'beta': driver_beta_decimal,
+#             'category': price.category.category_name,
+#         }

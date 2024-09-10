@@ -174,6 +174,8 @@ urlpatterns = [
     path('completed_rides', CompletedRideList.as_view(), name='completed_rides'),
     path('cancelledbookings',CancelledListView.as_view(),name='cancelledbookings'),
     path('cancel_ride', cancel_ride, name='cancel_ride'),
+    path('global_customerGetRidePricingDetails', customerGetRidePricingDetails.as_view(), name='global_customerGetRidePricingDetails'),
+
 
     path('current-bookings', AssignDriverView.as_view(), name='current_bookings'),
     path('invoice/<int:ride_id>/', InvoiceView.as_view(), name='invoice_view'),

@@ -18,21 +18,21 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source">
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" disabled>
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Drop Off Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination">
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination"disabled>
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date">
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" disabled>
                                         <div id="dateError" class="invalid-feedback"></div>
                                     </div>
                                 </div>
@@ -40,7 +40,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time">
+                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
                                     </div>
                                 </div>
                 
@@ -57,8 +57,6 @@
     </div>
 </div>
 <!-- book ride end -->
-
-
 
 <div class="container-xxl py-5">
     <div class="container">
@@ -122,10 +120,10 @@
                                     N/A
                                 {% endif %}
                             </small> -->
-                            <small class="border-end me-3 pe-3">
+                            <!-- <small class="border-end me-3 pe-3">
                                 <p><strong>Permit:</strong> ₹<span id="permit_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Permit Non A/C:</strong> ₹<span id="permit_non_ac_{{ category|slugify }}">0</span></p>
-                            </small>
+                            </small> -->
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
@@ -226,13 +224,13 @@ function updateCategoryDetails(category, costData) {
 // Function to update price details and book button for AC/Non-AC
 function updatePriceAndButton(categorySlug, carType, costDetails) {
     var priceElement = document.getElementById("price_" + carType + "_" + categorySlug);
-    var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
+    // var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
     var tollElement = document.getElementById("toll_" + carType + "_" + categorySlug);
     var betaElement = document.getElementById("beta_" + carType + "_" + categorySlug);
     var bookButton = document.querySelector(`button[data-category="${categorySlug}"][data-type="${carType}"]`);
     var hiddenPriceInput = document.getElementById(`hidden_price_${carType}_${categorySlug}`);
 
-    if (!priceElement || !permitElement || !tollElement || !betaElement || !bookButton || !hiddenPriceInput) {
+    if (!priceElement || !tollElement || !betaElement || !bookButton || !hiddenPriceInput) {
         console.warn("Some elements are missing for category:", categorySlug, carType);
         return;
     }
@@ -242,7 +240,7 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     if (costDetails && costDetails.cost) {
         // Update price details
         priceElement.textContent = costDetails.cost;
-        permitElement.textContent = costDetails.permit || "-";
+        // permitElement.textContent = costDetails.permit || "-";
         tollElement.textContent = costDetails.toll || "-";
         betaElement.textContent = costDetails.beta || "-";
 
@@ -254,7 +252,7 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     } else {
         // If price details are not available
         priceElement.textContent = "Not Available";
-        permitElement.textContent = "-";
+        // permitElement.textContent = "-";
         tollElement.textContent = "-";
         betaElement.textContent = "-";
 

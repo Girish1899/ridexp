@@ -25,12 +25,13 @@ urlpatterns = [
     # path('cabs_list', views.cabs_list, name='cabs_list'),
     path('search_url', search_url, name='search_url'),
     path('airportcabs_list', views.airportcabs_list, name='airportcabs_list'),
+    path('airport_ride_pricing_details', AirportGetRidePricingDetails.as_view(), name='airport_ride_pricing_details'),
     path('localcabs_list', views.localcabs_list, name='localcabs_list'),
     path('booking_list', booking_list, name='booking_list'),
     path('search_customer_phone_numbers/', search_phone_numbers, name='search_customer_phone_numbers'),
     path('get_customer_details/', get_customer_details, name='get_customer_details'),
     path('add_new_booking', AddNewBooking.as_view(), name='add_new_booking'),
-    path('get_ride_pricing_details', GetRidePricingDetails.as_view(), name='get_ride_pricing_details'),
+    # path('get_ride_pricing_details', GetRidePricingDetails.as_view(), name='get_ride_pricing_details'),
     
     path('logout/', views.logout_view, name='logout'),
     

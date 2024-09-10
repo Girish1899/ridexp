@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime,time
 from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404,redirect
 
@@ -183,12 +183,12 @@ class Addbookings(TemplateView):
             last_ride = RideDetails.objects.all().order_by('-ride_id').first()
             if last_ride:
                 try:
-                    last_company_format = int(last_ride.company_format.replace('CUSAPP', ''))
+                    last_company_format = int(last_ride.company_format.replace('RID', ''))
                 except ValueError:
                     last_company_format = last_ride.ride_id
-                next_company_format = f'CUSAPP{last_company_format + 1:02}'
+                next_company_format = f'RID{last_company_format + 1:02}'
             else:
-                next_company_format = 'CUSAPP01'
+                next_company_format = 'RID01'
 
             ride_type_id = request.POST.get('ridetype')
             source = request.POST.get('source')
@@ -197,6 +197,8 @@ class Addbookings(TemplateView):
             pickup_time = request.POST.get('pickup_time')
             category = request.POST.get('category')
             total_fare = request.POST.get('total_fare')
+            ridetype_name = request.POST.get('ridetype', '').strip()
+            slots = determine_time_slot(pickup_time)
             customer_notes = request.POST.get('customer_notes')
 
             # Split category_value to get the category name
@@ -206,6 +208,19 @@ class Addbookings(TemplateView):
             except Category.DoesNotExist:
                 return JsonResponse({'status': 'Error', 'message': f'Category {category_name} does not exist.'})
 
+            ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
+            car_type_name = category.split('|')[1]
+
+            # Updated logic to include ridetype in pricing instance retrieval
+            try:
+                pricing_instance = Pricing.objects.get(
+                    category=category_id,
+                    car_type=car_type_name,
+                    ridetype=ridetype,  # Include ridetype in the query
+                    slots=slots,
+                )
+            except Pricing.DoesNotExist:
+                return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
 
             # Retrieve customer from session
             customer_id = request.session.get('customer_id')  
@@ -216,9 +231,6 @@ class Addbookings(TemplateView):
                 customer = Customer.objects.get(customer_id=customer_id)
             except Customer.DoesNotExist:
                 return JsonResponse({'status': 'Error', 'message': f'Customer with ID {customer_id} does not exist.'})
-
-            # Ensure objects exist in database before saving
-            ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
 
             # Determine ride status based on pickup date
             today = date.today().isoformat()
@@ -244,6 +256,7 @@ class Addbookings(TemplateView):
                 pickup_date=pickup_date,
                 pickup_time=pickup_time,
                 total_fare=total_fare,
+                pricing = pricing_instance, # Set the Pricing instance
                 customer_notes=customer_notes,
                 ride_status=ride_status,
             )
@@ -291,6 +304,18 @@ class Addbookings(TemplateView):
         except Exception as e:
             print(f"Exception: {e}")
             return JsonResponse({'status': 'Error', 'message': str(e)})
+
+def determine_time_slot(pickup_time_str):
+    # Determine the time slot based on pickup_time_str
+    pickup_time = datetime.strptime(pickup_time_str, '%H:%M').time()
+    if time(0, 0) <= pickup_time < time(6, 0):
+        return '12AM - 6AM'
+    elif time(6, 0) <= pickup_time < time(12, 0):
+        return '6AM - 12PM'
+    elif time(12, 0) <= pickup_time < time(18, 0):
+        return '12PM - 6PM'
+    else:
+        return '6PM - 12AM'
 
 class customerGetRidePricingDetails(APIView):
     def post(self, request):
