@@ -31,7 +31,7 @@ urlpatterns = [
     path('search_customer_phone_numbers/', search_phone_numbers, name='search_customer_phone_numbers'),
     path('get_customer_details/', get_customer_details, name='get_customer_details'),
     path('add_new_booking', AddNewBooking.as_view(), name='add_new_booking'),
-    # path('get_ride_pricing_details', GetRidePricingDetails.as_view(), name='get_ride_pricing_details'),
+    path('get_ride_pricing_details', GetRidePricingDetails.as_view(), name='get_ride_pricing_details'),
     
     path('logout/', views.logout_view, name='logout'),
     

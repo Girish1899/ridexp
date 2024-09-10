@@ -50,375 +50,375 @@
         
 </style>
 
-    <main class="main">
-        <!-- hero slider -->
-        <div class="container" id="book_now">
-            <div class="container" style="background: white;border-radius: 10px;padding: 1%;">
-                <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport Transfer</button>
-                <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local Drop</button>
-                <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
-                <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
-                <div class="booking-form">
-                    <h4 class="booking-title">Book Your Ride</h4>
-                    <div id="Airport" class="tabcontent">
-                        <form action="{% url 'search_url' %}" id="airportForm">
-                            <input type="hidden" name="ridetype" value="airport">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_source" name="source" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Off Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_destination" name="destination" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date" required>                                       
-                                        <div id="dateError" class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-        
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control pickup-time"  id="Airport_pickup_time" name="pickup_time" required>                                       
-                                        <div id="timeError" class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-        
-                                <div class="col-lg-2 align-self-end">
-                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                            class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                      </div>
-                      
-                      <div id="LocalDrop" class="tabcontent">
-                        <form action="{% url 'search_url' %}" id="localDropForm">
-                            <input type="hidden" name="ridetype" value="local">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_source" name="source" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Off Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_destination" name="destination" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalDrop_pickup_date" name="pickup_date" required>                                       
-                                        <div id="dateError" class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control pickup-time "  id="LocalDrop_pickup_time" name="pickup_time" required>                                       
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 align-self-end">
-                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                            class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                      </div>
-                      
-                      <div id="LocalPackage" class="tabcontent">
-                        <form action="{% url 'search_url' %}" id="localPackageForm">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_source" name="source">
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Off Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_destination" name="destination" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalPackage_pickup_date" name="pickup_date" required>                                       
-                                        <div id="dateError" class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control pickup-time"  id="LocalPackage_pickup_time" name="pickup_time" required>                                       
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 align-self-end">
-                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                            class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
-                        </form>
-                      </div>
-                      
-                      <div id="Outstation" class="tabcontent">
-                        <form action="{% url 'search_url' %}" id="outstationForm">
-                            <!-- Radio Buttons for Trip Type (Single Row) -->
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="form-group">
-                                        <label>Trip Type:</label>
-                                        <div class="form-check form-check-inline">
-                                            <input type="radio" id="one_way" name="trip_type" value="one_way" checked class="form-check-input">
-                                            <label for="one_way" class="form-check-label">One Way</label>
+<main class="main">
+    <!-- hero slider -->
+    <!-- booking area end -->
+    <div class="hero-section"> 
+        <!-- <div class="hero-slider owl-carousel owl-theme"> -->
+            <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
+                <!-- <div class="container"> -->
+                    <div class="row align-items-center">
+                        <h1 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp" data-delay=".25s">WELCOME TO RIDE EXPRESS!</h1>
+                            <div class="container">
+                                <div class="container" style="background: transparent;border-radius: 10px;padding: 1%;">
+                                    <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport Transfer</button>
+                                    <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local Drop</button>
+                                    <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
+                                    <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
+                                    <div class="booking-form">
+                                        <h4 class="booking-title">Book Your Ride</h4>
+                                        <div id="Airport" class="tabcontent">
+                                            <form action="{% url 'search_url' %}" id="airportForm">
+                                                <input type="hidden" name="ridetype" value="airport">
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_source" name="source" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Drop Off Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Airport_destination" name="destination" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Date:</label>
+                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date" required>                                       
+                                                            <div id="dateError" class="invalid-feedback"></div>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Time:</label>
+                                                            <input type="time" class="form-control pickup-time"  id="Airport_pickup_time" name="pickup_time" required>                                       
+                                                            <div id="timeError" class="invalid-feedback"></div>
+                                                        </div>
+                                                    </div>
+                            
+                                                    <div class="col-lg-2 align-self-end">
+                                                        <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                                class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                          </div>
+                                          
+                                          <div id="LocalDrop" class="tabcontent">
+                                            <form action="{% url 'search_url' %}" id="localDropForm">
+                                                <input type="hidden" name="ridetype" value="local">
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_source" name="source" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Drop Off Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalDrop_destination" name="destination" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Date:</label>
+                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalDrop_pickup_date" name="pickup_date" required>                                       
+                                                            <div id="dateError" class="invalid-feedback"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Time:</label>
+                                                            <input type="time" class="form-control pickup-time "  id="LocalDrop_pickup_time" name="pickup_time" required>                                       
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 align-self-end">
+                                                        <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                                class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                          </div>
+                                          
+                                          <div id="LocalPackage" class="tabcontent">
+                                            <form action="{% url 'search_url' %}" id="localPackageForm">
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_source" name="source">
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Drop Off Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="LocalPackage_destination" name="destination" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Date:</label>
+                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="LocalPackage_pickup_date" name="pickup_date" required>                                       
+                                                            <div id="dateError" class="invalid-feedback"></div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Time:</label>
+                                                            <input type="time" class="form-control pickup-time"  id="LocalPackage_pickup_time" name="pickup_time" required>                                       
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-2 align-self-end">
+                                                        <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                                class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                          </div>
+                                          
+                                          <div id="Outstation" class="tabcontent">
+                                            <form action="{% url 'search_url' %}" id="outstationForm">
+                                                <!-- Radio Buttons for Trip Type (Single Row) -->
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label>Trip Type:</label>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" id="one_way" name="trip_type" value="one_way" checked class="form-check-input">
+                                                                <label for="one_way" class="form-check-label">One Way</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" id="round_trip" name="trip_type" value="round_trip" class="form-check-input">
+                                                                <label for="round_trip" class="form-check-label">Round Trip</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        
+                                                <!-- Other Fields -->
+                                                <div class="row">
+                                                    <!-- Pick Up Location -->
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_source" name="source" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <!-- Drop Off Location -->
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Drop Off Location:</label>
+                                                            <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_destination" name="destination" required>
+                                                            <i class="far fa-location-dot"></i>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <!-- Pick Up Date -->
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Date:</label>
+                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_pickup_date" name="pickup_date" required>
+                                                            <div id="dateError" class="invalid-feedback"></div>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <!-- Pick Up Time -->
+                                                    <div class="col-lg-2">
+                                                        <div class="form-group">
+                                                            <label>Pick Up Time:</label>
+                                                            <input type="time" class="form-control pickup-time" id="Outstation_pickup_time" name="pickup_time" required>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <!-- Submit Button -->
+                                                    <div class="col-lg-2 align-self-end">
+                                                        <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
+                                                    </div>
+                                                </div>
+                                        
+                                                <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
+                                                <div class="row drop-fields" style="display:none;">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Drop Date:</label>
+                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_drop_date" name="drop_date" required>
+                                                        </div>
+                                                    </div>
+                                        
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Drop Time:</label>
+                                                            <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time" required>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
                                         </div>
-                                        <div class="form-check form-check-inline">
-                                            <input type="radio" id="round_trip" name="trip_type" value="round_trip" class="form-check-input">
-                                            <label for="round_trip" class="form-check-label">Round Trip</label>
-                                        </div>
+                                                          
                                     </div>
                                 </div>
                             </div>
-                    
-                            <!-- Other Fields -->
-                            <div class="row">
-                                <!-- Pick Up Location -->
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_source" name="source" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                    
-                                <!-- Drop Off Location -->
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Off Location:</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="Outstation_destination" name="destination" required>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
-                                </div>
-                    
-                                <!-- Pick Up Date -->
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_pickup_date" name="pickup_date" required>
-                                        <div id="dateError" class="invalid-feedback"></div>
-                                    </div>
-                                </div>
-                    
-                                <!-- Pick Up Time -->
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control pickup-time" id="Outstation_pickup_time" name="pickup_time" required>
-                                    </div>
-                                </div>
-                    
-                                <!-- Submit Button -->
-                                <div class="col-lg-2 align-self-end">
-                                    <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
-                                </div>
-                            </div>
-                    
-                            <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
-                            <div class="row drop-fields" style="display:none;">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Outstation_drop_date" name="drop_date" required>
-                                    </div>
-                                </div>
-                    
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Time:</label>
-                                        <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time" required>
-                                    </div>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                                      
-                </div>
-            </div>
-        </div>
-        <!-- booking area end -->
-        <div class="hero-section"> 
-            <div class="hero-slider owl-carousel owl-theme">
-                <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-md-12 col-lg-9 mx-auto">
-                                <div class="hero-content text-center">
-                                    <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
-                                        Deepam Taxi!</h6>
-                                    <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
-                                        Airport Taxi at your service! Starts at  
-                                        <span>₹499</span>/- Pickup, <span>₹724</span>/- Drop 
-                                    </h1>
-                                    <p data-animation="fadeInLeft" data-delay=".75s">
-                                        Airport pickup for the time of 4:00 AM - 7:45 AM would cost Rs.499/- within 35km radius.
-                                    </p>
-                                    <div class="hero-btn justify-content-center" data-animation="fadeInUp"
-                                        data-delay="1s">
-                                        <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                        <a href="/services" class="theme-btn theme-btn2">Learn More<i
-                                                class="fas fa-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-single" style="background: url('static/img/slider/sl02.avif')">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-md-12 col-lg-9 mx-auto">
-                                <div class="hero-content text-center">
-                                    <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
-                                        Deepam Taxi!</h6>
-                                    <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
-                                        Affordable 24/7 <span>Local Cabs</span> in Bangalore 
-                                    </h1>
-                                    <p data-animation="fadeInLeft" data-delay=".75s">
-                                        Deepam Taxi simplifies your local travel needs within Bangalore city. We offer affordable and 
-                                        reliable local taxi services, ensuring you pay less and travel more. Whether you need a ride across
-                                         town or a quick trip within the city limits, our 24/7 service is here for you. With timely pickups
-                                          and drops, coupled with exceptional 24x7 customer support, Deepam Taxi ensures a hassle-free and 
-                                          convenient local taxi experience in Bangalore.
-                                    </p>
-                                    <div class="hero-btn justify-content-center" data-animation="fadeInUp"
-                                        data-delay="1s">
-                                        <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                        <a href="/services" class="theme-btn theme-btn2">Learn More<i
-                                                class="fas fa-arrow-right"></i></a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="hero-single" style="background: url('static/img/slider/sl03.avif')">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <div class="col-md-12 col-lg-9 mx-auto">
-                                <div class="hero-content text-center">
-                                    <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
-                                        Deepam Taxi!</h6>
-                                    <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
-                                        Outstation Cabs in  <span>Bangalore</span> 
-                                    </h1>
-                                    <p data-animation="fadeInLeft" data-delay=".75s">
-                                        Plan your outstation travel from Bangalore with ease and affordability! Deepam Taxi offers a range of 
-                                        vehicles to suit your needs and budget, starting at just Rs. 9 per kilometer. Choose from hatchbacks, 
-                                        sedans, Innovas, SUVs, or even tempo travelers. Plus, enjoy the convenience of no check-post charges 
-                                        on one-way or round-trip bookings (terms and conditions apply). Our 24/7 booking service and customer
-                                         support ensure a smooth and hassle-free experience, complete with timely pickups and drops for your 
-                                         outstation journey.
-                                    </p>
-                                    <div class="hero-btn justify-content-center" data-animation="fadeInUp"
-                                        data-delay="1s" >
-                                        <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                        <a href="/services" class="theme-btn theme-btn2">Learn More<i
-                                                class="fas fa-arrow-right"></i></a>
-                                    </div>
+                        <div class="col-md-12 col-lg-9 mx-auto">
+                            <div class="hero-content text-center">
+                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                    Airport Taxi at your service! Starts at  
+                                    <span>₹499</span>/- Pickup, <span>₹724</span>/- Drop 
+                                </h1>
+                                <p data-animation="fadeInLeft" data-delay=".75s">
+                                    Airport pickup for the time of 4:00 AM - 7:45 AM would cost Rs.499/- within 35km radius.
+                                </p>
+                                <div class="hero-btn justify-content-center" data-animation="fadeInUp"
+                                    data-delay="1s">
+                                    <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                    <a href="/services" class="theme-btn theme-btn2">Learn More<i
+                                            class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- hero slider end -->
+            
+            <!-- <div class="hero-single" style="background: url('static/img/slider/sl02.avif')">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-12 col-lg-9 mx-auto">
+                            <div class="hero-content text-center">
+                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
+                                    Deepam Taxi!</h6>
+                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                    Affordable 24/7 <span>Local Cabs</span> in Bangalore 
+                                </h1>
+                                <p data-animation="fadeInLeft" data-delay=".75s">
+                                    Deepam Taxi simplifies your local travel needs within Bangalore city. We offer affordable and 
+                                    reliable local taxi services, ensuring you pay less and travel more. Whether you need a ride across
+                                     town or a quick trip within the city limits, our 24/7 service is here for you. With timely pickups
+                                      and drops, coupled with exceptional 24x7 customer support, Deepam Taxi ensures a hassle-free and 
+                                      convenient local taxi experience in Bangalore.
+                                </p>
+                                <div class="hero-btn justify-content-center" data-animation="fadeInUp"
+                                    data-delay="1s">
+                                    <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                    <a href="/services" class="theme-btn theme-btn2">Learn More<i
+                                            class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-single" style="background: url('static/img/slider/sl03.avif')">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-12 col-lg-9 mx-auto">
+                            <div class="hero-content text-center">
+                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
+                                    Deepam Taxi!</h6>
+                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                                    Outstation Cabs in  <span>Bangalore</span> 
+                                </h1>
+                                <p data-animation="fadeInLeft" data-delay=".75s">
+                                    Plan your outstation travel from Bangalore with ease and affordability! Deepam Taxi offers a range of 
+                                    vehicles to suit your needs and budget, starting at just Rs. 9 per kilometer. Choose from hatchbacks, 
+                                    sedans, Innovas, SUVs, or even tempo travelers. Plus, enjoy the convenience of no check-post charges 
+                                    on one-way or round-trip bookings (terms and conditions apply). Our 24/7 booking service and customer
+                                     support ensure a smooth and hassle-free experience, complete with timely pickups and drops for your 
+                                     outstation journey.
+                                </p>
+                                <div class="hero-btn justify-content-center" data-animation="fadeInUp"
+                                    data-delay="1s" >
+                                    <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                    <a href="/services" class="theme-btn theme-btn2">Learn More<i
+                                            class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> -->
+    </div>
+    <!-- hero slider end -->
 
-        <!-- booking area -->
+    <!-- booking area -->
 
 <!-- The Modal -->
 <div id="myModal" class="modal">
-    <!-- Modal content -->
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span> <!-- Close button -->
-        <!-- Google Form iframe -->
-        <iframe id="googleFormFrame" src="" frameborder="0"></iframe>
-    </div>
+<!-- Modal content -->
+<div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span> <!-- Close button -->
+    <!-- Google Form iframe -->
+    <iframe id="googleFormFrame" src="" frameborder="0"></iframe>
 </div>
-        
-        <!-- about area -->
-        <div class="about-area py-120">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-lg-6">
-                        <div class="about-left wow fadeInLeft" data-wow-delay=".25s">
-                            <div class="about-img">
-                                <img src="{% static '/img/about/01.png' %}" alt="">
+</div>
+    
+    <!-- about area -->
+    <div class="about-area py-120">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-left wow fadeInLeft" data-wow-delay=".25s">
+                        <div class="about-img">
+                            <img src="{% static '/img/about/01.png' %}" alt="">
+                        </div>
+                        <div class="about-experience">
+                            <div class="about-experience-icon">
+                                <img src="{% static '/img/icon/taxi-booking.svg' %}" alt="">
                             </div>
-                            <div class="about-experience">
-                                <div class="about-experience-icon">
-                                    <img src="{% static '/img/icon/taxi-booking.svg' %}" alt="">
-                                </div>
-                                <b>15+ Years Of <br> Quality Service</b>
-                            </div>
+                            <b>15+ Years Of <br> Quality Service</b>
                         </div>
                     </div>
-                    <div class="col-lg-6">
-                        <div class="about-right wow fadeInRight" data-wow-delay=".25s">
-                            <div class="site-heading mb-3">
-                                <span class="site-title-tagline justify-content-start">
-                                    <i class="flaticon-drive"></i> About Us
-                                </span>
-                                <h2 class="site-title">
-                                    Your <span>Trusted</span> Transportation Partner in Bangalore  
-                                </h2>
-                            </div>
-                            <!-- <p class="about-text">
-                                There are many variations of passages of Lorem Ipsum available, but the majority have
-                                suffered alteration in some form, by injected humour.
-                            </p> -->
-                            <div class="about-list-wrapper">
-                                <ul class="about-list list-unstyled">
-                                    <li>
-                                        Founded in 2007, Deepam Taxi is a leading taxi and cab service in Bangalore, known for its commitment to customer satisfaction.
-                                    </li>
-                                    <li>
-                                        Choose from a wide range of vehicles to suit your needs, from A/C and Non A/C hatchbacks and sedans to Innovas, tempo travelers, and more.
-                                    </li>
-                                    <li>
-                                        Deepam Taxi understands the needs of corporate clients and offers tailored solutions for a hassle-free rental experience.
-                                    </li>
-                                    <li>
-                                        Deepam Taxi leverages its extensive experience to deliver top-quality car hire and leasing services.
-                                    </li>
-                                </ul>
-                            </div>
-                            <a href="/about" class="theme-btn mt-4">Discover More<i
-                                    class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="col-lg-6">
+                    <div class="about-right wow fadeInRight" data-wow-delay=".25s">
+                        <div class="site-heading mb-3">
+                            <span class="site-title-tagline justify-content-start">
+                                <i class="flaticon-drive"></i> About Us
+                            </span>
+                            <h2 class="site-title">
+                                Your <span>Trusted</span> Transportation Partner in Bangalore  
+                            </h2>
                         </div>
+                        <!-- <p class="about-text">
+                            There are many variations of passages of Lorem Ipsum available, but the majority have
+                            suffered alteration in some form, by injected humour.
+                        </p> -->
+                        <div class="about-list-wrapper">
+                            <ul class="about-list list-unstyled">
+                                <li>
+                                    Founded in 2007, Deepam Taxi is a leading taxi and cab service in Bangalore, known for its commitment to customer satisfaction.
+                                </li>
+                                <li>
+                                    Choose from a wide range of vehicles to suit your needs, from A/C and Non A/C hatchbacks and sedans to Innovas, tempo travelers, and more.
+                                </li>
+                                <li>
+                                    Deepam Taxi understands the needs of corporate clients and offers tailored solutions for a hassle-free rental experience.
+                                </li>
+                                <li>
+                                    Deepam Taxi leverages its extensive experience to deliver top-quality car hire and leasing services.
+                                </li>
+                            </ul>
+                        </div>
+                        <a href="/about" class="theme-btn mt-4">Discover More<i
+                                class="fas fa-arrow-right"></i></a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- about area end -->
+    </div>
+    <!-- about area end -->
 
         
 
@@ -460,7 +460,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="service-item wow fadeInUp" data-wow-delay=".50s">
                             <div class="service-img">
-                                <img src="{% static '/img/service/service02.jpeg' %}" alt="">
+                                <img src="{% static '/img/service/service03.jpg' %}" alt="">
                             </div>
                             <div class="service-icon">
                                 <img src="{% static '/img/icon/city-taxi.svg' %}" alt="">
@@ -502,7 +502,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="service-item wow fadeInUp" data-wow-delay=".25s">
                             <div class="service-img">
-                                <img src="{% static '/img/service/04.jpeg' %}" alt="">
+                                <img src="{% static '/img/service/business.avif' %}" alt="">
                             </div>
                             <div class="service-icon">
                                 <img src="{% static '/img/icon/business.svg' %}" alt="">
@@ -523,7 +523,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="service-item wow fadeInUp" data-wow-delay=".50s">
                             <div class="service-img">
-                                <img src="{% static '/img/service/05.avif' %}" alt="">
+                                <img src="{% static '/img/service/holiday.png' %}" alt="">
                             </div>
                             <div class="service-icon">
                                 <img src="{% static '/img/icon/taxi-2.svg' %}" alt="">
@@ -888,7 +888,7 @@
                         <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
                             <div class="rate-header">
                                 <div class="rate-img">
-                                    <img src="{% static '/img/rate/01.png' %}" alt="">
+                                    <img src="{% static '/img/rate/sedan.png' %}" alt="">
                                 </div>
                             </div>
                             <div class="rate-header-content">
@@ -917,7 +917,7 @@
                         <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
                             <div class="rate-header">
                                 <div class="rate-img">
-                                    <img src="{% static '/img/rate/01.png' %}" alt="">
+                                    <img src="{% static '/img/rate/sedan.png' %}" alt="">
                                 </div>
                             </div>
                             <div class="rate-header-content">
@@ -945,7 +945,7 @@
                         <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
                             <div class="rate-header">
                                 <div class="rate-img">
-                                    <img src="{% static '/img/rate/01.png' %}" alt="">
+                                    <img src="{% static '/img/rate/sedan.png' %}" alt="">
                                 </div>
                             </div>
                             <div class="rate-header-content">
@@ -1431,7 +1431,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
                             <div class="blog-item-img">
-                                <img src="{% static 'img/service/05.jpeg' %}" alt="Thumb">
+                                <img src="{% static 'img/service/business.avif' %}" alt="Thumb">
                             </div>
                             <div class="blog-item-info">
                                 <div class="blog-item-meta">
@@ -1450,7 +1450,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
                             <div class="blog-item-img">
-                                <img src="{% static 'img/service/06.jpeg' %}" alt="Thumb">
+                                <img src="{% static 'img/service/holiday.png' %}" alt="Thumb">
                             </div>
                             <div class="blog-item-info">
                                 <div class="blog-item-meta">
@@ -1469,7 +1469,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
                             <div class="blog-item-img">
-                                <img src="{% static 'img/service/service02.jpeg' %}" alt="Thumb">
+                                <img src="{% static 'img/service/service03.jpg' %}" alt="Thumb">
                             </div>
                             <div class="blog-item-info">
                                 <div class="blog-item-meta">
@@ -1590,7 +1590,7 @@ function openPage(pageName, btn_id) {
     tablinks = document.getElementsByClassName("tablink");
     for (i = 0; i < tablinks.length; i++) {
         tablinks[i].style.backgroundColor = "";
-        tablinks[i].style.color = "black";
+        tablinks[i].style.color = "white";
     }
     document.getElementById(pageName).style.display = "block";
 
