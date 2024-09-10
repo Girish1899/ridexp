@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-h=grwu1iy%6zs0qiib_t&4pgbe$i^*^koad_)4ec7s4-!g2yoq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -78,7 +78,7 @@ ROOT_URLCONF = 'taxipro.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join('templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,7 +103,7 @@ LOGIN_URL = '/login/'
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'djongo',
-#         'NAME': 'DeepamTaxi',  # Replace with your MongoDB database name
+#         'NAME': 'RidexpressTaxi',  # Replace with your MongoDB database name
 #         'CLIENT': {
 #             'host': 'localhost',  # Replace with your MongoDB host
 #             'port': 27017,        # Replace with your MongoDB port
@@ -123,7 +123,7 @@ DATABASES = {
    }
 
 # DATABASES['default'] = dj_database_url.config(
-#     default='djongo://localhost:27017/Deepam',
+#     default='djongo://localhost:27017/Ridexpress',
 #     engine='djongo'
 # )
 
