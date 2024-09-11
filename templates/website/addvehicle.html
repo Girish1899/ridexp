@@ -15,299 +15,325 @@
                 <div class="col-md-10 mx-auto">
                     <div class="booking-form">
                         <div class="book-ride-head">
-                            <h4 class="booking-title">Register Your Vehicle</h4>
+                            <h4 class="booking-title" style="color: #DB9710;"><span class="text-uppercase">Register Your Vehicle</span></h4>
                         </div>
-                        <form action="#">
-                            <div class="row"></div>
+                        <!-- <form action="#"> -->
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">OWNER DETAILS</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">ACCOUNT DETAILS</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="contact-tab" data-bs-toggle="tab" data-bs-target="#contact" type="button" role="tab" aria-controls="contact" aria-selected="false">VEHICLE DETAILS</button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                  <button class="nav-link" id="document-tab" data-bs-toggle="tab" data-bs-target="#document" type="button" role="tab" aria-controls="document" aria-selected="false">DOCUMENT UPLOAD</button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                                    <br>
+                                        <div class="welcome-text">
+                                            <center><h4 style="color: #DB9710;">Vehicle Owner Details</h4></center>
+                                        </div>
+                                    <br>
+                                    <input type="hidden" id="owner_id" name="owner_id">
+                                    
+                                    <div class="form-group row" >
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">* Phone Number</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="phone_number" name="phone_number">
+                                        </div>
 
-                            <!-- row -->
-                            <div class="col-xl-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <!-- <h4 class="card-title">Add Vehicle</h4> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">* Name</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="name" name="name">
+                                        </div>
                                     </div>
-                                    <div class="card-body">
-                                        <input type="hidden" id="owner_id" name="owner_id">
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number">
-                                            </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Email</label>
+                                        <div class="col-sm-10">
+                                            <input type="email" class="form-control form-control-lg regvehicle" id="email" name="email">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">* Address</label>
+                                        <div class="col-sm-10">                                            
+                                            <textarea class="form-control regvehicle" rows="2" id="address" name="address"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style=" font-size: 16px;">Profile Image</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg " id="image" name="image">
+                                            <img id="preview1"  src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Address Proof</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
+                                            <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Identity Proof</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="identity" name="identity">
+                                            <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                    </div><br>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-dark" onclick="nextTab()">Next</button>
+                                    </div>                                    
+                                </div>
+
+                                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">                                    <br>
+                                    <div class="welcome-text">
+                                        <center><h4 style="color: #DB9710;">Owner Account Details</h4></center>
+                                        <!-- <span class="ml-1">Element</span> -->
+                                    </div>
+                                    <br>
+                                
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <label class="col-form-label col-form-label-lg" style="font-size: 16px;">Holder Name</label>
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="holdername" name="holdername">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="col-form-label col-form-label-lg" style="font-size: 16px;">A/C Number</label>
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="ac_number" name="ac_number">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-sm-6">
+                                            <label class="col-form-label col-form-label-lg" style="font-size: 16px;">Bank Name</label>
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="bankname" name="bankname">
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <label class="col-form-label col-form-label-lg" style="font-size: 16px;">IFSC Code</label>
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="ifsc_code" name="ifsc_code">
+                                        </div>
+                                    </div><br>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-dark" onclick="nextTab()">Next</button>
+                                    </div>   
+                                </div>
+
+                                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">                                    <br>
+                                    <div class="welcome-text">
+                                        <center><h4 style="color:#DB9710;">Vehicle Details</h4></center>
+                                    </div>
+                                    <br>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Vehicle No.*</label>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="part1" name="part1" maxlength="2" placeholder="KA" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="part2" name="part2" maxlength="2" placeholder="01" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="part3" name="part3" maxlength="2" placeholder="AB" required>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="text" class="form-control form-control-lg regvehicle" id="part4" name="part4" maxlength="4" placeholder="0000" required>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car Category *</label>
+                                        <div class="col-sm-4">
+                                            <select id="category" name="category" class="form-control form-control-lg" style="height: 52px;" onchange="getbrand()">
+                                                <option value="" selected disabled>Select Car Category</option>
+                                                {% for obj in catlist %}
+                                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car Brand *</label>
+                                        <div class="col-sm-4">
+                                            <select id="brand" name="brand" class="form-control form-control-lg" style="height: 52px;" onchange="getmodel()">
+                                                <option value="" selected disabled>Select Car Brand</option>
+                                                <!-- Options will be dynamically added here -->
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car Model *</label>
+                                        <div class="col-sm-4">
+                                            <select id="model" name="model" class="form-control form-control-lg" style="height: 52px;">
+                                                <option value="" selected disabled>Select Car Model</option>
+                                                <!-- Options will be dynamically added here -->
+                                            </select>
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Select a Year *</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control form-control-lg" id="year" name="year" style="height: 52px;">
+                                                <option value="" selected disabled>Select Year</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car body color *</label>
+                                        <div class="col-sm-4">
+                                            <select id="color" name="color" class="form-control form-control-lg" style="height: 52px;">
+                                                <option value="" selected disabled>Select Car Body Color</option>
+                                                {% for obj in colorlist %}
+                                                <option value="{{ obj.color_id }}">{{ obj.name }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;"> Transmission Type *</label>
+                                        <div class="col-sm-4">
+                                            <select id="transmission" name="transmission" class="form-control form-control-lg" style="height: 52px;">
+                                                <option value="" selected disabled>Select Car Transmission Type</option>
+                                                {% for obj in tlist %}
+                                                <option value="{{ obj.transmission_id }}">{{ obj.transmission_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style=" font-size: 16px;">Fuel Type *</label>
+                                        <div class="col-sm-4">
+                                            <select id="vehicle_type" name="vehicle_type" class="form-control form-control-lg" style="height: 52px;">
+                                                <option value="" selected disabled>Select Fuel Type</option>
+                                                {% for obj in vtypelist %}
+                                                <option value="{{ obj.vehicle_type_id }}">{{ obj.vehicle_type_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car Type *</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control form-control-lg" id="car_type" name="car_type" style="height: 52px;">
+                                                <option value="" selected disabled>Select Car Type</option>
+                                                <option>AC</option>
+                                                <option>NON AC</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Insurance Expiry *</label>
+                                        <div class="col-sm-4">
+                                            <input type="date" class="form-control form-control-lg" style="height: 52px;" id="insurance_expiry" name="insurance_expiry">
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Vehicle Owner Name</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control form-control-lg" id="name" name="name">
-                                            </div>
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Select Drive Type *</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control form-control-lg" id="drive_status" name="drive_status" style="height: 52px;">
+                                                <option value="" selected disabled>Select Drive Status</option>
+                                                <option value="selfdrive">Self Drive</option>
+                                                <option value="otherdrive">Other Drive</option>
+                                            </select>
                                         </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control form-control-lg" id="email" name="email">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Address</label>
-                                            <div class="col-sm-10">                                            
-                                                <textarea class="form-control" rows="2" id="address" name="address"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="image" name="image">
-                                                <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
-                                                <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="identity" name="identity">
-                                                <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-
-                                        <hr>
-                                        <div class="welcome-text">
-                                           <center><h4 style="color: blue;">Account Details</h4></center>
-                                            <!-- <span class="ml-1">Element</span> -->
-                                        </div>
-                                        <hr>
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Holder Name</label>
-                                                <input type="text" class="form-control form-control-lg" id="holdername" name="holdername">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">A/C Number</label>
-                                                <input type="text" class="form-control form-control-lg" id="ac_number" name="ac_number">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Bank Name</label>
-                                                <input type="text" class="form-control form-control-lg" id="bankname" name="bankname">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">IFSC Code</label>
-                                                <input type="text" class="form-control form-control-lg" id="ifsc_code" name="ifsc_code">
-                                            </div>
-                                        </div>
-
-                                        <!-- <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Vehicle Owner Name</label>
-                                            <div class="col-sm-10">
-                                                <select id="single-select" name="owner" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Owner Id</option>
-                                                    {% for obj in ownerlist %}
-                                                    <option value="{{ obj.owner_id }}">{{ obj.name }} - {{obj.phone_number}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div> -->
-
-                                        <hr>
-                                        <div class="welcome-text">
-                                           <center><h4 style="color: blue;">Vehicle Details</h4></center>
-                                            <!-- <span class="ml-1">Element</span> -->
-                                        </div>
-                                        <hr>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle No.*</label>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-lg" id="part1" name="part1" maxlength="2" placeholder="KA" required>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-lg" id="part2" name="part2" maxlength="2" placeholder="01" required>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-lg" id="part3" name="part3" maxlength="2" placeholder="AB" required>
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <input type="text" class="form-control form-control-lg" id="part4" name="part4" maxlength="4" placeholder="0000" required>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
-                                            <div class="col-sm-4">
-                                                <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
-                                                    <option value="" selected disabled>Select Car Category</option>
-                                                    {% for obj in catlist %}
-                                                    <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand *</label>
-                                            <div class="col-sm-4">
-                                                <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
-                                                    <option value="" selected disabled>Select Car Brand</option>
-                                                    <!-- Options will be dynamically added here -->
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model *</label>
-                                            <div class="col-sm-4">
-                                                <select id="model" name="model" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Car Model</option>
-                                                    <!-- Options will be dynamically added here -->
-                                                </select>
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control form-control-lg" id="year" name="year">
-                                                    <option value="" selected disabled>Select Year</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car body color *</label>
-                                            <div class="col-sm-4">
-                                                <select id="color" name="color" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Car Body Color</option>
-                                                    {% for obj in colorlist %}
-                                                    <option value="{{ obj.color_id }}">{{ obj.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Transmission Type *</label>
-                                            <div class="col-sm-4">
-                                                <select id="transmission" name="transmission" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Car Transmission Type</option>
-                                                    {% for obj in tlist %}
-                                                    <option value="{{ obj.transmission_id }}">{{ obj.transmission_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
-                                            <div class="col-sm-4">
-                                                <select id="vehicle_type" name="vehicle_type"
-                                                    class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Fuel Type</option>
-                                                    {% for obj in vtypelist %}
-                                                    <option value="{{ obj.vehicle_type_id }}">{{ obj.vehicle_type_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control form-control-lg" id="car_type" name="car_type">
-                                                    <option value="" selected disabled>Select Car Type</option>
-                                                    <option>AC</option>
-                                                    <option>NON AC</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry *</label>
-                                            <div class="col-sm-4">
-                                                <input type="date" class="form-control form-control-lg" id="insurance_expiry" name="insurance_expiry">
-                                            </div>
-
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Drive Type *</label>
-                                            <div class="col-sm-4">
-                                                <select class="form-control form-control-lg" id="drive_status" name="drive_status">
-                                                    <option value="" selected disabled>Select Drive Status</option>
-                                                    <option value="selfdrive">Self Drive</option>
-                                                    <option value="otherdrive">Other Drive</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <hr>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg"style="color: #454545; font-size: 16px;">Registration Certificate*</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate">
-                                                <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate">
-                                                <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Policy *</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy">
-                                                <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details">
-                                                <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details *</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details">
-                                                <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                            <!-- </div> -->
-
-                                            <!-- <div class="form-group row"> -->
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
-                                            <div class="col-sm-4">
-                                                <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test">
-                                                <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-2 col-form-label col-form-label-lg ">
-                                            <button type="button" class="btn btn-dark" id="save_action">Submit</button>
-                                        </div>
+                                    </div><br>
+                                    <div class="d-flex justify-content-end">
+                                        <button type="button" class="btn btn-dark" onclick="nextTab()">Next</button>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane fade" id="document" role="tabpanel" aria-labelledby="document-tab">                                    <br>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg"style="font-size: 16px;">Registration Certificate*</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate" >
+                                            <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">FC Certificate *</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate">
+                                            <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Insurance Policy *</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy">
+                                            <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Tax Details *</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details">
+                                            <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Permit Details *</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details">
+                                            <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                        <!-- </div> -->
+
+                                        <!-- <div class="form-group row"> -->
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style=" font-size: 16px;">Emission Test *</label>
+                                        <div class="col-sm-4">
+                                            <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test">
+                                            <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                                        </div>
+                                    </div><br>
+                                    <center><div class="col-sm-2 col-form-label col-form-label-lg ">
+                                        <button type="button" class="btn btn-dark" id="save_action">Submit</button>
+                                    </div></center>
+                                </div>
                             </div>
-                    </div>
+                        <!-- </form> -->
+                    </div>      
                 </div>
+            </div>
+        </div>
+    </div>
 
 
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    function nextTab() {
+        // Find the active tab
+        let activeTab = document.querySelector('.nav-tabs .nav-link.active');
+        
+        // Find the next tab in the list
+        let nextTab = activeTab.closest('li').nextElementSibling;
+
+        // If there is a next tab, click it
+        if (nextTab && nextTab.querySelector('button')) {
+            nextTab.querySelector('button').click();
+        }
+    }
+</script>
 
 <script>
 

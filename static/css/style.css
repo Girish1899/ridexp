@@ -266,10 +266,12 @@ label {
 }
 
 #rideheader{
-  color: #41C324;
+  color: #db9710;
   font-weight: 900;
 }
-
+.regvehicle{
+  height: 35px;
+}
 
 
 /*====================
