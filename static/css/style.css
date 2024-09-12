@@ -267,6 +267,7 @@ label {
 
 #rideheader{
   color: #db9710;
+  margin-top: -170px;
   font-weight: 900;
 }
 .regvehicle{
@@ -1670,6 +1671,14 @@ label {
 
   .hero-single .hero-content .hero-btn {
     gap: 1rem;
+  }
+
+  #bookingpart {
+    margin-left: 9px;
+    margin-right: 10px;
+  }
+  .booking-form{
+    width: 360px;
   }
 
 }

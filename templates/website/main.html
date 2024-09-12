@@ -59,13 +59,13 @@
                 <!-- <div class="container"> -->
                     <div class="row align-items-center">
                         <h1 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp" data-delay=".25s">WELCOME TO RIDE EXPRESS!</h1>
-                            <div class="container">
-                                <div class="container" style="background: transparent;border-radius: 10px;padding: 1%;">
+                            <div class="container" style="margin-top: -30px;" id="bookingpart">
+                                <div class="container" style="background: transparent;border-radius: 10px;padding: 1px;">
                                     <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport</button>
                                     <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local</button>
-                                    <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
+                                    <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">Packages</button>
                                     <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
-                                    <div class="booking-form">
+                                    <div class="booking-form" >
                                         <h4 class="booking-title">Book Your Ride</h4>
                                         <div id="Airport" class="tabcontent">
                                             <form action="{% url 'search_url' %}" id="airportForm">
@@ -607,7 +607,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="{% url 'home' %}" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -631,7 +631,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="{% url 'home' %}" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -655,7 +655,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="{% url 'home' %}" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -679,7 +679,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="{% url 'home' %}" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -703,7 +703,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="{% url 'home' %}" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -727,7 +727,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="{% url 'home' %}" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -1396,7 +1396,7 @@
                             <a href="#" class="cta-number"><i class="far fa-headset"></i>080-46844684</a>
                         </div>
                         <div class="cta-btn">
-                            <a href="/bookride" class="theme-btn">Book Your Cab<i class="fas fa-arrow-right"></i></a>
+                            <a href="{% url 'home' %}" class="theme-btn">Book Your Cab<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
