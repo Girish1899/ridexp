@@ -229,36 +229,6 @@ urlpatterns = [
     path('Updatecolor', Updatecolor.as_view(), name='Updatecolor'),
     path('color/<int:color_id>/view/', ViewColor.as_view(), name='color'),
 
-
-    #local package###################
-    path('add_localpackage',addlocalpackage.as_view(),name='add_localpackage'),
-    path('delete_localpackage',DeleteLocalPackage.as_view(),name='delete_localpackage'),
-    path('view_localpackage',LocalPackageListView.as_view(),name='view_localpackage'),
-    path('updatelocalpackage',UpdateLocalPackage.as_view(),name="updatelocalpackage"),
-    path('editlocalpackage/<int:id>/',EditLocalPackage.as_view(),name="editlocalpackage"),
-
-    #localprice
-    path('add_localprice', AddLocalPrice.as_view(), name='add_localprice'),
-    path('delete_localprice', DeleteLocalPrice.as_view(), name='delete_localprice'),
-    path('view_localprice', LocalPriceList.as_view(), name='view_localprice'),
-    path('updatelocalprice',UpdateLocalPrice.as_view(),name="updatelocalprice"),
-    path('editlocalprice/<int:id>/',EditLocalPrice.as_view(),name="editlocalprice"),
-
-
-    #airport
-    path('add_airportpricing', AddAirportPricingView.as_view(), name='add_airportpricing'),
-    path('delete_airportprice',DeleteAirportPrice.as_view(),name="delete_airportprice"),
-    path('view_airportprice', AirportPriceList.as_view(), name='view_airportprice'),
-    path('updateairportprice',UpdateAirportPackage.as_view(),name="updateairportprice"),
-    path('editairportprice/<int:id>/',EditAirportPackage.as_view(),name="editairportprice"),
-
-    #outstation
-    path('add_outstationprice', AddOutstationView.as_view(), name='add_outstationprice'),
-    path('delete_outstationprice',DeletestationPrice.as_view(),name="delete_outstationprice"),
-    path('view_outstationprice', OutstationPriceList.as_view(), name='view_outstationprice'),
-    path('updateoutstationprice',UpdateOutstationPrice.as_view(),name="updateoutstationprice"),
-    path('editoutstationprice/<int:id>/',EditOutstationPrice.as_view(),name="editoutstationprice"),
-
     # Commission details ##################################
 
     path('CommVehicleListView',CommVehicleListView.as_view(),name="CommVehicleListView"),
