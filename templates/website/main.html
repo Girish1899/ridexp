@@ -4,6 +4,11 @@
 {% block body_content %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <style>
+    html {
+  scroll-behavior: smooth;
+}
+
+
     .btn:hover {
             background-color: var(--theme-color); 
             color:white !important;
@@ -50,21 +55,23 @@
         
 </style>
 
-<main class="main">
+<main class="main" id="bookride">
     <!-- hero slider -->
     <!-- booking area end -->
-    <div class="hero-section"> 
+    <div class="hero-section" > 
         <!-- <div class="hero-slider owl-carousel owl-theme"> -->
             <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
                 <!-- <div class="container"> -->
                     <div class="row align-items-center">
                         <h1 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp" data-delay=".25s">WELCOME TO RIDE EXPRESS!</h1>
                             <div class="container">
-                                <div class="container" style="background: transparent;border-radius: 10px;padding: 1%;">
+                                <div  class="container" style="background: transparent;border-radius: 10px;padding: 1%;">
+                                    <div>
                                     <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport</button>
                                     <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local</button>
                                     <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')" id="localpackage">LocalPackage</button>
                                     <button class="btn tablink" onclick="openPage('Outstation','outstation')" id="outstation">Outstation</button>
+                                </div>
                                     <div class="booking-form">
                                         <h4 class="booking-title">Book Your Ride</h4>
                                         <div id="Airport" class="tabcontent">
@@ -541,7 +548,7 @@
                     <div class="col-md-6 col-lg-4">
                         <div class="service-item wow fadeInUp" data-wow-delay=".75s">
                             <div class="service-img">
-                                <img src="{% static '/img/service/wedding-car-services.png' %}" alt="">
+                                <img src="{% static '/img/service/06.jpeg' %}" alt="">
                             </div>
                             <div class="service-icon">
                                 <img src="{% static '/img/icon/taxi.svg' %}" alt="">
@@ -607,14 +614,14 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="#bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 filter-item cat2">
                         <div class="taxi-item">
                             <div class="taxi-img">
-                                <img src="{% static '/img/taxi/sedan-1.png' %}" alt="">
+                                <img src="{% static '/img/taxi/etios.jpg' %}" alt="">
                             </div>
                             <div class="taxi-content">
                                 <div class="taxi-head">
@@ -624,42 +631,18 @@
                                 <div class="taxi-feature">
                                     <ul>
                                         <li><i class="far fa-person-seat"></i> Passengers: <span>3/4</span></li>
-                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>3/4</span></li>
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="#bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 filter-item cat2">
-                        <div class="taxi-item">
-                            <div class="taxi-img">
-                                <img src="{% static '/img/taxi/sedan-1.png' %}" alt="">
-                            </div>
-                            <div class="taxi-content">
-                                <div class="taxi-head">
-                                    <h4>Sedan Model</h4>
-                                    <span>250 kms/day</span>
-                                </div>
-                                <div class="taxi-feature">
-                                    <ul>
-                                        <li><i class="far fa-person-seat"></i> Passengers: <span>3/4</span></li>
-                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
-                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
-                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
-                                        </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
-                                    </ul>
-                                </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat3">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="{% static '/img/taxi/suv-cab.png' %}" alt="">
@@ -671,39 +654,63 @@
                                 </div>
                                 <div class="taxi-feature">
                                     <ul>
-                                        <li><i class="far fa-person-seat"></i> Passengers: <span>5/6</span></li>
-                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>3/4</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>4/5</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>4/5</span></li>
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="#bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-4 filter-item cat3">
                         <div class="taxi-item">
                             <div class="taxi-img">
-                                <img src="{% static '/img/taxi/suv-cab.png' %}" alt="">
+                                <img src="{% static '/img/taxi/innova.webp' %}" alt="">
                             </div>
                             <div class="taxi-content">
                                 <div class="taxi-head">
                                     <h4>SUV 7 Model</h4>
-                                    <span>250 kms/day</span>
+                                    <span>300 kms/day</span>
                                 </div>
                                 <div class="taxi-feature">
                                     <ul>
-                                        <li><i class="far fa-person-seat"></i> Passengers: <span>6/7</span></li>
-                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>2</span></li>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>5/6</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>5/6</span></li>
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="#bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat3">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="{% static '/img/taxi/hycross.webp' %}" alt="">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>LUXURY Model</h4>
+                                    <span>300 kms/day</span>
+                                </div>
+                                <div class="taxi-feature">
+                                    <ul>
+                                        <li><i class="far fa-person-seat"></i> Passengers: <span>6/7</span></li>
+                                        <li><i class="far fa-suitcase-rolling"></i> Luggage Carry: <span>5/6</span></li>
+                                        <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
+                                        <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
+                                        </li>
+                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
+                                    </ul>
+                                </div>
+                                <a href="#bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
@@ -727,7 +734,7 @@
                                         <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
-                                <a href="/bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
+                                <a href="#bookride" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
