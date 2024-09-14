@@ -52,8 +52,37 @@ def home(request):
     
     return render(request, 'website/main.html',context)
 
+
+def Why_Choose_Local_Cab_Services(request):
+    context = None
+    return render(request, 'website/blog/1.html',context)
+
+
+def top_reasons(request):
+    context = None
+    return render(request, 'website/blog/2.html',context)
+
+def tips(request):
+    context = None
+    return render(request, 'website/blog/3.html',context)
+
+def benefits(request):
+    context = None
+    return render(request, 'website/blog/4.html',context)
+
+def how_to_choose(request):
+    context = None
+    return render(request, 'website/blog/5.html',context)
+
+def essential_qualities(request):
+    context = None
+    return render(request, 'website/blog/6.html',context)
+
 def about(request):
     return render(request, 'website/about.html')
+
+
+
 
 # def cabs_list(request):
 #     # Retrieve query parameters from the URL

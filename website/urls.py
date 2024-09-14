@@ -34,5 +34,10 @@ urlpatterns = [
     path('get_ride_pricing_details', GetRidePricingDetails.as_view(), name='get_ride_pricing_details'),
     
     path('logout/', views.logout_view, name='logout'),
-    
+    path('blog/why_choose_local_cab_services', views.Why_Choose_Local_Cab_Services, name="Why_Choose_Local_Cab_Services"),
+    path('blog/top_reasons', views.top_reasons, name="top_reasons"),
+    path('blog/tips', views.tips, name="tips"),
+    path('blog/benefits', views.benefits, name="benefits"),
+    path('blog/how_to_choose', views.how_to_choose, name="how_to_choose"),
+    path('blog/essential_qualities', views.essential_qualities, name="essential_qualities"),
 ]
