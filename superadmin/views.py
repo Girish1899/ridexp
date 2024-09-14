@@ -2807,7 +2807,7 @@ class AddRide(TemplateView):
             print("Ride details saved successfully.")
             
             whatsapp = {
-                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWRiZWZhNTA0NzhkMjc0MGM0OWI2MyIsIm5hbWUiOiJEZWVwYW0gVGF4aSIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NGVkYmVmYTUwNDc4ZDI3NDBjNDliNWUiLCJhY3RpdmVQbGFuIjoiQkFTSUNfTU9OVEhMWSIsImlhdCI6MTY5MzMwMjUyMn0.-oNpicqPahvPSuR-hI9F7i3l2YMZVaPs5Z7Hqk0JjyU",
+                "apiKey": "",
                 "campaignName": "newbooking_confirmation_local",
                 "destination": customer.phone_number,
                 "userName": "Deepam Taxi",

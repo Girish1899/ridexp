@@ -273,7 +273,11 @@ label {
 .regvehicle{
   height: 35px;
 }
-
+#servicecontainer{
+  background: whitesmoke;
+  border-radius: 10px;
+  padding: 1px;
+}
 
 /*====================
 4. Preloader
@@ -1680,6 +1684,11 @@ label {
   .booking-form{
     width: 360px;
   }
+  #servicecontainer{
+    margin-right: 9px;
+    margin-left: 9px;
+    width: 362px;
+  }
 
 }
 
@@ -2088,6 +2097,8 @@ a.ui-button:active,
 
 .service-img img{
   border-radius: 30px;
+  height: 200px;
+  width: 350px;
 }
 
 .service-content {
@@ -2172,6 +2183,8 @@ a.ui-button:active,
 
 .service-details img{
   border-radius: 15px;
+  height: 20%;
+  width: 100%;
 }
 
 
@@ -2754,6 +2767,7 @@ a.ui-button:active,
 .blog-item-img{
   border-radius: 15px;
   overflow: hidden;
+  height: 200px;
 }
 
 .blog-item-img img {
@@ -3803,6 +3817,8 @@ a.ui-button:active,
   padding: 20px;
   background: var(--theme-bg-light);
   border-radius: 15px;
+  height: 180px;
+  width: 300px;
 }
 
 .taxi-head {
