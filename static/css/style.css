@@ -2570,7 +2570,8 @@ a.ui-button:active,
 }
 
 .counter-wrapper{
-  background-image: url(../img/shape/shape-3.png);
+  background: black;
+  /* background-image: url(../img/shape/shape-3.png); */
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
