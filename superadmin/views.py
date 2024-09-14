@@ -1283,14 +1283,37 @@ class UpdateDriverView(APIView):
                 except (ValueError, Vehicle.DoesNotExist):
                     return JsonResponse({'success': False, 'error': 'Vehicle not found'}, status=404)
 
-            # Update the driver with new data
-            old_name = driver.name
-            original_status = driver.status
+            # Update the related Profile first
+            new_email = request.POST.get('email', driver.email)
+            new_phone_number = request.POST.get('phone_number', driver.phone_number)
+            new_address = request.POST.get('address', driver.address)
+            new_status = request.POST.get('status', driver.status)         
+
+            try:
+                profile = Profile.objects.get(user__email=driver.email)
+                profile.phone_number = new_phone_number
+                profile.address = new_address
+                profile.status = new_status
+                profile.updated_by = request.user
+                profile.save()
+            except Profile.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'Profile not found for the driver'}, status=404)
+
+            # Update the related User model
+            try:
+                user = User.objects.get(email=driver.email)
+                user.username = request.POST.get('name', driver.name)
+                user.email = new_email  # Updating the email
+                user.save()
+            except User.DoesNotExist:
+                return JsonResponse({'success': False, 'error': 'User not found for the driver'}, status=404)
+
+            # Update the driver with new data, now including the email update
             driver.name = request.POST.get('name', driver.name)
-            driver.phone_number = request.POST.get('phone_number', driver.phone_number)
-            driver.email = request.POST.get('email', driver.email)
-            driver.address = request.POST.get('address', driver.address)
-            driver.status = request.POST.get('status', driver.status)
+            driver.phone_number = new_phone_number
+            driver.email = new_email  # Set new email
+            driver.address = new_address
+            driver.status = new_status
             driver.company_format = request.POST.get('company_format', driver.company_format)
             driver.pfrom_date = request.POST.get('pfrom_date', driver.pfrom_date)
             driver.pto_date = request.POST.get('pto_date', driver.pto_date)
@@ -1307,29 +1330,8 @@ class UpdateDriverView(APIView):
                 driver.driving_license = request.FILES['driving_license']
 
             driver.updated_by = request.user
-            driver.save()
-
-            # Update the related Profile
-            try:
-                profile = Profile.objects.get(user__email=driver.email)
-                profile.phone_number = driver.phone_number
-                profile.address = driver.address
-                profile.status = driver.status
-                profile.updated_by = request.user
-                profile.save()
-            except Profile.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'Profile not found for the driver'}, status=404)
-
-            # Update the related User model
-            try:
-                user = User.objects.get(email=driver.email)
-                user.username = driver.name
-                user.email = driver.email
-                user.save()
-            except User.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'User not found for the driver'}, status=404)
-
-            # Handle vehicle and owner status updates
+            driver.save() 
+             # Handle vehicle and owner status updates
             if driver.vehicle:
                 if driver.vehicle.drive_status == 'selfdrive':
                     driver.vehicle.vehicle_status = driver.status
@@ -1339,14 +1341,13 @@ class UpdateDriverView(APIView):
                     owner.status = driver.status
                     owner.save()
                 elif driver.vehicle.drive_status == 'otherdrive':
-                    if original_status == 'active' and driver.status == 'inactive':
+                    if new_status == 'active' and driver.status == 'inactive':
                         driver.vehicle.vehicle_status = 'active'
                         driver.vehicle.save()
-                    elif original_status == 'inactive' and driver.status == 'active':
+                    elif new_status == 'inactive' and driver.status == 'active':
                         driver.vehicle.vehicle_status = 'active'
                         driver.vehicle.save()
 
-            # Create another DriverHistory entry after updating the driver
             DriverHistory.objects.create(
                 driver_id=driver.driver_id,
                 vehicle=driver.vehicle,
@@ -1368,7 +1369,7 @@ class UpdateDriverView(APIView):
                 updated_by=request.user.username,
                 created_by=driver.created_by.username if driver.created_by else None
             )
-
+            
             return JsonResponse({'success': True}, status=200)
 
         except ValueError as e:
@@ -1383,7 +1384,7 @@ class UpdateDriverView(APIView):
             return JsonResponse({'success': False, 'error': 'User not found'}, status=404)
         except Exception as e:
             return JsonResponse({'success': False, 'error': f'An unexpected error occurred: {e}'}, status=500)
-
+            
 class DriverHistoryView(TemplateView):
     template_name = 'superadmin/history_driver.html'
 
@@ -3288,10 +3289,10 @@ class UpdateRide(APIView):
             ride_id = request.POST['ride_id']
             ride_type_id = request.POST['ridetype']
             source = request.POST.get('source',None)
-            destination = request.POST('destination',None)
+            destination = request.POST.get('destination',None)
             pickup_date = request.POST['pickup_date']
             pickup_time = request.POST['pickup_time']
-            model_id = request.POST['model']
+            category = request.POST['category']
             total_fare = request.POST['total_fare']
             customer_id = request.POST['customer']
             customer_notes = request.POST['customer_notes']
@@ -3330,9 +3331,20 @@ class UpdateRide(APIView):
                 )
             customer.save()
 
-            # Ensure required objects exist
+            # Ensure objects exist in database before saving
             ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
-            model = Model.objects.get(model_id=model_id)
+            category_name = category.split('|')[0]
+            car_type_name = category.split('|')[1]
+            category_instance = Category.objects.get(category_name=category_name)
+
+            # Retrieve pricing instance
+            pricing_instance = Pricing.objects.get(
+                category=category_instance,
+                car_type=car_type_name,
+                ridetype=ridetype,
+                slots=slots,
+            )
+            print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
             # Determine ride status based on pickup date
             today = date.today().isoformat()
@@ -3342,7 +3354,7 @@ class UpdateRide(APIView):
             # ride_details.company_format = ride_details.company_format  # Retain existing company format
             ride_details.customer = customer
             ride_details.ridetype = ridetype
-            ride_details.model = model
+            ride_details.category = category
             ride_details.source = source
             ride_details.destination = destination
             ride_details.pickup_date = pickup_date
