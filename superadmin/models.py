@@ -614,8 +614,8 @@ class Pricing(models.Model):
     created_by = models.ForeignKey(User, related_name='pricing_created', on_delete=models.SET_NULL, null=True, blank=True)
     updated_by = models.ForeignKey(User, related_name='pricing_updated', on_delete=models.SET_NULL, null=True, blank=True)
 
-    class Meta:
-        unique_together = ('category', 'ridetype', 'car_type')
+    # class Meta:
+    #     unique_together = ('category', 'ridetype', 'car_type')
 
 class PricingHistory(models.Model):
     STATUS_CHOICES = [
