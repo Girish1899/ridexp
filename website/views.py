@@ -560,25 +560,25 @@ class AddNewBooking(APIView):
                 print("source ^^^: ",request.POST['source'] )
                 print("source ^^^: ", request.POST['destination'])
                 whatsapp = {
-                    "apiKey": "",
-                    "campaignName": "newbooking_confirmation_local",
+                    "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                    "campaignName": "booking confirmation",
                     "destination": customer_phone_number,
-                    "userName": "Deepam Taxi",
+                    "userName": "Ridexpress",
                     "templateParams": [
-                        customer_name,
-                        "WB" + time_str,
-                        date.today(),
-                        datetime.now().strftime('%H:%M'),
-                        request.POST['source'],
-                        request.POST['destination'],
-                        pickup_date +'  ' +pickup_time,
-                        total_fare
+                        customer_name,  
+                        company_format,
+                        pickup_date +'  ' +pickup_time,    
+                        source,   
+                        destination
                     ],
                     "source": "new-landing-page form",
                     "media": {},
                     "buttons": [],
                     "carouselCards": [],
-                    "location": {}
+                    "location": {},
+                    "paramsFallbackValue": {
+                        "FirstName": "user"
+                    }
                     }
                 # Send the POST request
                 gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
