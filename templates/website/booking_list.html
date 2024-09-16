@@ -243,26 +243,42 @@
                 total_fare: total_fare,
                 ride_status:ride_status,
             },
-            success: function(result) {
-                if(result["status"]!="Error")
-                {
-                    alert("thank you for booking with us. information will be shared with you over whats app.")
-                    location.href = "{% url 'home' %}"
-                }
-                else
-                {
-                    alert("Oops something went wrong. Please try again. "+result['message'])
-                }
-                $('#costs-table-container').css('display', 'none');
-                // Function to populate table with JSON data
-            // populateTable(result.costs);
-            },
-            error: function(xhr, status, error) {
-                console.error(xhr.responseText);
-            }
-        });
+        success: function(result) {
+            if (result["status"] != "Error") {
+                var company_format = result['company_format']; // Get company_format from the backend
 
+                // Construct the message with company_format
+                var message = `Hello ${customer_name},
+
+                    Thank you for choosing Ridexpress!
+
+                    We’re happy to confirm your booking:
+
+                    Booking Id : ${company_format}
+                    Pickup Date & Time: ${pickup_date} ${pickup_time}
+                    Pickup Location: ${source}
+                    Drop-off Location: ${destination}
+
+                    Cab details will be provided shortly. If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+                    We look forward to serving you!
+
+                    Best regards,
+                    Ridexpress
+                    support@ridexpress.in
+                    ridexpress.in`;
+
+                alert("Thank you for booking with us. Information will be shared with you over WhatsApp.");
+                location.href = "{% url 'home' %}";
+            } else {
+                alert("Oops, something went wrong. Please try again. " + result['message']);
+            }
+        },
+        error: function(xhr, status, error) {
+            console.error(xhr.responseText);
+        }
     });
+});
 </script>
 
     
