@@ -21,22 +21,6 @@ from rest_framework.response import Response
 
 # Create your views here.
 
-
-def index(request):
-    cust_count = Customer.objects.count()
-    driver_count = Driver.objects.count()
-    booking_count = RideDetails.objects.count()
-    vehicle_count = Vehicle.objects.count()
-
-    context = {
-        'cust_count': cust_count,
-        'driver_count': driver_count,
-        'booking_count': booking_count,
-        'vehicle_count': vehicle_count,
-    }
-    return render(request,'customer/index.html',context)
-
-
 class regcustomer(TemplateView):
     template_name = "customer/register.html"
 
@@ -92,7 +76,7 @@ class custlogin(TemplateView):
             request.session['customer_id'] = customer.customer_id
 
             # Redirect to a customer-specific index page (e.g., customer dashboard)
-            redirect_url = reverse('cusindex')  # Assuming 'cusindex' is the URL name for the dashboard
+            redirect_url = reverse('cusaddbooking')  # Assuming 'cusindex' is the URL name for the dashboard
             return JsonResponse({'success': True, 'redirect_url': redirect_url})
 
         except Customer.DoesNotExist:
@@ -263,7 +247,7 @@ class Addbookings(TemplateView):
             
             # Send WhatsApp notification
             whatsapp = {
-                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0ZWRiZWZhNTA0NzhkMjc0MGM0OWI2MyIsIm5hbWUiOiJEZWVwYW0gVGF4aSIsImFwcE5hbWUiOiJBaVNlbnN5IiwiY2xpZW50SWQiOiI2NGVkYmVmYTUwNDc4ZDI3NDBjNDliNWUiLCJhY3RpdmVQbGFuIjoiQkFTSUNfTU9OVEhMWSIsImlhdCI6MTY5MzMwMjUyMn0.-oNpicqPahvPSuR-hI9F7i3l2YMZVaPs5Z7Hqk0JjyU",
+                "apiKey": "",
                 "campaignName": "newbooking_confirmation_local",
                 "destination": customer.phone_number,
                 "userName": "Deepam Taxi",

@@ -46,14 +46,15 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Location</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-lg" id="source" name="source" value="{{ ride.0.source }}" maxlength="1000">
+                            <input type="text" class="form-control autocomeple_g" id="source" name="source" value="{{ ride.0.source }}" maxlength="1000">
+                            <i class="far fa-location-dot"></i> 
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Location</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-lg" id="destination" name="destination" value="{{ ride.0.destination }}" maxlength="1000">
+                            <input type="text" class="form-control autocomeple_g" id="destination" name="destination" value="{{ ride.0.destination }}" maxlength="1000">
                         </div>
                     </div>
 
@@ -67,7 +68,8 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Time</label>
                         <div class="col-sm-10">
-                            <input type="time" class="form-control form-control-lg" id="pickup_time" name="pickup_time" value="{% if ride.0.pickup_time %}{{ ride.0.pickup_time|time:'H:i' }}{% endif %}">
+                            <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time" name="pickup_time" value="{% if ride.0.pickup_time %}{{ ride.0.pickup_time|time:'H:i' }}{% endif %}">
+                            <div id="timeError" class="invalid-feedback"></div>
                         </div>
                     </div>
 
@@ -77,39 +79,17 @@
                             <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
                                 <option value="" selected disabled>Select Category</option>
                                 {% for obj in catlist %}
-                                <option value="{{ obj.category_id }}" {% if obj.category_id == ride.0.model.brand.category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
                                 {% endfor %}
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Brand</label>
-                        <div class="col-sm-10">
-                            <select name="select" id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
-                                <option value="" selected disabled>Select Brand</option>
-                                {% for obj in blist %}
-                                <option value="{{obj.brand_id}}" {% if obj.brand_id == ride.0.model.brand.brand_id %} selected {% endif %}>{{obj.brand_name}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Model</label>
-                        <div class="col-sm-10">
-                            <select id="model" name="model" class="form-control form-control-lg">
-                                <option value="" selected disabled>Select Model</option>
-                                {% for obj in modellist %}
-                                <option value="{{ obj.model_id }}" {% if obj.model_id == ride.0.model.model_id %} selected {% endif %}>{{ obj.model_name }}</option>
-                                {% endfor %}
-                            </select>
+                            <div id="categoryError" class="invalid-feedback"></div>                          
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Total Fare</label>
                         <div class="col-sm-10">
-                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare" value="{{ ride.0.total_fare }}">
+                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare" value="{{ ride.0.total_fare }}" value="{{ details.cost }}" readonly>
                         </div>
                     </div>
 
@@ -178,6 +158,40 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
+    $('.pickup-time').change(function() {
+    var selectedDate = new Date($('.date-picker').val());
+    var today = new Date();
+    var selectedTime = $(this).val();
+
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+        var now = new Date();
+        var selectedHours = parseInt(selectedTime.split(':')[0]);
+        var selectedMinutes = parseInt(selectedTime.split(':')[1]);
+        var currentHours = now.getHours();
+        var currentMinutes = now.getMinutes();
+        var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
+
+        // Check if the selected time is earlier than the current time
+    if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
+        $(this).val(''); // Clear invalid time
+        $(this).addClass('is-invalid');
+        $('#timeError').text('Please select a current or future time.');
+    } else {
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#timeError').text('');
+    }
+} else {
+    // If the date is in the future, any time is valid
+    $(this).removeClass('is-invalid');
+    $(this).addClass('is-valid');
+    $('#timeError').text('');
+}
+});
+</script>
+<script>
     // Set the minimum date to today's date
     document.addEventListener('DOMContentLoaded', function() {
         var today = new Date();
@@ -188,38 +202,109 @@
         today = yyyy + '-' + mm + '-' + dd;
         document.getElementById('pickup_date').setAttribute('min', today);
     });
-</script>
-
-<script>
-    function getbrand() {
-        $('#brand')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="" selected disabled>Select Brand</option>');
+    function getTimeSlot(pickupTime) {
+        var time = pickupTime.split(":");
+        var hour = parseInt(time[0]);
         
-        const category = $('#category').val();
-        '{% for obj in blist %}'
-        if ('{{ obj.category.category_id }}' == category) {
-            $('#brand').append('<option value="{{ obj.brand_id }}">{{ obj.brand_name }}</option>');
+        if (hour >= 0 && hour < 6) {
+            return '12AM - 6AM';
+        } else if (hour >= 6 && hour < 12) {
+            return '6AM - 12PM';
+        } else if (hour >= 12 && hour < 18) {
+            return '12PM - 6PM';
+        } else if (hour >= 18 && hour < 24) {
+            return '6PM - 12AM';
+        } else {
+            return null;  // Invalid time
         }
-        '{% endfor %}'
     }
+    function getRidePricingDetails() {
+        var ridetype = $('#ridetype').val();
+        var source = $('#source').val();
+        var destination = $('#destination').val();
+        var pickup_date = $('#pickup_date').val();
+        var pickup_time = $('#pickup_time').val();
+        var time_slot = getTimeSlot(pickup_time);  // Calculate time slot
 
-    function getmodel() {
-        $('#model')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="" selected disabled>Select Model</option>');
-        
-        const brand = $('#brand').val();
-        '{% for obj in modellist %}'
-        if ('{{ obj.brand.brand_id }}' == brand) {
-            $('#model').append('<option value="{{ obj.model_id }}">{{ obj.model_name }}</option>');
+        if (ridetype && source && destination && pickup_date && pickup_time) {
+            // Disable Category Dropdown and Show Loading Indicator
+            $('#category').prop('disabled', true).html('<option>Loading...</option>');
+                $('#total_fare').val('');
+            $.ajax({
+                url: '{% url "global_customerGetRidePricingDetails" %}',
+                type: 'POST',
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    ridetype: ridetype,
+                    source: source,
+                    destination: destination,
+                    pickup_date: pickup_date,
+                    pickup_time: pickup_time,
+                    time_slot: time_slot, // Replace with actual logic for time_slot
+                },
+                success: function(response) {
+                    console.log(response);  // Check if response is correct
+                    if (response.costs) {
+                        var $categorySelect = $('#category');
+                        $categorySelect.empty();  // Clear existing options
+                        $categorySelect.append('<option value="" selected disabled>Select Category</option>');
+                        
+                        $.each(response.costs, function(category, carTypes) {
+                            $.each(carTypes, function(carType, details) {
+                                $categorySelect.append(
+                                    $('<option>', {
+                                        value: category + '|' + carType,
+                                        text: category + ' - ' + carType.charAt(0).toUpperCase() + carType.slice(1) + ' - ₹' + details.cost,
+                                        'data-cost': details.cost // Add data attribute for cost
+                                    })
+                                );
+                            });
+                        });
+                        $categorySelect.prop('disabled', false); // Enable Category Dropdown
+                        } else {
+                            // If no costs returned, show message
+                            $('#category').html('<option value="" selected disabled>No Categories Available</option>');
+                            $('#category').prop('disabled', true);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        $('#category').html('<option value="" selected disabled>Error Loading Categories</option>');
+                        $('#category').prop('disabled', true);
+                    }
+                });
+            } else {
+                // If any required field is missing, reset Category and Total Fare
+                $('#category').empty().append('<option value="" selected disabled>Select Category</option>').prop('disabled', true);
+                $('#total_fare').val('');
+            }
         }
-        '{% endfor %}'
-    }
+
+        $('#ridetype, #source, #destination, #pickup_date, #pickup_time').on('change', function() {
+            // Clear Category and Total Fare when inputs change
+            $('#category').empty().append('<option value="" selected disabled>Select Category</option>').prop('disabled', true);
+            $('#total_fare').val('');
+            // Clear any previous validation messages
+            $('#categoryError').text('');
+            // Fetch new Category options based on updated inputs
+            getRidePricingDetails();
+        });
+        $('#category').on('change', function() {
+            var selectedOption = $(this).find('option:selected');
+            var cost = selectedOption.data('cost');
+            
+            if (cost) {
+                $('#total_fare').val(cost);  // Set total fare to selected category cost
+                $('#category').removeClass('is-invalid').addClass('is-valid');
+                $('#categoryError').text('');
+            } else {
+                $('#total_fare').val('');  // Clear total fare if no cost is found
+                $('#category').removeClass('is-valid').addClass('is-invalid');
+                $('#categoryError').text('Please select a valid category.');
+            }
+        });
 </script>
 
 <script>
@@ -276,7 +361,7 @@
         var destination = $('#destination').val();
         var pickup_date = $('#pickup_date').val();
         var pickup_time = $('#pickup_time').val();
-        var model = $('#model').val();
+        var category = $('#category').val();
         var total_fare = $('#total_fare').val();
         var customer = $('#customer_id').val();
         var customer_notes = $('#customer_notes').val();
@@ -287,7 +372,7 @@
         var address = $('#address').val();
 
         // Validation for required fields
-        if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !brand || !model || !total_fare || !phone_number || !customer_name || !email ) {
+        if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !total_fare || !phone_number || !customer_name || !email ) {
             alert('Please fill out all required fields.');
             return false;
         }
@@ -352,7 +437,7 @@
                     destination: destination,
                     pickup_date: pickup_date,
                     pickup_time: pickup_time,
-                    model: model,
+                    category: category,
                     total_fare: total_fare,
                     customer: customer,
                     customer_notes: customer_notes,
@@ -373,21 +458,64 @@
         }
     });
 
+</script>
 
+<script>
+    function initAutocomplete() {
+          const inputs = document.querySelectorAll('.autocomeple_g');
+    
+    
+          inputs.forEach(input => {
+          const autocomplete = new google.maps.places.Autocomplete(input);
+    
+          autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            }
+            console.log('Place details for', input.id, ':', place);
+            });
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        });
+
+
+
+      // Initialize datepicker
+    $('.date-picker').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        todayHighlight: true,
+        startDate: new Date() // Set start date to today
+    });
+
+    // Datepicker change event listener
+    $('.date-picker').change(function() {
+        var selectedDate = new Date($(this).val());
+        var today = new Date();
+
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            $(this).val(''); // Clear invalid date
+            $(this).addClass('is-invalid');
+            $('#dateError').text('Please select a future date.');
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).addClass('is-valid');
+            $('#dateError').text('');
+        }
+    });
 
 </script>
 
-<style>
-    #phone_number_list {
-    position: absolute;
-    /* width: calc(100% - 2px);  */
-    margin-top: 5px; 
-    margin-left: 15px;
-    z-index: 1000; 
-    background: white; 
-    border: 1px solid #ddd; 
-    border-radius: 4px; 
-}
-</style>
 
 {% endblock content %}
