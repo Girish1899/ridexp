@@ -10,22 +10,30 @@
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{% static '/dashboard/images/favicon.png' %}">
     <link href="{% static '/dashboard/css/style.css' %}" rel="stylesheet">
+
+    
+<meta name="description" content=" Book local, outstation, and airport taxis with RidexpressTaxi Services. Enjoy 24/7 service, affordable rates, and safe rides for all your travel needs. Professional drivers ensure a comfortable and reliable journey, whether you're commuting within the city, traveling long-distance, or catching a flight." />
+
+<meta name="keywords" content="local taxi service, outstation taxi, airport taxi, cab service, taxi booking, affordable cab, reliable taxi service, 24/7 taxi, city commute, outstation cab, long-distance taxi, one-way taxi, airport transfer, taxi near me, cab for airport, Bengaluru taxi service, safe taxi service, Ridexpress" />
+
+
 </head>
 
 <body class="h-100">
     <div class="authincation h-100">
 
-    <!-- <div class="authincation h-100" style="background-image: url('static/images/loginbg.pNg'); 
-    background-size: cover; background-position: center; background-repeat: no-repeat;"> -->
-        <div class="container-fluid h-100">
+   
+        <div class="container-fluid h-100" style="background-image: url('/static/img/service/custlogin.avif'); 
+            background-size: cover; background-position: center; background-repeat: no-repeat;">
             <div class="row justify-content-center h-100 align-items-center">
                 <div class="col-md-6">
                     <div class="authincation-content">
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    
-                                    <h4 class="text-center mb-4">Sign up your account</h4>
+                                    <center> <img src="/static/img/logo/ridexpress.png" style="width: 50%;"></center>
+                                    <br>
+                                    <h2 class="text-center mb-4">Create your account</h2>
 
                                         <div class="form-group row">
                                             <label><strong>Customer Name</strong></label>
@@ -52,7 +60,7 @@
                                         </div>
                                         
                                     <div class="new-account mt-3">
-                                        <p>Already have an account? <a class="text-primary" href="{% url 'custlogin' %}">Sign in</a></p>
+                                     <center>   <p>Already have an account? <a class="text-primary" href="{% url 'custlogin' %}">Sign in</a></p> </center>
                                     </div>
                                 </div>
                             </div>
@@ -62,6 +70,83 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal Structure -->
+    <div class="modal fade" id="statusErrorsModal" tabindex="-1" role="dialog" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center p-lg-4">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#db3646" stroke-width="6" stroke-miterlimit="10"
+                            cx="65.1" cy="65.1" r="62.1" />
+                        <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round"
+                            stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
+                        <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round"
+                            stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2" />
+                    </svg>
+                    <h4 class="text-danger mt-3">Invalid!!</h4>
+                    <p class="mt-3">Phone number already exists..</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="statusErrorsModal_all" tabindex="-1" role="dialog" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center p-lg-4">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#db3646" stroke-width="6" stroke-miterlimit="10"
+                            cx="65.1" cy="65.1" r="62.1" />
+                        <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round"
+                            stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
+                        <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round"
+                            stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2" />
+                    </svg>
+                    <h4 class="text-danger mt-3">Invalid!!</h4>
+                    <p class="mt-3">All fields are required.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="statusErrorsModal_phone" tabindex="-1" role="dialog" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center p-lg-4">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#db3646" stroke-width="6" stroke-miterlimit="10"
+                            cx="65.1" cy="65.1" r="62.1" />
+                        <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round"
+                            stroke-miterlimit="10" x1="34.4" y1="37.9" x2="95.8" y2="92.3" />
+                        <line class="path line" fill="none" stroke="#db3646" stroke-width="6" stroke-linecap="round"
+                            stroke-miterlimit="10" x1="95.8" y1="38" x2="34.4" y2="92.2" />
+                    </svg>
+                    <h4 class="text-danger mt-3">Invalid!!</h4>
+                    <p class="mt-3">Please enter a valid 10-digit phone number.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="statusSuccessModal" tabindex="-1" role="dialog" data-bs-backdrop="static"
+        data-bs-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-body text-center p-lg-4">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 130.2 130.2">
+                        <circle class="path circle" fill="none" stroke="#198754" stroke-width="6" stroke-miterlimit="10"
+                            cx="65.1" cy="65.1" r="62.1" />
+                        <polyline class="path check" fill="none" stroke="#198754" stroke-width="6"
+                            stroke-linecap="round" stroke-miterlimit="10" points="100.2,40.2 51.5,88.8 29.8,67.5 " />
+                    </svg>
+                    <h4 class="text-success mt-3">Oh Yeah!</h4>
+                    <p class="mt-3">Registered successfully.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
 <!--**********************************
     Scripts
@@ -84,14 +169,16 @@
             var status = 'active';
             
             if (!customer_name || !phone_number || !email   ) {
-                alert("All fields are required.");
+                var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal_all'));
+                myModal.show();
                 return;
             }
 
             // Validate phone number format
             var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
-                alert("Please enter a valid 10-digit phone number.");
+                var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal_phone'));
+                myModal.show();
                 return;
             }
 
@@ -101,7 +188,8 @@
                 data: { phone_number: phone_number },
                 success: function (data) {
                     if (data.exists) {
-                        alert("Phone number already exists.");
+                        var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal'));
+                        myModal.show();
                     } else {
                         $.ajax({
                             url: '{% url "regcustomer" %}',
@@ -118,8 +206,10 @@
                                 // company_format: company_format,
                             },
                             success: function (result) {
-                                alert("Registered successfully");
-                                location.href = "{% url 'custlogin' %}";
+                                var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
+                                myModal.show();
+
+                                // location.href = "{% url 'custlogin' %}";
                             },
                             error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

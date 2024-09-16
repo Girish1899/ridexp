@@ -1,5 +1,8 @@
 {% extends "./index.html" %}
 {% load static %}
+{% block title %}<title> Affordable Local, Outstation, & Airport Taxi Services | RidexpressTaxi Services  </title> {% endblock %}
+{% block meta_description %} <meta name="description"  content=" Book local, outstation, and airport taxis with RidexpressTaxi Services. Enjoy 24/7 service, affordable rates, and safe rides for all your travel needs. Professional drivers ensure a comfortable and reliable journey, whether you're commuting within the city, traveling long-distance, or catching a flight." />{% endblock %}
+{% block meta_keywords %} <meta name="keywords"  content="local taxi service, outstation taxi, airport taxi, cab service, taxi booking, affordable cab, reliable taxi service, 24/7 taxi, city commute, outstation cab, long-distance taxi, one-way taxi, airport transfer, taxi near me, cab for airport, Bengaluru taxi service, safe taxi service, Ridexpress" />{% endblock %}
 
 {% block body_content %}
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -285,7 +288,7 @@
                                     "Because every journey should be affordable - enjoy safe and comfortable rides at the best prices."                                </p>
                                 <div class="hero-btn justify-content-center" data-animation="fadeInUp"
                                     data-delay="1s">
-                                    <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
+                                    <a href="/about" class="theme-btn">About Us<i class="fas fa-arrow-right"></i></a>
                                     <a href="/services" class="theme-btn theme-btn2">Learn More<i
                                             class="fas fa-arrow-right"></i></a>
                                 </div>
@@ -294,65 +297,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- <div class="hero-single" style="background: url('static/img/slider/sl02.avif')">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-12 col-lg-9 mx-auto">
-                            <div class="hero-content text-center">
-                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
-                                    Ridexpress Taxi!</h6>
-                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
-                                    Affordable 24/7 <span>Local Cabs</span> in Bangalore 
-                                </h1>
-                                <p data-animation="fadeInLeft" data-delay=".75s">
-                                    Ridexpress Taxi simplifies your local travel needs within Bangalore city. We offer affordable and 
-                                    reliable local taxi services, ensuring you pay less and travel more. Whether you need a ride across
-                                     town or a quick trip within the city limits, our 24/7 service is here for you. With timely pickups
-                                      and drops, coupled with exceptional 24x7 customer support, Ridexpress Taxi ensures a hassle-free and 
-                                      convenient local taxi experience in Bangalore.
-                                </p>
-                                <div class="hero-btn justify-content-center" data-animation="fadeInUp"
-                                    data-delay="1s">
-                                    <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                    <a href="/services" class="theme-btn theme-btn2">Learn More<i
-                                            class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="hero-single" style="background: url('static/img/slider/sl03.avif')">
-                <div class="container">
-                    <div class="row align-items-center">
-                        <div class="col-md-12 col-lg-9 mx-auto">
-                            <div class="hero-content text-center">
-                                <h6 class="hero-sub-title" data-animation="fadeInUp" data-delay=".25s">Welcome To
-                                    Ridexpress Taxi!</h6>
-                                <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
-                                    Outstation Cabs in  <span>Bangalore</span> 
-                                </h1>
-                                <p data-animation="fadeInLeft" data-delay=".75s">
-                                    Plan your outstation travel from Bangalore with ease and affordability! Ridexpress Taxi offers a range of 
-                                    vehicles to suit your needs and budget, starting at just Rs. 9 per kilometer. Choose from hatchbacks, 
-                                    sedans, Innovas, SUVs, or even tempo travelers. Plus, enjoy the convenience of no check-post charges 
-                                    on one-way or round-trip bookings (terms and conditions apply). Our 24/7 booking service and customer
-                                     support ensure a smooth and hassle-free experience, complete with timely pickups and drops for your 
-                                     outstation journey.
-                                </p>
-                                <div class="hero-btn justify-content-center" data-animation="fadeInUp"
-                                    data-delay="1s" >
-                                    <a href="/about" class="theme-btn">About More<i class="fas fa-arrow-right"></i></a>
-                                    <a href="/services" class="theme-btn theme-btn2">Learn More<i
-                                            class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
     </div>
     <!-- hero slider end -->
 
@@ -618,7 +562,7 @@
                     <div class="col-md-6 col-lg-4 filter-item cat2">
                         <div class="taxi-item">
                             <div class="taxi-img">
-                                <img src="{% static '/img/taxi/sedan-1.png' %}" alt="">
+                                <img src="{% static '/img/taxi/022.jpg' %}" alt="">
                             </div>
                             <div class="taxi-content">
                                 <div class="taxi-head">
@@ -882,7 +826,7 @@
                         <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
                             <div class="rate-header">
                                 <div class="rate-img">
-                                    <img src="{% static '/img/rate/sedan.png' %}" alt="">
+                                    <img src="{% static '/img/taxi/airport.jpg' %}" alt="">
                                 </div>
                             </div>
                             <div class="rate-header-content">
@@ -911,7 +855,7 @@
                         <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
                             <div class="rate-header">
                                 <div class="rate-img">
-                                    <img src="{% static '/img/rate/sedan.png' %}" alt="">
+                                    <img src="{% static '/img/service/taxi_rome_tips.jpg' %}" alt="">
                                 </div>
                             </div>
                             <div class="rate-header-content">
@@ -939,7 +883,7 @@
                         <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
                             <div class="rate-header">
                                 <div class="rate-img">
-                                    <img src="{% static '/img/rate/sedan.png' %}" alt="">
+                                    <img src="{% static '/img/service/os.jpg' %}" alt="" style="width: 95%;">
                                 </div>
                             </div>
                             <div class="rate-header-content">

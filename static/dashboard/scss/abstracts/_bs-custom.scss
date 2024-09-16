@@ -8,7 +8,7 @@ $fm:'HelveticaNeueMed'; // fm = font Medium
 
 // Body
 $body-bg   : rgba(88, 115, 254, 0.04);
-$body-color: #BDBDC7;
+$body-color: white;
 
 // Typography
 $font-family-base: 'Roboto',
@@ -96,7 +96,7 @@ $colors: map-merge(("blue": $blue,
     "gray-dark": $gray-800),
   $colors);
 
-$primary  : #593bdb !default;
+$primary  : #FFAA16 !default;
 $secondary: #673BB7 !default;
 $success  : #7ED321 !default;
 $info     : #50E3C2 !default;
