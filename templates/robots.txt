@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /admin
+Disallow: /wp-login.php
+Disallow: /superadmin
+Disallow: /adminuser
+Disallow: /rescue
+Disallow: /quality
+Disallow: /telecaller
+Disallow: /distributer
+Disallow: /addride
+Disallow: /driver 
+Disallow: /hr
+Sitemap: https://www.ridexpress.in/sitemap.xml
