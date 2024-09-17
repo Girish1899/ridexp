@@ -181,6 +181,27 @@ def get_weekly_data(request):
 class login(TemplateView,APIView):
     template_name = "login.html" 
 
+
+class forgot_password(TemplateView):
+    template_name = "website/forgot-password.html" 
+
+
+class robots(TemplateView):
+    template_name = "robots.txt" 
+
+
+
+class sitemap(TemplateView):
+    template_name = "sitemap.xml" 
+
+
+
+class about_blog(TemplateView):
+    template_name = "website/about.html" 
+
+
+
+
 @csrf_exempt
 def login_view(request):
     if request.method == 'POST':

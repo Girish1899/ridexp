@@ -8,6 +8,8 @@ from django.utils.decorators import method_decorator
 
 
 
+
+
 # @csrf_exempt
 # def global_fetch_customer_details(request):
 #     phone_number = request.GET.get('phone_number', '')
