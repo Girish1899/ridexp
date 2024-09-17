@@ -763,3 +763,10 @@ class DailyVehicleComm(models.Model):
 
     class Meta:
         unique_together = ('vehicle', 'date')
+
+class ContactUs(models.Model):
+    contact_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    subject = models.TextField()
+    message = models.TextField()

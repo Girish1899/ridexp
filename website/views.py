@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Color, CommissionType, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Brand, Category, Color, CommissionType, ContactUs, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -140,8 +140,8 @@ def airportcabs_list(request):
     destination = request.GET.get('destination', '')
     pickup_date = request.GET.get('pickup_date', '')
     pickup_time = request.GET.get('pickup_time', '')
-    car_type = request.GET.get('car_type', '')  # Capture car_type
-    ridetype = 'airport'
+    car_type = request.GET.get('car_type', '') 
+    ridetype = request.GET.get('ridetype', '')  
 
     ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
 
@@ -188,8 +188,8 @@ def localcabs_list(request):
     destination = request.GET.get('destination', '')
     pickup_date = request.GET.get('pickup_date', '')
     pickup_time = request.GET.get('pickup_time', '')
-    car_type = request.GET.get('car_type', '')  # Capture car_type
-    ridetype = 'local'
+    car_type = request.GET.get('car_type', '') 
+    ridetype = request.GET.get('ridetype', '')  
 
     ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
 
@@ -343,8 +343,29 @@ def bookride(request):
         
     return render(request, 'website/book-ride.html',context)
 
-def contact(request):
-    return render(request, 'website/contact.html')
+# def contact(request):
+#     return render(request, 'website/contact.html')
+
+class AddContact(TemplateView):
+    template_name = "website/contact.html"
+
+    def post(self , request):
+        name = request.POST['name']
+        email = request.POST['email']
+        subject = request.POST['subject']
+        message = request.POST['message']
+
+        cu = ContactUs()
+        cu.name = name
+        cu.email = email
+        cu.subject = subject
+        cu.message = message
+        cu.save()
+        return JsonResponse({'status':"Success"})
+
+class ContactList(ListView):
+    model = ContactUs
+    template_name = "superadmin/view_contact.html"
 
 def services(request):
     return render(request, 'website/service.html')

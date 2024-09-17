@@ -46,6 +46,13 @@
                                         <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
                                     </div>
                                 </div>
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Ride Type:</label>
+                                        <input type="text" class="form-control" id="ridetype" name="ridetype" disabled>
+                                    </div>
+                                </div>
                 
                                 <div class="col-lg-3">
                                     <button class="theme-btn" type="submit" id="save_action">Check Fares<i
@@ -72,7 +79,7 @@
             {% for category, prices in pricing_dict.items %}
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="room-item shadow rounded overflow-hidden">
-                    <div class="position-relative">
+                    <div class="position-relative ">
                         {% if prices.ac %}
                             <img class="img-fluid" src="{{ prices.ac.category.image.url }}" alt="{{ category|capfirst }}">
                         {% elif prices.non_ac %}
@@ -83,11 +90,11 @@
 
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
                             <!-- Non AC Price Display -->
-                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 0.25rem 0.75rem; margin-right: auto;">
+                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 0.25rem 0.75rem; margin-right: auto;font-size: 14px;font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                             <!-- AC Price Display -->
-                            <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 0.25rem 0.75rem; margin-left: auto;">
+                            <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 0.25rem 0.75rem; margin-left: auto;font-size: 14px;font-weight: bold;">
                                 AC ₹ <span id="price_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                         </div>
@@ -96,6 +103,23 @@
                     <div class="p-4 mt-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="mb-0">{{ category|capfirst }}</h5>
+                            <!-- <small class="border-end me-3 pe-3">
+                                <strong>Seats:</strong>
+                                {% if prices.ac %}
+                                    {{ prices.ac.category.seats }}
+                                {% elif prices.non_ac %}
+                                    {{ prices.non_ac.category.seats }}
+                                {% else %}
+                                    N/A
+                                {% endif %}
+                            </small> -->
+                            <div class="ps-2">
+                                <p style="font-size: 15px;"><strong>Distance (km):</strong> <span id="distance_{{ category|slugify }}">0</span></p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex mb-3">
+                           
                             <small class="border-end me-3 pe-3">
                                 <strong>Seats:</strong>
                                 {% if prices.ac %}
@@ -106,27 +130,6 @@
                                     N/A
                                 {% endif %}
                             </small>
-                            <div class="ps-2">
-                                <p style="font-size: 15px;"><strong>Distance (km):</strong> <span id="distance_{{ category|slugify }}">0</span></p>
-                                
-                            </div>
-                        </div>
-                        
-                        <div class="d-flex mb-3">
-                            <!-- <small class="border-end me-3 pe-3">
-                                <strong>Seats:</strong>
-                                {% if prices.ac %}
-                                    {{ prices.ac.category.seats }}
-                                {% elif prices.non_ac %}
-                                    {{ prices.non_ac.category.seats }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </small> -->
-                            <!-- <small class="border-end me-3 pe-3">
-                                <p><strong>Permit:</strong> ₹<span id="permit_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Permit Non A/C:</strong> ₹<span id="permit_non_ac_{{ category|slugify }}">0</span></p>
-                            </small> -->
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
@@ -148,7 +151,7 @@
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
                                 <input type="hidden" name="car_type" value="non_ac"> 
-                                <button type="submit" class="btn btn-sm btn-danger w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
+                                <button type="submit" class="btn btn-sm btn-secondary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
                                     Non A/c Not Available
                                 </button>
                             </form>
@@ -163,7 +166,7 @@
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
                                 <input type="hidden" name="car_type" value="ac"> 
-                                <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #41C324; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
+                                <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #007bff; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
                                     A/c Not Available
                                 </button>
                             </form>
@@ -179,7 +182,7 @@
                         
                 
 <script>
-    var ridetype = "local";
+    // var ridetype = "local"; 
     $(document).ready(function() {
     const params = {};
     const queryString = window.location.search.slice(1);
@@ -203,6 +206,9 @@
     }
     if (params.pickup_time) {
         document.getElementById('pickup_time').value = params.pickup_time;
+    }
+    if (params.ridetype) {
+        document.getElementById('ridetype').value = params.ridetype;
         $("#save_action").click();
     }
 });
@@ -243,23 +249,18 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     if (costDetails && costDetails.cost) {
         // Update price details
         priceElement.textContent = costDetails.cost;
-        // permitElement.textContent = costDetails.permit || "-";
         tollElement.textContent = costDetails.toll || "-";
         betaElement.textContent = costDetails.beta || "-";
 
         hiddenPriceInput.value = costDetails.cost;
 
-        // Enable book button if price is available
         bookButton.textContent = `Book ${carType === 'ac' ? 'A/c' : 'Non A/c'}`;
         bookButton.disabled = false;
     } else {
-        // If price details are not available
         priceElement.textContent = "Not Available";
-        // permitElement.textContent = "-";
         tollElement.textContent = "-";
         betaElement.textContent = "-";
 
-        // Disable book button and change text
         bookButton.textContent = `${carType === 'ac' ? 'A/c' : 'Non A/c'} Not Available`;
         bookButton.disabled = true;
     }
@@ -285,7 +286,7 @@ function getTimeSlot(pickupTime) {
 // AJAX request to get pricing details
 $("#save_action").click(function(event) {
     event.preventDefault();
-    var ridetype = "local";
+    var ridetype = $('#ridetype').val();
     var source = $('#source').val();
     var destination = $('#destination').val();
     var pickup_date = $('#pickup_date').val();
