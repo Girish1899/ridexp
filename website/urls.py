@@ -40,4 +40,8 @@ urlpatterns = [
     path('blog/benefits', views.benefits, name="benefits"),
     path('blog/how_to_choose', views.how_to_choose, name="how_to_choose"),
     path('blog/essential_qualities', views.essential_qualities, name="essential_qualities"),
+    path('blog/save_money', views.save_money, name="save_money"),
+    path('blog/exploring_city', views.exploring_city, name="exploring_city"),
+    path('blog/luxury_taxi', views.luxury_taxi, name="luxury_taxi"),
+    path('blog/the_importance', views.the_importance, name="the_importance"),
 ]
