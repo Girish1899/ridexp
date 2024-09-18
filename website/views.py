@@ -1,4 +1,5 @@
 # website/views.py
+import random
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -12,6 +13,8 @@ from django.db.models import Q
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.response import Response
+
 
 
 # Define the time slots
@@ -128,11 +131,11 @@ def search_url(request):
     pickup_date = request.GET.get('pickup_date')
     pickup_time = request.GET.get('pickup_time')
     ridetype = request.GET.get('ridetype')
+    trip_type = request.GET.get('trip_type')  # Get the trip type for outstation
 
     if not source or not destination or not pickup_date:
         return HttpResponse("All fields are required.", status=400)
 
-    # Construct the URL for the search based on ridetype
     if ridetype == 'airport':
         search_url = reverse('airportcabs_list')
     elif ridetype == 'local':
@@ -140,14 +143,28 @@ def search_url(request):
     elif ridetype == 'localpackage':
         search_url = reverse('cabs_list')
     elif ridetype == 'outstation':
-        search_url = reverse('outstationcabs_list')
+        if not trip_type:
+            return HttpResponse("Trip type is required for outstation rides.", status=400)
+        
+        if trip_type == 'one_way':
+            search_url = reverse('outstation_oneway')
+        elif trip_type == 'round_trip':
+
+            drop_date = request.GET.get('drop_date')
+            drop_time = request.GET.get('drop_time')
+            if not drop_date or not drop_time:
+                return HttpResponse("Drop date and drop time are required for round trip.", status=400)
+            search_url = reverse('outstation_roundtrip')
+        else:
+            return HttpResponse("Invalid trip type for outstation.", status=400)
     else:
         return HttpResponse("Invalid ride type.", status=400)
 
-    # Construct the final URL with query parameters
-    search_url += f"?location1={source}&location2={destination}&pickup_date={pickup_date}&pickup_time={pickup_time}&ridetype={ridetype}"
+    search_url += f"?location1={source}&location2={destination}&pickup_date={pickup_date}&pickup_time={pickup_time}&ridetype={ridetype}&trip_type={trip_type}"
 
-    # Redirect to the constructed URL
+    if trip_type == 'round_trip':
+        search_url += f"&drop_date={drop_date}&drop_time={drop_time}"
+
     return redirect(search_url)
 
 def airportcabs_list(request):
@@ -199,7 +216,6 @@ def airportcabs_list(request):
     return render(request, 'website/cabs_list.html', context)
 
 def localcabs_list(request):
-    # Retrieve query parameters from the URL
     source = request.GET.get('source', '')
     destination = request.GET.get('destination', '')
     pickup_date = request.GET.get('pickup_date', '')
@@ -209,29 +225,24 @@ def localcabs_list(request):
 
     ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
 
-    # Initialize an empty dictionary to hold pricing information
     pricing_dict = {}
 
     if ride_type_instance:
-        # Fetch all AC and non-AC pricing related to the 'airport' ride type
         pricing_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='ac').select_related('category')
         pricing_non_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='non_ac').select_related('category')
 
-        # Populate the dictionary with AC pricing
         for price in pricing_ac:
             category_name = price.category.category_name.lower()
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {'ac': None, 'non_ac': None}
             pricing_dict[category_name]['ac'] = price
 
-        # Populate the dictionary with non-AC pricing
         for price in pricing_non_ac:
             category_name = price.category.category_name.lower()
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {'ac': None, 'non_ac': None}
             pricing_dict[category_name]['non_ac'] = price
 
-    # Print pricing data for debugging
     print("Filtered Pricing QuerySet:", pricing_dict)
 
     context = {
@@ -247,6 +258,96 @@ def localcabs_list(request):
 
     return render(request, 'website/localcabs_list.html', context)
 
+# one way
+
+def outstation_oneway(request):
+    source = request.GET.get('source', '')
+    destination = request.GET.get('destination', '')
+    pickup_date = request.GET.get('pickup_date', '')
+    pickup_time = request.GET.get('pickup_time', '')
+    car_type = request.GET.get('car_type', '') 
+    ridetype = request.GET.get('ridetype', '')  
+
+    ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+
+    pricing_dict = {}
+
+    if ride_type_instance:
+        pricing_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='ac').select_related('category')
+        pricing_non_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='non_ac').select_related('category')
+
+        for price in pricing_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['ac'] = price
+
+        for price in pricing_non_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['non_ac'] = price
+
+    print("Filtered Pricing QuerySet:", pricing_dict)
+
+    context = {
+        'source': source,
+        'destination': destination,
+        'pickup_date': pickup_date,
+        'pickup_time': pickup_time,
+        'car_type': car_type,  # Pass car_type to the context
+        'pricing_dict': pricing_dict,
+        'ridetype':ridetype,
+    }
+
+
+    return render(request, 'website/outstation_oneway.html', context)
+
+# roundtrip outstation
+
+def outstation_roundtrip(request):
+    source = request.GET.get('source', '')
+    destination = request.GET.get('destination', '')
+    pickup_date = request.GET.get('pickup_date', '')
+    pickup_time = request.GET.get('pickup_time', '')
+    car_type = request.GET.get('car_type', '') 
+    ridetype = request.GET.get('ridetype', '')  
+
+    ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+
+    pricing_dict = {}
+
+    if ride_type_instance:
+        pricing_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='ac').select_related('category')
+        pricing_non_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='non_ac').select_related('category')
+
+        for price in pricing_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['ac'] = price
+
+        for price in pricing_non_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['non_ac'] = price
+
+    print("Filtered Pricing QuerySet:", pricing_dict)
+
+    context = {
+        'source': source,
+        'destination': destination,
+        'pickup_date': pickup_date,
+        'pickup_time': pickup_time,
+        'car_type': car_type,  # Pass car_type to the context
+        'pricing_dict': pricing_dict,
+        'ridetype':ridetype,
+    }
+
+
+    return render(request, 'website/outstation_roundtrip.html', context)
+
 
 def booking_list(request):
     # Get parameters from GET request
@@ -259,6 +360,9 @@ def booking_list(request):
     car_type = request.GET.get('car_type', '')  # Capture the car_type from the request
     price = request.GET.get('price')
     slots = request.GET.get('time_slot')
+    drop_date = request.GET.get('drop_date') 
+    drop_time = request.GET.get('drop_time') 
+    
 
     # Debugging prints
     print("Price received in view:", price)
@@ -292,7 +396,10 @@ def booking_list(request):
         'ridetype': ridetype,
         'car_type': car_type,
         'price': price,
-        'pricing': pricing_instance,  # Associate the correct Pricing instance
+        'pricing': pricing_instance, 
+        'drop_date': drop_date, 
+        'drop_time': drop_time, 
+        
     })
 
 
@@ -481,6 +588,15 @@ def logout_view(request):
 
 class AddNewBooking(APIView):
 
+    def parse_date(self, date_str):
+        """Helper function to parse dates in multiple formats"""
+        for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+            try:
+                return datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+        raise ValueError(f"Date {date_str} is not in a recognized format.")
+
     def post(self, request):
         try:
             pickup_date_str = request.POST.get('pickup_date', '')
@@ -494,6 +610,7 @@ class AddNewBooking(APIView):
             # Convert date and time
             pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
             pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
+            
 
             # Get current system time
             current_time = datetime.now()
@@ -512,9 +629,12 @@ class AddNewBooking(APIView):
             customer_email = request.POST['email']
             customer_notes = request.POST['customer_notes']
             total_fare=request.POST['total_fare']
+            # drop_date=request.POST['drop_date']
+            # drop_time=request.POST['drop_time']
             car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
             ridetype_name = request.POST.get('ridetype', '').strip()
             slots = determine_time_slot(pickup_time_str)  # Function to determine the slot based on pickup_time
+
 
 
             if not ridetype_name:
@@ -543,6 +663,16 @@ class AddNewBooking(APIView):
                 )
             except Pricing.DoesNotExist:
                 return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
+
+            if ridetype_name == 'outstation' and pricing_instance.trip_type == 'round_trip':
+                drop_date_str = request.POST.get('drop_date', '')
+                drop_time_str = request.POST.get('drop_time', '')
+
+                drop_date = self.parse_date(drop_date_str) if drop_date_str else None
+                drop_time = datetime.strptime(drop_time_str, '%H:%M').time() if drop_time_str else None
+            else:
+                drop_date = None
+                drop_time = None    
 
             # Ensure objects exist in database before saving
             customer_exits = Customer.objects.filter(phone_number=customer_phone_number).count()
@@ -591,7 +721,9 @@ class AddNewBooking(APIView):
                 ride_details.assigned_by=request.user
                 ride_details.created_by=request.user
                 ride_details.updated_by=request.user
-                ride_details.pricing = pricing_instance  # Set the Pricing instance
+                ride_details.pricing = pricing_instance 
+                ride_details.drop_date = drop_date 
+                ride_details.drop_time = drop_time 
 
                 ride_details.save()
                 print("source ^^^: ",request.POST['source'] )
@@ -865,8 +997,6 @@ class AirportGetRidePricingDetails(APIView):
             toll_price = Decimal(str(price.toll_price)) if toll_option == 'add_toll' else Decimal(0)
             print(f"Toll option: {toll_option}, Toll price applied: {toll_price}")  # Check if this correctly shows 0 for no_toll
 
-
-
             pricing_dict[category_name][car_type] = self.calculate_cost(distance, price, toll_price)
 
         return JsonResponse({'costs': pricing_dict})
@@ -976,3 +1106,226 @@ class GetRidePricingDetails(APIView):
             'beta': driver_beta_decimal,
             'category': price.category.category_name,
         }
+    
+
+# one way outstation
+
+class OnewayRidePricingDetails(APIView):
+    def post(self, request):
+        import googlemaps
+        from decimal import Decimal
+        from django.http import JsonResponse
+        from datetime import datetime
+
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date = request.POST['pickup_date']
+        pickup_time = request.POST['pickup_time']
+        time_slot = request.POST['time_slot']
+        ridetype = request.POST['ridetype'] 
+        trip_type = request.POST['trip_type'] 
+
+        api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+        gmaps = googlemaps.Client(key=api_key)
+
+        result = gmaps.distance_matrix(
+            origins=[source],
+            destinations=[destination],
+            mode="driving",
+            departure_time=datetime.now()
+        )
+
+        distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
+        print("Distance calculated:", distance)
+
+        costs = {}
+
+        ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+        if not ride_type_instance:
+            return JsonResponse({'error': 'Invalid ridetype'}, status=400)
+
+        pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance,trip_type=trip_type)
+
+        print("Fetched Pricing Details: ", pricing_details)
+
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()  # 'ac' or 'non ac'
+
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
+
+        print("Pricing Dict after calculation: ", pricing_dict)
+        return JsonResponse({'costs': pricing_dict})
+    
+    def calculate_cost(self, distance, price):
+        """Helper method to calculate cost based on distance and pricing details."""
+        from decimal import Decimal
+
+        price_per_km_decimal = Decimal(str(price.price_per_km))
+        permit_decimal = Decimal(str(price.permit))
+        toll_price_decimal = Decimal(str(price.toll_price))
+        driver_beta_decimal = Decimal(str(price.driver_beta))
+
+        temp_cost = Decimal(distance) * price_per_km_decimal
+        temp_cost += permit_decimal + toll_price_decimal + driver_beta_decimal
+        category_cost = round(temp_cost, 0)
+
+        return {
+            'distance_km': distance,
+            'cost': category_cost,
+            'permit': permit_decimal,
+            'toll': toll_price_decimal,
+            'beta': driver_beta_decimal,
+            'category': price.category.category_name,
+        } 
+
+
+# round trip
+
+class RoundtripRidePricingDetails(APIView):
+    def post(self, request):
+        import googlemaps
+        from decimal import Decimal
+        from django.http import JsonResponse
+
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date_str = request.POST['pickup_date']
+        pickup_time_str = request.POST['pickup_time']
+        drop_date_str = request.POST['drop_date']
+        drop_time_str = request.POST['drop_time']
+        time_slot = request.POST['time_slot']
+        ridetype = request.POST['ridetype']
+        trip_type = request.POST['trip_type']
+
+        pickup_datetime = datetime.strptime(f"{pickup_date_str} {pickup_time_str}", "%m/%d/%Y %H:%M")
+        drop_datetime = datetime.strptime(f"{drop_date_str} {drop_time_str}", "%m/%d/%Y %H:%M")
+
+        if drop_datetime.date() > pickup_datetime.date():
+            num_days = 1
+            end_of_pickup_day = pickup_datetime.replace(hour=23, minute=59, second=59)
+
+            if drop_datetime > end_of_pickup_day:
+                num_days += (drop_datetime.date() - pickup_datetime.date()).days
+        else:
+            num_days = 1
+
+        print(f"Total days for the trip: {num_days}")
+
+        api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+        gmaps = googlemaps.Client(key=api_key)
+
+        result = gmaps.distance_matrix(
+            origins=[source],
+            destinations=[destination],
+            mode="driving",
+            departure_time=datetime.now()
+        )
+
+        distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
+        print(f"Distance between {source} and {destination}: {distance} km")
+
+        daily_km_cap = 250 * num_days
+        print(f"Total allowed km for {num_days} day(s): {daily_km_cap} km")
+
+        applicable_distance = max(distance, daily_km_cap)
+        print(f"Applicable distance based on days: {applicable_distance} km")
+
+        ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+        if not ride_type_instance:
+            return JsonResponse({'error': 'Invalid ridetype'}, status=400)
+
+        pricing_details = Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype=ride_type_instance, trip_type=trip_type
+        )
+
+        print("Fetched Pricing Details: ", pricing_details)
+
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()  # 'ac' or 'non ac'
+
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price, num_days)
+
+        print("Pricing Dict after calculation: ", pricing_dict)
+        return JsonResponse({'costs': pricing_dict})
+
+    def calculate_cost(self, distance, price, num_days):
+        """Helper method to calculate cost based on distance and pricing details."""
+        from decimal import Decimal
+
+        price_per_km_decimal = Decimal(str(price.price_per_km))
+        permit_decimal = Decimal(str(price.permit))
+        toll_price_decimal = Decimal(str(price.toll_price))
+
+        driver_beta_decimal = Decimal(str(price.driver_beta)) * Decimal(num_days)
+        print(f"Driver beta for {num_days} day(s): {driver_beta_decimal}")
+
+        temp_cost = Decimal(distance) * price_per_km_decimal
+        temp_cost += permit_decimal + toll_price_decimal + driver_beta_decimal
+        category_cost = round(temp_cost, 0)
+
+        return {
+            'distance_km': distance,
+            'cost': category_cost,
+            'permit': permit_decimal,
+            'toll': toll_price_decimal,
+            'beta': driver_beta_decimal,
+            'category': price.category.category_name,
+        }
+    
+
+# otp 
+
+# class SendOtp(APIView):
+#     def post(self, request):
+#         phone_number = request.POST.get('phone_number')
+#         if phone_number:
+#             otp = random.randint(1000, 9999)
+#             request.session[f'otp_{phone_number}'] = otp
+
+#             # WhatsApp API logic to send OTP
+#             whatsapp = {
+#                 "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+#                 "destination": phone_number,
+#                 "templateParams": [str(otp)],
+#                 "source": "your_whatsapp_number",  # Ensure this is correctly set
+#             }
+#             gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            
+#             try:
+#                 response = requests.post(gateway_url, json=whatsapp)
+#                 if response.status_code == 200:
+#                     return Response({"status": "success", "message": "OTP sent successfully"}, status=200)
+#                 else:
+#                     print(f"Failed to send message. Status code: {response.status_code}")
+#                     print(response.text)  # Print response body for debugging
+#                     return Response({"status": "error", "message": "Failed to send OTP"}, status=response.status_code)
+#             except requests.RequestException as e:
+#                 print(f"Error sending message: {e}")
+#                 return Response({"status": "error", "message": "Error sending message"}, status=500)
+#         else:
+#             return Response({"status": "error", "message": "Phone number not provided"}, status=400)
+
+
+# class VerifyOtp(APIView):
+#     def post(self, request):
+#         phone_number = request.POST.get('phone_number')
+#         otp_entered = request.POST.get('otp')
+
+#         if phone_number and otp_entered:
+#             otp_stored = request.session.get(f'otp_{phone_number}')
+
+#             if otp_stored and str(otp_stored) == otp_entered:
+#                 return JsonResponse({"status": "Success", "message": "OTP verified successfully"})
+#             else:
+#                 return JsonResponse({"status": "Error", "message": "Invalid OTP"})
+#         return JsonResponse({"status": "Error", "message": "Phone number and OTP are required"})

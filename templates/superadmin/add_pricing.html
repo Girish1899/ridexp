@@ -60,11 +60,11 @@
                                         <div class="col-sm-10">
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way">
-                                                <label class="form-check-label" for="one_way">One Way</label>
+                                                <label class="form-check-label" for="one_way" style="color: black;">One Way</label>
                                             </div>
                                             <div class="form-check form-check-inline">
                                                 <input class="form-check-input" type="radio" name="trip_type" id="round_trip" value="round_trip">
-                                                <label class="form-check-label" for="round_trip">Round Trip</label>
+                                                <label class="form-check-label" for="round_trip" style="color: black;">Round Trip</label>
                                             </div>
                                         </div>
                                     </div>
@@ -163,7 +163,7 @@
                     var price_per_km = $('#price_per_km').val();
                     var trip_type = $('input[name="trip_type"]:checked').val();
         
-                    if (!category || !ridetype || !price_per_km || !slots) {
+                    if (!category || !ridetype || !price_per_km || !slots || !car_type) {
                         alert("All fields are required.");
                         return;
                     }

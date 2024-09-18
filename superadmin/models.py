@@ -688,6 +688,8 @@ class RideDetails(models.Model):
     created_by = models.ForeignKey(User, related_name='rides_created', on_delete=models.SET_NULL, null=True, blank=True)
     updated_by = models.ForeignKey(User, related_name='rides_updated', on_delete=models.SET_NULL, null=True, blank=True)
     comments = models.CharField(max_length=1000,null=True)
+    drop_date = models.DateField(null=True)
+    drop_time = models.TimeField(null=True)
 
 class RideDetailsHistory(models.Model):
     STATUS_CHOICES = [
@@ -727,6 +729,8 @@ class RideDetailsHistory(models.Model):
     created_by = models.CharField(max_length=100, null=True, blank=True)
     updated_by = models.CharField(max_length=100, null=True, blank=True)
     comments = models.CharField(max_length=1000,null=True)
+    drop_date = models.DateField(null=True)
+    drop_time = models.TimeField(null=True)
 
     def str(self):
         return f"History for ride_id {self.ride_id} on {self.updated_on}"

@@ -27,6 +27,7 @@ from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
 from django.db.models import OuterRef, Subquery, Max
+from rest_framework.response import Response
 
 def report(request):
     report_type = request.GET.get('report_type', 'daily')
