@@ -78,6 +78,22 @@ def essential_qualities(request):
     context = None
     return render(request, 'website/blog/6.html',context)
 
+def save_money(request):
+    context = None
+    return render(request, 'website/blog/7.html',context)
+
+def exploring_city(request):
+    context = None
+    return render(request, 'website/blog/8.html',context)
+
+def luxury_taxi(request):
+    context = None
+    return render(request, 'website/blog/9.html',context)
+
+def the_importance(request):
+    context = None
+    return render(request, 'website/blog/10.html',context)    
+
 def about(request):
     return render(request, 'website/about.html')
 
