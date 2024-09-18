@@ -88,35 +88,35 @@
                                     <h2>Get In Touch</h2>
                                     <p>Our dedicated customer support team is available 24/7 to assist you with bookings, inquiries, or any concerns you may have. Reach out to us today and experience the convenience of traveling with Ridexpress Taxi. </p>
                                 </div>
-                                <form method="post" action="/Taxica/assets/php/contact.php" id="contact-form">
+                                <!-- <form method="post" action="/Taxica/assets/php/contact.php" id="contact-form"> -->
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="text" class="form-control" name="name"
+                                                <input type="text" class="form-control" id="name" name="name"
                                                     placeholder="Your Name" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <input type="email" class="form-control" name="email"
+                                                <input type="email" class="form-control" id="email" name="email"
                                                     placeholder="Your Email" required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <input type="text" class="form-control" name="subject"
+                                        <input type="text" class="form-control" id="subject" name="subject"
                                             placeholder="Your Subject" required>
                                     </div>
                                     <div class="form-group">
                                         <textarea name="message" cols="30" rows="5" class="form-control"
-                                            placeholder="Write Your Message"></textarea>
+                                            placeholder="Write Your Message" id="message"></textarea>
                                     </div>
-                                    <button type="submit" class="theme-btn">Send
+                                    <button type="submit" class="theme-btn" id="save_action">Send
                                         Message <i class="far fa-paper-plane"></i></button>
                                     <div class="col-md-12 mt-3">
                                         <div class="form-messege text-success"></div>
                                     </div>
-                                </form>
+                                <!-- </form> -->
                             </div>
                         </div>
                     </div>
@@ -132,8 +132,44 @@
                 <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d15555.358792373936!2d77.6135562!3d12.9180225!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae15b6f19e1689%3A0x68a6913d797e138e!2sRidexpress%20Taxi%3A%20Cabs%20in%20Bangalore%20%7C%20Outstation%20Cabs%20Booking!5e0!3m2!1sen!2sin!4v1720067905672!5m2!1sen!2sin" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.300990926002!2d77.55844288110087!3d12.888357184280364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae151f1d485609%3A0x128233fc8d0b7aa4!2sForum%20South%20Bengaluru!5e0!3m2!1sen!2sin!4v1726231145685!5m2!1sen!2sin" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
-
-
     </main>
+
+    <script>
+        $(document).ready(function () {
+            $("#save_action").click(function () {
+                var name = $('#name').val();
+                var email = $('#email').val();
+                var subject = $('#subject').val();
+                var message = $('#message').val();
+                
+                if (!name || !email || !subject || !message) {
+                    alert("All fields are required.");
+                    return;
+                }
+                console.log("name :", name);
+                console.log("subject :", subject);
+    
+                $.ajax({
+                    url: '{% url "contact" %}',
+                    type: "POST",
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: { name : name , email : email, subject : subject, message : message },
+                    success: function (result) {
+                        console.log("result ***: ", result);
+                        alert("Message Sent Successfully");
+                        location.href = "{% url 'home' %}";
+                    },
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+    
+                });
+    
+            });
+    
+        });
+    </script>    
 
     {% endblock body_content %}
