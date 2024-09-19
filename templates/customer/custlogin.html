@@ -138,13 +138,19 @@
                                     <br>
                                     <h2 class="text-center mb-4">Sign in your account</h2>
                                     <div class="form-group">
-                                        <label><strong>Phone Number</strong></label>
+                                        <label style="color: black;"><strong>Phone Number</strong></label>
                                         <input type="text" class="form-control form-control-lg" id="phone_number"
                                             name="phone_number">
                                     </div>
+
+                                    <div class="form-group">
+                                        <label style="color: black;"><strong>Password</strong></label>
+                                        <input type="password" class="form-control form-control-lg" id="password" name="password">
+                                    </div>
+
                                     <div class="form-row d-flex justify-content-between mt-4 mb-2">
                                         <div class="form-group">
-                                            <a href="#">Forgot Password?</a>
+                                            <a href="{% url 'forgot_password' %}" style="color: black;">Forgot Password?</a>
                                         </div>
                                     </div>
                                     <div class="text-center">
@@ -219,36 +225,44 @@
 
 <script>
     $(document).ready(function () {
-        $("#login_action").click(function (event) {
-            event.preventDefault(); // Prevent default form submission
-            var phone_number = $('#phone_number').val();
+    $("#login_action").click(function (event) {
+        event.preventDefault(); // Prevent default form submission
+        var phone_number = $('#phone_number').val();
+        var password = $('#password').val(); // Capture password
 
-            $.ajax({
-                url: "{% url 'custlogin' %}",
-                type: "POST",
-                data: {
-                    phone_number: phone_number,
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function (response) {
-                    if (response.success) {
-                        var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
-                        myModal.show();
-                        window.location.href = response.redirect_url;
-                    } else {
-                        // alert(response.message); // Display registration message
+        console.log("Phone Number: " + phone_number); // Debug: log phone number
+        console.log("Password: " + password); // Debug: log password
 
-                        var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal'));
-                        myModal.show();
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText); // Log the server response for debugging
-                    alert("An error occurred while processing your request."); // Display a generic error message
+        $.ajax({
+            url: "{% url 'custlogin' %}",
+            type: "POST",
+            data: {
+                phone_number: phone_number,
+                password: password, // Send password
+                csrfmiddlewaretoken: '{{ csrf_token }}'
+            },
+            success: function (response) {
+                console.log("Response from server: ", response); // Debug: log server response
+
+                if (response.success) {
+                    var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
+                    myModal.show();
+                    window.location.href = response.redirect_url;
+                } else {
+                    console.log("Login failed: ", response.message); // Debug: log failure message
+
+                    var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal'));
+                    myModal.show();
                 }
-            });
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText); // Debug: log error response
+                alert("An error occurred while processing your request."); // Display a generic error message
+            }
         });
     });
+});
+
 </script>
 
 </html>

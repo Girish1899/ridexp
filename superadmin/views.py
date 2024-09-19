@@ -1764,6 +1764,7 @@ class addcustomer(TemplateView):
         customer_name = request.POST['customer_name']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
+        password = request.POST['password']
         address = request.POST['address']
         status = request.POST['status']
         company_format = request.POST.get('company_format', '')
@@ -1771,6 +1772,7 @@ class addcustomer(TemplateView):
         cust = Customer(
             customer_name=customer_name,
             phone_number=phone_number,
+            password=password,
             email=email,
             address=address,
             status=status,
@@ -1844,6 +1846,7 @@ class UpdateCustomer(APIView):
         customer.phone_number = request.POST['phone_number']
         customer.address = request.POST['address']
         customer.email = request.POST['email']
+        customer.password = request.POST['password']
         customer.status = request.POST['status']
         customer.updated_by = request.user
         customer.save()
@@ -1856,6 +1859,7 @@ class UpdateCustomer(APIView):
             phone_number=customer.phone_number,
             address=customer.address,
             email=customer.email,
+            password=customer.password,
             status=customer.status,
             created_on=customer.created_on,
             updated_on=customer.updated_on,
@@ -3309,6 +3313,7 @@ class UpdateRide(APIView):
         try:
             # Retrieve POST data
             ride_id = request.POST['ride_id']
+            company_format = request.POST['company_format']
             ride_type_id = request.POST['ridetype']
             source = request.POST.get('source',None)
             destination = request.POST.get('destination',None)
@@ -3323,6 +3328,7 @@ class UpdateRide(APIView):
             customer_name = request.POST['customer_name']
             email = request.POST['email']
             address = request.POST['address']
+            slots = determine_time_slot(pickup_time)
 
             # Fetch the existing ride details
             ride_details = RideDetails.objects.get(ride_id=ride_id)
@@ -3393,7 +3399,18 @@ class UpdateRide(APIView):
             return JsonResponse({'status': 'Error', 'message': f'Ride with ID {ride_id} does not exist.'})
         except Exception as e:
             return JsonResponse({'status': 'Error', 'message': str(e)})
-
+        
+def determine_time_slot(pickup_time_str):
+    # Determine the time slot based on pickup_time_str
+    pickup_time = datetime.strptime(pickup_time_str, '%H:%M').time()
+    if time(0, 0) <= pickup_time < time(6, 0):
+        return '12AM - 6AM'
+    elif time(6, 0) <= pickup_time < time(12, 0):
+        return '6AM - 12PM'
+    elif time(12, 0) <= pickup_time < time(18, 0):
+        return '12PM - 6PM'
+    else:
+        return '6PM - 12AM'     
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class profile(TemplateView):

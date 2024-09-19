@@ -61,6 +61,13 @@
                                         </div>
 
                                         <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Password</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="password" name="password" value="{{ customerlist.0.password }}">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
                                             <div class="col-sm-10">                                            
                                                 <textarea class="form-control" rows="2" id="address" name="address">{{ customerlist.0.address }}</textarea>
@@ -101,11 +108,12 @@
             var customer_name = document.getElementById('customer_name').value;
             var phone_number = document.getElementById('phone_number').value;
             var email = document.getElementById('email').value;
+            var password = document.getElementById('password').value;
             var address = document.getElementById('address').value;
             var status = document.getElementById('status').value;
             var original_phone_number = $('#original_phone_number').val();
 
-            if (!customer_name || !phone_number || !email ) {
+            if (!customer_name || !phone_number || !email || !password ) {
                 alert("All fields are required.");
                 return;
             }
@@ -124,6 +132,13 @@
                 return;
             }
 
+            // Validate password criteria
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordPattern.test(password)) {
+                    alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                    return;
+                }
+
             // Check if phone number already exists
             $.ajax({
                 url: "{% url 'check_phonenumber' %}",
@@ -134,7 +149,7 @@
                         alert("Phone number already exists.");
                     } else {
                         if (confirm("Are you sure you want to save this customer?")) {
-                            submitForm(customer_id, customer_name, company_format, phone_number, address, email, status);
+                            submitForm(customer_id, customer_name, company_format, phone_number, address, email,password, status);
                         }
                     }
                 },
@@ -144,7 +159,7 @@
             });
         });
 
-        function submitForm(customer_id, customer_name, company_format, phone_number, address, email, status) {
+        function submitForm(customer_id, customer_name, company_format, phone_number, address, email,password, status) {
             $.ajax({
                 url: '{% url "UpdateCustomer" %}',
                 type: "POST",
@@ -153,6 +168,7 @@
                     'customer_name': customer_name,
                     'phone_number': phone_number,
                     'email': email,
+                    'password': password,
                     'address': address,
                     'status': status,
                     'company_format': company_format,
