@@ -95,7 +95,27 @@ def luxury_taxi(request):
 
 def the_importance(request):
     context = None
-    return render(request, 'website/blog/10.html',context)    
+    return render(request, 'website/blog/10.html',context)  
+
+def why_taxis(request):
+    context = None
+    return render(request, 'website/blog/11.html',context)  
+
+def how_taxis(request):
+    context = None
+    return render(request, 'website/blog/12.html',context)
+
+def top_tips(request):
+    context = None
+    return render(request, 'website/blog/13.html',context)
+
+def the_role(request):
+    context = None
+    return render(request, 'website/blog/14.html',context)
+
+def family_travel(request):
+    context = None
+    return render(request, 'website/blog/15.html',context)
 
 def about(request):
     return render(request, 'website/about.html')
@@ -1285,47 +1305,41 @@ class RoundtripRidePricingDetails(APIView):
 
 # otp 
 
-# class SendOtp(APIView):
-#     def post(self, request):
+# otp_store = {}
+
+# def send_otp(request):
+#     if request.method == 'POST':
 #         phone_number = request.POST.get('phone_number')
-#         if phone_number:
-#             otp = random.randint(1000, 9999)
-#             request.session[f'otp_{phone_number}'] = otp
+#         customer_name = request.POST.get('customer_name')
 
-#             # WhatsApp API logic to send OTP
-#             whatsapp = {
-#                 "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
-#                 "destination": phone_number,
-#                 "templateParams": [str(otp)],
-#                 "source": "your_whatsapp_number",  # Ensure this is correctly set
-#             }
-#             gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
-            
-#             try:
-#                 response = requests.post(gateway_url, json=whatsapp)
-#                 if response.status_code == 200:
-#                     return Response({"status": "success", "message": "OTP sent successfully"}, status=200)
-#                 else:
-#                     print(f"Failed to send message. Status code: {response.status_code}")
-#                     print(response.text)  # Print response body for debugging
-#                     return Response({"status": "error", "message": "Failed to send OTP"}, status=response.status_code)
-#             except requests.RequestException as e:
-#                 print(f"Error sending message: {e}")
-#                 return Response({"status": "error", "message": "Error sending message"}, status=500)
-#         else:
-#             return Response({"status": "error", "message": "Phone number not provided"}, status=400)
+#         otp = random.randint(100000, 999999)
+#         otp_store[phone_number] = otp  # Store the OTP
 
-
-# class VerifyOtp(APIView):
-#     def post(self, request):
-#         phone_number = request.POST.get('phone_number')
-#         otp_entered = request.POST.get('otp')
-
-#         if phone_number and otp_entered:
-#             otp_stored = request.session.get(f'otp_{phone_number}')
-
-#             if otp_stored and str(otp_stored) == otp_entered:
-#                 return JsonResponse({"status": "Success", "message": "OTP verified successfully"})
+#         whatsapp = {
+#             "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+#             "campaignName": "booking confirmation",
+#             "destination": phone_number,
+#             "userName": "Ridexpress",
+#             "templateParams": [str(otp)],
+#             "source": "new-landing-page form",
+#         }
+#         gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+#         try:
+#             response = requests.post(gateway_url, data=whatsapp)
+#             if response.status_code == 200:
+#                 return JsonResponse({'status': 'Success', 'message': 'OTP sent successfully'})
 #             else:
-#                 return JsonResponse({"status": "Error", "message": "Invalid OTP"})
-#         return JsonResponse({"status": "Error", "message": "Phone number and OTP are required"})
+#                 return JsonResponse({'status': 'Error', 'message': 'Failed to send OTP'})
+#         except requests.RequestException as e:
+#             return JsonResponse({'status': 'Error', 'message': str(e)})
+
+# def verify_otp(request):
+#     if request.method == 'POST':
+#         phone_number = request.POST.get('phone_number')
+#         entered_otp = request.POST.get('otp')
+
+#         if phone_number in otp_store and str(otp_store[phone_number]) == entered_otp:
+#             del otp_store[phone_number]  # Clear OTP after verification
+#             return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully'})
+#         else:
+#             return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP'})

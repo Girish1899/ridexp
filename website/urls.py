@@ -48,7 +48,12 @@ urlpatterns = [
     path('blog/exploring_city', views.exploring_city, name="exploring_city"),
     path('blog/luxury_taxi', views.luxury_taxi, name="luxury_taxi"),
     path('blog/the_importance', views.the_importance, name="the_importance"),
+    path('blog/why_taxis', views.why_taxis, name="why_taxis"),
+    path('blog/how_taxis', views.how_taxis, name="how_taxis"),
+    path('blog/top_tips', views.top_tips, name="top_tips"),
+    path('blog/the_role', views.the_role, name="the_role"),
+    path('blog/family_travel', views.family_travel, name="family_travel"),
 
-    # path('send_otp/', SendOtp.as_view(), name='send_otp'),
-    # path('verify_otp/', VerifyOtp.as_view(), name='verify_otp'),
+    # path('send_otp/', views.send_otp, name='send_otp'),
+    # path('verify_otp/', views.verify_otp, name='verify_otp'),
 ]
