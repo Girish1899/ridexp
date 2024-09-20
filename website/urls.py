@@ -53,6 +53,11 @@ urlpatterns = [
     path('blog/top_tips', views.top_tips, name="top_tips"),
     path('blog/the_role', views.the_role, name="the_role"),
     path('blog/family_travel', views.family_travel, name="family_travel"),
+    path('blog/eco_friendly', views.eco_friendly, name="eco_friendly"),
+    path('blog/taxi_improve', views.taxi_improve, name="taxi_improve"),
+    path('blog/the_future', views.the_future, name="the_future"),
+    path('blog/perfect_choice', views.perfect_choice, name="perfect_choice"),
+    path('blog/taxi_companies', views.taxi_companies, name="taxi_companies"),
 
     # path('send_otp/', views.send_otp, name='send_otp'),
     # path('verify_otp/', views.verify_otp, name='verify_otp'),

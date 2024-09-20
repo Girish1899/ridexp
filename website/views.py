@@ -117,6 +117,26 @@ def family_travel(request):
     context = None
     return render(request, 'website/blog/15.html',context)
 
+def eco_friendly(request):
+    context = None
+    return render(request, 'website/blog/16.html',context)
+
+def taxi_improve(request):
+    context = None
+    return render(request, 'website/blog/17.html',context)
+
+def the_future(request):
+    context = None
+    return render(request, 'website/blog/18.html',context)
+
+def perfect_choice(request):
+    context = None
+    return render(request, 'website/blog/19.html',context)
+
+def taxi_companies(request):
+    context = None
+    return render(request, 'website/blog/20.html',context)
+
 def about(request):
     return render(request, 'website/about.html')
 
