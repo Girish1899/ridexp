@@ -206,67 +206,13 @@
                                             <div style="color: red;">{{ i.comments }}</div>
 
                                         </td>
-                                        <td><button type="button" class="btn btn-success btn-sm btn-custom-sm" data-toggle="modal" data-target="#assignDriverModal" data-ride-id="{{ i.ride_id }}">Reassign Driver</button></td>
+                                        <td><button type="button" class="btn btn-success btn-sm btn-custom-sm" onclick="Restoreride('{{i.ride_id}}', '{{i.pickup_date}}')">Restore</button></td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Assign Driver Modal -->
-<div class="modal fade" id="assignDriverModal" tabindex="-1" role="dialog" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="assignDriverModalLabel">Assign Driver</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="table-responsive">
-                    <table id="driverTable" class="table table-striped">
-                        <thead>
-                            <tr style="color: #030000;">
-                                <th>Driver Name</th>
-                                <th>Vehicle Id</th>
-                                <th>Vehicle Number</th>
-                                <th>Category</th>
-                                <th>Phone Number</th>
-                                <th>Driver Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for driver in drivers %}
-                            {% if driver.status == 'active' %}
-                            <tr style="color: #030000;">
-                                <td>{{ driver.name }}</td>
-                                <td>
-                                    <button type="button" class="btn btn-primary assign-driver-btn {% if driver.driver_status == 'occupied' %}btn-danger disabled{% endif %}" data-driver-id="{{ driver.company_format }}" {% if driver.driver_status == 'occupied' %}disabled{% endif %}>
-                                        {{ driver.vehicle.company_format }}
-                                    </button>
-                                </td>
-                                <td>{{ driver.vehicle.Vehicle_Number }}</td>
-                                <td>{{ driver.vehicle.model.brand.category.category_name }}</td>
-                                <td>{{ driver.phone_number }}</td>
-                                <td>
-                                    {% if driver.driver_status == 'free' %}
-                                        <span class="badge badge-success">{{ driver.driver_status }}</span>
-                                    {% elif driver.driver_status == 'occupied' %}
-                                        <span class="badge badge-warning">{{ driver.driver_status }}</span>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -301,57 +247,32 @@
     </script>
 
 <script>
-    
-    $(document).ready(function() {
-    console.log("Document is ready!");
-
-    // Assign Driver Button Click Event
-    $(document).on('click', '.assign-driver-btn', function() {
-        console.log("Assign driver button clicked!");
-
-        const driverId = $(this).data('driver-id');
-        const rideId = $('#assignDriverModal').data('ride-id');
-
-        console.log("Driver ID: ", driverId); // Debugging statement
-        console.log("Ride ID: ", rideId);     // Debugging statement
-
-        // Check if driverId is correctly retrieved
-        if (!driverId) {
-            console.error("Driver ID is missing");
-            alert("Driver ID is missing.");
-            return;
-        }
-
-        $.ajax({
-            url: '{% url "assign_driver" %}',
-            type: "POST",
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
+    function Restoreride(ride_id,pickup_date){
+        var action = confirm("Are you sure you want to restore this booking?");
+        if (action != false) {
+          $.ajax({
+                url: "/superadmin/update_ride_status/" + ride_id + "/",  // Updated to include ride_id in the URL path
+                type: "POST",  // Use POST method
+                data: {
+                    'pickup_date': pickup_date,  // Send pickup_date in POST data
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'  // Include CSRF token
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.success) {
+                    alert("Booking Restored Successfully");
+                    window.location.href = "{% url 'cancelledbookings' %}";
+                } else {
+                    alert(data.message || "Error occurred");
+                }
             },
-            data: JSON.stringify({ driver_id: driverId, ride_id: rideId }),
-            contentType: 'application/json; charset=utf-8',
-            success: function(result) {
-                console.log("Success: ", result);
-                alert("Driver assigned successfully.");
-                location.reload(); // Reload page after successful assignment
-            },
-            error: function(xhr, status, error) {
-                console.error("Error: ", xhr.responseText);
-                alert('Failed to assign driver.');
+            error: function () {
+                alert("Error occurred while restoring booking.");
             }
-        });
-    });
-
-    // Modal Show Event
-    $('#assignDriverModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
-        var modal = $(this);
-        modal.data('ride-id', rideId); // Store ride ID in modal attribute
-
-        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
-    });
-});
+          });
+      
+      }
+      }
 // Toggle Filter Report visibility
 $('#toggleFilterReport').click(function() {
         var filterReport = $('.filter_report');

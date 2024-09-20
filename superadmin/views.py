@@ -1584,6 +1584,11 @@ class UserList(ListView):
     template_name = "superadmin/view_user.html"
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class UserEmpList(ListView):
+    model = Profile
+    template_name = "superadmin/view_useremp.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class DeleteUser(View):
     def get(self, request):
         profile_id = request.GET.get('profile_id', None)
@@ -3454,6 +3459,30 @@ class CancelledListView(ListView):
 
     def get_queryset(self):
         return RideDetails.objects.filter(ride_status='cancelledbookings') 
+
+def update_ride_status(request, ride_id):
+    if request.method == 'POST':
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)
+            pickup_date = request.POST.get('pickup_date')
+
+            if pickup_date:
+                today = date.today().isoformat()
+
+                if pickup_date > today:
+                    ride.ride_status = 'advancebookings'
+                else:
+                    ride.ride_status = 'currentbookings'
+
+                ride.save()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'pickup_date not provided'})
+
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Ride not found'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
 def cancel_ride(request):
     if request.method == 'POST':
