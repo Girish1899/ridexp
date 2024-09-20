@@ -177,7 +177,12 @@ def search_url(request):
         return HttpResponse("All fields are required.", status=400)
 
     if ridetype == 'airport':
-        search_url = reverse('airportcabs_list')
+        if trip_type == 'one_way':
+            search_url = reverse('airportcabs_list')  # Redirect to cabs_list for one way trip
+        elif trip_type == 'round_trip':
+            search_url = reverse('airport_roundtrip')  # Redirect to airport_roundtrip for round trip
+        else:
+            return HttpResponse("Invalid trip type for airport rides.", status=400)
     elif ridetype == 'local':
         search_url = reverse('localcabs_list')
     elif ridetype == 'localpackage':
@@ -202,7 +207,7 @@ def search_url(request):
 
     search_url += f"?location1={source}&location2={destination}&pickup_date={pickup_date}&pickup_time={pickup_time}&ridetype={ridetype}&trip_type={trip_type}"
 
-    if trip_type == 'round_trip':
+    if ridetype == 'outstation' and trip_type == 'round_trip':
         search_url += f"&drop_date={drop_date}&drop_time={drop_time}"
 
     return redirect(search_url)
@@ -254,6 +259,54 @@ def airportcabs_list(request):
     }
 
     return render(request, 'website/cabs_list.html', context)
+
+def airport_roundtrip(request):
+    # Retrieve query parameters from the URL
+    source = request.GET.get('source', '')
+    destination = request.GET.get('destination', '')
+    pickup_date = request.GET.get('pickup_date', '')
+    pickup_time = request.GET.get('pickup_time', '')
+    car_type = request.GET.get('car_type', '') 
+    ridetype = request.GET.get('ridetype', '')  
+
+    ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+
+    # Initialize an empty dictionary to hold pricing information
+    pricing_dict = {}
+
+    if ride_type_instance:
+        # Fetch all AC and non-AC pricing related to the 'airport' ride type
+        pricing_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='ac').select_related('category')
+        pricing_non_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='non_ac').select_related('category')
+
+        # Populate the dictionary with AC pricing
+        for price in pricing_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['ac'] = price
+
+        # Populate the dictionary with non-AC pricing
+        for price in pricing_non_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['non_ac'] = price
+
+    # Print pricing data for debugging
+    print("Filtered Pricing QuerySet:", pricing_dict)
+
+    context = {
+        'source': source,
+        'destination': destination,
+        'pickup_date': pickup_date,
+        'pickup_time': pickup_time,
+        'car_type': car_type,  # Pass car_type to the context
+        'pricing_dict': pricing_dict,
+        'ridetype':ridetype,
+    }
+
+    return render(request, 'website/airport_roundtrip.html', context)
 
 def localcabs_list(request):
     source = request.GET.get('source', '')
@@ -995,6 +1048,7 @@ class AirportGetRidePricingDetails(APIView):
         pickup_time = request.POST['pickup_time']
         time_slot = request.POST['time_slot']
         ridetype = request.POST['ridetype']
+        trip_type = request.POST['trip_type'] 
         toll_option = request.POST.get('toll_option')
         print("Backend received toll option: ", toll_option)  # Debugging
 
@@ -1023,7 +1077,7 @@ class AirportGetRidePricingDetails(APIView):
             return JsonResponse({'error': 'Invalid ridetype'}, status=400)
 
         # Fetch all pricing details filtered by the selected time slot and ridetype
-        pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance)
+        pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance,trip_type=trip_type)
 
         # Organize pricing data by category and car type
         pricing_dict = {}
@@ -1064,7 +1118,7 @@ class AirportGetRidePricingDetails(APIView):
             'beta': driver_beta_decimal,
             'category': price.category.category_name,
         }
-
+        
 class GetRidePricingDetails(APIView):
     def post(self, request):
         import googlemaps

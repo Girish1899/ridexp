@@ -26,6 +26,7 @@ urlpatterns = [
     path('search_url', search_url, name='search_url'),
     path('airportcabs_list', views.airportcabs_list, name='airportcabs_list'),
     path('airport_ride_pricing_details', AirportGetRidePricingDetails.as_view(), name='airport_ride_pricing_details'),
+    path('airport_roundtrip', views.airport_roundtrip, name='airport_roundtrip'),
     path('localcabs_list', views.localcabs_list, name='localcabs_list'),
     path('outstation_oneway', views.outstation_oneway, name='outstation_oneway'),
     path('outstation_roundtrip', views.outstation_roundtrip, name='outstation_roundtrip'),
