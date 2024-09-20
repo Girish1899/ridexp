@@ -39,7 +39,6 @@ class regcustomer(TemplateView):
         customer_name = request.POST['customer_name']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
-        password = request.POST['password']
         address = request.POST['address']
         status = request.POST['status']
 
@@ -48,7 +47,6 @@ class regcustomer(TemplateView):
             customer_name=customer_name,
             phone_number=phone_number,
             email=email,
-            password=password,
             address=address,
             status=status,
             company_format=next_company_format,  # Corrected here
@@ -71,28 +69,19 @@ class custlogin(TemplateView):
 
     def post(self, request):
         phone_number = request.POST.get('phone_number')
-        password = request.POST.get('password')
-
-        print("Received phone number:", phone_number) 
-        print("Received password:", password) 
 
         try:
             customer = Customer.objects.get(phone_number=phone_number)
-            print("Customer found:", customer)  
+            # Store customer ID in session after successful login
+            request.session['customer_id'] = customer.customer_id
 
-            if password == customer.password:
-                print("Password matched.")  # Debug: log password match
-                request.session['customer_id'] = customer.customer_id
-                redirect_url = reverse('cusaddbooking')
-                return JsonResponse({'success': True, 'redirect_url': redirect_url})
-            else:
-                print("Password mismatch.")
-                return JsonResponse({'success': False, 'message': 'Phone number or password does not match.'})
+            # Redirect to a customer-specific index page (e.g., customer dashboard)
+            redirect_url = reverse('cusaddbooking')  # Assuming 'cusindex' is the URL name for the dashboard
+            return JsonResponse({'success': True, 'redirect_url': redirect_url})
 
         except Customer.DoesNotExist:
-            print("Customer does not exist.")  
-            return JsonResponse({'success': False, 'message': 'Phone number or password does not match.'})
-        
+            return JsonResponse({'success': False, 'message': 'Phone number not found. Please register.'})
+
 def cuslogout_view(request):
     logout(request)
     request.session.flush()

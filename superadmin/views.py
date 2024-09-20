@@ -1764,7 +1764,7 @@ class addcustomer(TemplateView):
         customer_name = request.POST['customer_name']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
-        password = request.POST['password']
+        # password = request.POST['password']
         address = request.POST['address']
         status = request.POST['status']
         company_format = request.POST.get('company_format', '')
@@ -1772,7 +1772,7 @@ class addcustomer(TemplateView):
         cust = Customer(
             customer_name=customer_name,
             phone_number=phone_number,
-            password=password,
+            # password=password,
             email=email,
             address=address,
             status=status,
@@ -1846,7 +1846,7 @@ class UpdateCustomer(APIView):
         customer.phone_number = request.POST['phone_number']
         customer.address = request.POST['address']
         customer.email = request.POST['email']
-        customer.password = request.POST['password']
+        # customer.password = request.POST['password']
         customer.status = request.POST['status']
         customer.updated_by = request.user
         customer.save()
@@ -1859,7 +1859,7 @@ class UpdateCustomer(APIView):
             phone_number=customer.phone_number,
             address=customer.address,
             email=customer.email,
-            password=customer.password,
+            # password=customer.password,
             status=customer.status,
             created_on=customer.created_on,
             updated_on=customer.updated_on,

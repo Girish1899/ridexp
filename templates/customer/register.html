@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title> Register Customer - Luxury Taxi Services | Premium Cab Rides for Special Occasions | RidexpressTaxi Services </title>
     <!-- Favicon icon -->
-    <!-- <link rel="icon" type="image/png" sizes="16x16" href="{% static '/dashboard/images/favicon.png' %}"> -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static '/dashboard/images/favicon.png' %}">
     <link href="{% static '/dashboard/css/style.css' %}" rel="stylesheet">
 
     
@@ -36,27 +36,22 @@
                                     <h2 class="text-center mb-4">Create your account</h2>
 
                                         <div class="form-group row">
-                                            <label style="color: black;"><strong>Customer Name</strong></label>
+                                            <label><strong>Customer Name</strong></label>
                                             <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name">
                                         </div>
 
                                         <div class="form-group row">
-                                            <label style="color: black;"><strong>Phone Number</strong></label>
+                                            <label><strong>Phone Number</strong></label>
                                             <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number">
                                         </div>
 
                                         <div class="form-group row">
-                                            <label style="color: black;"><strong>Email</strong></label>                                            
+                                            <label><strong>Email</strong></label>                                            
                                             <input type="email" class="form-control form-control-lg" id="email" name="email">
                                         </div>
 
                                         <div class="form-group row">
-                                            <label style="color: black;"><strong>Password</strong></label>                                            
-                                            <input type="password" class="form-control form-control-lg" id="password" name="password">
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label style="color: black;"><strong>Address</strong></label>                                           
+                                            <label><strong>Address</strong></label>                                           
                                             <textarea class="form-control" rows="2" id="address" name="address"></textarea>                                           
                                         </div>
 
@@ -170,11 +165,10 @@
             var customer_name = $('#customer_name').val();
             var phone_number = $('#phone_number').val();
             var email = $('#email').val();
-            var password = $('#password').val();
             var address = $('#address').val();
             var status = 'active';
             
-            if (!customer_name || !phone_number || !email || !password ) {
+            if (!customer_name || !phone_number || !email   ) {
                 var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal_all'));
                 myModal.show();
                 return;
@@ -187,13 +181,6 @@
                 myModal.show();
                 return;
             }
-
-            // Validate password criteria
-            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                if (!passwordPattern.test(password)) {
-                    alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
-                    return;
-                }
 
             $.ajax({
                 url: '{% url "check_phonenumber" %}',
@@ -214,7 +201,6 @@
                                 customer_name: customer_name,
                                 phone_number: phone_number,
                                 email: email,
-                                password: password,
                                 address: address,
                                 status: status,
                                 // company_format: company_format,
