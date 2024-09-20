@@ -200,6 +200,7 @@
                                           
                                           <div id="Outstation" class="tabcontent">
                                             <form action="{% url 'search_url' %}" id="outstationForm">
+                                                <input type="hidden" name="ridetype" value="outstation">
                                                 <!-- Radio Buttons for Trip Type (Single Row) -->
                                                 <div class="row">
                                                     <div class="col-lg-12">
@@ -1634,22 +1635,33 @@ document.getElementById("defaultOpen").click();
     // });
 
     document.addEventListener('DOMContentLoaded', function() {
-        const oneWayRadio = document.getElementById('one_way');
-        const roundTripRadio = document.getElementById('round_trip');
-        const dropFields = document.querySelector('.drop-fields');
+    const oneWayRadio = document.getElementById('one_way');
+    const roundTripRadio = document.getElementById('round_trip');
+    const dropDate = document.getElementById('Outstation_drop_date');
+    const dropTime = document.getElementById('Outstation_drop_time');
+    const dropFields = document.querySelector('.drop-fields');
+    
+    // Function to toggle required attribute
+    function toggleDropFields() {
+        if (oneWayRadio.checked) {
+            dropFields.style.display = 'none';  // Hide drop fields
+            dropDate.removeAttribute('required');
+            dropTime.removeAttribute('required');
+        } else if (roundTripRadio.checked) {
+            dropFields.style.display = 'flex';  // Show drop fields
+            dropDate.setAttribute('required', 'required');
+            dropTime.setAttribute('required', 'required');
+        }
+    }
 
-        oneWayRadio.addEventListener('change', function() {
-            if (oneWayRadio.checked) {
-                dropFields.style.display = 'none';
-            }
-        });
+    // Initial state
+    toggleDropFields();
 
-        roundTripRadio.addEventListener('change', function() {
-            if (roundTripRadio.checked) {
-                dropFields.style.display = 'flex'; // 'flex' to ensure the fields display in a row
-            }
-        });
-    });
+    // Add event listeners for radio buttons
+    oneWayRadio.addEventListener('change', toggleDropFields);
+    roundTripRadio.addEventListener('change', toggleDropFields);
+});
+
 </script>
 
     {% endblock body_content %}

@@ -71,11 +71,11 @@
                                             <div class="col-sm-10">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way" {% if plist.0.trip_type == "one_way" %}checked{% endif %}>
-                                                    <label class="form-check-label" for="one_way">One Way</label>
+                                                    <label class="form-check-label" for="one_way" style="color: black;">One Way</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="trip_type" id="round_trip" value="round_trip" {% if plist.0.trip_type == "round_trip" %}checked{% endif %}>
-                                                    <label class="form-check-label" for="round_trip">Round Trip</label>
+                                                    <label class="form-check-label" for="round_trip" style="color: black;">Round Trip</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -139,65 +139,78 @@
 
 <script>
     $(document).ready(function () {
-        $('#trip_type_section').hide();
+    // Function to check if ride type is "Outstation" and show trip_type section
+    function checkRideType() {
+        var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
+        if (selectedRideType.includes('outstation')) {
+            $('#trip_type_section').show();
+        } else {
+            $('#trip_type_section').hide();
+        }
+    }
 
-        $('#ridetype').change(function () {
-            var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
-            if (selectedRideType.includes('outstation')) {
-                $('#trip_type_section').show();
-            } else {
-                $('#trip_type_section').hide();
-            }
-        });
+    // On page load, check if the ride type is "Outstation" and display trip_type section
+    checkRideType();
 
-        $("#save_action").click(function () {
-            event.preventDefault();
-
-            category = document.getElementById('category').value;
-            ridetype = document.getElementById('ridetype').value;
-            slots = document.getElementById('slots').value;
-            driver_beta = document.getElementById('driver_beta').value;
-            toll_price = document.getElementById('toll_price').value;
-            car_type = document.getElementById('car_type').value;
-            trip_type = $('input[name="trip_type"]:checked').val(); // Get selected trip type value
-            permit = document.getElementById('permit').value;
-            price_per_km = document.getElementById('price_per_km').value;
-            // price_per_km = parseFloat(document.getElementById('price_per_km').value).toFixed(2);
-            pricing_id = document.getElementById('pricing_id').value;
-            console.log("ridetype:", ridetype);
-
-            if (!category || !ridetype || !price_per_km || !slots ) {
-                alert("All fields are required.");
-                return;
-            }
-            if (confirm("Are you sure you want to save this pricing?")) {
-                $.ajax({
-                    url: "{% url 'UpdatePricing' %}",
-                    type: "POST",
-                    data: { 'pricing_id':pricing_id,'category': category, 'ridetype': ridetype, 'slots' : slots, 'driver_beta': driver_beta, 'toll_price': toll_price, 'car_type': car_type, 'permit': permit, 'price_per_km':price_per_km, 'trip_type':trip_type},
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    success: function (result) {
-                        console.log("result val: ", result);
-                        if (result['success']) {
-                            alert("pricing details edited successfully");
-                            window.location.href = "{% url 'pricinglist' %}";
-                        } else {
-                            alert("Failed to edit pricing details: " + result['message']);
-                        }
-                    },
-                    error: function (xhr, status, error) {
-                        console.log('AJAX error:', error);
-                    }
-                });
-
-            }
-
-        });
-
+    // When ridetype is changed, check again
+    $('#ridetype').change(function () {
+        checkRideType();
     });
 
+    // On form submission
+    $("#save_action").click(function (event) {
+        event.preventDefault();
+
+        var category = $('#category').val();
+        var ridetype = $('#ridetype').val();
+        var slots = $('#slots').val();
+        var driver_beta = $('#driver_beta').val();
+        var toll_price = $('#toll_price').val();
+        var car_type = $('#car_type').val();
+        var trip_type = $('input[name="trip_type"]:checked').val(); // Get selected trip type value
+        var permit = $('#permit').val();
+        var price_per_km = $('#price_per_km').val();
+        var pricing_id = $('#pricing_id').val();
+
+        if (!category || !ridetype || !price_per_km || !slots) {
+            alert("All fields are required.");
+            return;
+        }
+
+        if (confirm("Are you sure you want to save this pricing?")) {
+            $.ajax({
+                url: "{% url 'UpdatePricing' %}",
+                type: "POST",
+                data: {
+                    'pricing_id': pricing_id,
+                    'category': category,
+                    'ridetype': ridetype,
+                    'slots': slots,
+                    'driver_beta': driver_beta,
+                    'toll_price': toll_price,
+                    'car_type': car_type,
+                    'permit': permit,
+                    'price_per_km': price_per_km,
+                    'trip_type': trip_type
+                },
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                success: function (result) {
+                    if (result['success']) {
+                        alert("Pricing details edited successfully");
+                        window.location.href = "{% url 'pricinglist' %}";
+                    } else {
+                        alert("Failed to edit pricing details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+});
 
 </script>
 
