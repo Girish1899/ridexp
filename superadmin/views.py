@@ -2539,26 +2539,12 @@ def fetch_customer_details(request):
     return JsonResponse({'success': False, 'message': 'Invalid request'})
 
 
+
 class AddRidee(TemplateView):
-    template_name = "add_ride.html"
+    template_name = "website/main.html"
     
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-
-        context['customerlist'] = Customer.objects.all()
-        context['ridetypelist'] = Ridetype.objects.all()
-        context['catlist'] = Category.objects.all()
-        context['blist'] = Brand.objects.all()
-        context['modellist'] = Model.objects.all()
-        
-        last_ride = RideDetails.objects.all().order_by('-ride_id').first()
-        if last_ride:
-            last_company_format = int(last_ride.company_format.replace('RID', ''))
-            next_company_format = f'RID{last_company_format + 1:02}'
-        else:
-            next_company_format = 'RID01'
-        context['next_company_format'] = next_company_format
-        
+        context = super().get_context_data(**kwargs)        
         return context
     
     def post(self, request):
