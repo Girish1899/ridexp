@@ -7,9 +7,9 @@ from website.views import *
 urlpatterns = [
     path('', views.home, name='home'),
     path('about', views.about, name='about'),
+    path('save-enquiry/', save_enquiry, name='save_enquiry'),
     path('bookride', views.bookride, name='bookride'),
     path('contact', AddContact.as_view(), name='contact'),
-    path('contactlist', ContactList.as_view(), name='contactlist'),    
     path('taxi_services', views.services, name='services'),
     path('airport_taxi', views.airporttaxi, name='airporttaxi'),
     path('outstationcabs', views.outstationcabs, name='outstationcabs'),

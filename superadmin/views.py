@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -1583,6 +1583,7 @@ class UserList(ListView):
     model = Profile
     template_name = "superadmin/view_user.html"
 
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UserEmpList(ListView):
     model = Profile
@@ -1699,7 +1700,12 @@ def check_useremail(request):
     data = {
         'exists': em.count() > 0
     }
-    return JsonResponse(data)        
+    return JsonResponse(data)   
+
+# contact ###############################
+class ContactList(ListView):
+    model = ContactUs
+    template_name = "superadmin/view_contact.html"     
 
 
 # customer###################################
@@ -1736,6 +1742,7 @@ def update_status(request):
                 phone_number=customer.phone_number,
                 address=customer.address,
                 email=customer.email,
+                password=customer.password,
                 status=customer.status,
                 block_reason=customer.block_reason,
                 created_on=customer.created_on,
@@ -1769,7 +1776,7 @@ class addcustomer(TemplateView):
         customer_name = request.POST['customer_name']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
-        # password = request.POST['password']
+        password = request.POST['password']
         address = request.POST['address']
         status = request.POST['status']
         company_format = request.POST.get('company_format', '')
@@ -1777,7 +1784,7 @@ class addcustomer(TemplateView):
         cust = Customer(
             customer_name=customer_name,
             phone_number=phone_number,
-            # password=password,
+            password=password,
             email=email,
             address=address,
             status=status,
@@ -1851,7 +1858,7 @@ class UpdateCustomer(APIView):
         customer.phone_number = request.POST['phone_number']
         customer.address = request.POST['address']
         customer.email = request.POST['email']
-        # customer.password = request.POST['password']
+        customer.password = request.POST['password']
         customer.status = request.POST['status']
         customer.updated_by = request.user
         customer.save()
@@ -1864,7 +1871,7 @@ class UpdateCustomer(APIView):
             phone_number=customer.phone_number,
             address=customer.address,
             email=customer.email,
-            # password=customer.password,
+            password=customer.password,
             status=customer.status,
             created_on=customer.created_on,
             updated_on=customer.updated_on,

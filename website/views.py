@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Color, CommissionType, ContactUs, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -139,6 +139,27 @@ def taxi_companies(request):
 
 def about(request):
     return render(request, 'website/about.html')
+
+@csrf_exempt 
+def save_enquiry(request):
+    print("Received request:", request.method)  # Log the request method
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        print("Name:", name, "Email:", email, "Message:", message)  # Log the input values
+
+        if not name or not email or not message:
+            return JsonResponse({'error': 'All fields are required.'}, status=400)
+        try:
+            enquiry = Enquiry.objects.create(name=name, email=email, message=message)
+            return JsonResponse({'success': 'Enquiry saved successfully!'})
+        except Exception as e:
+            print("Error saving enquiry:", e)  # Log the error
+            return JsonResponse({'error': 'Failed to save enquiry.'}, status=500)
+    
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
 
 
 
@@ -518,6 +539,7 @@ def get_customer_details(request):
             'customer_name': customer.customer_name,
             'email': customer.email,
             'address': customer.address,
+            'password': customer.password,
         }
         return JsonResponse(data)
     except Customer.DoesNotExist:
@@ -579,9 +601,6 @@ class AddContact(TemplateView):
         cu.save()
         return JsonResponse({'status':"Success"})
 
-class ContactList(ListView):
-    model = ContactUs
-    template_name = "superadmin/view_contact.html"
 
 def services(request):
     return render(request, 'website/service.html')
@@ -720,6 +739,7 @@ class AddNewBooking(APIView):
             address = request.POST['address']
             customer_name = request.POST['customer_name']
             customer_email = request.POST['email']
+            password = request.POST['password']
             customer_notes = request.POST['customer_notes']
             total_fare=request.POST['total_fare']
             # drop_date=request.POST['drop_date']
@@ -787,7 +807,8 @@ class AddNewBooking(APIView):
                         phone_number=customer_phone_number,
                         email=customer_email,
                         address=address,
-                        status="Active",
+                        password=password,
+                        status="active",
                         company_format=next_company_format,
                         created_by=request.user,
                         updated_by=request.user)
