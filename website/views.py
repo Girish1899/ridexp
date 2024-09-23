@@ -144,24 +144,20 @@ def about(request):
 def save_enquiry(request):
     print("Received request:", request.method)  # Log the request method
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
+        cust_name = request.POST.get('cust_name')
+        cust_phone_number = request.POST.get('cust_phone_number')
+        cust_email = request.POST.get('cust_email')
+        service = request.POST.get('service')
+        cust_message = request.POST.get('cust_message')
 
-        print("Name:", name, "Email:", email, "Message:", message)  # Log the input values
-
-        if not name or not email or not message:
-            return JsonResponse({'error': 'All fields are required.'}, status=400)
         try:
-            enquiry = Enquiry.objects.create(name=name, email=email, message=message)
+            enquiry = Enquiry.objects.create(cust_name=cust_name, cust_phone_number=cust_phone_number, cust_email=cust_email, service=service, cust_message=cust_message)
             return JsonResponse({'success': 'Enquiry saved successfully!'})
         except Exception as e:
             print("Error saving enquiry:", e)  # Log the error
             return JsonResponse({'error': 'Failed to save enquiry.'}, status=500)
     
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
-
-
 
 
 # def cabs_list(request):

@@ -1,0 +1,63 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Customer Enquiry</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Serial No</th>
+                                    <th>Customer Name</th>
+                                    <th>Number</th>
+                                    <th>Email</th>
+                                    <th>Service</th>
+                                    <th>Message</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.cust_name }}</td>
+                                    <td>{{ i.cust_phone_number }}</td>
+                                    <td>{{ i.cust_email }}</td>
+                                    <td>{{ i.service }}</td>
+                                    <td>{{ i.cust_message }}</td>
+                                    
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+{% endblock content%}
+

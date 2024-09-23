@@ -151,7 +151,10 @@ urlpatterns = [
     path('vehicleupdate_status/',vehicleupdate_status,name='vehicleupdate_status'),
 
 #contact #########################
-    path('contactlist', ContactList.as_view(), name='contactlist'),    
+    path('contactlist', ContactList.as_view(), name='contactlist'),
+
+#  enquiry ################################
+    path('enquirylist', EnquiryList.as_view(), name='enquirylist'),    
 
     # ride details ###########################
 

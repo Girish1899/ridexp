@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -1705,8 +1705,13 @@ def check_useremail(request):
 # contact ###############################
 class ContactList(ListView):
     model = ContactUs
-    template_name = "superadmin/view_contact.html"     
+    template_name = "superadmin/view_contact.html"   
 
+
+# enquiry ###############################
+class EnquiryList(ListView):
+    model = Enquiry
+    template_name = "superadmin/view_enquiry.html"       
 
 # customer###################################
 

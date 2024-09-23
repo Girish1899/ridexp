@@ -779,6 +779,40 @@ class ContactUs(models.Model):
 
 class Enquiry(models.Model):
     enquiry_id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=100)
-    email = models.EmailField()
-    message = models.TextField()
+    cust_name = models.CharField(max_length=100)
+    cust_phone_number = models.CharField(max_length=15)
+    cust_email = models.EmailField()
+    service = models.TextField()
+    cust_message = models.TextField()
+
+
+
+class Package(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    package_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    duration = models.CharField(max_length=255)
+    features = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=20, choices=Driver.STATUS_CHOICES)
+
+class PackageOrder(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    order_id = models.AutoField(primary_key=True)
+    customer = models.ForeignKey('Customer', on_delete=models.CASCADE) 
+    package = models.ForeignKey(Package, on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=Driver.STATUS_CHOICES)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=50) 
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)

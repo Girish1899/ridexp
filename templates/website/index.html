@@ -1,210 +1,310 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
-    <!-- meta tags -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="canonical" href="https://www.ridexpress.in/">
-
-
-    
-
-    <!-- Meta Tags for Cab Business -->
-    {% block title %}{% endblock %}
-{% block meta_description %}{% endblock %}
-{% block meta_keywords %}{% endblock %}
-
-<!-- Open Graph Meta Tags for Social Sharing -->
-
-<meta property="og:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services" />
-<meta property="og:description" content="RidexpressTaxi Services offers 24/7 local, outstation, and airport taxi services with professional drivers and affordable rates. Book your ride today for a comfortable and safe journey!" />
-<meta property="og:image" content="https://ridexpress.in/static/img/logo/ridexpress.png" />
-<meta property="og:url" content="ridexpress.in" />
-<meta property="og:type" content="website" />
-
-<!-- Twitter Card Meta Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services">
-<meta name="twitter:description" content="Book local, outstation, and airport taxis with RidexpressTaxi Services. 24/7 availability, affordable fares, and professional drivers for stress-free travel.">
-<meta name="twitter:image" content="">
-<meta name="twitter:url" content="ridexpress.in">
-
-
-
-    <!-- title -->
-    
-
-    <!-- favicon -->
-    <link rel="icon" type="image/x-icon" href="{% static '/img/logo/favicon.png' %}">
-
-    <!-- css -->
-    <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/all-fontawesome.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/animate.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/magnific-popup.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/jquery-ui.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/jquery.timepicker.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/nice-select.min.css' %}">
-    <link rel="stylesheet" href="{% static '/css/style.css' %}">
-    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> -->
-
-    <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
-    <style>
-        .blog-title a
-        {
-            text-decoration: none;
-        }
-
-        /* Styling for the floating WhatsApp icon */
-/* Styling for the floating WhatsApp icon */
-.whatsapp-float {
-  position: fixed;
-  bottom: 80px; /* This keeps the WhatsApp icon above the Scroll to Top button */
-  right: 20px;
-  width: 60px;
-  height: 60px;
-  z-index: 100;
-}
-
-.whatsapp-float img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  border-radius: 50%;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
-}
-
-.whatsapp-float img:hover {
-  transform: scale(1.1);
-}
-
-/* Styling for the Scroll to Top button */
-#scroll-top {
-  position: fixed;
-  bottom: 20px; /* This places the Scroll to Top button below the WhatsApp icon */
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  z-index: 100;
-  /* background-color: #caa770; */
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
-}
-
-#scroll-top:hover {
-  transform: scale(1.1);
-}
-
-
-/*  Enquiry  */
-.enquiry-float {
-  position: fixed;
-  bottom: 150px; /* Position above the WhatsApp button */
-  right: 26px;
-  width: 53px;
-  height: 53px;
-  z-index: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #fff;
-  border-radius: 50%;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  transition: transform 0.3s ease;
-}
-
-.enquiry-float i {
-  font-size: 30px;
-  color: #007bff;
-}
-
-.enquiry-float:hover {
-  transform: scale(1.1);
-}
-
-/* Modal styling */
-.modal {
-  display: none; /* Hidden by default */
-  position: fixed;
-  z-index: 200; /* Above everything else */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
-  justify-content: center;
-  align-items: center;
-}
-
-.modal-content {
-  background-color: #fff;
-  margin: auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 300px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
-  position: relative;
-}
-
-.modal-content h2 {
-  margin-top: 0;
-}
-
-.modal-content label {
-  display: block;
-  margin: 10px 0 5px;
-}
-
-.modal-content input, 
-.modal-content textarea {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.modal-content button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.modal-content button:hover {
-  background-color: #0056b3;
-}
-
-/* Close button */
-.close {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.close:hover {
-  color: red;
-}
+  <!-- meta tags -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://www.ridexpress.in/">
 
 
 
 
+  <!-- Meta Tags for Cab Business -->
+  {% block title %}{% endblock %}
+  {% block meta_description %}{% endblock %}
+  {% block meta_keywords %}{% endblock %}
 
-    </style>
+  <!-- Open Graph Meta Tags for Social Sharing -->
 
-<script type="application/ld+json">
+  <meta property="og:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services" />
+  <meta property="og:description"
+    content="RidexpressTaxi Services offers 24/7 local, outstation, and airport taxi services with professional drivers and affordable rates. Book your ride today for a comfortable and safe journey!" />
+  <meta property="og:image" content="https://ridexpress.in/static/img/logo/ridexpress.png" />
+  <meta property="og:url" content="ridexpress.in" />
+  <meta property="og:type" content="website" />
+
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services">
+  <meta name="twitter:description"
+    content="Book local, outstation, and airport taxis with RidexpressTaxi Services. 24/7 availability, affordable fares, and professional drivers for stress-free travel.">
+  <meta name="twitter:image" content="">
+  <meta name="twitter:url" content="ridexpress.in">
+
+
+
+  <!-- title -->
+
+
+  <!-- favicon -->
+  <link rel="icon" type="image/x-icon" href="{% static '/img/logo/favicon.png' %}">
+
+  <!-- css -->
+  <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/all-fontawesome.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/animate.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/magnific-popup.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/owl.carousel.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/jquery-ui.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/jquery.timepicker.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/nice-select.min.css' %}">
+  <link rel="stylesheet" href="{% static '/css/style.css' %}">
+  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> -->
+
+  <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
+  <style>
+    .blog-title a {
+      text-decoration: none;
+    }
+
+    /* Styling for the floating WhatsApp icon */
+    /* Styling for the floating WhatsApp icon */
+    .whatsapp-float {
+      position: fixed;
+      bottom: 80px;
+      /* This keeps the WhatsApp icon above the Scroll to Top button */
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      z-index: 100;
+    }
+
+    .whatsapp-float img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-float img:hover {
+      transform: scale(1.1);
+    }
+
+    /* Styling for the Scroll to Top button */
+    #scroll-top {
+      position: fixed;
+      bottom: 20px;
+      /* This places the Scroll to Top button below the WhatsApp icon */
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      z-index: 100;
+      /* background-color: #caa770; */
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #scroll-top:hover {
+      transform: scale(1.1);
+    }
+
+
+    /*  Enquiry  */
+    .enquiry-float {
+      position: fixed;
+      bottom: 150px;
+      /* Position above the WhatsApp button */
+      right: 26px;
+      width: 53px;
+      height: 53px;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
+      border-radius: 50%;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .enquiry-float i {
+      font-size: 30px;
+      color: #007bff;
+    }
+
+    .enquiry-float:hover {
+      transform: scale(1.1);
+    }
+
+    /* Modal styling */
+    /* Modal styling */
+    .modal {
+      display: none;
+      /* Hidden by default */
+      position: fixed;
+      z-index: 200;
+      /* Above everything else */
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      /* Darker background for better contrast */
+      justify-content: center;
+      align-items: flex-start;
+      /* Align items to the top */
+      transition: opacity 0.3s ease;
+      /* Fade-in effect for modal */
+      padding-top: 60px;
+      /* Space for navbar */
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+      /* Subtle gradient */
+      margin: auto;
+      padding: 30px;
+      /* Increased padding for a spacious look */
+      border-radius: 15px;
+      /* More rounded corners */
+      width: 400px;
+      /* Default width */
+      max-width: 90%;
+      /* Max width for responsiveness */
+      max-height: calc(90vh - 60px);
+      /* Adjust for navbar height */
+      overflow-y: auto;
+      /* Adds scroll if content exceeds max height */
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      /* Softer shadow */
+      position: relative;
+      animation: slideIn 0.5s;
+      /* Slide-in animation */
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+        /* Slide from above */
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+        /* Final position */
+      }
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #333;
+      /* Darker title color */
+      font-family: 'Arial', sans-serif;
+      /* Use a clean font */
+      font-size: 24px;
+      /* Larger font size for title */
+      text-align: center;
+      /* Center title */
+    }
+
+    .modal-content label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      /* Bold labels */
+      color: #555;
+      /* Darker label color */
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 12px;
+      /* Increased padding */
+      margin-bottom: 15px;
+      /* More space between inputs */
+      border: 1px solid #ccc;
+      /* Lighter border */
+      border-radius: 8px;
+      /* More rounded input fields */
+      font-size: 16px;
+      /* Larger font size */
+      transition: border 0.3s, box-shadow 0.3s;
+      /* Smooth border transition */
+    }
+
+    .modal-content input:focus,
+    .modal-content textarea:focus {
+      border-color: #007bff;
+      /* Blue border on focus */
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      /* Light blue shadow on focus */
+      outline: none;
+      /* Remove default outline */
+    }
+
+    .modal-content button {
+      background-color: #007bff;
+      color: #fff;
+      padding: 12px;
+      /* Increased padding for buttons */
+      border: none;
+      border-radius: 8px;
+      /* More rounded button */
+      cursor: pointer;
+      font-size: 18px;
+      /* Larger button text */
+      transition: background-color 0.3s, transform 0.2s;
+      /* Smooth transitions */
+    }
+
+    .modal-content button:hover {
+      background-color: #0056b3;
+      /* Darker blue on hover */
+      transform: scale(1.05);
+      /* Slightly enlarge button on hover */
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 20px;
+      /* Larger close button */
+      cursor: pointer;
+      color: #aaa;
+      /* Lighter close button color */
+      transition: color 0.3s;
+      /* Smooth color transition */
+    }
+
+    .close:hover {
+      color: red;
+      /* Change color on hover */
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 600px) {
+      .modal-content {
+        width: 90%;
+        /* Full width on small screens */
+        padding: 20px;
+        /* Reduced padding */
+      }
+
+      .modal-content h2 {
+        font-size: 20px;
+        /* Smaller title on mobile */
+      }
+
+      .modal-content button {
+        font-size: 16px;
+        /* Smaller button text on mobile */
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
@@ -224,303 +324,337 @@
       "openingHours": "Mo-Su 00:00-23:59"
     }
     </script>
-    
+
 
 </head>
 {% block body %}
+
 <body>
 
-    <!-- preloader -->
-    <div class="preloader">
-        <div class="loader-ripple">
-            <div></div>
-            <div></div>
-        </div>
+  <!-- preloader -->
+  <div class="preloader">
+    <div class="loader-ripple">
+      <div></div>
+      <div></div>
     </div>
-    <!-- preloader end -->
+  </div>
+  <!-- preloader end -->
 
 
-    <!-- header area -->
-    {% include "./header.html" %}
-    <!-- header area end -->
+  <!-- header area -->
+  {% include "./header.html" %}
+  <!-- header area end -->
 
-{% block body_content %}
+  {% block body_content %}
 
-    {% endblock body_content %}
-    
-    <!-- footer area -->
-    {% include "./footer.html" %}
-    <!-- footer area end -->
+  {% endblock body_content %}
 
-
-
-    <!-- scroll-top -->
-    <a href="https://wa.me/6366463555?text=Hello,%20I%20would%20like%20to%20book%20a%20taxi.%20Could%20you%20please%20help%20me%20with%20the%20details?" class="whatsapp-float" target="_blank">
+  <!-- footer area -->
+  {% include "./footer.html" %}
+  <!-- footer area end -->
 
 
-        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
 
-      </a>
-    <br>
+  <!-- scroll-top -->
+  <a href="https://wa.me/6366463555?text=Hello,%20I%20would%20like%20to%20book%20a%20taxi.%20Could%20you%20please%20help%20me%20with%20the%20details?"
+    class="whatsapp-float" target="_blank">
 
-    <!-- enquiry btn -->
 
-    <a href="#" class="enquiry-float" id="enquiry-btn">
-        <i class="fas fa-question-circle"></i>
-    </a>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
 
-    <div id="enquiryModal" class="modal">
-        <div class="modal-content">
-          <span class="close">&times;</span>
-          <h2>Enquiry Form</h2>
-          
-          <label for="name">Name:</label>
-          <input type="text" id="name" name="name" required>
-          <br>
-          
-          <label for="email">Email:</label>
-          <input type="email" id="email" name="email" required>
-          <br>
-          
-          <label for="message">Message:</label>
-          <textarea id="message" name="message" required></textarea>
-          <br>
-          
-          <button type="submit" id="save_btn">Submit</button>
+  </a>
+  <br>
+
+  <!-- enquiry btn -->
+
+  <a href="#" class="enquiry-float" id="enquiry-btn">
+    <i class="fas fa-question-circle"></i>
+  </a>
+
+  <div id="enquiryModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Enquiry Form</h2><br>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Your Name" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="email" class="form-control" id="cust_phone_number" name="cust_phone_number"
+              placeholder=" Phone Number" required>
+          </div>
         </div>
       </div>
 
-    <br>
-    <!--  -->
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="cust_email" name="cust_email" placeholder="Your Email" required>
+          </div>
+        </div>
 
-    <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
-    
-    <!-- scroll-top end -->
+        <div class="col-md-6">
+          <div class="form-group">
+            <select class="form-control" id="service" name="service">
+              <option value="Airport Transfer">Airport Transfer</option>
+              <option value="Local Transfer">Local Transfer</option>
+              <option value="Outstation">Outstation Transfer</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div><br>
 
-    {% endblock body %}
+      <div class="form-group">
+        <textarea name="message" cols="30" rows="2" class="form-control" placeholder="Write Your Message"
+          id="cust_message" name="cust_message"></textarea>
+      </div>
+      <button type="submit" class="theme-btn" id="save_btn">Submit
+        <i class="far fa-paper-plane"></i></button>
 
-    <!-- js -->
-   
-    <script src="{% static '/js/modernizr.min.js' %}"></script>
-    <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static '/js/imagesloaded.pkgd.min.js' %}"></script>
-    <script src="{% static '/js/jquery.magnific-popup.min.js' %}"></script>
-    <script src="{% static '/js/isotope.pkgd.min.js' %}"></script>
-    <script src="{% static '/js/jquery.appear.min.js' %}"></script>
-    <script src="{% static '/js/jquery.easing.min.js' %}"></script>
-    <script src="{% static '/js/owl.carousel.min.js' %}"></script>
-    <script src="{% static '/js/counter-up.js' %}"></script>
-    <script src="{% static '/js/jquery-ui.min.js' %}"></script>
-    <script src="{% static '/js/jquery.timepicker.min.js' %}"></script>
-    <script src="{% static '/js/jquery.nice-select.min.js' %}"></script>
-    <script src="{% static '/js/wow.min.js' %}"></script>
-    <script src="{% static '/js/main.js' %}"></script>
-    <script>
+    </div>
+  </div>
 
-          // Get the modal
+  <br>
+  <!--  -->
+
+  <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
+
+  <!-- scroll-top end -->
+
+  {% endblock body %}
+
+  <!-- js -->
+
+  <script src="{% static '/js/modernizr.min.js' %}"></script>
+  <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
+  <script src="{% static '/js/imagesloaded.pkgd.min.js' %}"></script>
+  <script src="{% static '/js/jquery.magnific-popup.min.js' %}"></script>
+  <script src="{% static '/js/isotope.pkgd.min.js' %}"></script>
+  <script src="{% static '/js/jquery.appear.min.js' %}"></script>
+  <script src="{% static '/js/jquery.easing.min.js' %}"></script>
+  <script src="{% static '/js/owl.carousel.min.js' %}"></script>
+  <script src="{% static '/js/counter-up.js' %}"></script>
+  <script src="{% static '/js/jquery-ui.min.js' %}"></script>
+  <script src="{% static '/js/jquery.timepicker.min.js' %}"></script>
+  <script src="{% static '/js/jquery.nice-select.min.js' %}"></script>
+  <script src="{% static '/js/wow.min.js' %}"></script>
+  <script src="{% static '/js/main.js' %}"></script>
+  <script>
+
+    // Get the modal
     var modal = document.getElementById('myModal');
 
-// Function to open the modal and load Google Form
-function openModal() {
-    var googleFormUrl = 'https://forms.gle/EUGWHRSqYExnpyzH6';
-    document.getElementById('googleFormFrame').src = googleFormUrl;
-    modal.style.display = "block";
-}
-
-// Function to close the modal
-function closeModal() {
-    modal.style.display = "none";
-}
-
-// Close the modal if user clicks outside of it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        closeModal();
+    // Function to open the modal and load Google Form
+    function openModal() {
+      var googleFormUrl = 'https://forms.gle/EUGWHRSqYExnpyzH6';
+      document.getElementById('googleFormFrame').src = googleFormUrl;
+      modal.style.display = "block";
     }
-};
+
+    // Function to close the modal
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    // Close the modal if user clicks outside of it
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    };
 
 
 
-// function openForm() {
-//     document.getElementById('googleFormFrame').src = 'https://forms.gle/EUGWHRSqYExnpyzH6';
-//     document.getElementById('googleFormFrame').style.display = 'block';
-// }
-        function initAutocomplete() {
-          const inputs = document.querySelectorAll('.autocomeple_g');
-    
-    
-          inputs.forEach(input => {
-          const autocomplete = new google.maps.places.Autocomplete(input);
-    
-          autocomplete.addListener('place_changed', function() {
-            const place = autocomplete.getPlace();
-            if (!place.geometry) {
-              window.alert("No details available for input: '" + place.name + "'");
-              return;
-            }
-            console.log('Place details for', input.id, ':', place);
-            });
-            });
-        }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const script = document.createElement('script');
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
+    // function openForm() {
+    //     document.getElementById('googleFormFrame').src = 'https://forms.gle/EUGWHRSqYExnpyzH6';
+    //     document.getElementById('googleFormFrame').style.display = 'block';
+    // }
+    function initAutocomplete() {
+      const inputs = document.querySelectorAll('.autocomeple_g');
+
+
+      inputs.forEach(input => {
+        const autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function () {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) {
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+          console.log('Place details for', input.id, ':', place);
         });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    });
 
 
 
-      // Initialize datepicker
+    // Initialize datepicker
     $('.date-picker').datepicker({
-        format: 'mm/dd/yyyy',
-        autoclose: true,
-        todayHighlight: true,
-        startDate: new Date() // Set start date to today
+      format: 'mm/dd/yyyy',
+      autoclose: true,
+      todayHighlight: true,
+      startDate: new Date() // Set start date to today
     });
 
     // Datepicker change event listener
-    $('.date-picker').change(function() {
-        var selectedDate = new Date($(this).val());
-        var today = new Date();
+    $('.date-picker').change(function () {
+      var selectedDate = new Date($(this).val());
+      var today = new Date();
 
-        today.setHours(0, 0, 0, 0);
-        
-        if (selectedDate < today) {
-            $(this).val(''); // Clear invalid date
-            $(this).addClass('is-invalid');
-            $('#dateError').text('Please select a future date.');
-        } else {
-            $(this).removeClass('is-invalid');
-            $(this).addClass('is-valid');
-            $('#dateError').text('');
-        }
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        $(this).val(''); // Clear invalid date
+        $(this).addClass('is-invalid');
+        $('#dateError').text('Please select a future date.');
+      } else {
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#dateError').text('');
+      }
     });
 
     // Timepicker validation event listener
-    $('.pickup-time').change(function() {
-        var selectedDate = new Date($('.date-picker').val());
-        var today = new Date();
-        var selectedTime = $(this).val();
+    $('.pickup-time').change(function () {
+      var selectedDate = new Date($('.date-picker').val());
+      var today = new Date();
+      var selectedTime = $(this).val();
 
-        today.setHours(0, 0, 0, 0);
-        
-        if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
-            var now = new Date();
-            var selectedHours = parseInt(selectedTime.split(':')[0]);
-            var selectedMinutes = parseInt(selectedTime.split(':')[1]);
-            var currentHours = now.getHours();
-            var currentMinutes = now.getMinutes();
-            var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
+      today.setHours(0, 0, 0, 0);
 
-            // Check if the selected time is earlier than the current time
+      if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+        var now = new Date();
+        var selectedHours = parseInt(selectedTime.split(':')[0]);
+        var selectedMinutes = parseInt(selectedTime.split(':')[1]);
+        var currentHours = now.getHours();
+        var currentMinutes = now.getMinutes();
+        var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
+
+        // Check if the selected time is earlier than the current time
         if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
-            $(this).val(''); // Clear invalid time
-            $(this).addClass('is-invalid');
-            $('#timeError').text('Please select a current or future time.');
+          $(this).val(''); // Clear invalid time
+          $(this).addClass('is-invalid');
+          $('#timeError').text('Please select a current or future time.');
         } else {
-            $(this).removeClass('is-invalid');
-            $(this).addClass('is-valid');
-            $('#timeError').text('');
+          $(this).removeClass('is-invalid');
+          $(this).addClass('is-valid');
+          $('#timeError').text('');
         }
-    } else {
+      } else {
         // If the date is in the future, any time is valid
         $(this).removeClass('is-invalid');
         $(this).addClass('is-valid');
         $('#timeError').text('');
+      }
+    });
+
+  </script>
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-DSN21LMHNV"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-DSN21LMHNV');
+  </script>
+
+
+  <!-- enquiry  -->
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var modal = document.getElementById("enquiryModal");
+
+    var btn = document.getElementById("enquiry-btn");
+
+    var closeBtn = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function () {
+      modal.style.display = "flex";
     }
-});
- 
-</script>
 
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-DSN21LMHNV"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    }
 
-  gtag('config', 'G-DSN21LMHNV');
-</script>
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
 
-
-<!-- enquiry  -->
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-var modal = document.getElementById("enquiryModal");
-
-var btn = document.getElementById("enquiry-btn");
-
-var closeBtn = document.getElementsByClassName("close")[0];
-
-btn.onclick = function() {
-  modal.style.display = "flex";
-}
-
-closeBtn.onclick = function() {
-  modal.style.display = "none";
-}
-
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
-}
-
-$(document).ready(function () {
-    console.log("Document is ready.");
-    $("#save_btn").click(function () {
+    $(document).ready(function () {
+      console.log("Document is ready.");
+      $("#save_btn").click(function () {
         console.log("Submit button clicked.");
-        var name = $('#name').val();
-        var email = $('#email').val();
-        var message = $('#message').val();
-        
-        if (!name || !email || !message) {
-            alert("All fields are required.");
-            return;
-        }
+        var cust_name = $('#cust_name').val();
+        var cust_phone_number = $('#cust_phone_number').val();
+        var cust_email = $('#cust_email').val();
+        var service = $('#service').val();
+        var cust_message = $('#cust_message').val();
 
-        console.log("name :", name);
-        console.log("email :", email);
-        console.log("message :", message); 
+
+
+        console.log("name :", cust_name);
+        console.log("phone :", cust_phone_number);
+        console.log("email :", cust_email);
+        console.log("subject :", service);
+        console.log("message :", cust_message);
 
         $.ajax({
-            url: '/save-enquiry/',
-            type: "POST",
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            data: { 
-                name: name, 
-                email: email, 
-                message: message 
-            },
-            success: function (result) {
-                console.log("Success response:", result);
-                if (result.success) {
-                    alert(result.success);
-                    $('#name').val('');
-                    $('#email').val('');
-                    $('#message').val('');
-                    modal.style.display = "none";
-                } else {
-                    alert(result.error);
-                }
-            },
-            error: function (xhr, status, error) {
-                console.error("Error: ", xhr.responseText);
-                alert("There was an error submitting your enquiry.");
+          url: '/save-enquiry/',
+          type: "POST",
+          headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+          },
+          data: {
+            cust_name: cust_name,
+            cust_phone_number: cust_phone_number,
+            cust_email: cust_email,
+            service: service,
+            cust_message: cust_message
+          },
+          success: function (result) {
+            console.log("Success response:", result);
+            if (result.success) {
+              alert(result.success);
+              $('#cust_name').val('');
+              $('#cust_phone_number').val('');
+              $('#cust_email').val('');
+              $('#service').val('');
+              $('#cust_message').val('');
+              modal.style.display = "none";
+            } else {
+              alert(result.error);
             }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error: ", xhr.responseText);
+            alert("There was an error submitting your enquiry.");
+          }
         });
+      });
     });
-});
-</script>
+  </script>
 
 
-   
+
 
 </body>
 
