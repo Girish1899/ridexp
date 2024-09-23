@@ -49,6 +49,8 @@
     <link rel="stylesheet" href="{% static '/css/jquery.timepicker.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/nice-select.min.css' %}">
     <link rel="stylesheet" href="{% static '/css/style.css' %}">
+    <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> -->
+
     <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
     <style>
         .blog-title a
@@ -100,6 +102,103 @@
 #scroll-top:hover {
   transform: scale(1.1);
 }
+
+
+/*  Enquiry  */
+.enquiry-float {
+  position: fixed;
+  bottom: 150px; /* Position above the WhatsApp button */
+  right: 26px;
+  width: 53px;
+  height: 53px;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 50%;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease;
+}
+
+.enquiry-float i {
+  font-size: 30px;
+  color: #007bff;
+}
+
+.enquiry-float:hover {
+  transform: scale(1.1);
+}
+
+/* Modal styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 200; /* Above everything else */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark background */
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+}
+
+.modal-content label {
+  display: block;
+  margin: 10px 0 5px;
+}
+
+.modal-content input, 
+.modal-content textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.modal-content button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content button:hover {
+  background-color: #0056b3;
+}
+
+/* Close button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: red;
+}
+
+
 
 
 
@@ -163,6 +262,37 @@
 
       </a>
     <br>
+
+    <!-- enquiry btn -->
+
+    <a href="#" class="enquiry-float" id="enquiry-btn">
+        <i class="fas fa-question-circle"></i>
+    </a>
+
+    <div id="enquiryModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Enquiry Form</h2>
+          
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name" required>
+          <br>
+          
+          <label for="email">Email:</label>
+          <input type="email" id="email" name="email" required>
+          <br>
+          
+          <label for="message">Message:</label>
+          <textarea id="message" name="message" required></textarea>
+          <br>
+          
+          <button type="submit" id="save_action">Submit</button>
+        </div>
+      </div>
+
+    <br>
+    <!--  -->
+
     <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
     
     <!-- scroll-top end -->
@@ -302,11 +432,8 @@ window.onclick = function(event) {
         $('#timeError').text('');
     }
 });
-
-
-
-    
-      </script>
+ 
+</script>
 
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-DSN21LMHNV"></script>
@@ -317,6 +444,81 @@ window.onclick = function(event) {
 
   gtag('config', 'G-DSN21LMHNV');
 </script>
+
+
+<!-- enquiry  -->
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+var modal = document.getElementById("enquiryModal");
+
+var btn = document.getElementById("enquiry-btn");
+
+var closeBtn = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+  modal.style.display = "flex";
+}
+
+closeBtn.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+
+$(document).ready(function () {
+    console.log("Document is ready.");
+    $("#save_action").click(function () {
+        console.log("Submit button clicked.");
+        var name = $('#name').val();
+        var email = $('#email').val();
+        var message = $('#message').val();
+        
+        if (!name || !email || !message) {
+            alert("All fields are required.");
+            return;
+        }
+
+        console.log("name :", name);
+        console.log("email :", email);
+        console.log("message :", message); 
+
+        $.ajax({
+            url: '/save-enquiry/',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: { 
+                name: name, 
+                email: email, 
+                message: message 
+            },
+            success: function (result) {
+                console.log("Success response:", result);
+                if (result.success) {
+                    alert(result.success);
+                    $('#name').val('');
+                    $('#email').val('');
+                    $('#message').val('');
+                    modal.style.display = "none";
+                } else {
+                    alert(result.error);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert("There was an error submitting your enquiry.");
+            }
+        });
+    });
+});
+</script>
+
 
    
 
