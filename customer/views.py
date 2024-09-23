@@ -25,28 +25,26 @@ class regcustomer(TemplateView):
     template_name = "customer/register.html"
 
     def post(self, request):
-        # Fetch the last customer entry
         last_cust = Customer.objects.all().order_by('-customer_id').first()
 
-        # Calculate the next company_format value
         if last_cust:
             last_company_format = int(last_cust.company_format.replace('CUST', ''))
             next_company_format = f'CUST{last_company_format + 1:02}'
         else:
             next_company_format = 'CUST01'
 
-        # Retrieve form data
         customer_name = request.POST['customer_name']
         phone_number = request.POST['phone_number']
         email = request.POST['email']
+        password = request.POST['password']
         address = request.POST['address']
         status = request.POST['status']
 
-        # Create and save the new customer
         cust = Customer(
             customer_name=customer_name,
             phone_number=phone_number,
             email=email,
+            password=password,
             address=address,
             status=status,
             company_format=next_company_format,  # Corrected here
@@ -68,20 +66,26 @@ class custlogin(TemplateView):
     template_name = "customer/custlogin.html"
 
     def post(self, request):
-        phone_number = request.POST.get('phone_number')
+        if request.method == "POST":
+            phone_number = request.POST.get('phone_number')
+            password = request.POST.get('password')
 
-        try:
-            customer = Customer.objects.get(phone_number=phone_number)
-            # Store customer ID in session after successful login
-            request.session['customer_id'] = customer.customer_id
+            print("Received phone number:", phone_number) 
+            print("Received password:", password) 
 
-            # Redirect to a customer-specific index page (e.g., customer dashboard)
-            redirect_url = reverse('cusaddbooking')  # Assuming 'cusindex' is the URL name for the dashboard
-            return JsonResponse({'success': True, 'redirect_url': redirect_url})
-
-        except Customer.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Phone number not found. Please register.'})
-
+            if Customer.objects.filter(phone_number=phone_number).exists():
+                customer = Customer.objects.get(phone_number=phone_number)
+                
+                if customer.password == password:  # Dummy password check
+                    return JsonResponse({'success': True, 'redirect_url': 'cusaddbooking'})
+                else:
+                    return JsonResponse({'success': False, 'message': 'Invalid password.'})
+            else:
+                # Return an error message if phone number doesn't exist
+                return JsonResponse({'success': False, 'message': 'Phone number not found. Please register.'})
+        
+        return JsonResponse({'success': False, 'message': 'Invalid request method.'})
+        
 def cuslogout_view(request):
     logout(request)
     request.session.flush()
