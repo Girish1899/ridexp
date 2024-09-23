@@ -277,6 +277,7 @@ class Customer(models.Model):
     phone_number = models.CharField(max_length=10)
     address = models.TextField()
     email = models.EmailField()
+    password = models.CharField(max_length=128)  
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     block_reason = models.CharField(max_length=1000,null=True)
     total_rides = models.IntegerField(default=0) 
@@ -296,6 +297,7 @@ class CustomerHistory(models.Model):
     phone_number = models.CharField(max_length=10)
     address = models.TextField()
     email = models.EmailField()
+    password = models.CharField(max_length=128)  
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     block_reason = models.CharField(max_length=1000,null=True)
     total_rides = models.IntegerField(default=0,null=True)
@@ -773,4 +775,10 @@ class ContactUs(models.Model):
     name = models.CharField(max_length=100)
     email = models.EmailField()
     subject = models.TextField()
+    message = models.TextField()
+
+class Enquiry(models.Model):
+    enquiry_id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
     message = models.TextField()

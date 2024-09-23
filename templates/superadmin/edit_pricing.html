@@ -142,7 +142,7 @@
     // Function to check if ride type is "Outstation" and show trip_type section
     function checkRideType() {
         var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
-        if (selectedRideType.includes('outstation')) {
+        if (selectedRideType.includes('outstation') || selectedRideType.includes('airport')) {
             $('#trip_type_section').show();
         } else {
             $('#trip_type_section').hide();

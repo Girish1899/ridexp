@@ -75,6 +75,7 @@ urlpatterns = [
     path('check_useremail',check_useremail,name='check_useremail'),
     path('adduser', adduser.as_view(), name='adduser'),
     path('userlist', UserList.as_view(), name='userlist'),
+    path('useremp', UserEmpList.as_view(), name='useremp'),
     path('DeleteUser', DeleteUser.as_view(), name='DeleteUser'),
     path('EditUser/<int:id>/', EditUser.as_view(), name='EditUser'),
     path('UserHistory/<int:profile_id>/', ProfileHistoryView.as_view(), name='User_history'),
@@ -149,7 +150,8 @@ urlpatterns = [
     path('VerifyVehicle/', verify_vehicle, name='VerifyVehicle'),
     path('vehicleupdate_status/',vehicleupdate_status,name='vehicleupdate_status'),
 
-
+#contact #########################
+    path('contactlist', ContactList.as_view(), name='contactlist'),    
 
     # ride details ###########################
 
@@ -173,6 +175,7 @@ urlpatterns = [
     path('ongoing_rides', OngoingRideList.as_view(), name='ongoing_rides'),
     path('completed_rides', CompletedRideList.as_view(), name='completed_rides'),
     path('cancelledbookings',CancelledListView.as_view(),name='cancelledbookings'),
+    path('update_ride_status/<int:ride_id>/',update_ride_status, name='update_ride_status'),
     path('cancel_ride', cancel_ride, name='cancel_ride'),
     path('global_customerGetRidePricingDetails', customerGetRidePricingDetails.as_view(), name='global_customerGetRidePricingDetails'),
 

@@ -82,6 +82,24 @@
                                         <div id="Airport" class="tabcontent">
                                             <form action="{% url 'search_url' %}" id="airportForm">
                                                 <input type="hidden" name="ridetype" value="airport">
+                                                <!-- Radio Buttons for Trip Type -->
+                                                <div class="row">
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label>Trip Type:</label>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" id="airport_one_way" name="trip_type" value="one_way" checked class="form-check-input">
+                                                                <label for="airport_one_way" class="form-check-label">One Way</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input type="radio" id="airport_round_trip" name="trip_type" value="round_trip" class="form-check-input">
+                                                                <label for="airport_round_trip" class="form-check-label">Round Trip</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Other Fields -->
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -100,22 +118,19 @@
                                                     <div class="col-lg-2">
                                                         <div class="form-group">
                                                             <label>Pick Up Date:</label>
-                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date" required>                                       
+                                                            <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date" required>
                                                             <div id="dateError" class="invalid-feedback"></div>
                                                         </div>
                                                     </div>
-                            
                                                     <div class="col-lg-2">
                                                         <div class="form-group">
                                                             <label>Pick Up Time:</label>
-                                                            <input type="time" class="form-control pickup-time"  id="Airport_pickup_time" name="pickup_time" required>                                       
+                                                            <input type="time" class="form-control pickup-time" id="Airport_pickup_time" name="pickup_time" required>
                                                             <div id="timeError" class="invalid-feedback"></div>
                                                         </div>
                                                     </div>
-                            
                                                     <div class="col-lg-2 align-self-end">
-                                                        <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
-                                                                class="fas fa-arrow-right"></i></button>
+                                                        <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -1661,6 +1676,28 @@ document.getElementById("defaultOpen").click();
     oneWayRadio.addEventListener('change', toggleDropFields);
     roundTripRadio.addEventListener('change', toggleDropFields);
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const airportOneWayRadio = document.getElementById('airport_one_way');
+    const airportRoundTripRadio = document.getElementById('airport_round_trip');
+
+    // Function to handle trip type change, if needed for future logic
+    function handleAirportTripType() {
+        if (airportOneWayRadio.checked) {
+            console.log("One Way trip selected for Airport");
+        } else if (airportRoundTripRadio.checked) {
+            console.log("Round Trip selected for Airport");
+        }
+    }
+
+    // Initial state
+    handleAirportTripType();
+
+    // Add event listeners for radio buttons
+    airportOneWayRadio.addEventListener('change', handleAirportTripType);
+    airportRoundTripRadio.addEventListener('change', handleAirportTripType);
+});
+
 
 </script>
 

@@ -25,6 +25,7 @@
                                 <input type="hidden" id="source_hidden" name="source" value="{{ source }}">
                                 <!-- <input type="text" class="form-control datetimepicker-input" placeholder="Pickup Location" value="{{ source }}" readonly> -->
                             </div>
+                        </div>
                             <div class="col-md-3">
                                 <div class="date" id="date2" data-target-input="nearest">
                                     <label>Drop Location</label>
@@ -154,7 +155,12 @@
                                         <label for="message">Address</label>
                                     </div>
                                 </div>
-                                
+                                <div class="col-md-6">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" id="password" placeholder="Create a password" >
+                                        <label for="password">Password</label>
+                                    </div>
+                                </div>
                                 <div class="col-6">
                                     <div class="form-floating">
                                         <textarea class="form-control" placeholder="Special Request" id="customer_notes" rows="3"></textarea>
@@ -203,6 +209,7 @@
                         $('#customer_name').val(data.customer_name).prop('readonly', true);
                         $('#email').val(data.email).prop('readonly', true);
                         $('#address').val(data.address).prop('readonly', true);
+                        $('#password').val(data.password).prop('readonly', true);
                         $('#customer_notes').val(''); // Clear any existing notes
                     },
                     error: function(xhr, status, error) {
@@ -211,6 +218,7 @@
                             $('#customer_name').val('').prop('readonly', false);
                             $('#email').val('').prop('readonly', false);
                             $('#address').val('').prop('readonly', false);
+                            $('#password').val('').prop('readonly', false);
                             $('#customer_notes').val(''); // Clear any existing notes
                         }
                     }
@@ -242,6 +250,7 @@
             var customer_name = $('#customer_name').val();
             var address = $('#address').val();
             var email = $('#email').val();
+            var password = $('#password').val();
             var phone_number = $('#phone_number').val();
             var customer_notes = $('#customer_notes').val();
             var ride_status = 'currentbookings';
@@ -265,6 +274,7 @@
                     address: address,
                     customer_name: customer_name,
                     email: email,
+                    password: password,
                     customer_notes: customer_notes,
                     total_fare: total_fare,
                     ride_status: ride_status,

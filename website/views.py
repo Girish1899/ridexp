@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Color, CommissionType, ContactUs, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -140,6 +140,27 @@ def taxi_companies(request):
 def about(request):
     return render(request, 'website/about.html')
 
+@csrf_exempt 
+def save_enquiry(request):
+    print("Received request:", request.method)  # Log the request method
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+        message = request.POST.get('message')
+
+        print("Name:", name, "Email:", email, "Message:", message)  # Log the input values
+
+        if not name or not email or not message:
+            return JsonResponse({'error': 'All fields are required.'}, status=400)
+        try:
+            enquiry = Enquiry.objects.create(name=name, email=email, message=message)
+            return JsonResponse({'success': 'Enquiry saved successfully!'})
+        except Exception as e:
+            print("Error saving enquiry:", e)  # Log the error
+            return JsonResponse({'error': 'Failed to save enquiry.'}, status=500)
+    
+    return JsonResponse({'error': 'Invalid request method.'}, status=405)
+
 
 
 
@@ -177,7 +198,12 @@ def search_url(request):
         return HttpResponse("All fields are required.", status=400)
 
     if ridetype == 'airport':
-        search_url = reverse('airportcabs_list')
+        if trip_type == 'one_way':
+            search_url = reverse('airportcabs_list')  # Redirect to cabs_list for one way trip
+        elif trip_type == 'round_trip':
+            search_url = reverse('airport_roundtrip')  # Redirect to airport_roundtrip for round trip
+        else:
+            return HttpResponse("Invalid trip type for airport rides.", status=400)
     elif ridetype == 'local':
         search_url = reverse('localcabs_list')
     elif ridetype == 'localpackage':
@@ -202,7 +228,7 @@ def search_url(request):
 
     search_url += f"?location1={source}&location2={destination}&pickup_date={pickup_date}&pickup_time={pickup_time}&ridetype={ridetype}&trip_type={trip_type}"
 
-    if trip_type == 'round_trip':
+    if ridetype == 'outstation' and trip_type == 'round_trip':
         search_url += f"&drop_date={drop_date}&drop_time={drop_time}"
 
     return redirect(search_url)
@@ -254,6 +280,54 @@ def airportcabs_list(request):
     }
 
     return render(request, 'website/cabs_list.html', context)
+
+def airport_roundtrip(request):
+    # Retrieve query parameters from the URL
+    source = request.GET.get('source', '')
+    destination = request.GET.get('destination', '')
+    pickup_date = request.GET.get('pickup_date', '')
+    pickup_time = request.GET.get('pickup_time', '')
+    car_type = request.GET.get('car_type', '') 
+    ridetype = request.GET.get('ridetype', '')  
+
+    ride_type_instance = Ridetype.objects.filter(name=ridetype).first()
+
+    # Initialize an empty dictionary to hold pricing information
+    pricing_dict = {}
+
+    if ride_type_instance:
+        # Fetch all AC and non-AC pricing related to the 'airport' ride type
+        pricing_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='ac').select_related('category')
+        pricing_non_ac = Pricing.objects.filter(ridetype=ride_type_instance, car_type='non_ac').select_related('category')
+
+        # Populate the dictionary with AC pricing
+        for price in pricing_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['ac'] = price
+
+        # Populate the dictionary with non-AC pricing
+        for price in pricing_non_ac:
+            category_name = price.category.category_name.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {'ac': None, 'non_ac': None}
+            pricing_dict[category_name]['non_ac'] = price
+
+    # Print pricing data for debugging
+    print("Filtered Pricing QuerySet:", pricing_dict)
+
+    context = {
+        'source': source,
+        'destination': destination,
+        'pickup_date': pickup_date,
+        'pickup_time': pickup_time,
+        'car_type': car_type,  # Pass car_type to the context
+        'pricing_dict': pricing_dict,
+        'ridetype':ridetype,
+    }
+
+    return render(request, 'website/airport_roundtrip.html', context)
 
 def localcabs_list(request):
     source = request.GET.get('source', '')
@@ -465,6 +539,7 @@ def get_customer_details(request):
             'customer_name': customer.customer_name,
             'email': customer.email,
             'address': customer.address,
+            'password': customer.password,
         }
         return JsonResponse(data)
     except Customer.DoesNotExist:
@@ -526,9 +601,6 @@ class AddContact(TemplateView):
         cu.save()
         return JsonResponse({'status':"Success"})
 
-class ContactList(ListView):
-    model = ContactUs
-    template_name = "superadmin/view_contact.html"
 
 def services(request):
     return render(request, 'website/service.html')
@@ -667,6 +739,7 @@ class AddNewBooking(APIView):
             address = request.POST['address']
             customer_name = request.POST['customer_name']
             customer_email = request.POST['email']
+            password = request.POST['password']
             customer_notes = request.POST['customer_notes']
             total_fare=request.POST['total_fare']
             # drop_date=request.POST['drop_date']
@@ -734,7 +807,8 @@ class AddNewBooking(APIView):
                         phone_number=customer_phone_number,
                         email=customer_email,
                         address=address,
-                        status="Active",
+                        password=password,
+                        status="active",
                         company_format=next_company_format,
                         created_by=request.user,
                         updated_by=request.user)
@@ -995,6 +1069,7 @@ class AirportGetRidePricingDetails(APIView):
         pickup_time = request.POST['pickup_time']
         time_slot = request.POST['time_slot']
         ridetype = request.POST['ridetype']
+        trip_type = request.POST['trip_type'] 
         toll_option = request.POST.get('toll_option')
         print("Backend received toll option: ", toll_option)  # Debugging
 
@@ -1023,7 +1098,7 @@ class AirportGetRidePricingDetails(APIView):
             return JsonResponse({'error': 'Invalid ridetype'}, status=400)
 
         # Fetch all pricing details filtered by the selected time slot and ridetype
-        pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance)
+        pricing_details = Pricing.objects.select_related('category').filter(slots=time_slot, ridetype=ride_type_instance,trip_type=trip_type)
 
         # Organize pricing data by category and car type
         pricing_dict = {}
@@ -1064,7 +1139,7 @@ class AirportGetRidePricingDetails(APIView):
             'beta': driver_beta_decimal,
             'category': price.category.category_name,
         }
-
+        
 class GetRidePricingDetails(APIView):
     def post(self, request):
         import googlemaps
