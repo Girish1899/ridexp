@@ -1001,7 +1001,18 @@ label {
 }
 
 .navbar-brand {
-  margin-right: 0;
+  margin-left: -50px;
+}
+
+#logoheader {
+    font-family: 'Courier New', Courier, monospace;    
+    font-size: 25px;                   /* Adjust the font size as needed */
+    font-weight: bold;  
+    margin-top: 22px;               /* Make the text bold */
+    color: #db9710;                   /* Change the color to your preference */
+    display: inline-block;             /* Keeps the text aligned with the image */
+    text-transform: uppercase;         /* Makes the text uppercase */
+    letter-spacing: 1px;     
 }
 
 .navbar-brand img {
@@ -2424,9 +2435,9 @@ a.ui-button:active,
   font-weight: 300;
 }
 
-.cha-2{
-  /* padding-top: 350px; */
-}
+/* .cha-2{
+  padding-top: 350px;
+} */
 
 
 @media all and (max-width: 991px) {

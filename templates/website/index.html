@@ -286,7 +286,7 @@
           <textarea id="message" name="message" required></textarea>
           <br>
           
-          <button type="submit" id="save_action">Submit</button>
+          <button type="submit" id="save_btn">Submit</button>
         </div>
       </div>
 
@@ -472,7 +472,7 @@ window.onclick = function(event) {
 
 $(document).ready(function () {
     console.log("Document is ready.");
-    $("#save_action").click(function () {
+    $("#save_btn").click(function () {
         console.log("Submit button clicked.");
         var name = $('#name').val();
         var email = $('#email').val();
