@@ -1005,11 +1005,11 @@ label {
 }
 
 #logoheader {
-    font-family: 'Courier New', Courier, monospace;    
+    font-family: auto;    
     font-size: 25px;                   /* Adjust the font size as needed */
     font-weight: bold;  
     margin-top: 22px;               /* Make the text bold */
-    color: #db9710;                   /* Change the color to your preference */
+    color: var(--color-dark);                   /* Change the color to your preference */
     display: inline-block;             /* Keeps the text aligned with the image */
     text-transform: uppercase;         /* Makes the text uppercase */
     letter-spacing: 1px;     

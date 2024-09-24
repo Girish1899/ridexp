@@ -11,6 +11,7 @@ urlpatterns = [
     path('bookride', views.bookride, name='bookride'),
     path('contact', AddContact.as_view(), name='contact'),
     path('taxi_services', views.services, name='services'),
+    path('sitemap.xml', views.sitemap, name='sitemap'),
     path('airport_taxi', views.airporttaxi, name='airporttaxi'),
     path('outstationcabs', views.outstationcabs, name='outstationcabs'),
     path('localtaxi', views.localtaxi, name='localtaxi'),

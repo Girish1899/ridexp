@@ -55,6 +55,9 @@ def home(request):
     
     return render(request, 'website/main.html',context)
 
+def sitemap(request):
+    context = None
+    return render(request, 'sitemap.xml',context)
 
 def Why_Choose_Local_Cab_Services(request):
     context = None
