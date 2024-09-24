@@ -19,7 +19,7 @@ urlpatterns = [
     path('faq', views.faq, name='faq'),
     path('terms', views.terms, name='terms'),
     path('login', views.login_page.as_view(), name='login'),
-    path('regvehicle', views.AddVehicle.as_view(), name='regvehicle'),
+    path('register_vehicle', views.AddVehicle.as_view(), name='register_vehicle'),
     path('get_owner_details/', get_owner_details, name='get_owner_details'),
     path('check_vehicleno/',check_vehicleno,name='check_vehicleno'),
     path('login_view', views.login_view, name='login_view'),
@@ -90,6 +90,33 @@ urlpatterns = [
     path('blog/cashless_payments', views.airport24, name="cashless_payments"),
     path('blog/safety_during_pandemic', views.airport25, name="safety_during_pandemic"),
 
+#local_blogs #################################
+    path('blog/local_future', views.local_future, name="local_future"),
+    path('blog/better_environment', views.better_environment, name="better_environment"),
+    path('blog/city_travel', views.city_travel, name="city_travel"),
+    path('blog/electric_taxi', views.electric_taxi, name="electric_taxi"),
+    path('blog/bestlocalcabs', views.bestlocalcabs, name="bestlocalcabs"),
+    path('blog/affordable', views.affordable, name="affordable"),
+    path('blog/urban_growth', views.urban_growth, name="urban_growth"),
+    path('blog/ride_sharing', views.ride_sharing, name="ride_sharing"),
+    path('blog/tech_savy', views.tech_savy, name="tech_savy"),
+    path('blog/tourism', views.tourism, name="tourism"),
+    path('blog/hybrid', views.hybrid, name="hybrid"),
+    path('blog/mega_cities', views.mega_cities, name="mega_cities"),
+    path('blog/benefits', views.benefits, name="benefits"),
+    path('blog/fleets', views.fleets, name="fleets"),
+    path('blog/public_transport', views.public_transport, name="public_transport"),
+    path('blog/save_money', views.save_money, name="save_money"),
+
+    path('blog/localcabs_leadingcharge', views.localcabs_leadingcharge, name="localcabs_leadingcharge"),
+    path('blog/heroes_of_nighttime_urban_transport', views.urban_transport, name="heroes_of_nighttime_urban_transport"),
+    path('blog/taxi_regulations_the_future', views.taxi_regulations_the_future, name="taxi_regulations_the_future"),
+    path('blog/reducing_city_emissions', views.reducing_city_emissions, name="reducing_city_emissions"),
+    path('blog/localcabs_support_corporate_travel', views.localcabs_support_corporate_travel, name="localcabs_support_corporate_travel"),
+    path('blog/green_taxi_initiatives', views.green_taxi_initiatives, name="green_taxi_initiatives"),
+    path('blog/sloution_for_miletransport', views.sloution_for_miletransport, name="sloution_for_miletransport"),
+    path('blog/driverless_taxis', views.driverless_taxis, name="driverless_taxis"),
+    path('blog/localcabs_best_for_airport', views.localcabs_best_for_airport, name="localcabs_best_for_airport"),
 
 
 

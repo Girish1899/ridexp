@@ -160,109 +160,79 @@
 
     .modal-content {
       background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
-      /* Subtle gradient */
       margin: auto;
       padding: 30px;
-      /* Increased padding for a spacious look */
       border-radius: 15px;
-      /* More rounded corners */
-      width: 400px;
-      /* Default width */
+      width: 900px;
       max-width: 90%;
-      /* Max width for responsiveness */
       max-height: calc(90vh - 60px);
-      /* Adjust for navbar height */
       overflow-y: auto;
-      /* Adds scroll if content exceeds max height */
       box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-      /* Softer shadow */
       position: relative;
       animation: slideIn 0.5s;
-      /* Slide-in animation */
     }
 
     @keyframes slideIn {
       from {
         opacity: 0;
         transform: translateY(-20px);
-        /* Slide from above */
       }
 
       to {
         opacity: 1;
         transform: translateY(0);
-        /* Final position */
       }
     }
 
     .modal-content h2 {
       margin-top: 0;
       color: #333;
-      /* Darker title color */
       font-family: 'Arial', sans-serif;
-      /* Use a clean font */
       font-size: 24px;
-      /* Larger font size for title */
       text-align: center;
-      /* Center title */
     }
 
     .modal-content label {
       display: block;
       margin: 15px 0 5px;
       font-weight: bold;
-      /* Bold labels */
       color: #555;
-      /* Darker label color */
     }
 
     .modal-content input,
     .modal-content textarea {
       width: 100%;
       padding: 12px;
-      /* Increased padding */
       margin-bottom: 15px;
-      /* More space between inputs */
       border: 1px solid #ccc;
-      /* Lighter border */
       border-radius: 8px;
-      /* More rounded input fields */
       font-size: 16px;
-      /* Larger font size */
       transition: border 0.3s, box-shadow 0.3s;
-      /* Smooth border transition */
     }
 
     .modal-content input:focus,
     .modal-content textarea:focus {
       border-color: #007bff;
-      /* Blue border on focus */
       box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-      /* Light blue shadow on focus */
       outline: none;
-      /* Remove default outline */
     }
 
     .modal-content button {
-      background-color: #007bff;
+      background-color: #DB9710;
       color: #fff;
       padding: 12px;
-      /* Increased padding for buttons */
       border: none;
       border-radius: 8px;
-      /* More rounded button */
       cursor: pointer;
       font-size: 18px;
-      /* Larger button text */
       transition: background-color 0.3s, transform 0.2s;
-      /* Smooth transitions */
+      width: 150px;
+      height: 50px;
     }
 
     .modal-content button:hover {
-      background-color: #0056b3;
-      /* Darker blue on hover */
+      background-color: #DB9710;
       transform: scale(1.05);
-      /* Slightly enlarge button on hover */
     }
 
     .close {
@@ -270,36 +240,28 @@
       top: 15px;
       right: 20px;
       font-size: 20px;
-      /* Larger close button */
       cursor: pointer;
       color: #aaa;
-      /* Lighter close button color */
       transition: color 0.3s;
-      /* Smooth color transition */
     }
 
     .close:hover {
       color: red;
-      /* Change color on hover */
     }
 
     /* Responsive Styles */
     @media (max-width: 600px) {
       .modal-content {
         width: 90%;
-        /* Full width on small screens */
         padding: 20px;
-        /* Reduced padding */
       }
 
       .modal-content h2 {
         font-size: 20px;
-        /* Smaller title on mobile */
       }
 
       .modal-content button {
         font-size: 16px;
-        /* Smaller button text on mobile */
       }
     }
   </style>
@@ -374,7 +336,7 @@
   <div id="enquiryModal" class="modal">
     <div class="modal-content">
       <span class="close">&times;</span>
-      <h2>Reach Out: We’re Here to Help</h2><br>
+      <h2 style="color: rgb(6, 6, 54);">Reach Out: We’re Here to Help</h2><br>
 
       <div class="row">
         <div class="col-md-6">
@@ -413,8 +375,8 @@
         <textarea name="message" cols="30" rows="2" class="form-control" placeholder="Write Your Message"
           id="cust_message" name="cust_message"></textarea>
       </div>
-      <button type="submit" class="theme-btn" id="save_btn">Submit
-        <i class="far fa-paper-plane"></i></button>
+      <center><button type="submit" class="theme-btn" id="save_btn">Submit
+        <i class="far fa-paper-plane"></i></button></center>
 
     </div>
   </div>

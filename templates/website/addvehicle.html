@@ -586,7 +586,7 @@
                         alert("Vehicle Number already exists.");
                     } else {
                         $.ajax({
-                            url: '{% url "regvehicle" %}',
+                            url: '{% url "register_vehicle" %}',
                             type: "POST",
                             headers: {
                                 'X-CSRFToken': '{{ csrf_token }}'
