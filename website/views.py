@@ -220,6 +220,109 @@ def airport25(request):
 
 ###############################################################
 
+# local blogs ###############################
+def local_future(request):
+    context = None
+    return render(request, 'website/blog/local1.html',context)
+
+def better_environment(request):
+    context = None
+    return render(request, 'website/blog/local2.html',context)
+
+def city_travel(request):
+    context = None
+    return render(request, 'website/blog/local3.html',context)
+
+def electric_taxi(request):
+    context = None
+    return render(request, 'website/blog/local4.html',context)
+
+def bestlocalcabs(request):
+    context = None
+    return render(request, 'website/blog/local5.html',context)
+
+def affordable(request):
+    context = None
+    return render(request, 'website/blog/local6.html',context)
+
+def urban_growth(request):
+    context = None
+    return render(request, 'website/blog/local7.html',context)
+
+def ride_sharing(request):
+    context = None
+    return render(request, 'website/blog/local8.html',context)
+
+def tech_savy(request):
+    context = None
+    return render(request, 'website/blog/local9.html',context)
+
+def tourism(request):
+    context = None
+    return render(request, 'website/blog/local10.html',context)
+
+def hybrid(request):
+    context = None
+    return render(request, 'website/blog/local11.html',context)
+
+def mega_cities(request):
+    context = None
+    return render(request, 'website/blog/local12.html',context)
+
+def benefits(request):
+    context = None
+    return render(request, 'website/blog/local13.html',context)
+
+def fleets(request):
+    context = None
+    return render(request, 'website/blog/local14.html',context)
+
+def public_transport(request):
+    context = None
+    return render(request, 'website/blog/local15.html',context)
+
+def save_money(request):
+    context = None
+    return render(request, 'website/blog/local16.html',context)
+
+def localcabs_leadingcharge(request):
+    context = None
+    return render(request, 'website/blog/local17.html',context)
+
+def urban_transport(request):
+    context = None
+    return render(request, 'website/blog/local18.html',context)
+
+def taxi_regulations_the_future(request):
+    context = None
+    return render(request, 'website/blog/local19.html',context)
+
+def reducing_city_emissions(request):
+    context = None
+    return render(request, 'website/blog/local20.html',context)
+
+def localcabs_support_corporate_travel(request):
+    context = None
+    return render(request, 'website/blog/local21.html',context)
+
+def green_taxi_initiatives(request):
+    context = None
+    return render(request, 'website/blog/local22.html',context)
+
+def sloution_for_miletransport(request):
+    context = None
+    return render(request, 'website/blog/local23.html',context)
+
+def driverless_taxis(request):
+    context = None
+    return render(request, 'website/blog/local24.html',context)
+
+def localcabs_best_for_airport(request):
+    context = None
+    return render(request, 'website/blog/local25.html',context)
+
+
+######################################
 def about(request):
     return render(request, 'website/about.html')
 
