@@ -1001,7 +1001,7 @@ label {
 }
 
 .navbar-brand {
-  margin-left: -50px;
+  margin-left: 0px;
 }
 
 #logoheader {
@@ -1205,7 +1205,7 @@ label {
     position: fixed;
   }
   .navbar-brand {
-    padding-left: 10px;
+    padding-left: 45px;
   }
 
   .navbar-brand img {
