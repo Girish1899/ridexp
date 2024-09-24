@@ -64,7 +64,7 @@
                                         </div>
                                         
                                     <div class="new-account mt-3">
-                                     <center>   <p style="color: black;">Already have an account? <a class="text-primary" href="{% url 'custlogin' %}">Sign in</a></p> </center>
+                                     <center>   <p style="color: black;">Already have an account? <a class="text-primary" href="{% url 'customer_login' %}">Sign in</a></p> </center>
                                     </div>
                                 </div>
                             </div>
@@ -204,7 +204,7 @@
                         myModal.show();
                     } else {
                         $.ajax({
-                            url: '{% url "regcustomer" %}',
+                            url: '{% url "customer_register" %}',
                             type: "POST",
                             headers: {
                                 'X-CSRFToken': '{{ csrf_token }}'
@@ -222,7 +222,7 @@
                                 var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
                                 myModal.show();
 
-                                // location.href = "{% url 'custlogin' %}";
+                                // location.href = "{% url 'customer_login' %}";
                             },
                             error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

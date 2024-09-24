@@ -103,6 +103,14 @@
     
                                 </div>
                             </div>
+
+                            <div class="col-md-2">
+                                <div class="date" id="date2" data-target-input="nearest">
+                                    <!-- <label>trip_type</label> -->
+                                    <!-- <h6>{{ trip_type }}</h6> -->
+                                    <input type="hidden" id="trip_type_hidden" name="trip_type" value="{{ trip_type }}">
+                                </div>
+                            </div>
     
     
                         </div>
@@ -237,6 +245,7 @@
             var destination = $('#destination_hidden').val();
             var pickup_date = $('#pickup_date_hidden').val();
             var car_type = $('#car_type_hidden').val();
+            var trip_type = $('#trip_type_hidden').val();
             var drop_date = $('#drop_date_hidden').val();
             var drop_time = $('#drop_time_hidden').val();
             
@@ -280,6 +289,7 @@
                     ride_status: ride_status,
                     drop_date: drop_date,
                     drop_time: drop_time,
+                    trip_type:trip_type,
                 },
                 success: function(result) {
                     if (result["status"] != "Error") {

@@ -89,13 +89,13 @@ class custlogin(TemplateView):
 def cuslogout_view(request):
     logout(request)
     request.session.flush()
-    return redirect('custlogin')
+    return redirect('customer_login')
 
 
 def customer_profile(request):
     customer_id = request.session.get('customer_id')
     if not customer_id:
-        return redirect('custlogin')  # Redirect to login if customer is not logged in
+        return redirect('customer_login')  # Redirect to login if customer is not logged in
 
     # Retrieve the customer's details
     customer = get_object_or_404(Customer, customer_id=customer_id)

@@ -3,9 +3,9 @@ from customer.views import *
 
 urlpatterns = [
 
-    path('custlogin',custlogin.as_view(),name='custlogin'),
-    path('custlogout', cuslogout_view, name='custlogout'),
-    path('regcustomer', regcustomer.as_view(), name='regcustomer'),
+    path('customer_login',custlogin.as_view(),name='customer_login'),
+    path('customer_logout', cuslogout_view, name='customer_logout'),
+    path('customer_register', regcustomer.as_view(), name='customer_register'),
     path('check_phonenumber',check_phonenumber, name='check_phonenumber'),
     path('', customer_profile, name='customer_profile'),
     path('previous', previous.as_view(), name='previous'),

@@ -155,7 +155,7 @@
                                         <button type="button" class="btn btn-primary btn-block" id="login_action">Sign me in</button>
                                     </div>
                                     <div class="new-account mt-3">
-                                        <center><p style="color: black;">Don't have an account? <a class="text-primary" href="{% url 'regcustomer' %}">Sign up</a></p>
+                                        <center><p style="color: black;">Don't have an account? <a class="text-primary" href="{% url 'customer_register' %}">Sign up</a></p>
                                         </center>
                                     </div>
                                 </div>
@@ -230,7 +230,7 @@
         console.log("Password: " + password); // Debug: log password
 
         $.ajax({
-            url: "{% url 'custlogin' %}",
+            url: "{% url 'customer_login' %}",
             type: "POST",
             data: {
                 phone_number: phone_number,
