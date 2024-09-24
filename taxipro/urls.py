@@ -33,8 +33,7 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('robots.txt', views.robots.as_view(), name='robots'),
     path('sitemap.xml', views.sitemap.as_view(), name='sitemap'),
-    path('blog/about', views.about_blog.as_view(), name='about'),
-    path('/blog/about', views.about_blog.as_view(), name='about'),
+    # path('blog/about', views.about_blog.as_view(), name='about'),
 
     path('admin/', admin.site.urls),
     # path('', TemplateView.as_view(template_name='index.html')), 

@@ -137,6 +137,86 @@ def taxi_companies(request):
     context = None
     return render(request, 'website/blog/20.html',context)
 
+
+ # airport ####################3
+
+def airport1(request):
+    return render(request, 'website/blog/a1.html') 
+
+def airport2(request):
+    return render(request, 'website/blog/a2.html')  
+
+def airport3(request):
+    return render(request, 'website/blog/a3.html')  
+
+def airport4(request):
+    return render(request, 'website/blog/a4.html')    
+
+def airport5(request):
+    return render(request, 'website/blog/a5.html') 
+
+def airport6(request):
+    return render(request, 'website/blog/a6.html') 
+
+def airport7(request):
+    return render(request, 'website/blog/a7.html') 
+
+def airport8(request):
+    return render(request, 'website/blog/a8.html') 
+
+def airport9(request):
+    return render(request, 'website/blog/a9.html') 
+
+def airport10(request):
+    return render(request, 'website/blog/a10.html') 
+
+def airport11(request):
+    return render(request, 'website/blog/a11.html') 
+
+def airport12(request):
+    return render(request, 'website/blog/a12.html') 
+
+def airport13(request):
+    return render(request, 'website/blog/a13.html') 
+
+def airport14(request):
+    return render(request, 'website/blog/a14.html') 
+
+def airport15(request):
+    return render(request, 'website/blog/a15.html')
+
+def airport16(request):
+    return render(request, 'website/blog/a16.html')  
+
+def airport17(request):
+    return render(request, 'website/blog/a17.html')
+
+def airport18(request):
+    return render(request, 'website/blog/a18.html')
+
+def airport19(request):
+    return render(request, 'website/blog/a19.html')  
+
+def airport20(request):
+    return render(request, 'website/blog/a20.html')  
+
+def airport21(request):
+    return render(request, 'website/blog/a21.html')
+
+def airport22(request):
+    return render(request, 'website/blog/a22.html')  
+
+def airport23(request):
+    return render(request, 'website/blog/a23.html')
+
+def airport24(request):
+    return render(request, 'website/blog/a24.html') 
+
+def airport25(request):
+    return render(request, 'website/blog/a25.html')    
+
+###############################################################
+
 def about(request):
     return render(request, 'website/about.html')
 
@@ -144,24 +224,20 @@ def about(request):
 def save_enquiry(request):
     print("Received request:", request.method)  # Log the request method
     if request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        message = request.POST.get('message')
+        cust_name = request.POST.get('cust_name')
+        cust_phone_number = request.POST.get('cust_phone_number')
+        cust_email = request.POST.get('cust_email')
+        service = request.POST.get('service')
+        cust_message = request.POST.get('cust_message')
 
-        print("Name:", name, "Email:", email, "Message:", message)  # Log the input values
-
-        if not name or not email or not message:
-            return JsonResponse({'error': 'All fields are required.'}, status=400)
         try:
-            enquiry = Enquiry.objects.create(name=name, email=email, message=message)
+            enquiry = Enquiry.objects.create(cust_name=cust_name, cust_phone_number=cust_phone_number, cust_email=cust_email, service=service, cust_message=cust_message)
             return JsonResponse({'success': 'Enquiry saved successfully!'})
         except Exception as e:
             print("Error saving enquiry:", e)  # Log the error
             return JsonResponse({'error': 'Failed to save enquiry.'}, status=500)
     
     return JsonResponse({'error': 'Invalid request method.'}, status=405)
-
-
 
 
 # def cabs_list(request):
@@ -474,9 +550,9 @@ def booking_list(request):
     car_type = request.GET.get('car_type', '')  # Capture the car_type from the request
     price = request.GET.get('price')
     slots = request.GET.get('time_slot')
+    trip_type = request.GET.get('trip_type')
     drop_date = request.GET.get('drop_date') 
     drop_time = request.GET.get('drop_time') 
-    
 
     # Debugging prints
     print("Price received in view:", price)
@@ -488,19 +564,23 @@ def booking_list(request):
         category__category_name=category,
         ridetype__name=ridetype,
         car_type=car_type,
-        slots=slots  # Pass time_slot to the template
-
+        slots=slots,  # Pass time_slot to the template
+        trip_type=trip_type
     )
 
     # Handle cases where multiple instances are found
     if pricing_instances.count() == 1:
         pricing_instance = pricing_instances.first()
+    elif pricing_instances.count() > 1:
+        # Log warning and choose the first instance (or apply more specific logic if needed)
+        print("Multiple Pricing instances found. Choosing the first one.")
+        pricing_instance = pricing_instances.first()  # Adjust this logic as needed
     else:
-        # Handle the case where there are multiple or no instances
-        # For example, choose the first instance or handle as needed
-        pricing_instance = pricing_instances.first() if pricing_instances.exists() else None
-        print("Multiple or no Pricing instances found.")
-
+        # Handle the case where no instances are found
+        pricing_instance = None
+        print("No Pricing instances found.")
+    
+    # Pass the results to the template
     return render(request, 'website/booking_list.html', {
         'source': source,
         'destination': destination,
@@ -513,8 +593,9 @@ def booking_list(request):
         'pricing': pricing_instance, 
         'drop_date': drop_date, 
         'drop_time': drop_time, 
-        
+        'trip_type': trip_type,
     })
+
 
 
 @csrf_exempt
@@ -745,6 +826,7 @@ class AddNewBooking(APIView):
             # drop_date=request.POST['drop_date']
             # drop_time=request.POST['drop_time']
             car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            trip_type = request.POST.get('trip_type', '').strip()  # Fetch car_type (AC or Non-AC)
             ridetype_name = request.POST.get('ridetype', '').strip()
             slots = determine_time_slot(pickup_time_str)  # Function to determine the slot based on pickup_time
 
@@ -771,7 +853,8 @@ class AddNewBooking(APIView):
                     category=category_instance,
                     car_type=car_type,
                     ridetype=ridetype_instance,  # Include ridetype in the query
-                    slots=slots
+                    slots=slots,
+                    trip_type=trip_type,
 
                 )
             except Pricing.DoesNotExist:

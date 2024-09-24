@@ -32,9 +32,8 @@
                         <div class="row no-gutters">
                             <div class="col-xl-12">
                                 <div class="auth-form">
-                                    <center> <img src="/static/img/logo/ridexpress.png" style="width: 50%;"></center>
-                                    <br>
-                                    <h1 class="text-center mb-4">Create your account</h1>
+                                    <center> <img src="/static/img/logo/ridexpress.png" style="width: 30%;margin-top: -45px;"></center>
+                                    <h2 class="text-center mb-2">Create Your Account</h2>
 
                                         <div class="form-group row">
                                             <label><strong>Customer Name</strong></label>
@@ -42,21 +41,21 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <label><strong>Phone Number</strong></label>
+                                            <!-- <label><strong>Phone Number</strong></label> -->
                                             <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" placeholder="Phone Number">
                                         </div>
 
                                         <div class="form-group row">
-                                            <label><strong>Email</strong></label>                                            
+                                            <!-- <label><strong>Email</strong></label>                                             -->
                                             <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Email">
                                         </div>
 
                                         <div class="form-group row">
-                                            <label><strong>Address</strong></label>                                           
+                                            <!-- <label><strong>Address</strong></label>                                            -->
                                             <textarea class="form-control" rows="2" id="address" name="address" placeholder="Address"></textarea>                                           
                                         </div>
                                         <div class="form-group row">
-                                            <label><strong>Password</strong></label>
+                                            <!-- <label><strong>Password</strong></label> -->
                                             <input type="text" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
                                         </div>
 
@@ -65,7 +64,7 @@
                                         </div>
                                         
                                     <div class="new-account mt-3">
-                                     <center>   <p style="color: black;">Already have an account? <a class="text-primary" href="{% url 'custlogin' %}">Sign in</a></p> </center>
+                                     <center>   <p style="color: black;">Already have an account? <a class="text-primary" href="{% url 'customer_login' %}">Sign in</a></p> </center>
                                     </div>
                                 </div>
                             </div>
@@ -170,10 +169,11 @@
             var customer_name = $('#customer_name').val();
             var phone_number = $('#phone_number').val();
             var email = $('#email').val();
+            var password = $('#password').val();
             var address = $('#address').val();
             var status = 'active';
             
-            if (!customer_name || !phone_number || !email   ) {
+            if (!customer_name || !phone_number || !email || !password ) {
                 var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal_all'));
                 myModal.show();
                 return;
@@ -187,6 +187,13 @@
                 return;
             }
 
+            // Validate password criteria
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordPattern.test(password)) {
+                    alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                    return;
+                }
+
             $.ajax({
                 url: '{% url "check_phonenumber" %}',
                 type: "GET",
@@ -197,7 +204,7 @@
                         myModal.show();
                     } else {
                         $.ajax({
-                            url: '{% url "regcustomer" %}',
+                            url: '{% url "customer_register" %}',
                             type: "POST",
                             headers: {
                                 'X-CSRFToken': '{{ csrf_token }}'
@@ -206,6 +213,7 @@
                                 customer_name: customer_name,
                                 phone_number: phone_number,
                                 email: email,
+                                password: password,
                                 address: address,
                                 status: status,
                                 // company_format: company_format,
@@ -214,7 +222,7 @@
                                 var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
                                 myModal.show();
 
-                                // location.href = "{% url 'custlogin' %}";
+                                // location.href = "{% url 'customer_login' %}";
                             },
                             error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

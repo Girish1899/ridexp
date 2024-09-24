@@ -60,6 +60,38 @@ urlpatterns = [
     path('blog/perfect_choice', views.perfect_choice, name="perfect_choice"),
     path('blog/taxi_companies', views.taxi_companies, name="taxi_companies"),
 
+
+    # airport blog ##############################################
+
+    path('blog/reliable_rideshares', views.airport1, name="reliable_rideshares"),
+    path('blog/airport_needs', views.airport2, name="airport_needs"),
+    path('blog/prebooking_airport', views.airport3, name="prebooking_airport"),
+    path('blog/airport_etiquette', views.airport4, name="airport_etiquette"),
+    path('blog/easily_trust', views.airport5, name="easily_trust"),
+    path('blog/flight_tracking', views.airport6, name="flight_tracking"),
+    path('blog/airport_pickup', views.airport7, name="airport_pickup"),
+    path('blog/airport_advantage', views.airport8, name="airport_advantage"),
+    path('blog/ideal_business', views.airport9, name="ideal_business"),
+    path('blog/savemoney_onairport', views.airport10, name="savemoney_onairport"),
+    path('blog/common_mistakes', views.airport11, name="common_mistakes"),
+    path('blog/modern_taxi', views.airport12, name="modern_taxi"),
+    path('blog/go_green', views.airport13, name="go_green"),
+    path('blog/major_global', views.airport14, name="major_global"),
+    path('blog/passenger_safety', views.airport15, name="passenger_safety"),
+    path('blog/affordable_transfer', views.airport16, name="affordable_transfer"),
+    path('blog/luxury_travelers', views.airport17, name="luxury_travelers"),
+    path('blog/avoid_scams', views.airport18, name="avoid_scams"),
+    path('blog/booking_idea', views.airport19, name="booking_idea"),
+    path('blog/your_needs', views.airport20, name="your_needs"),
+    path('blog/handle_delays', views.airport21, name="handle_delays"),
+    path('blog/ultimate_guide', views.airport22, name="ultimate_guide"),
+    path('blog/ridesharing_apps', views.airport23, name="ridesharing_apps"),
+    path('blog/cashless_payments', views.airport24, name="cashless_payments"),
+    path('blog/safety_during_pandemic', views.airport25, name="safety_during_pandemic"),
+
+
+
+
     # path('send_otp/', views.send_otp, name='send_otp'),
     # path('verify_otp/', views.verify_otp, name='verify_otp'),
 ]

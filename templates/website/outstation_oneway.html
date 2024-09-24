@@ -159,6 +159,7 @@
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
                                 <input type="hidden" name="car_type" value="non_ac"> 
+                                <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
                                 <button type="submit" class="btn btn-sm btn-secondary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
                                     Non A/c Not Available
                                 </button>
@@ -174,6 +175,7 @@
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
                                 <input type="hidden" name="car_type" value="ac"> 
+                                <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
                                 <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #007bff; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
                                     A/c Not Available
                                 </button>

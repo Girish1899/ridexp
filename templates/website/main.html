@@ -835,8 +835,8 @@
                 <div class="row">
                     <div class="col-lg-6 mx-auto">
                         <div class="site-heading text-center">
-                            <span class="site-title-tagline">Taxi Rate</span>
-                            <h2 class="site-title">Our Taxi Rate For You</h2>
+                            <!-- <span class="site-title-tagline">Our Unique Propositions</span> -->
+                            <h2 class="site-title">Our Unique Propositions</h2>
                             <div class="heading-divider"></div>
                         </div>
                     </div>
@@ -844,27 +844,150 @@
                 <div class="row">
                     <div class="col-md-6 col-lg-4">
                         <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="rate-header">
-                                <div class="rate-img">
-                                    <img src="{% static '/img/taxi/airport.jpg' %}" alt="taxi service in Bangalore">
-                                </div>
-                            </div>
                             <div class="rate-header-content">
-                                <h4>Airport Taxi</h4>
-                                <!-- <p class="rate-duration">One Time Payment</p> -->
+                                <h4>Booking assistance</h4>
                             </div>
                             <div class="rate-content">
                                 <div class="rate-icon">
-                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="Airport taxi Drop">
+                                    <i class="fa-light fa-calendar" style="color: #000000;"></i>                                
                                 </div>
                                 <div class="rate-feature">
                                     <ul>
-                                        <li><i class="far fa-check-double"></i> Pickup Charges: 499/- onwards </li>
-                                        <!-- <li><i class="far fa-check-double"></i> Pickup Starts from 4am to 7:45am: <span>INR: 499/- Note: within 30 to 35kms</span></li> -->
-                                        <li><i class="far fa-check-double"></i> Drop Charges: 1004/- onwards</li>
-                                        <!-- <li><i class="far fa-check-double"></i> Up To 50 kms: <span>$1.38/km</span></li> -->
-                                        <li><i class="far fa-check-double"></i> Toll Charges: 115</li>
-                                        <!-- <li><i class="far fa-check-double"></i> Extra Passangers: <span>$0.45</span></li> -->
+                                        <li><i class="far fa-check-double"></i> Need help with your booking? We're here to assist! </li>                                    
+                                    </ul>
+                                    <a href="{% url 'about' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
+                            
+                            <div class="rate-header-content">
+                                <h4>24/7 support</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-location-arrow" style="color: #000000;"></i>
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i> Always available 24/7 for your cab bookings anytime, anywhere!</li>
+                                    </ul>
+                                    <a href="{% url 'about' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="rate-header-content">
+                                <h4>Billing & Invoicing</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-file-lines" style="color: #000000;"></i>
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i>Cost Centre Breakup Automated Billing Vendor Access Tamper Proof</span></li>
+                                    </ul>
+                                    <a href="{% url 'about' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="rate-header-content">
+                                <h4>Tracking</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-paw" style="color: #000000;"></i>                              
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i> Delay Prediction Live Tracking Workflow No Show IVR</li>                                    
+                                    </ul>
+                                    <a href="{% url 'about' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
+                            
+                            <div class="rate-header-content">
+                                <h4>Compliance</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-crosshairs" style="color: #000000;"></i>                                
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i>We ensure compliance with all regulations for top service.</li>
+                                    </ul>
+                                    <a href="{% url 'about' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
+                            
+                            <div class="rate-header-content">
+                                <h4>Security</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-lock" style="color: #000000;"></i>                                
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i> Sign Off Violation Support Stoppage Alerts, Panic Alerts</li>
+                                    </ul>
+                                    <a href="{% url 'about' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="rate-header-content">
+                                <h4>Billing</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-money-bill" style="color: #000000;"></i>
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i>Cost Centre Breakup Automated Billing Vendor Access Tamper Proof</span></li>
+                                    </ul>
+                                    <a href="{% url 'outstationcabs' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="rate-header-content">
+                                <h4>Reporting</h4>
+                            </div>
+                            <div class="rate-content">
+                                <div class="rate-icon">
+                                    <i class="fa-light fa-square-check" style="color: #000000;"></i>                              
+                                </div>
+                                <div class="rate-feature">
+                                    <ul>
+                                        <li><i class="far fa-check-double"></i>Security Alert Reports OTA/OTD Reports No Show Reports Seat Utilization</li>                                    
                                     </ul>
                                     <a href="{% url 'airporttaxi' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
                                 </div>
@@ -873,26 +996,17 @@
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
-                            <div class="rate-header">
-                                <div class="rate-img">
-                                    <img src="{% static '/img/service/taxi_rome_tips.jpg' %}" alt="Cheapest Airport Cabs">
-                                </div>
-                            </div>
+                            
                             <div class="rate-header-content">
-                                <h4>Local Taxi</h4>
-                                <!-- <p class="rate-duration">One Time Payment</p> -->
+                                <h4>Compliance</h4>
                             </div>
                             <div class="rate-content">
                                 <div class="rate-icon">
-                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="Cheapest Cabs">
+                                    <i class="fa-light fa-crosshairs" style="color: #000000;"></i>                                
                                 </div>
                                 <div class="rate-feature">
                                     <ul>
-                                        <li><i class="far fa-check-double"></i> Base Charge:2295/- onwards</li>
-                                        <li><i class="far fa-check-double"></i> Distance/Time: 12hrs(150kms)</li>
-                                        <!-- <li><i class="far fa-check-double"></i> Up To 50 kms: <span>$1.38/km</span></li> -->
-                                        <li><i class="far fa-check-double"></i> Toll Fee: as per routes/actuals</li>
-                                        <!-- <li><i class="far fa-check-double"></i> Extra Passangers: <span>$0.45</span></li> -->
+                                        <li><i class="far fa-check-double"></i>Blacklisting Of Drivers Non-Compliant Alerts Vehicle Compliance Driver Compliance</li>
                                     </ul>
                                     <a href="{% url 'localtaxi' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
                                 </div>
@@ -901,32 +1015,23 @@
                     </div>
                     <div class="col-md-6 col-lg-4">
                         <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="rate-header">
-                                <div class="rate-img">
-                                    <img src="{% static '/img/service/os.jpg' %}" alt="airport" style="width: 95%;">
-                                </div>
-                            </div>
                             <div class="rate-header-content">
-                                <h4>Outstation Cabs</h4>
-                                <!-- <p class="rate-duration">One Time Payment</p> -->
+                                <h4>Mobile App</h4>
                             </div>
                             <div class="rate-content">
                                 <div class="rate-icon">
-                                    <img src="{% static '/img/icon/taxi-1.svg' %}" alt="local taxi">
+                                    <i class="fa-light fa-mobile" style="color: #000000;"></i>
                                 </div>
                                 <div class="rate-feature">
                                     <ul>
-                                        <li><i class="far fa-check-double"></i> Base Charge: 14rs onwards</span></li>
-                                        <li><i class="far fa-check-double"></i> Charges Calculated: km basis</li>
-                                        <li><i class="far fa-check-double"></i> Extra: Toll/Beta/Permit</li>
-                                        <!-- <li><i class="far fa-check-double"></i> Toll Fee: <span>$0.99</span></li> -->
-                                        <!-- <li><i class="far fa-check-double"></i> Extra Passangers: <span>$0.45</span></li> -->
+                                        <li><i class="far fa-check-double"></i>Safe Reach Confirmation Trip Feedback, Scheduling Scheduling, Scheduling SOS Alarm, Tracking.</span></li>
                                     </ul>
                                     <a href="{% url 'outstationcabs' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+
                 </div>
             </div>
         </div>
