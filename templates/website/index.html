@@ -329,7 +329,7 @@
   <!-- enquiry btn -->
 
   <a href="#" class="enquiry-float" id="enquiry-btn">
-    <i class="fas fa-question-circle"></i>
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Quill_Paper_Icon_with_White_Background.png" alt="Enquiry Icon">
   </a>
 
   <div id="enquiryModal" class="modal">
@@ -570,7 +570,10 @@
         var service = $('#service').val();
         var cust_message = $('#cust_message').val();
 
-
+        if (!cust_name || !cust_phone_number || !service || !cust_message) {
+                alert("All fields are required.");
+                return;
+            }
 
         console.log("name :", cust_name);
         console.log("phone :", cust_phone_number);
