@@ -117,11 +117,11 @@
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
                             <!-- Non AC Price Display -->
                              
-                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 0.25rem 0.75rem; margin-right: auto;font-size: 14px;font-weight: bold;">
+                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px;font-size: 14px;font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                             <!-- AC Price Display -->
-                            <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 0.25rem 0.75rem; margin-left: auto;font-size: 14px;font-weight: bold;">
+                            <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-left: 10px; font-size: 14px; font-weight: bold;">
                                 AC ₹ <span id="price_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                         </div>
@@ -138,6 +138,11 @@
                         </div>
                         
                         <div class="d-flex mb-3">
+                           
+                            <small class="border-end me-3 pe-3">
+                                <!-- <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p> -->
+                                <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
+                            </small>
                             <small class="border-end me-3 pe-3">
                                 <strong>Seats:</strong>
                                 {% if prices.ac %}
@@ -149,12 +154,9 @@
                                 {% endif %}
                             </small>
                             <small class="border-end me-3 pe-3">
-                                <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
-                            </small>
-                            <small class="border-end me-3 pe-3">
-                                <p><strong>Driver Beta:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
+                                <!-- <p><strong>Driver Beta:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
+                                <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p> -->
                             </small>
                         </div>
 
@@ -274,11 +276,11 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     var priceElement = document.getElementById("price_" + carType + "_" + categorySlug);
     // var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
     var tollElement = document.getElementById("toll_" + carType + "_" + categorySlug);
-    var betaElement = document.getElementById("beta_" + carType + "_" + categorySlug);
+    // var betaElement = document.getElementById("beta_" + carType + "_" + categorySlug);
     var bookButton = document.querySelector(`button[data-category="${categorySlug}"][data-type="${carType}"]`);
     var hiddenPriceInput = document.getElementById(`hidden_price_${carType}_${categorySlug}`);
 
-    if (!priceElement  || !tollElement || !betaElement || !bookButton || !hiddenPriceInput) {
+    if (!priceElement  || !tollElement || !bookButton || !hiddenPriceInput) {
         console.warn("Some elements are missing for category:", categorySlug, carType);
         return;
     }
@@ -290,7 +292,7 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
         priceElement.textContent = costDetails.cost;
         // permitElement.textContent = costDetails.permit || "-";
         tollElement.textContent = costDetails.toll || "-";
-        betaElement.textContent = costDetails.beta || "-";
+        // betaElement.textContent = costDetails.beta || "-";
 
         hiddenPriceInput.value = costDetails.cost;
 
@@ -302,7 +304,7 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
         priceElement.textContent = "Not Available";
         // permitElement.textContent = "-";
         tollElement.textContent = "-";
-        betaElement.textContent = "-";
+        // betaElement.textContent = "-";
 
         // Disable book button and change text
         bookButton.textContent = `${carType === 'ac' ? 'A/c' : 'Non A/c'} Not Available`;

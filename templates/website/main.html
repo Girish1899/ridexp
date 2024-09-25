@@ -1641,10 +1641,6 @@ function openPage(pageName, btn_id) {
     }
     document.getElementById(pageName).style.display = "block";
 
-    if (pageName == "Airport") {
-        document.getElementById('Airport_source').value = "Kempegowda International Airport Bengaluru";
-    }
-
     $("#" + btn_id).css('background', 'var(--theme-color)');
     $("#" + btn_id).css('color', 'white');
 }
