@@ -55,6 +55,10 @@ def home(request):
     
     return render(request, 'website/main.html',context)
 
+def our_rides(request):
+    context = None
+    return render(request, 'website/our_rides.html',context)
+
 
 def packages(request):
     context = None
