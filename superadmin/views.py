@@ -3071,16 +3071,70 @@ class InvoiceView(DetailView):
 def assign_driver(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        driver_id = data.get('driver_id')  # This will be company_format
+        driver_id = data.get('driver_id') 
         ride_id = data.get('ride_id')
 
         try:
-            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
-            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
-            ride.driver = driver  # Assign the driver object
+            ride = RideDetails.objects.get(ride_id=ride_id)  
+            driver = Driver.objects.get(company_format=driver_id) 
+            ride.driver = driver  
             ride.ride_status = 'assignbookings'
-            ride.assigned_by=request.user
+            ride.assigned_by = request.user
             ride.save()
+
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We’re happy to confirm your booking:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+            Cab Details: {ride.driver.name} - {ride.driver.vehicle.Vehicle_Number} 
+
+            If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+            We look forward to serving you!
+
+            Best regards,
+            Ridexpress
+            support@ridexpress.in
+            ridexpress.in
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_update",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination),
+                    f"{ride.driver.name} - {ride.driver.vehicle.Vehicle_Number}"  
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+            }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
 
             return JsonResponse({'status': 'success'})
         except RideDetails.DoesNotExist:
@@ -3506,14 +3560,65 @@ def cancel_ride(request):
             ride = RideDetails.objects.get(ride_id=ride_id)
             ride.comments = comments
             ride.ride_status = 'cancelledbookings'
-            ride.cancelled_by =request.user
+            ride.cancelled_by = request.user
             ride.save()
 
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We regret to inform you that your booking with Ridexpress has been cancelled:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+
+            If you didn’t request this cancellation or if you need further assistance, please contact us at +91 6366463555 or reply to this email.
+
+            We hope to serve you in the future!
+
+            Best regards,
+            Ridexpress
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_cancellation",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination)
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+                }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
+
             return JsonResponse({'status': 'success'})
+
         except RideDetails.DoesNotExist:
-            return JsonResponse({'status': 'error', 'essage': 'Ride not found.'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Ride not found.'}, status=404)
         except Exception as e:
-            return JsonResponse({'status': 'error', 'essage': str(e)}, status=500)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'failed'}, status=400)
 
