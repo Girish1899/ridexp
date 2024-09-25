@@ -55,9 +55,50 @@ def home(request):
     
     return render(request, 'website/main.html',context)
 
+
+def packages(request):
+    context = None
+    return render(request, 'website/taxi.html',context)
+
 def sitemap(request):
     context = None
     return render(request, 'sitemap.xml',context)
+
+
+def banaglore_to_mysore(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_mysore.html',context)
+
+def banaglore_to_coorg(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_coorg.html',context)
+
+def banaglore_to_hampi(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_hampi.html',context)
+
+def banaglore_to_munnar(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_munnar.html',context)
+
+def banaglore_to_nandi_hills(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_nandi_hills.html',context)
+
+def banaglore_to_kabini(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_kabini.html',context)
+
+def banaglore_to_chikmagalur(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_chikmagalur.html',context)
+
+
+def banaglore_to_ooty(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_ooty.html',context)
+
+
 
 def Why_Choose_Local_Cab_Services(request):
     context = None
