@@ -14,6 +14,8 @@ from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
+from superadmin.views import adduser
+
 
 
 
@@ -825,7 +827,6 @@ def login_view(request):
         username = request.POST.get('Username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
-        
         if user is not None:
             auth_login(request, user)
             try:
@@ -998,9 +999,16 @@ class AddNewBooking(APIView):
                         address=address,
                         password=password,
                         status="active",
-                        company_format=next_company_format,
-                        created_by=request.user,
-                        updated_by=request.user)
+                        company_format=next_company_format
+                        # ,
+                        # created_by=request.user,
+                        # updated_by=request.user
+                        )
+                adduser(self,request)
+                from django.contrib.auth.models import User
+                Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
+                    created_by=User.objects.get(phone_number=customer_phone_number),
+                    updated_by=User.objects.get(phone_number=customer_phone_number))
                 cust.save()
                 customer = Customer.objects.get(phone_number=customer_phone_number)
 
