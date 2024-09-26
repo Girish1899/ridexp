@@ -1,0 +1,105 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+ <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Car Color</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'package_category_list' %}" style="color: white;"><button  class="btn btn-primary">View Package Category</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <!-- <h4 class="card-title">Add Ride Type</h4> -->
+                            </div>
+                            <div class="card-body">
+                                
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Category Name</label>
+                                        <div class="col-sm-10">
+                                            <input type="text" class="form-control form-control-lg" id="category_name" name="category_name">
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary mb-2" id="save_category">Submit</button>
+                                    </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#save_category").click(function (event) {
+            event.preventDefault();
+
+            var category_name = $('#category_name').val().trim().toLowerCase();
+            
+            if (category_name.trim() === '') {
+                alert("Please enter color name.");
+                return;
+            }
+
+           
+            console.log("category_name :", category_name);
+
+            $.ajax({
+                url: '{% url "check_package_category" %}',
+                type: "GET",
+                data: { category_name: category_name },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("package category name already exists.");
+                    } else {
+                        // Proceed with form submission
+
+                    $.ajax({
+                        url: '{% url "add_package_category" %}',
+                        type: "POST",
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        data: { category_name : category_name},
+                        success: function (result) {
+                            console.log("result ***: ", result);
+                            alert("Package Category Added Successfully");
+                            location.href = "{% url 'package_category_list' %}";
+                        },
+                        error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+ {% endblock content%}    

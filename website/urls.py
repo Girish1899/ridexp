@@ -7,6 +7,7 @@ from website.views import *
 urlpatterns = [
     path('', views.home, name='home'),
     path('about', views.about, name='about'),
+    path('our_rides', views.our_rides, name='our_rides'),
     path('save-enquiry/', save_enquiry, name='save_enquiry'),
     path('bookride', views.bookride, name='bookride'),
     path('contact', AddContact.as_view(), name='contact'),
@@ -16,6 +17,8 @@ urlpatterns = [
     path('outstationcabs', views.outstationcabs, name='outstationcabs'),
     path('localtaxi', views.localtaxi, name='localtaxi'),
     path('blog', views.blog, name='blog'),
+    path('packages', views.packages, name='packages'),
+    
     path('faq', views.faq, name='faq'),
     path('terms', views.terms, name='terms'),
     path('login', views.login_page.as_view(), name='login'),
@@ -119,7 +122,17 @@ urlpatterns = [
     path('blog/localcabs_best_for_airport', views.localcabs_best_for_airport, name="localcabs_best_for_airport"),
 
 
+    path('packages/banaglore_to_mysore', views.banaglore_to_mysore, name="banaglore_to_mysore"),
+    path('packages/banaglore_to_coorg', views.banaglore_to_coorg, name="banaglore_to_coorg"),
+    path('packages/banaglore_to_hampi', views.banaglore_to_hampi, name="banaglore_to_hampi"),
+    path('packages/banaglore_to_munnar', views.banaglore_to_munnar, name="banaglore_to_munnar"),
+    path('packages/banaglore_to_nandi_hills', views.banaglore_to_nandi_hills, name="banaglore_to_nandi_hills"),
+    path('packages/banaglore_to_kabini', views.banaglore_to_kabini, name="banaglore_to_kabini"),
+    path('packages/banaglore_to_chikmagalur', views.banaglore_to_chikmagalur, name="banaglore_to_chikmagalur"),
+    path('packages/banaglore_to_ooty', views.banaglore_to_ooty, name="banaglore_to_ooty"),
 
-    # path('send_otp/', views.send_otp, name='send_otp'),
-    # path('verify_otp/', views.verify_otp, name='verify_otp'),
+
+
+    path('send_otp/', SendOtp.as_view(), name='send_otp'),
+    path('verify_otp/', VerifyOtp.as_view(), name='verify_otp'),
 ]

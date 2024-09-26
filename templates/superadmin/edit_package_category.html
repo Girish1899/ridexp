@@ -1,0 +1,120 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<!--**********************************
+    Content body start
+***********************************-->
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Edit Color</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'package_category_list' %}" style="color: white;"><button  class="btn btn-primary">View Package Category </button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <!-- <h4 class="card-title">Edit Color</h4> -->
+                </div>
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="package_category_id" name="package_category_id"
+                            value="{{ plist.0.package_category_id }}">
+                            <input type="hidden" class="form-control" id="original_category_name" name="original_category_name" value="{{ plist.0.category_name }}">
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Package Category Name</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control form-control-lg" id="category_name" name="category_name"
+                                value="{{ plist.0.category_name }}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_category">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_category").click(function () {
+            event.preventDefault();
+
+            var category_name = $('#category_name').val().trim().toLowerCase();
+            var package_category_id = $('#package_category_id').val();
+            var original_category_name = $('#original_category_name').val();
+
+            if (category_name.trim() === '') {
+                alert("Please enter package category name.");
+                return;
+            }
+
+            // Assuming you have a variable original_name to compare with the edited name
+            var original_name = "{{ plist.0.category_name }}";
+
+            if (category_name.trim() === original_category_name.trim()) {
+                submitForm(category_name, package_category_id);
+            } else {
+                $.ajax({
+                    url: "{% url 'check_package_category' %}",
+                    type: "GET",
+                    data: { 'category_name': category_name },
+                    success: function (data) {
+                        if (data.exists) {
+                            alert("category name already exists.");
+                        } else {
+                            if (confirm("Are you sure you want to save this package category?")) {
+                                submitForm(category_name, package_category_id);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+        });
+
+        function submitForm(category_name, package_category_id) {
+            $.ajax({
+                url: "{% url 'UpdatePackageCategory' %}",
+                type: "POST",
+                data: {
+                    'category_name': category_name,
+                    'package_category_id': package_category_id,
+                },
+                headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("package category details edited successfully");
+                        window.location.href = "{% url 'package_category_list' %}";
+                    } else {
+                        alert("Failed to edit package category details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+
+</script>
+
+{% endblock content%}

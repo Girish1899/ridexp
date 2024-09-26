@@ -1,12 +1,18 @@
 {% extends "./index.html" %}
 {% load static %}
-{% block title %}<title> Book_Listing - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services </title> {% endblock %}
-{% block meta_description %} <meta name="description"  content=" Get the best taxi fares with RidexpressTaxi Services. Enjoy transparent pricing with no hidden costs, whether you need a local, outstation, or airport ride. Check out our competitive rates and book your cab today for affordable and reliable transportation services." />{% endblock %}
-{% block meta_keywords %} <meta name="keywords"  content="taxi fares, affordable taxi pricing, transparent cab rates, competitive taxi fares, local taxi rates, outstation taxi prices, airport taxi fares, clear pricing taxi service, [City] taxi prices" />
-<meta name="keyphrase" content="Outstation cabs in Bangalore, cheapest outstation cabs in Bangalore, Outstation cab booking, cab rental services in bangalore, taxi serviceslow cost car rental, Car rentals, Outstation cabs, Outstation cabs Bangalore, car hire in bangalore,  cab hire, cheap cab for hire, taxi fare in bangalore">
-    {% endblock %}
-
-<link rel="canonical" href="https://ridexpress.in/" />
+{% block title %}<title> Book_Listing - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services </title>
+{% endblock %}
+{% block meta_description %}
+<meta name="description"
+    content=" Get the best taxi fares with RidexpressTaxi Services. Enjoy transparent pricing with no hidden costs, whether you need a local, outstation, or airport ride. Check out our competitive rates and book your cab today for affordable and reliable transportation services." />
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords"
+    content="taxi fares, affordable taxi pricing, transparent cab rates, competitive taxi fares, local taxi rates, outstation taxi prices, airport taxi fares, clear pricing taxi service, [City] taxi prices" />
+<meta name="keyphrase"
+    content="Outstation cabs in Bangalore, cheapest outstation cabs in Bangalore, Outstation cab booking, cab rental services in bangalore, taxi serviceslow cost car rental, Car rentals, Outstation cabs, Outstation cabs Bangalore, car hire in bangalore,  cab hire, cheap cab for hire, taxi fare in bangalore">
+<link rel="canonical" href="https://ridexpress.in/booking_list" />
+{% endblock %}
 {% block body_content %}
 <br>
 <!-- Booking Start -->
@@ -17,7 +23,7 @@
                 <div class="col-md-12">
                     <div class="row g-2">
                         <!-- <h3>Summary</h3> -->
-                    <h6 class="  text-primary text-uppercase">Summary</h6>
+                        <h6 class="  text-primary text-uppercase">Summary</h6>
                         <div class="col-md-3">
                             <div class="date" id="date1" data-target-input="nearest">
                                 <label>Pickup Location</label>
@@ -26,275 +32,371 @@
                                 <!-- <input type="text" class="form-control datetimepicker-input" placeholder="Pickup Location" value="{{ source }}" readonly> -->
                             </div>
                         </div>
-                            <div class="col-md-3">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <label>Drop Location</label>
-                                    <h6>{{ destination }}</h6>
-                                    <input type="hidden" id="destination_hidden" name="destination" value="{{ destination }}">
-                                </div>
+                        <div class="col-md-3">
+                            <div class="date" id="date2" data-target-input="nearest">
+                                <label>Drop Location</label>
+                                <h6>{{ destination }}</h6>
+                                <input type="hidden" id="destination_hidden" name="destination"
+                                    value="{{ destination }}">
                             </div>
-                            <div class="col-md-2">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <label>Pickup Date</label>
-                                    <h6>{{ pickup_date }}</h6>
-                                    <input type="hidden" id="pickup_date_hidden" name="pickup_date" value="{{ pickup_date }}">
-                                    <!-- <input type="date" class="form-control datetimepicker-input"  value="{{ pickup_date }}" readonly> -->
-                                </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="date" id="date2" data-target-input="nearest">
+                                <label>Pickup Date</label>
+                                <h6>{{ pickup_date }}</h6>
+                                <input type="hidden" id="pickup_date_hidden" name="pickup_date"
+                                    value="{{ pickup_date }}">
+                                <!-- <input type="date" class="form-control datetimepicker-input"  value="{{ pickup_date }}" readonly> -->
                             </div>
-                            <div class="col-md-2">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <label>Pickup Time</label>
-                                    <h6>{{ pickup_time }}</h6>
-                                    <input type="hidden" id="pickup_time_hidden" name="pickup_time" value="{{ pickup_time }}">
-                                </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="date" id="date2" data-target-input="nearest">
+                                <label>Pickup Time</label>
+                                <h6>{{ pickup_time }}</h6>
+                                <input type="hidden" id="pickup_time_hidden" name="pickup_time"
+                                    value="{{ pickup_time }}">
                             </div>
-                            <!-- <div class="col-md-2">
+                        </div>
+                        <!-- <div class="col-md-2">
                                 <div class="date" id="date2" data-target-input="nearest">
                                     <label>Ride Type</label>
                                     <h6>{{ ridetype }}</h6> -->
-                                    <input type="hidden" id="ridetype_hidden" name="ridetype" value="{{ ridetype }}">
-                                <!-- </div>
+                        <input type="hidden" id="ridetype_hidden" name="ridetype" value="{{ ridetype }}">
+                        <!-- </div>
                             </div> -->
-                            <div class="col-md-2">
-                                <div class="date"  data-target-input="nearest">
-                                    <label>Vehicle Type</label>
-                                    <h6>{{ category }}</h6>
-                                    <input type="hidden" id="category_hidden" name="category" value="{{ category }}">
-                                </div>
+                        <div class="col-md-2">
+                            <div class="date" data-target-input="nearest">
+                                <label>Vehicle Type</label>
+                                <h6>{{ category }}</h6>
+                                <input type="hidden" id="category_hidden" name="category" value="{{ category }}">
                             </div>
-                            <div class="col-md-2">
-                                <div class="date" data-target-input="nearest">
-                                    <label>Price</label>
-                                    <h6>₹{{ price }}</h6>
-                                    <input type="hidden" id="price_hidden" name="price" value="{{ price }}">
-                                </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="date" data-target-input="nearest">
+                                <label>Price</label>
+                                <h6>₹{{ price }}</h6>
+                                <input type="hidden" id="price_hidden" name="price" value="{{ price }}">
                             </div>
-    
-                            <div class="col-md-2">
-                                <div class="date" data-target-input="nearest">
-                                    <label>Car Type</label>
-                                    <h6>{{ car_type }}</h6>
-                                    <input type="hidden" id="car_type_hidden" name="car_type" value="{{ car_type }}">
-                                </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="date" data-target-input="nearest">
+                                <label>Car Type</label>
+                                <h6>{{ car_type }}</h6>
+                                <input type="hidden" id="car_type_hidden" name="car_type" value="{{ car_type }}">
                             </div>
-    
-                            <div class="col-md-2">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <label>Drop Date</label>
-                                    <h6>{{ drop_date }}</h6>
-                                    <input type="hidden" id="drop_date_hidden" name="drop_date" value="{{ drop_date }}">
-                                </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="date" id="date2" data-target-input="nearest">
+                                <label>Drop Date</label>
+                                <h6>{{ drop_date }}</h6>
+                                <input type="hidden" id="drop_date_hidden" name="drop_date" value="{{ drop_date }}">
                             </div>
-                            <div class="col-md-2">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <label>Drop Time</label>
-                                    <h6>{{ drop_time }}</h6>
-                                    <input type="hidden" id="drop_time_hidden" name="drop_time" value="{{ drop_time }}">
-                                </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="date" id="date2" data-target-input="nearest">
+                                <label>Drop Time</label>
+                                <h6>{{ drop_time }}</h6>
+                                <input type="hidden" id="drop_time_hidden" name="drop_time" value="{{ drop_time }}">
                             </div>
-    
-                            <div class="col-md-2"></div>
-                                <div class="date" data-target-input="nearest">
-                                    <!-- <label>Time Slot</label> -->
-                                    <h6>{{ time_slot }}</h6> <!-- Ensure time_slot is available here -->
-                                    <input type="hidden" id="time_slot_hidden" name="time_slot" value="{{ time_slot }}">
-                                    <!-- <input type="hidden" id="drop_date_hidden" name="drop_date" value="{{ drop_date }}">
+                        </div>
+
+                        <div class="col-md-2"></div>
+                        <div class="date" data-target-input="nearest">
+                            <!-- <label>Time Slot</label> -->
+                            <h6>{{ time_slot }}</h6> <!-- Ensure time_slot is available here -->
+                            <input type="hidden" id="time_slot_hidden" name="time_slot" value="{{ time_slot }}">
+                            <!-- <input type="hidden" id="drop_date_hidden" name="drop_date" value="{{ drop_date }}">
                                     <input type="hidden" id="drop_time_hidden" name="drop_time" value="{{ drop_time }}"> -->
-    
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-2">
+                        <div class="date" id="date2" data-target-input="nearest">
+                            <!-- <label>trip_type</label> -->
+                            <!-- <h6>{{ trip_type }}</h6> -->
+                            <input type="hidden" id="trip_type_hidden" name="trip_type" value="{{ trip_type }}">
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+<!-- Booking End -->
+
+
+<!-- Booking Start -->
+<div class="container-xxl py-5">
+    <div class="container">
+        <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
+            <!-- <h6 class="section-title text-center text-primary text-uppercase">Room Booking</h6> -->
+            <h1 class="mb-5"> <span class="text text-uppercase" style="color: rgb(10, 10, 63);">TRAVELLER DETAILS</span>
+            </h1>
+        </div>
+        <div class="row g-5">
+
+            <div class="col-lg-12">
+                <div class="wow fadeInUp" data-wow-delay="0.2s">
+                    <form>
+                        <div class="row g-3">
+                            <!-- Phone Number Input -->
+                            <div class="col-md-6">
+                                <div class="form-floating date" id="date3" data-target-input="nearest">
+                                    <input type="text" class="form-control" id="phone_number"
+                                        placeholder="Enter Phone Number">
+                                    <label for="phone_number">Phone number</label>
                                 </div>
                             </div>
 
-                            <div class="col-md-2">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <!-- <label>trip_type</label> -->
-                                    <!-- <h6>{{ trip_type }}</h6> -->
-                                    <input type="hidden" id="trip_type_hidden" name="trip_type" value="{{ trip_type }}">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="customer_name" placeholder="Your Name">
+                                    <label for="name">Your Name</label>
                                 </div>
                             </div>
-    
-    
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="email" class="form-control" id="email" placeholder="Your Email">
+                                    <label for="email">Your Email</label>
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Special Request" id="address"
+                                        rows="2"></textarea>
+                                    <label for="message">Address</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="password" class="form-control" id="password"
+                                        placeholder="Create a password">
+                                    <label for="password">Password</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating">
+                                    <textarea class="form-control" placeholder="Special Request" id="customer_notes"
+                                        rows="3"></textarea>
+                                    <label for="message">Comments</label>
+                                </div>
+                            </div>
+                            <input type="hidden" id="customer_id" name="customer_id">
+
+                            <center>
+                                <div class="col-3">
+                                    <button class="btn btn-primary w-100 py-3" type="submit" id="confirmBookingBtn"
+                                        style="background-color: #DB9710;border: none;">Book Now</button>
+                                </div>
+                            </center>
                         </div>
-                    </div>
-                   
+                    </form>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Booking End -->
-    
-    
-    <!-- Booking Start -->
-    <div class="container-xxl py-5">
-        <div class="container">
-            <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-                <!-- <h6 class="section-title text-center text-primary text-uppercase">Room Booking</h6> -->
-                <h1 class="mb-5"> <span class="text text-uppercase" style="color: rgb(10, 10, 63);">TRAVELLER DETAILS</span></h1>
-            </div>
-            <div class="row g-5">
-                
-                <div class="col-lg-12">
-                    <div class="wow fadeInUp" data-wow-delay="0.2s">
-                        <form>
-                            <div class="row g-3">
-                                <!-- Phone Number Input -->
-                                <div class="col-md-6">
-                                    <div class="form-floating date" id="date3" data-target-input="nearest">
-                                        <input type="text" class="form-control" id="phone_number" placeholder="Enter Phone Number">
-                                        <label for="phone_number">Phone number</label>
-                                    </div>
-                                </div>
-    
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="customer_name" placeholder="Your Name" >
-                                        <label for="name">Your Name</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" placeholder="Your Email" >
-                                        <label for="email">Your Email</label>
-                                    </div>
-                                </div>             
-                               
-                                <div class="col-6">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Special Request" id="address" rows="2"></textarea>
-                                        <label for="message">Address</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-floating">
-                                        <input type="password" class="form-control" id="password" placeholder="Create a password" >
-                                        <label for="password">Password</label>
-                                    </div>
-                                </div>
-                                <div class="col-6">
-                                    <div class="form-floating">
-                                        <textarea class="form-control" placeholder="Special Request" id="customer_notes" rows="3"></textarea>
-                                        <label for="message">Comments</label>
-                                    </div>
-                                </div>
-                                <input type="hidden" id="customer_id" name="customer_id">
-    
-                                <center><div class="col-3">
-                                    <button class="btn btn-primary w-100 py-3" type="submit" id="confirmBookingBtn" style="background-color: #DB9710;border: none;">Book Now</button>
-                                </div></center>
-                            </div>
-                        </form>
-                    </div>
+</div>
+<!-- Booking End -->
+
+<!-- Add OTP Modal -->
+<center>
+    <div id="otpModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter OTP</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeOtpModal"
+                        style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>An OTP has been sent to your WhatsApp number. Please enter it below to confirm your booking.</p>
+                    <input type="text" id="otpInput" class="form-control" placeholder="Enter OTP" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify OTP</button>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Booking End -->
-    
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
-    <script>
-        // Set the minimum date to today's date
-        document.addEventListener('DOMContentLoaded', function() {
-            var today = new Date();
-            var dd = String(today.getDate()).padStart(2, '0');
-            var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
-            var yyyy = today.getFullYear();
-            today = yyyy + '-' + mm + '-' + dd;
-            document.getElementById('pickup_date_hidden').setAttribute('min', today);
-        });
-    
-        // Customer details autofill when phone number changes
-        $(document).ready(function() {
-            $('#phone_number').on('change', function() {
-                var phoneNumber = $(this).val();
-    
-                $.ajax({
-                    url: "{% url 'get_customer_details' %}",
-                    data: {
-                        'phone_number': phoneNumber
-                    },
-                    success: function(data) {
-                        $('#customer_id').val(data.customer_id);
-                        $('#customer_name').val(data.customer_name).prop('readonly', true);
-                        $('#email').val(data.email).prop('readonly', true);
-                        $('#address').val(data.address).prop('readonly', true);
-                        $('#password').val(data.password).prop('readonly', true);
+</center>
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+<script>
+    // Set the minimum date to today's date
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); // January is 0!
+        var yyyy = today.getFullYear();
+        today = yyyy + '-' + mm + '-' + dd;
+        document.getElementById('pickup_date_hidden').setAttribute('min', today);
+    });
+
+    // Customer details autofill when phone number changes
+    $(document).ready(function () {
+        $('#phone_number').on('change', function () {
+            var phoneNumber = $(this).val();
+
+            $.ajax({
+                url: "{% url 'get_customer_details' %}",
+                data: {
+                    'phone_number': phoneNumber
+                },
+                success: function (data) {
+                    $('#customer_id').val(data.customer_id);
+                    $('#customer_name').val(data.customer_name).prop('readonly', true);
+                    $('#email').val(data.email).prop('readonly', true);
+                    $('#address').val(data.address).prop('readonly', true);
+                    $('#password').val(data.password).prop('readonly', true);
+                    $('#customer_notes').val(''); // Clear any existing notes
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.status === 404) {
+                        $('#customer_id').val('');
+                        $('#customer_name').val('').prop('readonly', false);
+                        $('#email').val('').prop('readonly', false);
+                        $('#address').val('').prop('readonly', false);
+                        $('#password').val('').prop('readonly', false);
                         $('#customer_notes').val(''); // Clear any existing notes
-                    },
-                    error: function(xhr, status, error) {
-                        if (xhr.status === 404) {
-                            $('#customer_id').val('');
-                            $('#customer_name').val('').prop('readonly', false);
-                            $('#email').val('').prop('readonly', false);
-                            $('#address').val('').prop('readonly', false);
-                            $('#password').val('').prop('readonly', false);
-                            $('#customer_notes').val(''); // Clear any existing notes
-                        }
                     }
-                });
+                }
             });
         });
-    
-        // When 'Book Now' button is clicked
-        $('#confirmBookingBtn').click(function(event) {
-            event.preventDefault();
-    
-            var ridetype = $('#ridetype_hidden').val();
-            var category = $('#category_hidden').val();
-            var total_fare = $('#price_hidden').val();
-            var source = $('#source_hidden').val();
-            var destination = $('#destination_hidden').val();
-            var pickup_date = $('#pickup_date_hidden').val();
-            var car_type = $('#car_type_hidden').val();
-            var trip_type = $('#trip_type_hidden').val();
-            var drop_date = $('#drop_date_hidden').val();
-            var drop_time = $('#drop_time_hidden').val();
-            
-            var date_parts = pickup_date.split('/');
-            if (date_parts.length === 3) {
-                pickup_date = date_parts[2] + '-' + date_parts[0] + '-' + date_parts[1]; // Convert MM/DD/YYYY to YYYY-MM-DD
+    });
+
+    $('#confirmBookingBtn').click(function (event) {
+        event.preventDefault();
+
+        // Collect booking details
+        var bookingDetails = {
+            ridetype: $('#ridetype_hidden').val(),
+            category: $('#category_hidden').val(),
+            total_fare: $('#price_hidden').val(),
+            source: $('#source_hidden').val(),
+            destination: $('#destination_hidden').val(),
+            pickup_date: $('#pickup_date_hidden').val(),
+            car_type: $('#car_type_hidden').val(),
+            trip_type: $('#trip_type_hidden').val(),
+            drop_date: $('#drop_date_hidden').val(),
+            drop_time: $('#drop_time_hidden').val(),
+            pickup_time: $('#pickup_time_hidden').val(),
+            customer: $('#customer_id').val(),
+            customer_name: $('#customer_name').val(),
+            address: $('#address').val(),
+            email: $('#email').val(),
+            password: $('#password').val(),
+            phone_number: $('#phone_number').val(),
+            customer_notes: $('#customer_notes').val(),
+            ride_status: 'currentbookings'
+
+        };
+
+        // Send OTP to the customer's WhatsApp number
+        $.ajax({
+            url: '{% url "send_otp" %}', // Backend endpoint to send OTP
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: {
+                phone_number: bookingDetails.phone_number,
+                customer_name: bookingDetails.customer_name
+            },
+            success: function (result) {
+                if (result["status"] == "Success") {
+                    // Show OTP modal
+                    $('#otpModal').modal('show');
+                } else {
+                    alert("Failed to send OTP. Please try again. " + result['message']);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
             }
-    
-            var pickup_time = $('#pickup_time_hidden').val();
-            var customer = $('#customer_id').val();
-            var customer_name = $('#customer_name').val();
-            var address = $('#address').val();
-            var email = $('#email').val();
-            var password = $('#password').val();
-            var phone_number = $('#phone_number').val();
-            var customer_notes = $('#customer_notes').val();
-            var ride_status = 'currentbookings';
-    
+        });
+
+        $('#otpModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+
+        // Handle OTP verification
+        $('#verifyOtpBtn').click(function () {
+            var otp = $('#otpInput').val();
+            $.ajax({
+                url: '{% url "verify_otp" %}', // Backend endpoint to verify OTP
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    phone_number: bookingDetails.phone_number,
+                    otp: otp
+                },
+                success: function (result) {
+                    if (result["status"] == "Success") {
+                        // If OTP is correct, proceed to confirm booking
+                        confirmBooking(bookingDetails);
+                    } else {
+                        alert("Incorrect OTP. Please try again.");
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+
+    // Function to confirm booking after OTP verification
+    function confirmBooking(bookingDetails) {
+        try {
+            function formatDateToLocal(dateStr) {
+                var date = new Date(dateStr);
+                var year = date.getFullYear();
+                var month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based, so add 1
+                var day = ('0' + date.getDate()).slice(-2); // Ensure two digits for day
+                return `${year}-${month}-${day}`; // Return in 'YYYY-MM-DD' format
+            }
+
+            if (bookingDetails.pickup_date) {
+                var formattedPickupDate = formatDateToLocal(bookingDetails.pickup_date);
+                bookingDetails.pickup_date = formattedPickupDate;
+            } else {
+                throw new Error("Pickup date is missing.");
+            }
+
+            // Check and convert drop_date if it exists
+            if (bookingDetails.drop_date) {
+                var formattedDropDate = formatDateToLocal(bookingDetails.drop_date);
+                bookingDetails.drop_date = formattedDropDate;
+            }
+
             $.ajax({
                 url: '{% url "add_new_booking" %}',
                 type: "POST",
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
-                data: {
-                    ridetype: ridetype,
-                    car_type: car_type,
-                    pickup_date: pickup_date,
-                    pickup_time: pickup_time,
-                    source: source,
-                    destination: destination,
-                    category: category,
-                    customer: customer,
-                    phone_number: phone_number,
-                    address: address,
-                    customer_name: customer_name,
-                    email: email,
-                    password: password,
-                    customer_notes: customer_notes,
-                    total_fare: total_fare,
-                    ride_status: ride_status,
-                    drop_date: drop_date,
-                    drop_time: drop_time,
-                    trip_type:trip_type,
-                },
-                success: function(result) {
+                data: bookingDetails,
+                success: function (result) {
                     if (result["status"] != "Error") {
                         var company_format = result['company_format']; // Get company_format from the backend
-    
+
                         // Construct the message with company_format
                         var message = `Hello ${customer_name},
     
@@ -303,9 +405,9 @@
                         We’re happy to confirm your booking:
     
                         Booking Id : ${company_format}
-                        Pickup Date & Time: ${pickup_date} ${pickup_time}
-                        Pickup Location: ${source}
-                        Drop-off Location: ${destination}
+                        Pickup Date & Time: ${bookingDetails.pickup_date} ${bookingDetails.pickup_time}
+                        Pickup Location: ${bookingDetails.source}
+                        Drop-off Location: ${bookingDetails.destination}
     
                         Cab details will be provided shortly. If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
     
@@ -315,18 +417,124 @@
                         Ridexpress
                         support@ridexpress.in
                         ridexpress.in`;
-    
+
                         alert("Thank you for booking with us. Information will be shared with you over WhatsApp.");
                         location.href = "{% url 'home' %}";
                     } else {
                         alert("Oops, something went wrong. Please try again. " + result['message']);
                     }
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
+        } catch (e) {
+            alert("Error: " + e.message);
+            console.error(e);
+        }
+    }
+
+    $(document).ready(function () {
+        $('#closeOtpModal').click(function () {
+            $('#otpModal').modal('hide'); // Hide the modal when close button is clicked
         });
-    </script>   
-    
-    {% endblock body_content %}
+    });
+</script>
+
+<style>
+    /* Required Bootstrap Modal CSS */
+    .modal {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1050;
+        display: none;
+        overflow: hidden;
+        outline: 0;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: auto;
+        margin: 0.5rem;
+        pointer-events: none;
+    }
+
+    .modal.fade .modal-dialog {
+        transition: -webkit-transform 0.3s ease-out;
+        transition: transform 0.3s ease-out;
+        transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+        -webkit-transform: translate(0, -50px);
+        transform: translate(0, -50px);
+    }
+
+    .modal.show .modal-dialog {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+
+    .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 0.3rem;
+        outline: 0;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 1rem 1rem;
+        border-bottom: 1px solid #dee2e6;
+        border-top-left-radius: 0.3rem;
+        border-top-right-radius: 0.3rem;
+    }
+
+    .modal-footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0.75rem;
+        border-top: 1px solid #dee2e6;
+        border-bottom-right-radius: 0.3rem;
+        border-bottom-left-radius: 0.3rem;
+    }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+    }
+
+    .modal-header .close {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #000;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: -1rem -4rem -1rem auto;
+        /* Adjust position */
+    }
+
+    .modal-header .close:hover,
+    .modal-header .close:focus {
+        color: #000;
+        text-decoration: none;
+    }
+</style>
+{% endblock body_content %}

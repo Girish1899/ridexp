@@ -244,6 +244,32 @@ urlpatterns = [
     path('vehicles/<str:vehicle_id>/daily-summary/', VehicleDailySummaryView.as_view(), name='vehicle_daily_summary'),
     path('vehicle/<int:vehicle_id>/details/<str:date>/', BookingDetailsView.as_view(), name='booking_details'),
 
+    #package_category################  
+    path('add_package_category', addpackagecategory.as_view(), name='add_package_category'),
+    path('check_package_category/', check_package_category, name='check_package_category'),
+    path('package_category_list', PackageCategoryList.as_view(), name='package_category_list'),
+    path('DeletePackageCategory', DeletePackageCategory.as_view(), name='DeletePackageCategory'),
+    path('EditPackageCategory/<int:id>/', EditPackageCategory.as_view(), name='EditPackageCategory'),
+    path('PackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='PackageCategoryHistory'),
+    path('UpdatePackageCategory', UpdatePackageCategory.as_view(), name='UpdatePackageCategory'),
+    # path('color/<int:color_id>/view/', ViewColor.as_view(), name='color'),
+
+    #package################  
+    path('add_packages', addpackages.as_view(), name='add_packages'),
+    path('packages_list', PackageList.as_view(), name='packages_list'),
+    path('DeletePackages', DeletePackages.as_view(), name='DeletePackages'),
+    path('EditPackages/<int:id>/', EditPackages.as_view(), name='EditPackages'),
+    path('PackagesHistory/<int:package_id>/', PackagesHistoryView.as_view(), name='PackagesHistory'),
+    path('UpdatePackages', UpdatePackages.as_view(), name='UpdatePackages'),
+
+    #package order################  
+    path('add_package_order', AddPackageOrderView.as_view(), name='add_package_order'),
+    path('package_order_list', PackageOrderList.as_view(), name='package_order_list'),
+    path('DeletePackageOrder', DeletePackageOrder.as_view(), name='DeletePackageOrder'),
+    path('EditPackageOrder/<int:id>/', EditPackageOrder.as_view(), name='EditPackageOrder'),
+    path('package_order_history/<int:order_id>/', PackageOrderHistoryView.as_view(), name='package_order_history'),
+    path('UpdatePackageOrder', UpdatePackageOrder.as_view(), name='UpdatePackageOrder'),
+
 
 ]
 

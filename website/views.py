@@ -14,8 +14,9 @@ from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
-from superadmin.views import adduser
+from django.core.cache import cache
 
+from superadmin.views import adduser
 
 
 
@@ -57,9 +58,54 @@ def home(request):
     
     return render(request, 'website/main.html',context)
 
+def our_rides(request):
+    context = None
+    return render(request, 'website/our_rides.html',context)
+
+
+def packages(request):
+    context = None
+    return render(request, 'website/taxi.html',context)
+
 def sitemap(request):
     context = None
     return render(request, 'sitemap.xml',context)
+
+
+def banaglore_to_mysore(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_mysore.html',context)
+
+def banaglore_to_coorg(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_coorg.html',context)
+
+def banaglore_to_hampi(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_hampi.html',context)
+
+def banaglore_to_munnar(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_munnar.html',context)
+
+def banaglore_to_nandi_hills(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_nandi_hills.html',context)
+
+def banaglore_to_kabini(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_kabini.html',context)
+
+def banaglore_to_chikmagalur(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_chikmagalur.html',context)
+
+
+def banaglore_to_ooty(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_ooty.html',context)
+
+
 
 def Why_Choose_Local_Cab_Services(request):
     context = None
@@ -827,6 +873,7 @@ def login_view(request):
         username = request.POST.get('Username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
+        
         if user is not None:
             auth_login(request, user)
             try:
@@ -919,6 +966,7 @@ class AddNewBooking(APIView):
             # Format the time as a string with hours, minutes, and seconds
             time_str = current_time.strftime('%H%M%S')
             company_format = "WB" + time_str
+            bookings_from = "website"
             # ridetype = request.POST['ridetype']
             category = request.POST['category']
             source = request.POST['source']
@@ -999,19 +1047,17 @@ class AddNewBooking(APIView):
                         address=address,
                         password=password,
                         status="active",
-                        company_format=next_company_format
-                        # ,
+                        company_format=next_company_format,
                         # created_by=request.user,
                         # updated_by=request.user
                         )
+                cust.save()
+                customer = Customer.objects.get(phone_number=customer_phone_number)
                 adduser(self,request)
                 from django.contrib.auth.models import User
                 Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
                     created_by=User.objects.get(phone_number=customer_phone_number),
                     updated_by=User.objects.get(phone_number=customer_phone_number))
-                cust.save()
-                customer = Customer.objects.get(phone_number=customer_phone_number)
-
             # Determine ride status based on pickup date
             today = date.today().isoformat()
             ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
@@ -1029,6 +1075,7 @@ class AddNewBooking(APIView):
                 ride_details.pickup_time=pickup_time
                 ride_details.customer_notes=customer_notes
                 ride_details.ride_status=ride_status
+                ride_details.bookings_from=bookings_from
                 ride_details.assigned_by=request.user
                 ride_details.created_by=request.user
                 ride_details.updated_by=request.user
@@ -1635,3 +1682,60 @@ class RoundtripRidePricingDetails(APIView):
 #             return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully'})
 #         else:
 #             return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP'})
+
+
+class SendOtp(View):
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        customer_name = request.POST.get('customer_name')
+        otp = str(random.randint(100000, 999999))  # Generate a random 6-digit OTP
+
+        # Store OTP in cache with a 5-minute expiration
+        cache.set(f'otp_{phone_number}', otp, timeout=300)
+
+        # WhatsApp API payload for OTP
+        whatsapp_payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "otp_verification",
+            "destination": phone_number,
+            "userName": "Ridexpress",
+            "templateParams": [str(otp)],
+            "source": "new-landing-page form",
+            "buttons": [
+                {
+                    "type": "button",
+                    "sub_type": "url",
+                    "index": 0,
+                    "parameters": [
+                        {
+                            "type": "text",
+                            "text": otp  # Send OTP in the message
+                        }
+                    ]
+                }
+            ]
+        }
+
+        try:
+            response = requests.post("https://backend.aisensy.com/campaign/t1/api/v2", json=whatsapp_payload)
+            if response.status_code == 200:
+                return JsonResponse({'status': 'Success', 'message': 'OTP sent successfully.'})
+            else:
+                return JsonResponse({'status': 'Error', 'message': 'Failed to send OTP.'})
+        except requests.RequestException as e:
+            return JsonResponse({'status': 'Error', 'message': f'Error sending OTP: {e}'})
+
+class VerifyOtp(View):
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        otp = request.POST.get('otp')
+
+        # Retrieve the OTP from the cache
+        cached_otp = cache.get(f'otp_{phone_number}')
+
+        if cached_otp and cached_otp == otp:
+            # OTP matches, remove it from cache
+            cache.delete(f'otp_{phone_number}')
+            return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully.'})
+        else:
+            return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})

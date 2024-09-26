@@ -1,0 +1,130 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Add Package Order</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'package_order_list' %}" style="color: white;">
+                    <button class="btn btn-primary">View Orders</button>
+                </a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer</label>
+                        <div class="col-sm-10">
+                            <select id="customer" name="customer" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Customer</option>
+                                {% for customer in customers %}
+                                <option value="{{ customer.customer_id }}">{{ customer.customer_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package</label>
+                        <div class="col-sm-10">
+                            <select id="package" name="package" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Package</option>
+                                {% for package in packages %}
+                                <option value="{{ package.package_id }}">{{ package.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Amount</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control form-control-lg" id="total_amount" name="total_amount">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Payment Method</label>
+                        <div class="col-sm-10">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="payment_method" id="upi" value="UPI">
+                                <label class="form-check-label" for="upi" style="color: black;">UPI</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="payment_method" id="cash" value="Cash">
+                                <label class="form-check-label" for="cash" style="color: black;">Cash</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="payment_method" id="card" value="Card">
+                                <label class="form-check-label" for="card" style="color: black;">Card</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
+                        <div class="col-sm-10">
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="active" selected disabled>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function () {
+            var customer = $('#customer').val();
+            var package = $('#package').val();
+            var total_amount = $('#total_amount').val();
+            var payment_method = $('input[name="payment_method"]:checked').val();
+            var status = $('#status').val();
+
+            // if (!customer || !package || !total_amount || !payment_method || !status) {
+            //     alert("All fields are required.");
+            //     return;
+            // }
+
+            console.log('customer',customer)
+            console.log('package',package)
+            console.log('status',status)
+
+            $.ajax({
+                url: '{% url "add_package_order" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: { customer: customer, package: package, total_amount: total_amount, payment_method: payment_method, status: status },
+                success: function (result) {
+                    alert("Package Order added successfully");
+                    location.href = "{% url 'package_order_list' %}";
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock content %}

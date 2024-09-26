@@ -1,0 +1,96 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <a href="{% url 'add_package_category' %}" style="color: white;"><button  class="btn btn-primary">Add Package Category</button></a>
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <!-- row -->
+
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h4 class="card-title">Package Category List</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="example" class="display" style="min-width: 845px">
+                                <thead>
+                                    <tr>
+                                    <th>Serial No</th>
+                                    <th>Package Category Name </th>
+                                    <th>Created On</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for i in object_list %}
+                                <tr style="color: #030000;">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.category_name }}</td>
+                                    <td>{{ i.created_on }}</td>
+                                    <td style="display: flex; justify-content: center; align-items: center;">
+                                        <a href="#" class="btn btn-primary"  onclick="EditPackageCategory('{{i.package_category_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-secondary" onclick="DeletePackageCategory('{{i.package_category_id}}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                        <a href="#" class="btn btn-warning" onclick="HistoryPackageCategory('{{i.package_category_id}}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div><!-- .animated -->
+</div><!-- .content -->
+
+<script>
+    function DeletePackageCategory(package_category_id){
+        var action = confirm("Are you sure you want to delete this Package Category?");
+        if (action != false) {
+          $.ajax({
+              url: "DeletePackageCategory",
+              data: {
+                  'package_category_id': package_category_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Package Category Deleted Successfully");
+                    window.location.href = "{% url 'package_category_list' %}";
+                    $("#package_category_id #i-" + package_category_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditPackageCategory(package_category_id) {
+        var action = confirm("Are you sure you want to edit this package category?");
+        if (action !== false) {
+            window.location.href = "EditPackageCategory/" + package_category_id; // Add a slash here
+        }
+    };
+    function HistoryPackageCategory(package_category_id) {
+        window.location.href = "PackageCategoryHistory/" + package_category_id; // Add a slash here
+    };
+
+</script>
+{% endblock content%}
+
