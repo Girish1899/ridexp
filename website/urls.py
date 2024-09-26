@@ -133,6 +133,6 @@ urlpatterns = [
 
 
 
-    # path('send_otp/', views.send_otp, name='send_otp'),
-    # path('verify_otp/', views.verify_otp, name='verify_otp'),
+    path('send_otp/', SendOtp.as_view(), name='send_otp'),
+    path('verify_otp/', VerifyOtp.as_view(), name='verify_otp'),
 ]
