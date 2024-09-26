@@ -1,0 +1,147 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+
+<!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Add Packages</h4>
+                            <!-- <span class="ml-1">Element</span> -->
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <a href="{% url 'packages_list' %}" style="color: white;"><button  class="btn btn-primary">View Packages</button></a>
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+                
+                <!-- row -->
+                <!-- <div class="row"> -->
+                    <div class="col-xl-12">
+
+                        <div class="card">
+                            <div class="card-header">
+                                <!-- <h4 class="card-title">Add Customer</h4> -->
+                            </div>
+                            <div class="card-body">
+                                <!-- <div class="basic-form"> -->
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Name</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="name" name="name">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category Name</label>
+                                            <div class="col-sm-10">
+                                                <select id="package_category" name="package_category" class="form-control form-control-lg">
+                                                    <option value="" selected disabled>Select Package Category</option>
+                                                    {% for obj in pclist %}
+                                                    <option value="{{ obj.package_category_id }}">{{ obj.category_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Description</label>
+                                            <div class="col-sm-10">                                            
+                                                <textarea class="form-control" rows="2" id="description" name="description"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price</label>
+                                            <div class="col-sm-10">
+                                                <input type="number" class="form-control form-control-lg" id="price" name="price">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Duration</label>
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control form-control-lg" id="duration" name="duration">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Features</label>
+                                            <div class="col-sm-10">                                            
+                                                <textarea class="form-control" rows="2" id="features" name="features"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                                            <div class="col-sm-10">    
+                                            <select class="form-control form-control-lg" id="status" name="status">
+                                                <option value="" selected disabled>Select Status</option>
+                                                <option value="active" selected>Active</option>
+                                                <option value="inactive">Inactive</option>
+                                            </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12">
+                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                        </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function () {
+            var name = $('#name').val();
+            var package_category = $('#package_category').val();
+            var description = $('#description').val();
+            var price = $('#price').val();
+            var duration = $('#duration').val();
+            var features = $('#features').val();
+            var status = $('#status').val();
+            
+            if (!name || !package_category || !price || !duration  ) {
+                alert("All fields are required.");
+                return;
+            }
+
+            console.log('category name',name)
+            console.log('category',package_category)
+            console.log('description',description)
+            console.log('status',status)
+
+            $.ajax({
+                url: '{% url "add_packages" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: { name: name, package_category: package_category, description: description, price: price, duration: duration, features: features, status: status },
+                success: function (result) {
+                    alert("Packages details added");
+                    location.href = "{% url 'packages_list' %}";
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+             });
+        });
+    });
+</script>
+
+{% endblock content %}

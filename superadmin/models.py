@@ -789,12 +789,29 @@ class Enquiry(models.Model):
 
 
 
-class Package(models.Model):
+class PackageCategories(models.Model):
+    package_category_id = models.AutoField(primary_key=True)
+    category_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True) 
+    created_by = models.ForeignKey(User, related_name='package_category_created', on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(User, related_name='package_category_updated', on_delete=models.SET_NULL, null=True, blank=True)
+
+class PackageCategoriesHistory(models.Model):
+    package_category_id = models.IntegerField()
+    category_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.CharField(max_length=100, null=True, blank=True)
+    updated_by = models.CharField(max_length=100, null=True, blank=True)        
+
+class Packages(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),
         ('inactive', 'Inactive'),
     ]
     package_id = models.AutoField(primary_key=True)
+    package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE) 
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -802,7 +819,27 @@ class Package(models.Model):
     features = models.TextField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    status = models.CharField(max_length=20, choices=Driver.STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    created_by = models.ForeignKey(User, related_name='packages_created', on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(User, related_name='packages_updated', on_delete=models.SET_NULL, null=True, blank=True)
+
+class PackagesHistory(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    package_id = models.IntegerField()
+    package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE) 
+    name = models.CharField(max_length=255)
+    description = models.TextField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    duration = models.CharField(max_length=255)
+    features = models.TextField()
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES) 
+    created_by = models.CharField(max_length=100, null=True, blank=True)
+    updated_by = models.CharField(max_length=100, null=True, blank=True)   
 
 class PackageOrder(models.Model):
     STATUS_CHOICES = [
@@ -810,11 +847,30 @@ class PackageOrder(models.Model):
         ('inactive', 'Inactive'),
     ]
     order_id = models.AutoField(primary_key=True)
-    customer = models.ForeignKey('Customer', on_delete=models.CASCADE) 
-    package = models.ForeignKey(Package, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE) 
+    package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=Driver.STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50) 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, related_name='package_order_created', on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(User, related_name='package_order_updated', on_delete=models.SET_NULL, null=True, blank=True)
+
+class PackageOrderHistory(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    order_id = models.IntegerField()
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE) 
+    package = models.ForeignKey(Packages, on_delete=models.CASCADE)
+    order_date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=50) 
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.CharField(max_length=100, null=True, blank=True)
+    updated_by = models.CharField(max_length=100, null=True, blank=True)    
