@@ -10,27 +10,29 @@
                     <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'adindex' %}" style="color: white !important;">Dashboard</a></li>
                 </ol>
             </div>
         </div>
         <!-- row -->
 
-
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Category List</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="example" class="display" style="min-width: 845px">
-                                <thead>
-                                    <tr>
-                                        <th>Category Id</th>
+              <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                  <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Category View</h6>
+                  </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                  <div class="table-responsive p-0">
+                    <table class="table align-items-center justify-content-center mb-0">
+                      <thead>
+                        <tr style="color: black !important;">
+                          <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project</th> -->
+                          <th>Category Id</th>
                                         <th>Category Name</th>
                                         <th>Status</th>
                                         <th>Created On</th>
@@ -38,36 +40,37 @@
                                         <th>Created by</th>
                                         <th>Updated by</th>
                                         <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for i in object_list %}
-                                    <tr style="color: #030000;">
-                                        <td>{{ i.category_id }}</td>
-                                        <td>{{ i.category_name }}</td>
-                                        <td>
-                                            <span class="badge {% if i.category_status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
-                                                {{ i.category_status }}
-                                            </span>
-                                        </td>                                         
-                                        <td>{{ i.created_on }}</td>
-                                        <td>{{ i.updated_on }}</td>
-                                        <td>{{ i.created_by }}</td>
-                                        <td>{{ i.updated_by }}</td>
-                                        <td >
-                                            <!-- <a href="#" class="btn btn-primary"  onclick="EditCategory('{{i.category_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
-                                            <a href="#" class="btn btn-secondary" onclick="DeleteCategory('{{i.category_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
-                                            <a href="#" class="btn btn-warning" onclick="HistoryCategory('{{i.category_id}}')"><i class="fa fa-clock"></i></a>
-                                        </td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for i in object_list %}
+                        <tr style="color: #030000;">
+                            <td>{{ i.category_id }}</td>
+                            <td>{{ i.category_name }}</td>
+                            <td>
+                                <span class="badge {% if i.category_status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                    {{ i.category_status }}
+                                </span>
+                            </td>                                         
+                            <td>{{ i.created_on }}</td>
+                            <td>{{ i.updated_on }}</td>
+                            <td>{{ i.created_by }}</td>
+                            <td>{{ i.updated_by }}</td>
+                            <td >
+                                <!-- <a href="#" class="btn btn-primary"  onclick="EditCategory('{{i.category_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                <a href="#" class="btn btn-secondary" onclick="DeleteCategory('{{i.category_id}}')"><i class="fa fa-trash"></i></a>&nbsp; -->
+                                <a href="#" class="btn btn-warning" onclick="HistoryCategory('{{i.category_id}}')"><i class="fa fa-clock"></i></a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                  
+                    </table>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
+          </div>
     </div>
 </div>
 
