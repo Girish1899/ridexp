@@ -1063,8 +1063,31 @@ class AddNewBooking(APIView):
                         )
                 cust.save()
                 customer = Customer.objects.get(phone_number=customer_phone_number)
-                customer = Customer.objects.get(phone_number=customer_phone_number)
-                adduser(request)
+                last_user = Profile.objects.all().order_by('-profile_id').first()
+                if last_user:
+                    last_company_format = int(last_user.company_format.replace('USR', ''))
+                    next_company_format = f'USR{last_company_format + 1:02}'
+                else:
+                    next_company_format = 'USR01'
+                user_name = request.POST['user_name']
+                phone_number = request.POST['phone_number']
+                email = request.POST['email']
+                password = request.POST['password']
+                address = request.POST['address']
+                user_type = request.POST['type']
+                status = request.POST['status']
+                company_format = request.POST.get('company_format', '')
+
+                user = User.objects.create_user(username=user_name, email=email, password=password)
+                profile = Profile.objects.create(
+                    user=user,
+                    phone_number=phone_number,
+                    address=address,
+                    type=user_type,
+                    status=status,
+                    company_format=company_format,
+                    created_by=request.user
+                    )
                 from django.contrib.auth.models import User
                 Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
                     created_by=User.objects.get(phone_number=customer_phone_number),
