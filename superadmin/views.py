@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -2538,6 +2538,51 @@ def verify_vehicle(request):
         vehicle.verification_status = 'verified'
         vehicle.verified_on = timezone.now()
         vehicle.save()
+        message = f"""
+        Hello {vehicle.owner.name},
+        Thank you for choosing Ridexpress,
+        We are pleased to inform you that your vehicle profile has been successfully verified!:
+        Attachment ID: {vehicle.company_format}
+        Cab Details: {vehicle.Vehicle_Number} - {vehicle.model.brand.category.category_name} - {vehicle.model.brand.brand_name} - {vehicle.model.model_name}
+
+        If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+        We look forward to serving you!
+
+        Best regards,
+        Ridexpress
+        support@ridexpress.in
+        ridexpress.in
+        """
+
+        payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "attachment_details",
+            "destination": vehicle.owner.phone_number,
+            "userName": "Ridexpress",
+            "templateParams": [
+                str(vehicle.owner.name),
+                str(vehicle.company_format),
+                f"{vehicle.Vehicle_Number} - {vehicle.model.brand.category.category_name} - {vehicle.model.brand.brand_name} - {vehicle.model.model_name}"
+            ],
+            "source": "new-landing-page form",
+            "media": {},
+            "buttons": [],
+            "carouselCards": [],
+            "location": {},
+            "paramsFallbackValue": {
+                "FirstName": "user"
+            }
+        }
+
+        gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+        response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+        if response.status_code == 200:
+            print("WhatsApp message sent successfully:", response.json())
+        else:
+            print("Failed to send WhatsApp message:", response.text)
+
         return JsonResponse({'verified': True})
     return JsonResponse({'verified': False})    
     
@@ -3064,6 +3109,49 @@ class InvoiceView(DetailView):
     
     def get_object(self):
         ride_id = self.kwargs.get("ride_id")
+        ride=RideDetails.objects.get(ride_id=ride_id)
+        #pip install docx2pdf-for windows
+        #sudo apt install libreoffice-for ubuntu
+        from docxtpl import DocxTemplate
+        from docx2pdf import convert
+
+        # Load your template
+        template = DocxTemplate("media/Invoice_template.docx")
+
+        # Define the context - a dictionary with placeholders and their respective values
+        sList={
+            'serv_type':'Drop',
+            'serv_desp': ride['source']+"-"+ride['destination'],
+            'serv_amount':ride['total_fare']
+        }
+        context = {
+        'invno': '0002',  
+        'sdate': '26-08-2024',  
+        'sptype': 'September 2024',
+        'spstatus':'Completed',
+        'serv_customer_name':ride['customer']['customer_name'],
+        'servrtype':ride['ridetype']['name'],
+        'servcarno':'MA12KA7890',
+        'serv_dist_trav':'12KM',
+        'serv_sub_total':'489',
+        'serv_sgst':'18',
+        'serv_cgst':'12',
+        'serv':sList,
+        'ttial':'530'
+        }
+
+        # Render the document with the context
+        template.render(context)
+
+        #  Save the document with the applied content
+        template.save("RideXpress_Invoice_EFGH_2.docx")
+
+        print("Document saved successfully!")
+
+        convert("media/RideXpress_Invoice.docx","media/RideXpress_Invoice.pdf")
+
+
+        print("Conversion complete! PDF saved.")
         return get_object_or_404(RideDetails, ride_id=ride_id)
 
 
@@ -3071,16 +3159,70 @@ class InvoiceView(DetailView):
 def assign_driver(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        driver_id = data.get('driver_id')  # This will be company_format
+        driver_id = data.get('driver_id') 
         ride_id = data.get('ride_id')
 
         try:
-            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
-            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
-            ride.driver = driver  # Assign the driver object
+            ride = RideDetails.objects.get(ride_id=ride_id)  
+            driver = Driver.objects.get(company_format=driver_id) 
+            ride.driver = driver  
             ride.ride_status = 'assignbookings'
-            ride.assigned_by=request.user
+            ride.assigned_by = request.user
             ride.save()
+
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We’re happy to confirm your booking:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+            Cab Details: {ride.driver.name} - {ride.driver.vehicle.Vehicle_Number} 
+
+            If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+            We look forward to serving you!
+
+            Best regards,
+            Ridexpress
+            support@ridexpress.in
+            ridexpress.in
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_update",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination),
+                    f"{ride.driver.name} - {ride.driver.vehicle.Vehicle_Number}"  
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+            }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
 
             return JsonResponse({'status': 'success'})
         except RideDetails.DoesNotExist:
@@ -3106,6 +3248,59 @@ def advanceassign_driver(request):
             ride.ride_status = 'assignlaterbookings'
             ride.assigned_by=request.user
             ride.save()
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We’re happy to confirm your booking:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+            Cab Details: {ride.driver.name} - {ride.driver.vehicle.Vehicle_Number} 
+
+            If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+            We look forward to serving you!
+
+            Best regards,
+            Ridexpress
+            support@ridexpress.in
+            ridexpress.in
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_update",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination),
+                    f"{ride.driver.name} - {ride.driver.vehicle.Vehicle_Number}"  
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+            }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
 
             return JsonResponse({'status': 'success'})
         except RideDetails.DoesNotExist:
@@ -3506,14 +3701,65 @@ def cancel_ride(request):
             ride = RideDetails.objects.get(ride_id=ride_id)
             ride.comments = comments
             ride.ride_status = 'cancelledbookings'
-            ride.cancelled_by =request.user
+            ride.cancelled_by = request.user
             ride.save()
 
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We regret to inform you that your booking with Ridexpress has been cancelled:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+
+            If you didn’t request this cancellation or if you need further assistance, please contact us at +91 6366463555 or reply to this email.
+
+            We hope to serve you in the future!
+
+            Best regards,
+            Ridexpress
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_cancellation",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination)
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+                }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
+
             return JsonResponse({'status': 'success'})
+
         except RideDetails.DoesNotExist:
-            return JsonResponse({'status': 'error', 'essage': 'Ride not found.'}, status=404)
+            return JsonResponse({'status': 'error', 'message': 'Ride not found.'}, status=404)
         except Exception as e:
-            return JsonResponse({'status': 'error', 'essage': str(e)}, status=500)
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
 
     return JsonResponse({'status': 'failed'}, status=400)
 
@@ -4235,4 +4481,323 @@ class BookingDetailsView(ListView):
         context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
         context['date'] = self.kwargs['date']
         return context  
+
+
+# package category #######################################################################
+
+@login_required(login_url='login')   
+def check_package_category(request):
+    category_name = request.GET.get('category_name', None)
+    cp = PackageCategories.objects.filter(category_name=category_name)
+    data = {
+        'exists': cp.count() > 0
+    }
+    return JsonResponse(data) 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addpackagecategory(TemplateView):
+    template_name = "superadmin/add_package_category.html"
+
+    def post(self, request):
+        category_name = request.POST['category_name']
+
+        cl = PackageCategories(
+            category_name=category_name,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        cl.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageCategoryList(ListView):
+    model = PackageCategories
+    template_name = "superadmin/view_package_category.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeletePackageCategory(View):
+    def get(self, request):
+        package_category_id = request.GET.get('package_category_id', None)
+        PackageCategories.objects.get(package_category_id=package_category_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditPackageCategory(TemplateView):
+    template_name = 'superadmin/edit_package_category.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['package_category_id'] = self.kwargs['id']
+            plist = PackageCategories.objects.filter(package_category_id=context['package_category_id'])
+        except:
+            plist = PackageCategories.objects.filter(package_category_id=context['package_category_id'])
+            
+        context['plist']= list(plist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdatePackageCategory(APIView):
+    def post(self, request):
+        package_category_id = request.POST['package_category_id']
+        package = PackageCategories.objects.get(package_category_id=package_category_id)
+
+        # Update the ride type with new data
+        package.category_name = request.POST['category_name']
+        package.updated_by = request.user
+        package.save()
+
+        # Create another RidetypeHistory entry after updating the ride type
+        PackageCategoriesHistory.objects.create(
+            package_category_id=package.package_category_id,
+            category_name=package.category_name,
+            created_on=package.created_on,
+            updated_on=package.updated_on,
+            created_by=package.created_by.username if package.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class PackageCategoryHistoryView(TemplateView):
+    template_name = 'superadmin/history_package_category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        package_category_id = self.kwargs['package_category_id']
+        package = get_object_or_404(PackageCategories, package_category_id=package_category_id)
+        history = PackageCategoriesHistory.objects.filter(package_category_id=package_category_id).order_by('updated_on')
+        context['package'] = package
+        context['history'] = history
+        return context
+ 
+
+ # packages #######################################################################
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addpackages(TemplateView):
+    template_name = "superadmin/add_packages.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pclist = PackageCategories.objects.all()
+        context = {'pclist': list(pclist)}
+        return context
+
+    def post(self, request):
+        name = request.POST['name']
+        package_category_id = request.POST['package_category']
+        description = request.POST['description']
+        price = request.POST['price']
+        duration = request.POST['duration']
+        features = request.POST['features']
+        status = request.POST['status']
+
+        cl = Packages(
+            name=name,
+            package_category=PackageCategories.objects.get(package_category_id=package_category_id),
+            description=description,
+            price=price,
+            duration=duration,
+            features=features,
+            status=status,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        cl.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageList(ListView):
+    model = Packages
+    template_name = "superadmin/view_packages.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeletePackages(View):
+    def get(self, request):
+        package_id = request.GET.get('package_id', None)
+        Packages.objects.get(package_id=package_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditPackages(TemplateView):
+    template_name = 'superadmin/edit_packages.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pclist = PackageCategories.objects.all()
+        try:
+            context['package_id'] = self.kwargs['id']
+            plist = Packages.objects.filter(package_id=context['package_id'])
+        except:
+            plist = Packages.objects.filter(package_id=context['package_id'])
+            
+        context = {'pclist':list(pclist),'plist':list(plist)}
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdatePackages(APIView):
+
+    def post(self, request):
+        package_id = request.POST['package_id']
+        package = Packages.objects.get(package_id=package_id)
+
+        package.name = request.POST['name']
+        package.package_category = PackageCategories.objects.get(package_category_id=request.POST['package_category'])
+        package.description = request.POST['description']
+        package.price = request.POST['price']
+        package.duration = request.POST['duration']
+        package.features = request.POST['features']
+        package.status = request.POST['status']
+        package.updated_by = request.user
+        package.save()
+
+        # Create another RidetypeHistory entry after updating the ride type
+        PackagesHistory.objects.create(
+            package_id=package.package_id,
+            name=package.name,
+            package_category=package.package_category,
+            description=package.description,
+            price=package.price,
+            duration=package.duration,
+            features=package.features,
+            status=package.status,
+            created_on=package.created_on,
+            updated_on=package.updated_on,
+            created_by=package.created_by.username if package.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+    
+class PackagesHistoryView(TemplateView):
+    template_name = 'superadmin/history_packages.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        package_id = self.kwargs['package_id']
+        package = get_object_or_404(Packages, package_id=package_id)
+        history = PackagesHistory.objects.filter(package_id=package_id).order_by('updated_on')
+        context['package'] = package
+        context['history'] = history
+        return context
+ 
+
+# package order####################################### 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddPackageOrderView(TemplateView):
+    template_name = "superadmin/add_package_order.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customers = Customer.objects.all()
+        packages = Packages.objects.all()
+        context.update({
+            'customers': customers,
+            'packages': packages
+        })
+        return context
+
+    def post(self, request):
+        customer_id = request.POST['customer']
+        package_id = request.POST['package']
+        total_amount = request.POST['total_amount']
+        payment_method = request.POST['payment_method']
+        status = request.POST['status']
+
+        order = PackageOrder(
+            customer=Customer.objects.get(customer_id=customer_id),
+            package=Packages.objects.get(package_id=package_id),
+            total_amount=total_amount,
+            payment_method=payment_method,
+            status=status,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        order.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageOrderList(ListView):
+    model = PackageOrder
+    template_name = "superadmin/view_package_order.html" 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeletePackageOrder(View):
+    def get(self, request):
+        order_id = request.GET.get('order_id', None)
+        PackageOrder.objects.get(order_id=order_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)     
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditPackageOrder(TemplateView):
+    template_name = 'superadmin/edit_package_order.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = self.kwargs.get('id')
+        order = PackageOrder.objects.get(order_id=order_id)
+        customers = Customer.objects.all()
+        packages = Packages.objects.all()
+        context.update({
+            'order': order,
+            'customers': customers,
+            'packages': packages,
+        })
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdatePackageOrder(APIView):
+    
+    def post(self, request):
+        order_id = request.POST.get('order_id')
+        order = PackageOrder.objects.get(order_id=order_id)
+
+        order.customer = Customer.objects.get(customer_id=request.POST['customer'])
+        order.package = Packages.objects.get(package_id=request.POST['package'])
+        order.status = request.POST['status']
+        order.total_amount = request.POST['total_amount']
+        order.payment_method = request.POST['payment_method']
+        order.updated_by = request.user
+        order.save()
+
+        # Log changes to history table
+        PackageOrderHistory.objects.create(
+            order_id=order.order_id,
+            customer=order.customer,
+            package=order.package,
+            order_date=order.order_date,
+            status=order.status,
+            total_amount=order.total_amount,
+            payment_method=order.payment_method,
+            created_on=order.created_on,
+            updated_on=order.updated_on,
+            created_by=order.created_by.username if order.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class PackageOrderHistoryView(TemplateView):
+    template_name = 'superadmin/history_package_order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = self.kwargs['order_id']
+        package_order = get_object_or_404(PackageOrder, order_id=order_id)
+        history = PackageOrderHistory.objects.filter(order_id=order_id).order_by('updated_on')
+        context['package_order'] = package_order
+        context['history'] = history
+        return context        
         

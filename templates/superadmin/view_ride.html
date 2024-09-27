@@ -280,60 +280,64 @@
     
 <script>
     $(document).ready(function() {
-        // Update data-comments attribute whenever textarea value changes
-        $('#comments').on('input', function() {
-            const comments = $(this).val();
-            $('.cancel-btn').attr('data-comments', comments);
-        });
+    // Update data-comments attribute whenever textarea value changes
+    $('#comments').on('input', function() {
+        const comments = $(this).val();
+        $('.cancel-btn').attr('data-comments', comments);
+    });
 
-        // Handle cancel button click
-        $(document).on('click', '.cancel-btn', function() {
-            console.log("Submit button clicked!");
+    // Handle cancel button click
+    $(document).on('click', '.cancel-btn', function() {
+        console.log("Submit button clicked!");
 
-            const comments = $(this).data('comments');
-            const rideId = $('#cancelBookingModal').data('ride-id');
+        const comments = $(this).data('comments');
+        const rideId = $('#cancelBookingModal').data('ride-id');
 
         console.log("comments: ", comments); // Debugging statement
         console.log("Ride ID: ", rideId);     // Debugging statement
 
-        // Check if driverId is correctly retrieved
+        // Check if comments are provided
         if (!comments) {
-            console.error("comments is missing");
-            alert("comments is missing.");
+            console.error("Comments are missing");
+            alert("Please provide cancellation comments.");
             return;
         }
 
         $.ajax({
-            url: '{% url "cancel_ride" %}',
+            url: '{% url "cancel_ride" %}', // Django URL for the cancel_ride view
             type: "POST",
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
+                'X-CSRFToken': '{{ csrf_token }}' // Make sure you are using CSRF tokens for POST requests in Django
             },
             data: JSON.stringify({ comments: comments, ride_id: rideId }),
             contentType: 'application/json; charset=utf-8',
             success: function(result) {
-                console.log("Success: ", result);
-                alert("Submitted successfully.");
-                location.reload(); // Reload page after successful assignment
+                if (result.status === 'success') {
+                    console.log("Ride successfully cancelled!");
+                    alert("Ride cancelled successfully. A WhatsApp message has been sent to the customer.");
+                    location.reload(); // Reload the page after success
+                } else {
+                    console.error("Cancellation failed: ", result.message);
+                    alert("Failed to cancel the ride: " + result.message);
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", xhr.responseText);
-                alert('Failed to assign driver.');
+                alert("Failed to cancel the ride. Please try again.");
             }
         });
     });
 
-    // Modal Show Event
+    // Modal Show Event to store the ride ID
     $('#cancelBookingModal').on('show.bs.modal', function(event) {
         var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var rideId = button.data('ride-id'); // Extract ride ID
         var modal = $(this);
         modal.data('ride-id', rideId); // Store ride ID in modal attribute
-
         console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
     });
-
 });
+
 </script>
 
 <script>
@@ -368,12 +372,18 @@
             contentType: 'application/json; charset=utf-8',
             success: function(result) {
                 console.log("Success: ", result);
-                alert("Driver assigned successfully.");
-                location.reload(); // Reload page after successful assignment
+                
+                if (result.status === 'success') {
+                    alert("Driver assigned successfully. A message has been sent to the customer.");
+                } else {
+                    alert("Failed to assign driver: " + (result.message || "Unknown error."));
+                }
+                
+                location.reload(); // Reload page after handling the message
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", xhr.responseText);
-                alert('Failed to assign driver.');
+                alert('Failed to assign driver. Please try again.');
             }
         });
     });

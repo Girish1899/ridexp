@@ -130,9 +130,9 @@ urlpatterns = [
     path('packages/banaglore_to_kabini', views.banaglore_to_kabini, name="banaglore_to_kabini"),
     path('packages/banaglore_to_chikmagalur', views.banaglore_to_chikmagalur, name="banaglore_to_chikmagalur"),
     path('packages/banaglore_to_ooty', views.banaglore_to_ooty, name="banaglore_to_ooty"),
+    path('packages/banaglore_to_pondicherry', views.banaglore_to_pondicherry, name="banaglore_to_pondicherry"),
 
 
-
-    # path('send_otp/', views.send_otp, name='send_otp'),
-    # path('verify_otp/', views.verify_otp, name='verify_otp'),
+    path('send_otp/', SendOtp.as_view(), name='send_otp'),
+    path('verify_otp/', VerifyOtp.as_view(), name='verify_otp'),
 ]
