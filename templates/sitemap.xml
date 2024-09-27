@@ -366,4 +366,57 @@
   <priority>0.64</priority>
 </url>
 
+
+
+<url>
+  <loc>https://ridexpress.in/packages</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_mysore</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_coorg</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_munnar</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_hampi</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_nandi_hills</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_kabini</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_chikmagalur</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_ooty</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://ridexpress.in/packages/banaglore_to_pondicherry</loc>
+  <lastmod>2024-09-17T04:16:24+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+
 </urlset>

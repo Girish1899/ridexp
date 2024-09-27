@@ -103,7 +103,9 @@ def banaglore_to_ooty(request):
     context = None
     return render(request, 'website/packages/banaglore_to_ooty.html',context)
 
-
+def banaglore_to_pondicherry(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_pondicherry.html',context)
 
 def Why_Choose_Local_Cab_Services(request):
     context = None
