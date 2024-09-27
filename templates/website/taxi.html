@@ -17,7 +17,7 @@
             <div class="container">
                 <h2 class="breadcrumb-title">Our Packages</h2>
                 <ul class="breadcrumb-menu">
-                    <li><a href="index.html">Home</a></li>
+                    <li><a href="{% url 'home' %}">Home</a></li>
                     <li class="active">Our Packages</li>
                 </ul>
             </div>
@@ -41,13 +41,13 @@
                     <ul class="filter-btns">
                         <li class="active" data-filter="*">All</li>
                         <li data-filter=".cat1">Hill Station</li>
-                        <li data-filter=".cat2">Adventure</li>
+                        <li data-filter=".cat2">Nature Getaways</li>
                         <li data-filter=".cat3">Mysore/Dussehra</li>
                         <li data-filter=".cat4">Religious</li>
                     </ul>
                 </div>
                 <div class="row filter-box">
-                    <div class="col-md-6 col-lg-4 filter-item cat1 cat2">
+                    <div class="col-md-6 col-lg-4 filter-item cat3 cat4">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="/static/img/taxi/mysore.webp" alt="bangalore_to_mysore">
@@ -63,7 +63,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat3 cat4">
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="/static/img/taxi/coorg.webp" alt="coorg">
@@ -81,7 +81,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat1 cat4">
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="/static/img/taxi/ooty.jpg" alt="ooty">
@@ -92,14 +92,13 @@
                                 </div>
                                 <div class="taxi-feature">
                                     <p style="text-align: justify;">
-                                        Discover the charming hill station of Ooty with our Bangalore to Ooty package. This tour includes visits to Ooty Lake, the Botanical Gardens, and a scenic drive through Nilgiri Hills.
-                                    </p>
+                                    Discover the charming hill station of Ooty with our exciting Bangalore to Ooty package. This unforgettable tour includes visits to the stunning Ooty Lake, the beautiful Botanical Gardens, and a scenic drive through the breathtaking Nilgiri Hills.</p>
                                 </div>
                                 <a href="/packages/banaglore_to_ooty" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat1 cat3">
+                    <div class="col-md-6 col-lg-4 filter-item cat2 cat4">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="/static/img/taxi/chikmaglur.jpg" alt="chikmaglur">
@@ -117,10 +116,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat1 cat2 cat3">
+                    <div class="col-md-6 col-lg-4 filter-item cat2 cat4">
                         <div class="taxi-item">
                             <div class="taxi-img">
-                                <img src="/static/img/taxi/hampi.webp" alt="hampi">
+                                <img src="/static/img/taxi/hampi_bg.jpg" alt="hampi">
                             </div>
                             <div class="taxi-content">
                                 <div class="taxi-head">
@@ -135,10 +134,10 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                    <div class="col-md-6 col-lg-4 filter-item cat1 cat2 cat4">
                         <div class="taxi-item">
                             <div class="taxi-img">
-                                <img src="/static/img/taxi/nandi.webp" alt="nandihills">
+                                <img src="/static/img/taxi/Nandi_bg.jpg" alt="nandihills">
                             </div>
                             <div class="taxi-content">
                                 <div class="taxi-head">
@@ -154,7 +153,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="/static/img/taxi/kabini.jpeg" alt="kabini">
@@ -172,7 +171,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
                         <div class="taxi-item">
                             <div class="taxi-img">
                                 <img src="/static/img/taxi/munnar.jpg" alt="munnar">
@@ -187,6 +186,24 @@
                                     </p>
                                 </div>
                                 <a href="/packages/banaglore_to_munnar" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/Pondicherry.jpg" alt="pondicherry">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Pondicherry Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Unwind on the sandy shores of Pondicherry with our Bangalore to Pondicherry Beach package. Explore the French colonial architecture, beaches, and cafes for a perfect beach getaway.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_pondicherry" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
                             </div>
                         </div>
                     </div>
