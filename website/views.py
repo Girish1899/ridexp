@@ -981,7 +981,7 @@ class AddNewBooking(APIView):
             # drop_date=request.POST['drop_date']
             # drop_time=request.POST['drop_time']
             car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
-            trip_type = request.POST.get('trip_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            # trip_type = request.POST.get('trip_type', '').strip() 
             ridetype_name = request.POST.get('ridetype', '').strip()
             slots = determine_time_slot(pickup_time_str)  # Function to determine the slot based on pickup_time
 
@@ -1004,14 +1004,24 @@ class AddNewBooking(APIView):
             
             # Updated logic to include ridetype in pricing instance retrieval
             try:
-                pricing_instance = Pricing.objects.get(
-                    category=category_instance,
-                    car_type=car_type,
-                    ridetype=ridetype_instance,  # Include ridetype in the query
-                    slots=slots,
-                    trip_type=trip_type,
-
-                )
+                if ridetype_name.lower() == 'local':
+                    # For local, omit trip_type in the query
+                    pricing_instance = Pricing.objects.get(
+                        category=category_instance,
+                        car_type=car_type,
+                        ridetype=ridetype_instance,  # Include ridetype in the query
+                        slots=slots
+                    )
+                else:
+                    # For outstation, include trip_type logic
+                    trip_type = request.POST.get('trip_type', '').strip()
+                    pricing_instance = Pricing.objects.get(
+                        category=category_instance,
+                        car_type=car_type,
+                        ridetype=ridetype_instance,
+                        slots=slots,
+                        trip_type=trip_type
+                    )
             except Pricing.DoesNotExist:
                 return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
 
@@ -1052,6 +1062,7 @@ class AddNewBooking(APIView):
                         # updated_by=request.user
                         )
                 cust.save()
+                customer = Customer.objects.get(phone_number=customer_phone_number)
                 customer = Customer.objects.get(phone_number=customer_phone_number)
                 adduser(self,request)
                 from django.contrib.auth.models import User
