@@ -1064,7 +1064,7 @@ class AddNewBooking(APIView):
                 cust.save()
                 customer = Customer.objects.get(phone_number=customer_phone_number)
                 customer = Customer.objects.get(phone_number=customer_phone_number)
-                adduser(self,request)
+                adduser(request)
                 from django.contrib.auth.models import User
                 Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
                     created_by=User.objects.get(phone_number=customer_phone_number),
