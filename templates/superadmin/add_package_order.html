@@ -53,6 +53,37 @@
                     </div>
 
                     <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Location</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control autocomeple_g" id="source" name="source" maxlength="1000">
+                            <i class="far fa-location-dot"></i>                        
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Location</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control autocomeple_g" id="destination" name="destination" maxlength="1000">
+                            <i class="far fa-location-dot"></i>                        
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pick up Date</label>
+                        <div class="col-sm-10">
+                            <input type="date" class="form-control form-control-lg date-picker" id="pickup_date" name="pickup_date">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pick up Time</label>
+                        <div class="col-sm-10">
+                            <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time" name="pickup_time">
+                            <div id="timeError" class="invalid-feedback"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Payment Method</label>
                         <div class="col-sm-10">
                             <div class="form-check form-check-inline">
@@ -96,6 +127,10 @@
             var customer = $('#customer').val();
             var package = $('#package').val();
             var total_amount = $('#total_amount').val();
+            var source = $('#source').val();
+            var destination = $('#destination').val();
+            var pickup_date = $('#pickup_date').val();
+            var pickup_time = $('#pickup_time').val();
             var payment_method = $('input[name="payment_method"]:checked').val();
             var status = $('#status').val();
 
@@ -114,7 +149,7 @@
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
-                data: { customer: customer, package: package, total_amount: total_amount, payment_method: payment_method, status: status },
+                data: { customer: customer, package: package, total_amount: total_amount, payment_method: payment_method, status: status,source: source,destination: destination,pickup_date: pickup_date,pickup_time: pickup_time, },
                 success: function (result) {
                     alert("Package Order added successfully");
                     location.href = "{% url 'package_order_list' %}";
@@ -126,5 +161,63 @@
         });
     });
 </script>
+
+<script>
+    function initAutocomplete() {
+          const inputs = document.querySelectorAll('.autocomeple_g');
+    
+    
+          inputs.forEach(input => {
+          const autocomplete = new google.maps.places.Autocomplete(input);
+    
+          autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+              window.alert("No details available for input: '" + place.name + "'");
+              return;
+            }
+            console.log('Place details for', input.id, ':', place);
+            });
+            });
+        }
+    
+        document.addEventListener('DOMContentLoaded', function() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        });
+
+
+
+      // Initialize datepicker
+    $('.date-picker').datepicker({
+        format: 'mm/dd/yyyy',
+        autoclose: true,
+        todayHighlight: true,
+        startDate: new Date() // Set start date to today
+    });
+
+    // Datepicker change event listener
+    $('.date-picker').change(function() {
+        var selectedDate = new Date($(this).val());
+        var today = new Date();
+
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            $(this).val(''); // Clear invalid date
+            $(this).addClass('is-invalid');
+            $('#dateError').text('Please select a future date.');
+        } else {
+            $(this).removeClass('is-invalid');
+            $(this).addClass('is-valid');
+            $('#dateError').text('');
+        }
+    });
+
+</script>
+
 
 {% endblock content %}

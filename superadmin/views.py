@@ -4710,6 +4710,10 @@ class AddPackageOrderView(TemplateView):
         customer_id = request.POST['customer']
         package_id = request.POST['package']
         total_amount = request.POST['total_amount']
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date = request.POST['pickup_date']
+        pickup_time = request.POST['pickup_time']
         payment_method = request.POST['payment_method']
         status = request.POST['status']
 
@@ -4718,9 +4722,11 @@ class AddPackageOrderView(TemplateView):
             package=Packages.objects.get(package_id=package_id),
             total_amount=total_amount,
             payment_method=payment_method,
+            source=source,
+            destination=destination,
+            pickup_date=pickup_date,
+            pickup_time=pickup_time,
             status=status,
-            created_by=request.user,
-            updated_by=request.user
         )
         order.save()
         return JsonResponse({'status': "Success"})
@@ -4768,8 +4774,11 @@ class UpdatePackageOrder(APIView):
         order.package = Packages.objects.get(package_id=request.POST['package'])
         order.status = request.POST['status']
         order.total_amount = request.POST['total_amount']
+        order.source = request.POST['source']
+        order.destination = request.POST['destination']
+        order.pickup_date = request.POST['pickup_date']
+        order.pickup_time = request.POST['pickup_time']
         order.payment_method = request.POST['payment_method']
-        order.updated_by = request.user
         order.save()
 
         # Log changes to history table
@@ -4780,11 +4789,13 @@ class UpdatePackageOrder(APIView):
             order_date=order.order_date,
             status=order.status,
             total_amount=order.total_amount,
+            source=order.source,
+            destination=order.destination,
+            pickup_date=order.pickup_date,
+            pickup_time=order.pickup_time,
             payment_method=order.payment_method,
             created_on=order.created_on,
             updated_on=order.updated_on,
-            created_by=order.created_by.username if order.created_by else None,
-            updated_by=request.user.username
         )
 
         return JsonResponse({'success': True}, status=200)
