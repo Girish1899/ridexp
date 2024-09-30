@@ -334,33 +334,42 @@
             keyboard: false
         });
 
-        // Handle OTP verification
-        $('#verifyOtpBtn').click(function () {
-            var otp = $('#otpInput').val();
-            $.ajax({
-                url: '{% url "verify_otp" %}', // Backend endpoint to verify OTP
-                type: "POST",
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                data: {
-                    phone_number: bookingDetails.phone_number,
-                    otp: otp
-                },
-                success: function (result) {
-                    if (result["status"] == "Success") {
-                        // If OTP is correct, proceed to confirm booking
-                        confirmBooking(bookingDetails);
-                    } else {
-                        alert("Incorrect OTP. Please try again.");
-                    }
-                },
-                error: function (xhr, status, error) {
-                    console.error(xhr.responseText);
-                }
-            });
-        });
+        // Disable the button and show feedback while OTP is being verified
+$('#verifyOtpBtn').click(function () {
+    var otp = $('#otpInput').val();
+
+    // Disable the button to prevent multiple submissions
+    $('#verifyOtpBtn').prop('disabled', true).text('Verifying...');
+
+    // Make AJAX call for OTP verification
+    $.ajax({
+        url: '{% url "verify_otp" %}', // Backend endpoint to verify OTP
+        type: "POST",
+        headers: {
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        data: {
+            phone_number: bookingDetails.phone_number,
+            otp: otp
+        },
+        success: function (result) {
+            if (result["status"] === "Success") {
+                // If OTP is correct, proceed to confirm booking
+                confirmBooking(bookingDetails);
+            } else {
+                alert("Incorrect OTP. Please try again.");
+                // Re-enable the button in case of failure
+                $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
+            }
+        },
+        error: function (xhr, status, error) {
+            console.error(xhr.responseText);
+            // Re-enable the button in case of an error
+            $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
+        }
     });
+    });
+});
 
     // Function to confirm booking after OTP verification
     function confirmBooking(bookingDetails) {
@@ -404,7 +413,7 @@
     
                         We’re happy to confirm your booking:
     
-                        Booking Id : ${company_format}
+                        Booking Id & Price: ${company_format} 
                         Pickup Date & Time: ${bookingDetails.pickup_date} ${bookingDetails.pickup_time}
                         Pickup Location: ${bookingDetails.source}
                         Drop-off Location: ${bookingDetails.destination}

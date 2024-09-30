@@ -207,7 +207,7 @@
                                     <div style="color: blue;">{{ i.assigned_on }}</div>
                                 </td>
                                 <td>
-                                    <a href="{% url 'invoice_view' i.ride_id %}" class="btn btn-primary">Invoice</a>
+                                    <a href="#" class="btn btn-primary invoice-btn" data-ride-id="{{ i.ride_id }}">Invoice</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -406,6 +406,56 @@ $(document).ready(function() {
     .mb-1 {
         color: black;
     }
+
+    .loading-message {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(255, 255, 255, 0.9);
+        border: 1px solid #ccc;
+        padding: 20px;
+        z-index: 1000;
+        text-align: center;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        color: black;
+    }
 </style>
+
+<script>
+    $(document).on('click', '.invoice-btn', function(e) {
+        e.preventDefault(); 
+        var rideId = $(this).data('ride-id');
+
+        // Show the loading message
+        var loadingMessage = $('<div class="loading-message">Please wait, we are generating invoice...</div>');
+        $('body').append(loadingMessage); 
+        loadingMessage.fadeIn(); 
+
+        $.ajax({
+            url: `/superadmin/invoice/${rideId}/`, 
+            type: "GET",
+            success: function (result) {
+                loadingMessage.fadeOut(function() {
+                    $(this).remove(); 
+                });
+
+                if (result.success) {
+                    alert(result.message);  
+                } else {
+                    alert(result.message); 
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
+                loadingMessage.fadeOut(function() {
+                    $(this).remove(); 
+                });
+                alert("An error occurred while generating the invoice.");
+            }
+        });
+    });
+</script>
     
 {% endblock %}

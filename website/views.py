@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from django.core.cache import cache
 
 from superadmin.views import adduser
+from django.contrib.auth.models import User
 
 
 
@@ -989,21 +990,17 @@ class AddNewBooking(APIView):
             try:
                 category_instance = Category.objects.get(category_name=category)
             except Category.DoesNotExist:
-                # Handle the case where the Ridetype does not exist
                 return JsonResponse({"status": "Error", "message": "Category does not exist."})
             
-            # Updated logic to include ridetype in pricing instance retrieval
             try:
                 if ridetype_name.lower() == 'local':
-                    # For local, omit trip_type in the query
                     pricing_instance = Pricing.objects.get(
                         category=category_instance,
                         car_type=car_type,
-                        ridetype=ridetype_instance,  # Include ridetype in the query
+                        ridetype=ridetype_instance,  
                         slots=slots
                     )
                 else:
-                    # For outstation, include trip_type logic
                     trip_type = request.POST.get('trip_type', '').strip()
                     pricing_instance = Pricing.objects.get(
                         category=category_instance,
@@ -1053,35 +1050,12 @@ class AddNewBooking(APIView):
                         )
                 cust.save()
                 customer = Customer.objects.get(phone_number=customer_phone_number)
-                last_user = Profile.objects.all().order_by('-profile_id').first()
-                if last_user:
-                    last_company_format = int(last_user.company_format.replace('USR', ''))
-                    next_company_format = f'USR{last_company_format + 1:02}'
-                else:
-                    next_company_format = 'USR01'
-                user_name = request.POST['user_name']
-                phone_number = request.POST['phone_number']
-                email = request.POST['email']
-                password = request.POST['password']
-                address = request.POST['address']
-                user_type = request.POST['type']
-                status = request.POST['status']
-                company_format = request.POST.get('company_format', '')
-
-                user = User.objects.create_user(username=user_name, email=email, password=password)
-                profile = Profile.objects.create(
-                    user=user,
-                    phone_number=phone_number,
-                    address=address,
-                    type=user_type,
-                    status=status,
-                    company_format=company_format,
-                    created_by=request.user
-                    )
-                from django.contrib.auth.models import User
-                Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
-                    created_by=User.objects.get(phone_number=customer_phone_number),
-                    updated_by=User.objects.get(phone_number=customer_phone_number))
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+                # adduser(self,request)
+                # from django.contrib.auth.models import User
+                # Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
+                #     created_by=User.objects.get(phone_number=customer_phone_number),
+                #     updated_by=User.objects.get(phone_number=customer_phone_number))
             # Determine ride status based on pickup date
             today = date.today().isoformat()
             ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
@@ -1100,12 +1074,17 @@ class AddNewBooking(APIView):
                 ride_details.customer_notes=customer_notes
                 ride_details.ride_status=ride_status
                 ride_details.bookings_from=bookings_from
-                ride_details.assigned_by=request.user
-                ride_details.created_by=request.user
-                ride_details.updated_by=request.user
+                # ride_details.assigned_by=request.user
+                # ride_details.created_by=request.user
+                # ride_details.updated_by=request.user
                 ride_details.pricing = pricing_instance 
                 ride_details.drop_date = drop_date 
                 ride_details.drop_time = drop_time 
+
+                if request.user.is_authenticated:
+                    ride_details.assigned_by = request.user
+                    ride_details.created_by = request.user
+                    ride_details.updated_by = request.user
 
                 ride_details.save()
                 print("source ^^^: ",request.POST['source'] )
@@ -1116,10 +1095,10 @@ class AddNewBooking(APIView):
                     "destination": customer_phone_number,
                     "userName": "Ridexpress",
                     "templateParams": [
-                        customer_name,  
+                        customer_name,
                         company_format,
                         pickup_date +'  ' +pickup_time,    
-                        source,   
+                        source,
                         destination
                     ],
                     "source": "new-landing-page form",
@@ -1754,15 +1733,23 @@ class VerifyOtp(View):
         phone_number = request.POST.get('phone_number')
         otp = request.POST.get('otp')
 
-        # Retrieve the OTP from the cache
-        cached_otp = cache.get(f'otp_{phone_number}')
+        print(f"OTP verification attempt for phone number: {phone_number}, entered OTP: {otp}")
 
-        # if cached_otp and cached_otp == otp:
-        #     # OTP matches, remove it from cache
-        #     cache.delete(f'otp_{phone_number}')
-        return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully.'})
-        # else:
-        #     return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})
+        cached_otp = cache.get(f'otp_{phone_number}')
+        
+        print(f"Cached OTP for phone number {phone_number}: {cached_otp}")
+
+        if not cached_otp:
+            print(f"No OTP found in cache for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'OTP expired. Please request a new one.'})
+
+        if cached_otp == otp:
+            cache.delete(f'otp_{phone_number}')
+            print(f"OTP verified successfully for phone number: {phone_number}")
+            return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully.'})
+        else:
+            print(f"Incorrect OTP entered for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})
 
 
 class PackageBookingList(TemplateView):
