@@ -2,7 +2,7 @@ from datetime import date, datetime,time
 from decimal import Decimal
 import json
 import os
-from django.http import JsonResponse
+from django.http import Http404, JsonResponse
 from django.db import IntegrityError
 import requests
 from django.shortcuts import get_object_or_404, redirect, render
@@ -3101,58 +3101,71 @@ class CompletedRideList(ListView):
 #         return JsonResponse({'error': 'Invalid date range'}, status=400)
     
 # invoice rides########################################################################################################
+from docxtpl import DocxTemplate
+from docx2pdf import convert
+import pythoncom
 
-class InvoiceView(DetailView):
-    model = RideDetails
-    template_name = 'superadmin/invoice.html'
-    context_object_name = 'ride'
+class InvoiceView(View):
     
-    def get_object(self):
-        ride_id = self.kwargs.get("ride_id")
-        ride=RideDetails.objects.get(ride_id=ride_id)
-        #pip install docx2pdf-for windows
-        #sudo apt install libreoffice-for ubuntu
-        from docxtpl import DocxTemplate
-        from docx2pdf import convert
+    def get(self, request, *args, **kwargs):
+        # Manually initialize COM
+        pythoncom.CoInitialize()
 
-        # Load your template
-        template = DocxTemplate("media/Invoice_template.docx")
+        try:
+            ride_id = self.kwargs.get("ride_id")
+            
+            try:
+                ride = RideDetails.objects.get(ride_id=ride_id)
+            except RideDetails.DoesNotExist:
+                return JsonResponse({'success': False, 'message': "Ride not found."})
 
-        # Define the context - a dictionary with placeholders and their respective values
-        sList={
-            'serv_type':'Drop',
-            'serv_desp': ride['source']+"-"+ride['destination'],
-            'serv_amount':ride['total_fare']
-        }
-        context = {
-        'invno': '0002',  
-        'sdate': '26-08-2024',  
-        'sptype': 'September 2024',
-        'spstatus':'Completed',
-        'serv_customer_name':ride['customer']['customer_name'],
-        'servrtype':ride['ridetype']['name'],
-        'servcarno':'MA12KA7890',
-        'serv_dist_trav':'12KM',
-        'serv_sub_total':'489',
-        'serv_sgst':'18',
-        'serv_cgst':'12',
-        'serv':sList,
-        'ttial':'530'
-        }
+            # Load your template
+            template_path = os.path.join("media", "Invoice_template.docx")
+            template = DocxTemplate(template_path)
 
-        # Render the document with the context
-        template.render(context)
+            current_date = datetime.now().strftime('%d-%m-%Y')
 
-        #  Save the document with the applied content
-        template.save("RideXpress_Invoice_EFGH_2.docx")
+            # Define the context
+            sList = {
+                'serv_type': 'Drop',
+                'serv_desp': f"{ride.source} - {ride.destination}",
+                'serv_amount': str(ride.total_fare),
+            }
 
-        print("Document saved successfully!")
+            context = {
+                'invno': '0002',  
+                'sdate': current_date,  
+                'sptype': 'September 2024',
+                'spstatus': 'Completed',
+                'serv_customer_name': ride.customer.customer_name,
+                'servrtype': ride.ridetype.name,
+                'servcarno': ride.driver.vehicle.Vehicle_Number,
+                'serv_dist_trav': '12KM',
+                'serv_sub_total': ride.total_fare,
+                'serv_sgst': '18',
+                'serv_cgst': '12',
+                'serv': sList,
+                'ttial': ride.total_fare,
+            }
 
-        convert("media/RideXpress_Invoice.docx","media/RideXpress_Invoice.pdf")
+            output_docx = os.path.join("media", f"RideXpress_Invoice_{ride_id}.docx")
+            template.render(context)
+            template.save(output_docx)
 
+            print("Document saved successfully!")
 
-        print("Conversion complete! PDF saved.")
-        return get_object_or_404(RideDetails, ride_id=ride_id)
+            output_pdf = os.path.join("media", f"RideXpress_Invoice_{ride_id}.pdf")
+            convert(output_docx, output_pdf)
+
+            print("Conversion complete! PDF saved.")
+
+            return JsonResponse({'success': True, 'message': f"Invoice for ride {ride_id} generated successfully!"})
+
+        except Exception as e:
+            return JsonResponse({'success': False, 'message': str(e)})
+        
+        finally:
+            pythoncom.CoUninitialize()
 
 
 # assign driver###########################################################################################################
@@ -3356,7 +3369,6 @@ class EditRide(TemplateView):
             'catlist': list(catlist),
             'blist': list(blist),
             'ride': list(ride)
-
         }
         return context
 
@@ -4710,6 +4722,10 @@ class AddPackageOrderView(TemplateView):
         customer_id = request.POST['customer']
         package_id = request.POST['package']
         total_amount = request.POST['total_amount']
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date = request.POST['pickup_date']
+        pickup_time = request.POST['pickup_time']
         payment_method = request.POST['payment_method']
         status = request.POST['status']
 
@@ -4718,9 +4734,11 @@ class AddPackageOrderView(TemplateView):
             package=Packages.objects.get(package_id=package_id),
             total_amount=total_amount,
             payment_method=payment_method,
+            source=source,
+            destination=destination,
+            pickup_date=pickup_date,
+            pickup_time=pickup_time,
             status=status,
-            created_by=request.user,
-            updated_by=request.user
         )
         order.save()
         return JsonResponse({'status': "Success"})
@@ -4768,8 +4786,11 @@ class UpdatePackageOrder(APIView):
         order.package = Packages.objects.get(package_id=request.POST['package'])
         order.status = request.POST['status']
         order.total_amount = request.POST['total_amount']
+        order.source = request.POST['source']
+        order.destination = request.POST['destination']
+        order.pickup_date = request.POST['pickup_date']
+        order.pickup_time = request.POST['pickup_time']
         order.payment_method = request.POST['payment_method']
-        order.updated_by = request.user
         order.save()
 
         # Log changes to history table
@@ -4780,11 +4801,13 @@ class UpdatePackageOrder(APIView):
             order_date=order.order_date,
             status=order.status,
             total_amount=order.total_amount,
+            source=order.source,
+            destination=order.destination,
+            pickup_date=order.pickup_date,
+            pickup_time=order.pickup_time,
             payment_method=order.payment_method,
             created_on=order.created_on,
             updated_on=order.updated_on,
-            created_by=order.created_by.username if order.created_by else None,
-            updated_by=request.user.username
         )
 
         return JsonResponse({'success': True}, status=200)

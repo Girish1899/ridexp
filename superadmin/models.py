@@ -850,14 +850,16 @@ class PackageOrder(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE) 
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Inactive')
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50) 
+    payment_method = models.CharField(max_length=50)
+    source = models.CharField(max_length=1000)
+    destination = models.CharField(max_length=1000)
+    pickup_date = models.DateField()
+    pickup_time = models.TimeField()
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    created_by = models.ForeignKey(User, related_name='package_order_created', on_delete=models.SET_NULL, null=True, blank=True)
-    updated_by = models.ForeignKey(User, related_name='package_order_updated', on_delete=models.SET_NULL, null=True, blank=True)
-
+    
 class PackageOrderHistory(models.Model):
     STATUS_CHOICES = [
         ('active', 'Active'),
@@ -869,8 +871,11 @@ class PackageOrderHistory(models.Model):
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50) 
+    payment_method = models.CharField(max_length=50)
+    source = models.CharField(max_length=1000)
+    destination = models.CharField(max_length=1000)
+    pickup_date = models.DateField()
+    pickup_time = models.TimeField() 
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
-    created_by = models.CharField(max_length=100, null=True, blank=True)
-    updated_by = models.CharField(max_length=100, null=True, blank=True)    
+

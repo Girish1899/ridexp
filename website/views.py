@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -17,6 +17,7 @@ from rest_framework.response import Response
 from django.core.cache import cache
 
 from superadmin.views import adduser
+from django.contrib.auth.models import User
 
 
 
@@ -39,22 +40,12 @@ def get_current_time_slot():
 
 def home(request):
         
-    # last_ride = RideDetails.objects.all().order_by('-ride_id').first()
-    # if last_ride:
-    #     last_company_format = last_ride.company_format.replace('RID', '')
-    #     next_company_format = f'RID{str(last_company_format) + 1:02}'
-    # else:
-    #     next_company_format = 'RID01'
-    # context={
-    #     'customerlist':Customer.objects.all(),
-    #     'ridetypelist': Ridetype.objects.all(),
-    #     'ridetypelist':Ridetype.objects.all(),
-    #     'catlist':Category.objects.all(),
-    #     'blist': Brand.objects.all(),
-    #     'modellist' : Model.objects.all(),
-    #     'next_company_format':next_company_format
-    # }
-    context = None
+    categories = PackageCategories.objects.all() 
+    packages = Packages.objects.all() 
+    context = {
+        'categories': categories,
+        'packages': packages,
+    }
     
     return render(request, 'website/main.html',context)
 
@@ -999,21 +990,17 @@ class AddNewBooking(APIView):
             try:
                 category_instance = Category.objects.get(category_name=category)
             except Category.DoesNotExist:
-                # Handle the case where the Ridetype does not exist
                 return JsonResponse({"status": "Error", "message": "Category does not exist."})
             
-            # Updated logic to include ridetype in pricing instance retrieval
             try:
                 if ridetype_name.lower() == 'local':
-                    # For local, omit trip_type in the query
                     pricing_instance = Pricing.objects.get(
                         category=category_instance,
                         car_type=car_type,
-                        ridetype=ridetype_instance,  # Include ridetype in the query
+                        ridetype=ridetype_instance,  
                         slots=slots
                     )
                 else:
-                    # For outstation, include trip_type logic
                     trip_type = request.POST.get('trip_type', '').strip()
                     pricing_instance = Pricing.objects.get(
                         category=category_instance,
@@ -1064,11 +1051,11 @@ class AddNewBooking(APIView):
                 cust.save()
                 customer = Customer.objects.get(phone_number=customer_phone_number)
                 customer = Customer.objects.get(phone_number=customer_phone_number)
-                adduser(self,request)
-                from django.contrib.auth.models import User
-                Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
-                    created_by=User.objects.get(phone_number=customer_phone_number),
-                    updated_by=User.objects.get(phone_number=customer_phone_number))
+                # adduser(self,request)
+                # from django.contrib.auth.models import User
+                # Customer.objects.filter(phone_number=customer_phone_number,email=customer_email).update(
+                #     created_by=User.objects.get(phone_number=customer_phone_number),
+                #     updated_by=User.objects.get(phone_number=customer_phone_number))
             # Determine ride status based on pickup date
             today = date.today().isoformat()
             ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
@@ -1087,12 +1074,17 @@ class AddNewBooking(APIView):
                 ride_details.customer_notes=customer_notes
                 ride_details.ride_status=ride_status
                 ride_details.bookings_from=bookings_from
-                ride_details.assigned_by=request.user
-                ride_details.created_by=request.user
-                ride_details.updated_by=request.user
+                # ride_details.assigned_by=request.user
+                # ride_details.created_by=request.user
+                # ride_details.updated_by=request.user
                 ride_details.pricing = pricing_instance 
                 ride_details.drop_date = drop_date 
                 ride_details.drop_time = drop_time 
+
+                if request.user.is_authenticated:
+                    ride_details.assigned_by = request.user
+                    ride_details.created_by = request.user
+                    ride_details.updated_by = request.user
 
                 ride_details.save()
                 print("source ^^^: ",request.POST['source'] )
@@ -1103,10 +1095,10 @@ class AddNewBooking(APIView):
                     "destination": customer_phone_number,
                     "userName": "Ridexpress",
                     "templateParams": [
-                        customer_name,  
+                        customer_name,
                         company_format,
                         pickup_date +'  ' +pickup_time,    
-                        source,   
+                        source,
                         destination
                     ],
                     "source": "new-landing-page form",
@@ -1741,12 +1733,174 @@ class VerifyOtp(View):
         phone_number = request.POST.get('phone_number')
         otp = request.POST.get('otp')
 
-        # Retrieve the OTP from the cache
-        cached_otp = cache.get(f'otp_{phone_number}')
+        print(f"OTP verification attempt for phone number: {phone_number}, entered OTP: {otp}")
 
-        if cached_otp and cached_otp == otp:
-            # OTP matches, remove it from cache
+        cached_otp = cache.get(f'otp_{phone_number}')
+        
+        print(f"Cached OTP for phone number {phone_number}: {cached_otp}")
+
+        if not cached_otp:
+            print(f"No OTP found in cache for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'OTP expired. Please request a new one.'})
+
+        if cached_otp == otp:
             cache.delete(f'otp_{phone_number}')
+            print(f"OTP verified successfully for phone number: {phone_number}")
             return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully.'})
         else:
+            print(f"Incorrect OTP entered for phone number: {phone_number}")
             return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})
+
+
+class PackageBookingList(TemplateView):
+    template_name = "website/package_booking_list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Get the form data passed from the previous page
+        context['package_category'] = self.request.GET.get('package_category')
+        context['package'] = self.request.GET.get('package')
+        context['duration'] = self.request.GET.get('duration')
+        context['price'] = self.request.GET.get('price')
+        context['description'] = self.request.GET.get('description')
+        context['features'] = self.request.GET.get('features')
+        context['source'] = self.request.GET.get('source')
+        context['destination'] = self.request.GET.get('destination')
+        context['pickup_date'] = self.request.GET.get('pickup_date')
+        context['pickup_time'] = self.request.GET.get('pickup_time')
+        return context  
+
+
+class AddPackageOrder(APIView):
+
+    def parse_date(self, date_str):
+        """Helper function to parse dates in multiple formats"""
+        for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+            try:
+                return datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+        raise ValueError(f"Date {date_str} is not in a recognized format.")
+
+    def post(self, request):
+        try:
+            pickup_date_str = request.POST.get('pickup_date', '')
+            pickup_time_str = request.POST.get('pickup_time', '')
+
+            if not pickup_date_str:
+                return JsonResponse({'status': 'Error', 'message': 'Pickup date is required'})
+            if not pickup_time_str:
+                return JsonResponse({'status': 'Error', 'message': 'Pickup time is required'})
+
+            # Convert date and time
+            pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
+            pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
+            # customer_id = request.POST['customer']
+            package_id = request.POST['package']
+            total_amount = request.POST['total_amount']
+            payment_method = request.POST['payment_method']
+            status = request.POST['status']
+            source = request.POST['source']
+            destination = request.POST['destination']
+            customer_phone_number = request.POST['phone_number']
+            address = request.POST['address']
+            customer_name = request.POST['customer_name']
+            customer_email = request.POST['email']
+            password = request.POST['password']
+
+            # Ensure objects exist in database before saving
+            customer_exits = Customer.objects.filter(phone_number=customer_phone_number).count()
+            if customer_exits>0:
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+                print(customer.email!=customer_email,customer.email,customer_email)
+                if customer.email!=customer_email:
+                    print("going back")
+                    return JsonResponse({'status': 'Error', 'message': "Customer's email or phone number does not match"})
+            else:
+                last_cust = Customer.objects.all().order_by('-customer_id').first()
+                if last_cust:
+                    last_company_format = int(last_cust.company_format.replace('CUST', ''))
+                    next_company_format = f'CUST{last_company_format + 1:02}'
+                else:
+                    next_company_format = 'CUST01'
+                cust = Customer(
+                        customer_name=customer_name,
+                        phone_number=customer_phone_number,
+                        email=customer_email,
+                        address=address,
+                        password=password,
+                        status="active",
+                        company_format=next_company_format,
+                        created_by=request.user,
+                        updated_by=request.user)
+                cust.save()
+                customer = Customer.objects.get(phone_number=customer_phone_number)
+
+            # Determine ride status based on pickup date
+            today = date.today().isoformat()
+            ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
+            
+            try:
+                ride_details = PackageOrder()
+                ride_details.customer=Customer.objects.get(phone_number=customer_phone_number)
+                ride_details.package=Packages.objects.get(package_id=package_id)
+                ride_details.total_amount=total_amount
+                ride_details.payment_method=payment_method
+                ride_details.source=source
+                ride_details.destination=destination
+                ride_details.pickup_date=pickup_date
+                ride_details.pickup_time=pickup_time
+                ride_details.status=status
+
+                ride_details.save()
+                order_id = ride_details.order_id
+
+                print("source ^^^: ",request.POST['source'] )
+                print("source ^^^: ", request.POST['destination'])
+                whatsapp = {
+                    "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                    "campaignName": "booking confirmation",
+                    "destination": customer_phone_number,
+                    "userName": "Ridexpress",
+                    "templateParams": [
+                        customer_name,
+                        order_id,  
+                        pickup_date +'  ' +pickup_time,    
+                        source,   
+                        destination
+                    ],
+                    "source": "new-landing-page form",
+                    "media": {},
+                    "buttons": [],
+                    "carouselCards": [],
+                    "location": {},
+                    "paramsFallbackValue": {
+                        "FirstName": "user"
+                    }
+                    }
+                # Send the POST request
+                gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+                try:
+                    response = requests.post(gateway_url, data=whatsapp)
+                    if response.status_code == 200:
+                        print("Message sent successfully")
+                    else:
+                        print(f"Failed to send message. Status code: {response.status_code}")
+                        print(response.text)  # Print response body for debugging
+                except requests.RequestException as e:
+                    print(f"Error sending message: {e}")
+            except IntegrityError as e:
+                # Log the specific IntegrityError
+                print("IntegrityError:", e)
+            
+            except Exception as e:
+                print("Error ^^^: ", str(e))
+            return JsonResponse({'status': "Success", 'message': 'Ride details added successfully'})
+        except Customer.DoesNotExist:
+            print(f"Customer with phone {customer_phone_number} does not exist.")
+            return JsonResponse({'status': 'Error', 'message': f'Customer with phone {customer_phone_number} does not exist.'})
+        except Exception as e:
+            print("^^^^^^: ", str(e))
+            print(f"Error saving ride details: {e}")
+            return JsonResponse({'status': 'Error', 'message': str(e)})
+

@@ -194,7 +194,57 @@
                                           </div>
                                           
                                           <div id="LocalPackage" class="tabcontent">
-                                            <form action="{% url 'search_url' %}" id="localPackageForm">
+                                            <form action="{% url 'package_booking_list' %}" method="get" id="localPackageForm">
+                                                <div class="row">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Category:</label>
+                                                            <select class="form-control" id="package_category" name="package_category" onchange="getpackage()">
+                                                                <option value="">Select Category</option>
+                                                                {% for category in categories %}
+                                                                    <option value="{{ category.package_category_id }}">{{ category.category_name }}</option>
+                                                                {% endfor %}
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Package</label>
+                                                            <select class="form-control" id="package" name="package">
+                                                                <option value="">Select Package</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Duration</label>
+                                                            <input type="text" class="form-control" id="duration" name="duration"  readonly>                                       
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Price</label>
+                                                            <input type="text" class="form-control" id="price" name="price"  readonly>                                       
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Description:</label>
+                                                            <textarea class="form-control" id="description" name="description" rows="2" readonly></textarea>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label>Features:</label>
+                                                            <textarea class="form-control" id="features" name="features" rows="2" readonly></textarea>
+                                                        </div>
+                                                    </div>  
+                                                </div>
+
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -1816,8 +1866,45 @@ document.addEventListener('DOMContentLoaded', function() {
     airportOneWayRadio.addEventListener('change', handleAirportTripType);
     airportRoundTripRadio.addEventListener('change', handleAirportTripType);
 });
+</script>
 
+<script>
+    function getpackage() {
+        // Clear the package dropdown
+        $('#package')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="null" selected disabled>Select Package</option>')
+        .val('null');
+        
+        let package_category = document.getElementById('package_category').value;
+        console.log("Selected category:", package_category);
+        
+        // Loop through the packages and add options to the dropdown
+        '{% for obj in packages %}'
+            if ('{{ obj.package_category.package_category_id }}' == package_category) {
+                console.log("Match found for package:", '{{obj.name}}');
+                
+                $('#package').append('<option value="{{ obj.package_id }}" data-price="{{ obj.price }}" data-duration="{{ obj.duration }}" data-description="{{ obj.description|escapejs }}" data-features="{{ obj.features }}">{{ obj.name }}</option>');
+            }
+        '{% endfor %}'
+    }
 
+    document.getElementById('package').addEventListener('change', function() {
+    let selectedOption = this.options[this.selectedIndex];
+
+    // Get the custom data attributes from the selected option
+    let price = selectedOption.getAttribute('data-price');
+    let duration = selectedOption.getAttribute('data-duration');
+    let description = selectedOption.getAttribute('data-description');
+    let features = selectedOption.getAttribute('data-features');
+
+    document.querySelector('[name="price"]').value = price;
+    document.querySelector('[name="duration"]').value = duration;
+    document.getElementById('description').value = description;  // Use ID selector for the textarea
+    document.querySelector('[name="features"]').value = features;
+});
 </script>
 
     {% endblock body_content %}
