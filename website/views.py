@@ -96,6 +96,56 @@ def banaglore_to_ooty(request):
     context = None
     return render(request, 'website/packages/banaglore_to_ooty.html',context)
 
+def bangalore_to_melukote(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_melukote.html',context)
+
+def bangalore_to_brindavan_gardens(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_brindavan_gardens.html',context)
+
+def bangalore_to_agumbe(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_agumbe.html',context)
+
+def bangalore_to_sakleshpur(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_sakleshpur.html',context)
+
+def bangalore_to_chikhaldara(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_chikhaldara.html',context)
+
+def bangalore_to_kodaikanal(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_kodaikanal.html',context)
+
+def bangalore_to_shimla(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_shimla.html',context)
+
+def bangalore_to_tirupati(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_tirupati.html',context)
+
+def bangalore_to_wayanad(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_wayanad.html',context)
+
+def bangalore_to_shravanabelagola(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_shravanabelagola.html',context)
+
+def bangalore_to_goa(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_goa.html',context)
+
+def bangalore_to_darjeeling(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_darjeeling.html',context)
+
+
+######################################
 
 
 def Why_Choose_Local_Cab_Services(request):

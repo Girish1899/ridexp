@@ -161,6 +161,18 @@ urlpatterns = [
     path('packages/banaglore_to_ooty', views.banaglore_to_ooty, name="banaglore_to_ooty"),
     path('packages/banaglore_to_pondicherry', views.banaglore_to_ooty, name="banaglore_to_pondicherry"),
 
+    path('packages/bangalore_to_melukote', views.bangalore_to_melukote, name="bangalore_to_melukote"),
+    path('packages/bangalore_to_brindavan_gardens', views.bangalore_to_brindavan_gardens, name="bangalore_to_brindavan_gardens"),
+    path('packages/bangalore_to_agumbe', views.bangalore_to_agumbe, name="bangalore_to_agumbe"),
+    path('packages/bangalore_to_sakleshpur', views.bangalore_to_sakleshpur, name="bangalore_to_sakleshpur"),
+    path('packages/bangalore_to_chikhaldara', views.bangalore_to_chikhaldara, name="bangalore_to_chikhaldara"),
+    path('packages/bangalore_to_kodaikanal', views.bangalore_to_kodaikanal, name="bangalore_to_kodaikanal"),
+    path('packages/bangalore_to_shimla', views.bangalore_to_shimla, name="bangalore_to_shimla"),
+    path('packages/bangalore_to_tirupati', views.bangalore_to_tirupati, name="bangalore_to_tirupati"),
+    path('packages/bangalore_to_wayanad', views.bangalore_to_wayanad, name="bangalore_to_wayanad"),
+    path('packages/bangalore_to_shravanabelagola', views.bangalore_to_shravanabelagola, name="bangalore_to_shravanabelagola"),
+    path('packages/bangalore_to_goa', views.bangalore_to_goa, name="bangalore_to_goa"),
+    path('packages/bangalore_to_darjeeling', views.bangalore_to_darjeeling, name="bangalore_to_darjeeling"),
 
     path('send_otp/', SendOtp.as_view(), name='send_otp'),
     path('verify_otp/', VerifyOtp.as_view(), name='verify_otp'),
