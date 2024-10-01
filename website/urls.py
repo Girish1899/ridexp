@@ -122,6 +122,35 @@ urlpatterns = [
     path('blog/localcabs_best_for_airport', views.localcabs_best_for_airport, name="localcabs_best_for_airport"),
 
 
+    # outstation
+
+    path('blog/guide_to_outstation', views.guide_to_outstation, name="guide_to_outstation"),
+    path('blog/reasons_to_choose_oustationcabs', views.reasons_to_choose_oustationcabs, name="reasons_to_choose_oustationcabs"),
+    path('blog/best_oustation_services', views.best_oustation_services, name="best_oustation_services"),
+    path('blog/essential_tips', views.essential_tips, name="essential_tips"),
+    path('blog/cost_structure', views.cost_structure, name="cost_structure"),
+    path('blog/planning_outstation_trip', views.planning_outstation_trip, name="planning_outstation_trip"),
+    path('blog/pre_booking_outstation', views.pre_booking_outstation, name="pre_booking_outstation"),
+    path('blog/travelling_with_family', views.travelling_with_family, name="travelling_with_family"),
+    path('blog/comfortable_outstation_taxi', views.comfortable_outstation_taxi, name="comfortable_outstation_taxi"),
+    path('blog/booking_outstation_taxi', views.booking_outstation_taxi, name="booking_outstation_taxi"),
+    path('blog/reliable_outstation_taxi', views.reliable_outstation_taxi, name="reliable_outstation_taxi"),
+    path('blog/technology_in_outstation', views.technology_in_outstation, name="technology_in_outstation"),
+    path('blog/budgeting_for_outstation', views.budgeting_for_outstation, name="budgeting_for_outstation"),
+    path('blog/cater_to_business', views.cater_to_business, name="cater_to_business"),
+    path('blog/environmental_impact_of_outstation', views.environmental_impact_of_outstation, name="environmental_impact_of_outstation"),
+    path('blog/exploring_cultural_attraction', views.exploring_cultural_attraction, name="exploring_cultural_attraction"),
+    path('blog/long_distance_journey', views.long_distance_journey, name="long_distance_journey"),
+    path('blog/different_outstation_destination', views.different_outstation_destination, name="different_outstation_destination"),
+    path('blog/safety_tips_for_outstation', views.safety_tips_for_outstation, name="safety_tips_for_outstation"),
+    path('blog/offbeat_locations', views.offbeat_locations, name="offbeat_locations"),
+    path('blog/family_travel_journeys', views.family_travel_journeys, name="family_travel_journeys"),
+    path('blog/maximum_savings', views.maximum_savings, name="maximum_savings"),
+    path('blog/outstation_taxi_fare', views.outstation_taxi_fare, name="outstation_taxi_fare"),
+    path('blog/outstation_taxi_experience', views.outstation_taxi_experience, name="outstation_taxi_experience"),
+    path('blog/navigating_language_barriers', views.navigating_language_barriers, name="navigating_language_barriers"),
+
+
     path('packages/banaglore_to_mysore', views.banaglore_to_mysore, name="banaglore_to_mysore"),
     path('packages/banaglore_to_coorg', views.banaglore_to_coorg, name="banaglore_to_coorg"),
     path('packages/banaglore_to_hampi', views.banaglore_to_hampi, name="banaglore_to_hampi"),

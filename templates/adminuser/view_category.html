@@ -33,13 +33,13 @@
                         <tr style="color: black !important;">
                           <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Project</th> -->
                           <th>Category Id</th>
-                                        <th>Category Name</th>
-                                        <th>Status</th>
-                                        <th>Created On</th>
-                                        <th>Updated On</th>
-                                        <th>Created by</th>
-                                        <th>Updated by</th>
-                                        <th>Action</th>
+                          <th>Category Name</th>
+                          <th>Status</th>
+                          <th>Created On</th>
+                          <th>Updated On</th>
+                          <th>Created by</th>
+                          <th>Updated by</th>
+                          <th>Action</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -48,7 +48,7 @@
                             <td>{{ i.category_id }}</td>
                             <td>{{ i.category_name }}</td>
                             <td>
-                                <span class="badge {% if i.category_status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                <span class="badge {% if i.category_status == 'active' %}bg-gradient-success{% else %}bg-gradient-success{% endif %}">
                                     {{ i.category_status }}
                                 </span>
                             </td>                                         
