@@ -3103,13 +3103,13 @@ class CompletedRideList(ListView):
 # invoice rides########################################################################################################
 from docxtpl import DocxTemplate
 from docx2pdf import convert
-import pythoncom
+# import pythoncom
 
 class InvoiceView(View):
     
     def get(self, request, *args, **kwargs):
         # Manually initialize COM
-        pythoncom.CoInitialize()
+        # pythoncom.CoInitialize()
 
         try:
             ride_id = self.kwargs.get("ride_id")
@@ -3164,8 +3164,8 @@ class InvoiceView(View):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
         
-        finally:
-            pythoncom.CoUninitialize()
+        # finally:
+            # pythoncom.CoUninitialize()
 
 
 # assign driver###########################################################################################################
