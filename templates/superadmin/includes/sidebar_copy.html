@@ -1,0 +1,135 @@
+{% load static %}
+   <!--************
+            Sidebar start
+        *************-->
+        <div class="quixnav">
+            <div class="quixnav-scroll">
+                <ul class="metismenu" id="menu">
+
+                    <li><a href="{% url 'index' %}" aria-expanded="false"><i class="icon icon-single-04"></i><span
+                        class="nav-text">Dashboard</span></a></li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Admins</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'userlist' %}">View Admins</a></li>
+                                <li><a href="{% url 'useremp' %}">View Employees</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <i class="icon icon-form"></i><span class="nav-text">Bookings</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'addbooking' %}">Add Bookings</a></li>
+                                <li><a href="{% url 'ridelist' %}">View Current Bookings</a></li>
+                                <li><a href="{% url 'advance_bookings' %}">View Advance Bookings</a></li>
+                                <li><a href="{% url 'pending_bookings' %}">View Pending Bookings</a></li>
+                                <li><a href="{% url 'view_assigned_rides' %}">View Assigned Bookings</a></li>
+                                <li><a href="{% url 'view_assignlater' %}">View AssignLater Bookings</a></li>
+                                <li><a href="{% url 'cancelledbookings' %}">View Cancelled Bookings</a></li>
+                                <li><a href="{% url 'ongoing_rides' %}">View Ongoing Bookings</a></li>
+                                <li><a href="{% url 'completed_rides' %}">View Completed Bookings</a></li>
+                            </ul>
+                        </li>
+
+                    <!-- <li class="nav-label">Category Management</li> -->
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-chart-bar-33"></i><span class="nav-text"> Category Management</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'CategoryListView' %}">View Car Category</a></li>
+                                <li><a href="{% url 'BrandListView' %}">View Car Brand</a></li>
+                                <li><a href="{% url 'ModelListView' %}">View Car Model</a></li>
+                                <li><a href="{% url 'vehicletypeList' %}">View Car Fuel Type</a></li>
+                                <li><a href="{% url 'TransmissionListView' %}">View Car Transmission</a></li>
+                                <li><a href="{% url 'colorList' %}">View Car Color</a></li>
+                                <li><a href="{% url 'ridetypeList' %}">View Service Type</a></li>
+                                
+                            </ul>
+                        </li>
+                    
+                        <li><a class="has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <i class="icon icon-form"></i><span class="nav-text">Car Management</span></a>
+                            <ul aria-expanded="false">
+                                <!-- <li><a href="{% url 'addvehicle' %}">Add Car</a></li> -->
+                                <li><a href="{% url 'vehiclelist' %}">View Active Cars</a></li>
+                                <li><a href="{% url 'vehicleblocklist' %}">View Blocked Cars</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Customers</span></a>
+                            <ul aria-expanded="false">
+                                <!-- <li><a href="{% url 'addcustomer' %}">Add Customer</a></li> -->
+                                <li><a href="{% url 'customerlist' %}">View Customer</a></li>
+                                <li><a href="{% url 'cust_profile_list' %}">Customer Bookings</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-form"></i><span class="nav-text">Commission Details</span></a>
+                            <ul aria-expanded="false">
+                                <!-- <li><a href="{% url 'addcommission' %}">Add Commission</a></li> -->
+                                <li><a href="{% url 'commissionlist' %}">View Commission</a></li>
+                                <li><a href="{% url 'vehicles' %}">View Vehicle List</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Drivers</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'viewdriver' %}">View Drivers</a></li>
+                                <li><a href="{% url 'viewdriververification' %}">Driver Verification</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-form"></i><span class="nav-text">Price Details</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'pricinglist' %}">View Price</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Vehicle Registration</span></a>
+                            <ul aria-expanded="false">
+                                <!-- <li><a href="{% url 'addvehicleowner' %}">Add Vehicle Owners</a></li> -->
+                                <li><a href="{% url 'viewvehicleowner' %}">View Vehicle Owners</a></li>
+                                <li><a href="{% url 'ownerverification' %}"> Vehicle Owner Verification</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Packages</span></a>
+                            <ul aria-expanded="false">
+                                <li><a href="{% url 'package_category_list' %}">View Package Category</a></li>
+                                <li><a href="{% url 'packages_list' %}">View Packages</a></li>
+                                <li><a href="{% url 'package_order_list' %}">View PackageOrders</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Report Management</span></a>
+                            <ul aria-expanded="false">
+                                <!-- <li><a href="{% url 'addvehicleowner' %}">Add Vehicle Owners</a></li> -->
+                                <li><a href="{% url 'driver_report' %}"> Driver Report</a></li>
+                            </ul>
+                        </li>
+
+                        <li><a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon icon-single-04"></i><span class="nav-text">Accounts</span></a>
+                            <ul aria-expanded="false">
+                                <!-- <li><a href="{% url 'add_accounts' %}">Add accounts</a></li> -->
+                                <li><a href="{% url 'accounts_list' %}">View accounts</a></li>
+                            </ul>
+                        </li>
+                    </li>
+                    <li><a href="{% url 'contactlist' %}" aria-expanded="false"><i class="icon icon-single-04"></i><span
+                        class="nav-text">Contact</span></a></li>
+
+                        <li><a href="{% url 'enquirylist' %}" aria-expanded="false"><i class="icon icon-single-04"></i><span
+                            class="nav-text">Enquiry</span></a></li>    
+            </div>
+        </div>
+        <!--************
+            Sidebar end
+        *************-->
