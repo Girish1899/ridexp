@@ -1,27 +1,34 @@
 {% extends 'superadmin/base.html' %}
 {% load static %}
 {% block content%}
-<!--**********************************
-    Content body start
-***********************************-->
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Edit Color</h4>
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <a href="{% url 'colorList' %}" style="color: white;"><button  class="btn btn-primary">View Car Color </button></a>
-                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'colorList' %}" style="color: white !important;">View
+                            Car Color</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
+                            Back</a></li>
+                </ol>
             </div>
         </div>
+
         <div class="col-xl-12">
-            <div class="card">
-                <div class="card-header">
-                    <!-- <h4 class="card-title">Edit Color</h4> -->
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                        style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Color</h6>
+                    </div>
                 </div>
+
                 <div class="card-body">
                     <div class="form-group row">
                         <input type="hidden" class="form-control" id="color_id" name="color_id"

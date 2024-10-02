@@ -1,34 +1,31 @@
 {% extends 'superadmin/base.html' %}
 {% load static %}
 {% block content%}
- <!--**********************************
-            Content body start
-        ***********************************-->
-        <div class="content-body">
-            <div class="container-fluid">
-                <div class="row page-titles mx-0">
-                    <div class="col-sm-6 p-md-0">
-                        <div class="welcome-text">
-                            <h4>Add Commission Type</h4>
-                            <!-- <span class="ml-1">Element</span> -->
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                        <a href="{% url 'commissionlist' %}" style="color: white;"><button  class="btn btn-primary">View Commission</button></a>
-                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
-                    </div>
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
-                <!-- row -->
-                <!-- <div class="row"> -->
-                    <div class="col-xl-12">
-
-                        <div class="card">
-                            <div class="card-header">
-                                <!-- <h4 class="card-title">Add Category</h4> -->
-                            </div>
-                            <div class="card-body">
-                                <!-- <div class="basic-form"> -->
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'commissionlist' %}" style="color: white !important;">View Commission</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+ 
+            <div class="col-xl-12">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Commission</h6>
+                        </div>
+                        </div>
+    
+                    <div class="card-body">
                                     
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Name</label>

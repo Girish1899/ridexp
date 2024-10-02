@@ -96,6 +96,56 @@ def banaglore_to_ooty(request):
     context = None
     return render(request, 'website/packages/banaglore_to_ooty.html',context)
 
+def bangalore_to_melukote(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_melukote.html',context)
+
+def bangalore_to_brindavan_gardens(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_brindavan_gardens.html',context)
+
+def bangalore_to_agumbe(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_agumbe.html',context)
+
+def bangalore_to_sakleshpur(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_sakleshpur.html',context)
+
+def bangalore_to_chikhaldara(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_chikhaldara.html',context)
+
+def bangalore_to_kodaikanal(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_kodaikanal.html',context)
+
+def bangalore_to_shimla(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_shimla.html',context)
+
+def bangalore_to_tirupati(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_tirupati.html',context)
+
+def bangalore_to_wayanad(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_wayanad.html',context)
+
+def bangalore_to_shravanabelagola(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_shravanabelagola.html',context)
+
+def bangalore_to_goa(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_goa.html',context)
+
+def bangalore_to_darjeeling(request):
+    context = None
+    return render(request, 'website/packages/bangalore_to_darjeeling.html',context)
+
+
+######################################
 
 
 def Why_Choose_Local_Cab_Services(request):
@@ -360,6 +410,107 @@ def localcabs_best_for_airport(request):
     context = None
     return render(request, 'website/blog/local25.html',context)
 
+# outstation blogs ####################################
+
+def guide_to_outstation(request):
+    context = None
+    return render(request, 'website/blog/out1.html',context)
+
+def reasons_to_choose_oustationcabs(request):
+    context = None
+    return render(request, 'website/blog/out2.html',context)
+
+def best_oustation_services(request):
+    context = None
+    return render(request, 'website/blog/out3.html',context)
+
+def essential_tips(request):
+    context = None
+    return render(request, 'website/blog/out4.html',context)
+
+def cost_structure(request):
+    context = None
+    return render(request, 'website/blog/out5.html',context)
+
+def planning_outstation_trip(request):
+    context = None
+    return render(request, 'website/blog/out6.html',context)
+
+def pre_booking_outstation(request):
+    context = None
+    return render(request, 'website/blog/out7.html',context)
+
+def travelling_with_family(request):
+    context = None
+    return render(request, 'website/blog/out8.html',context)
+
+def comfortable_outstation_taxi(request):
+    context = None
+    return render(request, 'website/blog/out9.html',context)
+
+def booking_outstation_taxi(request):
+    context = None
+    return render(request, 'website/blog/out10.html',context)
+
+def reliable_outstation_taxi(request):
+    context = None
+    return render(request, 'website/blog/out11.html',context)
+
+def technology_in_outstation(request):
+    context = None
+    return render(request, 'website/blog/out12.html',context)
+
+def budgeting_for_outstation(request):
+    context = None
+    return render(request, 'website/blog/out13.html',context)
+
+def cater_to_business(request):
+    context = None
+    return render(request, 'website/blog/out14.html',context)
+
+def environmental_impact_of_outstation(request):
+    context = None
+    return render(request, 'website/blog/out15.html',context)
+
+def exploring_cultural_attraction(request):
+    context = None
+    return render(request, 'website/blog/out16.html',context)
+
+def long_distance_journey(request):
+    context = None
+    return render(request, 'website/blog/out17.html',context)
+
+def different_outstation_destination(request):
+    context = None
+    return render(request, 'website/blog/out18.html',context)
+
+def safety_tips_for_outstation(request):
+    context = None
+    return render(request, 'website/blog/out19.html',context)
+
+def offbeat_locations(request):
+    context = None
+    return render(request, 'website/blog/out20.html',context)
+
+def family_travel_journeys(request):
+    context = None
+    return render(request, 'website/blog/out21.html',context)
+
+def maximum_savings(request):
+    context = None
+    return render(request, 'website/blog/out22.html',context)
+
+def outstation_taxi_fare(request):
+    context = None
+    return render(request, 'website/blog/out23.html',context)
+
+def outstation_taxi_experience(request):
+    context = None
+    return render(request, 'website/blog/out24.html',context)  
+
+def navigating_language_barriers(request):
+    context = None
+    return render(request, 'website/blog/out25.html',context)   
 
 ######################################
 def about(request):
