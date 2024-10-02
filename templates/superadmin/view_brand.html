@@ -1,6 +1,23 @@
 {% extends 'superadmin/base.html' %}
 {% load static %}
 {% block content%}
+<style>
+    .badge {
+    display: inline-flex; /* or block */
+    align-items: center;
+    justify-content: center;
+    min-width: 60px; /* Adjust as necessary */
+    height: 41px; /* Adjust as necessary */
+}
+.badge-success {
+        background-color: #28a745; /* Green color for active */
+    }
+    
+.badge-danger {
+    background-color: #dc3545; /* Red color for inactive */
+}
+
+</style>
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -55,7 +72,7 @@
                                         <a href="{% url 'ViewBrand' i.brand_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
                                         {% if i.category.category_status != 'inactive' %}
                                         <button class="btn btn-link p-0" onclick="toggleBrandStatus('{{ i.brand_id }}', '{{ i.status }}')" title="Change Status (block/unblock)">
-                                            <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
+                                            <span class="badge {% if i.status == 'active' %}badge-success{% else %} badge-danger {% endif %}">
                                                 <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white fa-2x"></i> <!-- Adjust icon size here -->
                                             </span>
                                         </button>

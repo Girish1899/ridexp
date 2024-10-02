@@ -409,6 +409,16 @@ textarea {
   font-size: inherit;
   line-height: inherit;
 }
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+input[type="file"],
+input[type="email"],
+textarea,
+select {
+    background-color: rgb(235, 234, 234);
+}
 
 button,
 select {
@@ -2863,10 +2873,16 @@ progress {
   padding: 0.75rem 0.75rem;
   margin: -0.75rem -0.75rem;
   margin-inline-end: 0.75rem;
+  
+}
+
+select.form-control {
+  background-color: rgb(235, 234, 234);
 }
 
 textarea.form-control {
   min-height: unset;
+  background-color: rgb(235, 234, 234);
 }
 
 textarea.form-control-sm {

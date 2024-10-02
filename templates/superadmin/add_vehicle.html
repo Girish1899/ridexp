@@ -1,6 +1,7 @@
 {% extends 'superadmin/base.html' %}
 {% load static %}
 {% block content %}
+
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -31,7 +32,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
                         </div>
                     </div>
@@ -39,7 +40,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Vehicle Owner</label>
-                        <div class="col-sm-10" >  
+                        <div class="col-sm-12" >  
                             <select id="single-select"  name="owner" class="form-control form-control-lg" >
                                 <option value="" selected disabled>Select Owner Id</option>
                                 {% for obj in ownerlist %}
@@ -48,7 +49,7 @@
                             </select>
                         </div>
                     </div>
-
+<br>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle No.*</label>
                         <div class="col-sm-2">
@@ -68,7 +69,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
                                 <option value="" selected disabled>Select Car Category</option>
                                 {% for obj in catlist %}
@@ -80,7 +81,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
                                 <option value="" selected disabled>Select Car Brand</option>
                                 <!-- Options will be dynamically added here -->
@@ -90,7 +91,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="model" name="model" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Car Model</option>
                                 <!-- Options will be dynamically added here -->
@@ -100,7 +101,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
-                        <div class="col-sm-4">    
+                        <div class="col-sm-12">    
                             <select class="form-control form-control-lg" id="year" name="year">
                                 <option value="" selected disabled>Select Year</option>
                             </select>
@@ -109,7 +110,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="commission_type" name="commission_type" class="form-control form-control-lg" onchange="updateCommissionPercentage()">
                                 <option value="" selected disabled>Select Commission Type</option>
                                 {% for obj in ctypelist %}
@@ -119,7 +120,7 @@
                         </div>
                         
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Percentage *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="commission_percentage" name="commission_percentage" disabled>
                         </div>
                     </div>
@@ -127,7 +128,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car body color *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="color" name="color" class="form-control form-control-lg" >
                                 <option value="" selected disabled>Select Car Body Color</option>
                                 {% for obj in colorlist %}
@@ -139,7 +140,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Transmission Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="transmission" name="transmission" class="form-control form-control-lg" >
                                 <option value="" selected disabled>Select Car Transmission Type</option>
                                 {% for obj in tlist %}
@@ -151,14 +152,14 @@
 
                     <!-- <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Color</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="color" name="color">
                         </div>
                     </div> -->
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select id="vehicle_type" name="vehicle_type" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Fuel Type</option>
                                 {% for obj in vtypelist %}
@@ -170,7 +171,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select class="form-control form-control-lg" id="car_type" name="car_type">
                                 <option value="" selected disabled>Select Car Type</option>
                                 <option >AC</option>
@@ -182,12 +183,12 @@
                    
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="date" class="form-control form-control-lg" id="insurance_expiry" name="insurance_expiry">
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Drive Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select class="form-control form-control-lg" id="drive_status" name="drive_status">
                                 <option value="" selected disabled>Select Drive Status</option>
                                 <option value="selfdrive" >Self Drive</option>
@@ -198,7 +199,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Registration Certificate *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate">
                             <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
@@ -206,7 +207,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate">
                             <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
@@ -214,7 +215,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Policy *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy">
                             <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
@@ -222,7 +223,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details">
                             <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
@@ -230,7 +231,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details">
                             <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
@@ -238,7 +239,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test">
                             <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
@@ -247,7 +248,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <select class="form-control form-control-lg" id="vehicle_status" name="vehicle_status">
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="active" selected>Active</option>
@@ -257,7 +258,7 @@
                     
                         
                     </div>
-
+<br>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>

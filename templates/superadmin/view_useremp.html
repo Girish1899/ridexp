@@ -60,7 +60,10 @@
                                     <!-- <td>{{ i.user.password }}</td> -->
                                     <td>{{ i.address }}</td>
                                     <td>{{ i.type }}</td>
-                                    <td><span class="badge badge-success">{{i.status}}</span></td>
+                                    <td><span class="badge {% if i.status == 'active' %}bg-gradient-success{% else %}bg-gradient-success{% endif %}">
+                                        {{ i.status }}
+                                      </span>
+                                    </td>
                                     <td>{{ i.created_on }}</td>
                                     <td>{{ i.updated_on }}</td>
                                     <td style="display: flex; justify-content: center; align-items: center;">
