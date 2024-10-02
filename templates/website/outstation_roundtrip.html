@@ -1,17 +1,21 @@
 {% extends "./index.html" %}
 {% load static %}
 
-{% block title %}<title> localcabs - Outstation Round Trip Taxi Booking | Affordable Round Trip Cab Services | RidexpressTaxi </title> {% endblock %}
-{% block meta_description %} <meta name="description" content="Experience comfortable and affordable outstation round trip taxi services with RidexpressTaxi. Book your round trip today and enjoy a convenient journey to your destination and back, with transparent pricing and no hidden charges. Perfect for weekend getaways and business trips." />{% endblock %}
-{% block meta_keywords %} <meta name="keywords" content="outstation round trip taxi, round trip cab booking, round trip outstation cab, two-way outstation ride, intercity round trip, affordable outstation taxi services, [City] to [Destination] round trip taxi, weekend round trip cab, long-distance round trip cab" />
-<link rel="canonical" href="https://ridexpress.in/outstation_roundtrip" />
-
+{% block title %}
+    <title> localcabs - Outstation Round Trip Taxi Booking | Affordable Round Trip Cab Services | RidexpressTaxi </title>
+{% endblock %}
+{% block meta_description %}
+    <meta name="description" content="Experience comfortable and affordable outstation round trip taxi services with RidexpressTaxi. Book your round trip today and enjoy a convenient journey to your destination and back, with transparent pricing and no hidden charges. Perfect for weekend getaways and business trips." />
+{% endblock %}
+{% block meta_keywords %}
+    <meta name="keywords" content="outstation round trip taxi, round trip cab booking, round trip outstation cab, two-way outstation ride, intercity round trip, affordable outstation taxi services, [City] to [Destination] round trip taxi, weekend round trip cab, long-distance round trip cab" />
+    <link rel="canonical" href="https://ridexpress.in/outstation_roundtrip" />
 {% endblock %}
 
 {% block body_content %}
 
- <!-- book ride -->
- <div class="book-ride py-120">
+<!-- Book Ride -->
+<div class="book-ride py-120">
     <div class="container">
         <div class="row">
             <div class="col-md-12 mx-auto">
@@ -25,63 +29,56 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" disabled>
+                                        <input type="text" class="form-control autocomplete" placeholder="Type Location" id="source" name="source">
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Drop Off Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination"disabled>
+                                        <input type="text" class="form-control autocomplete" placeholder="Type Location" id="destination" name="destination">
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" disabled>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date">
                                         <div id="dateError" class="invalid-feedback"></div>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
+                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Ride Type:</label>
-                                        <input type="text" class="form-control" id="ridetype" name="ridetype" disabled>
+                                        <input type="text" class="form-control" id="ridetype" name="ridetype">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label>Trip Type:</label>
-                                        <input type="text" class="form-control" id="trip_type" name="trip_type" disabled>
+                                        <input type="text" class="form-control" id="trip_type" name="trip_type">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label>Drop Date</label>
-                                        <input type="text" class="form-control" id="drop_date" name="drop_date" disabled>
+                                        <input type="text" class="form-control" id="drop_date" name="drop_date">
                                     </div>
                                 </div>
-
                                 <div class="col-lg-2">
                                     <div class="form-group">
                                         <label>Drop Time</label>
-                                        <input type="time" class="form-control" id="drop_time" name="drop_time" disabled>
+                                        <input type="time" class="form-control" id="drop_time" name="drop_time">
                                     </div>
                                 </div>
-                
                                 <div class="col-lg-3">
-                                    <button class="theme-btn" type="submit" id="save_action">Check Fares<i
-                                            class="fas fa-arrow-right"></i></button>
+                                    <button class="theme-btn" type="submit" id="save_action">Check Fares<i class="fas fa-arrow-right"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -91,12 +88,12 @@
         </div>
     </div>
 </div>
-<!-- book ride end -->
+<!-- Book Ride End -->
 
 <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h1 class="mb-5"><span class="text text-uppercase" style="color: rgb(10, 10, 63);">Select Cabs</span></h1>
+            <h1 class="mb-5"><span class="text text-uppercase" style="color: rgb(10, 10, 63);">Select Cabs at Ridexpress</span></h1>
         </div>
 
         <!-- Cab Items -->
@@ -104,7 +101,7 @@
             {% for category, prices in pricing_dict.items %}
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="room-item shadow rounded overflow-hidden">
-                    <div class="position-relative ">
+                    <div class="position-relative">
                         {% if prices.ac %}
                             <img class="img-fluid" src="{{ prices.ac.category.image.url }}" alt="{{ category|capfirst }}">
                         {% elif prices.non_ac %}
@@ -115,11 +112,11 @@
 
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
                             <!-- Non AC Price Display -->
-                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
+                            <small class="bg-secondary text-white rounded py-1 px-3" style="flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                             <!-- AC Price Display -->
-                            <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-left: 10px; font-size: 14px; font-weight: bold;">
+                            <small class="bg-primary text-white rounded py-1 px-3" style="flex-grow: 1; text-align: center; margin-left: 10px; font-size: 14px; font-weight: bold;">
                                 AC ₹ <span id="price_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                         </div>
@@ -128,26 +125,13 @@
                     <div class="p-4 mt-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="mb-0">{{ category|capfirst }}</h5>
-                            <!-- <small class="border-end me-3 pe-3">
-                                <strong>Seats:</strong>
-                                {% if prices.ac %}
-                                    {{ prices.ac.category.seats }}
-                                {% elif prices.non_ac %}
-                                    {{ prices.non_ac.category.seats }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </small> -->
                             <div class="ps-2">
                                 <p style="font-size: 15px;"><strong>Distance (km):</strong> <span id="distance_{{ category|slugify }}">0</span></p>
                             </div>
                         </div>
                         
                         <div class="d-flex mb-3">
-                           
-                           
                             <small class="border-end me-3 pe-3">
-                                <!-- <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p> -->
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
@@ -161,11 +145,6 @@
                                     N/A
                                 {% endif %}
                             </small>
-                            <small class="border-end me-3 pe-3">
-                                <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Driver Beta A/C:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
-                                <!-- <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p> -->
-                            </small>
                         </div>
 
                         <div class="d-flex justify-content-between">
@@ -173,39 +152,32 @@
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-right: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
                                 <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
-                                <input type="hidden" name="pickup_date" value="{{ request.GET.pickup_date }}">
-                                <input type="hidden" name="pickup_time" value="{{ request.GET.pickup_time }}">
-                                <input type="hidden" name="category" value="{{ prices.non_ac.category.category_name }}">
-                                <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
-                                <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
-                                <input type="hidden" name="car_type" value="non_ac"> 
-                                <input type="hidden" name="drop_date" value="{{ request.GET.drop_date }}">
-                                <input type="hidden" name="drop_time" value="{{ request.GET.drop_time }}">
-                                <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
-                                <button type="submit" class="btn btn-sm btn-secondary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
-                                    Non A/c Not Available
+                                <input type="hidden" name="trip_type" value="Non AC">
+                                <input type="hidden" name="category" value="{{ category|slugify }}">
+                                <button class="btn btn-danger w-100" type="submit">
+                                    {% if prices.non_ac %}
+                                        Book Non AC
+                                    {% else %}
+                                        Check Availability
+                                    {% endif %}
                                 </button>
                             </form>
-                        
-                            <!-- A/C Booking Button -->
+
+                            <!-- AC Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-left: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
                                 <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
-                                <input type="hidden" name="pickup_date" value="{{ request.GET.pickup_date }}">
-                                <input type="hidden" name="pickup_time" value="{{ request.GET.pickup_time }}">
-                                <input type="hidden" name="category" value="{{ prices.ac.category.category_name }}">
-                                <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
-                                <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
-                                <input type="hidden" name="car_type" value="ac">   
-                                <input type="hidden" name="drop_date" value="{{ request.GET.drop_date }}">
-                                <input type="hidden" name="drop_time" value="{{ request.GET.drop_time }}">
-                                <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
-                                <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #007bff; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
-                                    A/c Not Available
+                                <input type="hidden" name="trip_type" value="AC">
+                                <input type="hidden" name="category" value="{{ category|slugify }}">
+                                <button class="btn btn-primary w-100" type="submit">
+                                    {% if prices.ac %}
+                                        Book AC
+                                    {% else %}
+                                        Check Availability
+                                    {% endif %}
                                 </button>
                             </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
@@ -213,7 +185,8 @@
         </div>
     </div>
 </div>
-                        
+
+{% endblock %}
                 
 <script>
     // var ridetype = "local"; 

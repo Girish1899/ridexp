@@ -5,17 +5,16 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="footer-widget-box about-us">
                         <a href="#" class="footer-logo">
-                            <img src="/static/img/logo/logo-icon.png" alt="ridexpress" style="height: 60px; width: 67px;" >
+                            <img src="/static/img/logo/logo-icon.png" alt="Ridexpress Logo" style="height: 60px; width: 67px;">
                             <h2 id="logoheader" style="color: white;">RIDEXPRESS</h2>
                         </a>
                         <p class="mb-3">
-                            We are Ridexpress Taxi Car Rentals, the leading and the most reliable cab rentals provider in India. We provide taxi for Airport Pickup, Airport Drop, Local Pickup and Drop, and to major outstations from Bangalore.
+                            We are Ridexpress Taxi Car Rentals, the leading and most reliable cab rentals provider in India. We provide taxi for Airport Pickup, Airport Drop, Local Pickup and Drop, and to major outstations from Bangalore.
                         </p>
                         <ul class="footer-contact">
-                            <li><a href="tel:+21236547898"><i class="far fa-phone"></i>+91 6366463555</a></li>
+                            <li><a href="tel:+916366463555"><i class="far fa-phone"></i>+91 6366463555</a></li>
                             <li><i class="far fa-map-marker-alt"></i>Jp Nagar, Bengaluru, Karnataka 560078</li>
-                            <li><a href="mailto:support@Ridexpresstaxi.com"><i
-                                        class="far fa-envelope"></i>support@ridexpress.in</a></li>
+                            <li><a href="mailto:support@ridexpress.in"><i class="far fa-envelope"></i>support@ridexpress.in</a></li>
                         </ul>
                     </div>
                 </div>
@@ -24,11 +23,8 @@
                         <h4 class="footer-widget-title">Quick Links</h4>
                         <ul class="footer-list">
                             <li><a href="/about"><i class="fas fa-caret-right"></i> About Us</a></li>
-                            <!-- <li><a href="#"><i class="fas fa-caret-right"></i> Update News</a></li> -->
-                            <!-- <li><a href="#"><i class="fas fa-caret-right"></i> Testimonials</a></li> -->
                             <li><a href="/terms"><i class="fas fa-caret-right"></i> Terms Of Service</a></li>
-                            <li><a href="/terms"><i class="fas fa-caret-right"></i> Privacy policy</a></li>
-                            <!-- <li><a href="#"><i class="fas fa-caret-right"></i> Our Drivers</a></li> -->
+                            <li><a href="/privacy"><i class="fas fa-caret-right"></i> Privacy Policy</a></li>
                         </ul>
                     </div>
                 </div>
@@ -36,12 +32,9 @@
                     <div class="footer-widget-box list">
                         <h4 class="footer-widget-title">Support Center</h4>
                         <ul class="footer-list">
-                            <li><a href="/faq"><i class="fas fa-caret-right"></i> FAQ's</a></li>
-                            <!-- <li><a href="#"><i class="fas fa-caret-right"></i> Affiliates</a></li> -->
-                            <!-- <li><a href="#"><i class="fas fa-caret-right"></i> Booking Tips</a></li> -->
+                            <li><a href="/faq"><i class="fas fa-caret-right"></i> FAQ</a></li>
                             <li><a href="{% url 'home' %}"><i class="fas fa-caret-right"></i> Book A Ride</a></li>
                             <li><a href="{% url 'contact' %}"><i class="fas fa-caret-right"></i> Contact Us</a></li>
-                            <!-- <li><a href="#"><i class="fas fa-caret-right"></i> Sitemap</a></li> -->
                         </ul>
                     </div>
                 </div>
@@ -49,21 +42,18 @@
                     <div class="footer-widget-box list">
                         <h4 class="footer-widget-title">Newsletter</h4>
                         <div class="footer-newsletter">
-                            <p>Subscribe Our Newsletter To Get Latest Update And News</p>
+                            <p>Subscribe to our newsletter for the latest updates and news.</p>
                             <div class="subscribe-form">
-                                <form action="#">
-                                    <input type="email" class="form-control" placeholder="Your Email">
+                                <form action="#" method="post">
+                                    <input type="email" class="form-control" placeholder="Your Email" required>
                                     <button class="theme-btn" type="submit">
                                         Subscribe Now <i class="far fa-paper-plane"></i>
                                     </button>
-                                    
                                 </form>
-                                <a href="{% url 'login' %}"><button class="theme-btn" >
-                                    Admin Login <i class="fas fa-person"></i>
-                                </button></a>
-                                <a href="{% url 'register_vehicle' %}"><button class="theme-btn" >
-                                    Register Vehicle <i class="fas fa-car"></i>
-                                </button></a>
+                                <div class="mt-2">
+                                    <a href="{% url 'login' %}" class="theme-btn">Admin Login <i class="fas fa-person"></i></a>
+                                    <a href="{% url 'register_vehicle' %}" class="theme-btn">Register Vehicle <i class="fas fa-car"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -76,7 +66,7 @@
             <div class="row">
                 <div class="col-md-6 align-self-center">
                     <p class="copyright-text">
-                        &copy; Copyright <span id="date"></span> <a href="#"> RidexpressTaxi </a> All Rights Reserved.
+                        &copy; Copyright <span id="date"></span> <a href="#"> RidexpressTaxi </a>. All Rights Reserved.
                     </p>
                 </div>
                 <div class="col-md-6 align-self-center">
@@ -91,3 +81,8 @@
         </div>
     </div>
 </footer>
+
+<script>
+    // Automatically set the current year for copyright
+    document.getElementById('date').innerText = new Date().getFullYear();
+</script>

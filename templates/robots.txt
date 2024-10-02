@@ -1,13 +1,43 @@
 User-agent: *
-Disallow: /admin
-Disallow: /wp-login.php
-Disallow: /superadmin
-Disallow: /adminuser
-Disallow: /rescue
-Disallow: /quality
-Disallow: /telecaller
-Disallow: /distributer
-Disallow: /addride
-Disallow: /driver 
-Disallow: /hr
-Sitemap: https://www.ridexpress.in/sitemap.xml
+Disallow: /admin/
+Disallow: /login/
+Disallow: /logout/
+Disallow: /register_vehicle/
+Disallow: /save-enquiry/
+Disallow: /get_owner_details/
+Disallow: /check_vehicleno/
+Disallow: /search_customer_phone_numbers/
+Disallow: /get_customer_details/
+Disallow: /add_new_booking/
+Disallow: /get_ride_pricing_details/
+Disallow: /oneway_ride_pricing_details/
+Disallow: /roundtrip_ride_pricing_details/
+Disallow: /search_url/
+Disallow: /airport_ride_pricing_details/
+Disallow: /blog/save-enquiry/
+Disallow: /search_url/
+Disallow: /api/
+
+# Allow search engines to crawl the main pages
+Allow: /
+Allow: /about
+Allow: /our_rides
+Allow: /bookride
+Allow: /contact
+Allow: /taxi_services
+Allow: /sitemap.xml
+Allow: /airport-taxi
+Allow: /outstationcabs
+Allow: /localtaxi
+Allow: /blog
+Allow: /packages
+Allow: /faq
+Allow: /terms
+
+# Blog section
+Allow: /blog/
+Disallow: /blog/save-enquiry/
+Disallow: /blog/submit/
+
+# Sitemap and media files (if applicable)
+Sitemap: /sitemap.xml

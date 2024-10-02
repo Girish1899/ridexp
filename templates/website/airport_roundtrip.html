@@ -1,16 +1,20 @@
 {% extends "./index.html" %}
 {% load static %}
-{% block title %}<title> Cabs List - Round-Trip Taxi Services | Comfortable Two-Way Rides | RidexpressTaxi Services </title> {% endblock %}
-{% block meta_description %} <meta name="description"  content=" Need a cab for both ways? RidexpressTaxi Services offers convenient round-trip taxi services for hassle-free travel. Whether you're visiting nearby towns or planning a long-distance journey, our round-trip service ensures safe, comfortable rides both to and from your destination." />{% endblock %}
-{% block meta_keywords %} <meta name="keywords"  content="round-trip taxi service, two-way cab booking, round-trip ride, comfortable round-trip taxi, affordable round-trip cab, long-distance round-trip taxi, round-trip transportation, Bengaluru round-trip taxi" />
-<meta name="keyphrase" content="Outstation cabs in Bangalore, cheapest outstation cabs in Bangalore, Outstation cab booking, cab rental services in bangalore, taxi serviceslow cost car rental, Car rentals, Outstation cabs, Outstation cabs Bangalore, car hire in bangalore,  cab hire, cheap cab for hire, taxi fare in bangalore">
-<link rel="canonical" href="https://ridexpress.in/airport_roundtrip" />
+{% block title %}
+    <title>Cabs List - Round-Trip Taxi Services | Comfortable Two-Way Rides | RidexpressTaxi Services</title>
+{% endblock %}
+{% block meta_description %}
+    <meta name="description" content="Need a cab for both ways? RidexpressTaxi Services offers convenient round-trip taxi services for hassle-free travel. Whether you're visiting nearby towns or planning a long-distance journey, our round-trip service ensures safe, comfortable rides both to and from your destination." />
+{% endblock %}
+{% block meta_keywords %}
+    <meta name="keywords" content="round-trip taxi service, two-way cab booking, round-trip ride, comfortable round-trip taxi, affordable round-trip cab, long-distance round-trip taxi, round-trip transportation, Bengaluru round-trip taxi" />
+    <meta name="keyphrase" content="Outstation cabs in Bangalore, cheapest outstation cabs in Bangalore, Outstation cab booking, cab rental services in bangalore, taxi services, low-cost car rental, Car rentals, Outstation cabs, Outstation cabs Bangalore, car hire in bangalore, cab hire, cheap cab for hire, taxi fare in bangalore">
+    <link rel="canonical" href="https://ridexpress.in/airport_roundtrip" />
 {% endblock %}
 
 {% block body_content %}
-
- <!-- book ride -->
- <div class="book-ride py-120">
+<!-- Book Ride -->
+<div class="book-ride py-120">
     <div class="container">
         <div class="row">
             <div class="col-md-10 mx-auto">
@@ -20,69 +24,61 @@
                     </div>
                     <form action="#">
                         <div class="row">
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" disabled>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Pick Up Location</label>
+                                    <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" required disabled>
+                                    <i class="far fa-location-dot"></i>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Drop Off Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination" disabled>
-                                        <i class="far fa-location-dot"></i>
-                                    </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Drop Off Location</label>
+                                    <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination" required disabled>
+                                    <i class="far fa-location-dot"></i>
                                 </div>
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Date:</label>
-                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" disabled>
-                                        <div id="dateError" class="invalid-feedback"></div>
-                                    </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Pick Up Date:</label>
+                                    <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" required disabled>
+                                    <div id="dateError" class="invalid-feedback"></div>
                                 </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Pick Up Time:</label>
-                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
-                                    </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Pick Up Time:</label>
+                                    <input type="time" class="form-control" id="pickup_time" name="pickup_time" required disabled>
                                 </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Ride Type:</label>
-                                        <input type="text" class="form-control" id="ridetype" name="ridetype" disabled>
-                                    </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Ride Type:</label>
+                                    <input type="text" class="form-control" id="ridetype" name="ridetype" required disabled>
                                 </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label>Trip Type:</label>
-                                        <input type="text" class="form-control" id="trip_type" name="trip_type" disabled>
-                                    </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <label>Trip Type:</label>
+                                    <input type="text" class="form-control" id="trip_type" name="trip_type" required disabled>
                                 </div>
-
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <div class="d-flex align-items-center">
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="toll_option" id="add_toll" value="add_toll" >
-                                                <label class="form-check-label" for="add_toll">Add Toll</label>
-                                            </div>
-                                            <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="toll_option" id="no_toll" value="no_toll" checked>
-                                                <label class="form-check-label" for="no_toll">No Toll</label>
-                                            </div>                                            
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <div class="d-flex align-items-center">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="toll_option" id="add_toll" value="add_toll" aria-label="Add Toll">
+                                            <label class="form-check-label" for="add_toll">Add Toll</label>
                                         </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="toll_option" id="no_toll" value="no_toll" checked aria-label="No Toll">
+                                            <label class="form-check-label" for="no_toll">No Toll</label>
+                                        </div>                                            
                                     </div>
-                                </div>                                
-                
-                                <div class="col-lg-3">
-                                    <button class="theme-btn" type="submit" id="save_action">Check Fares<i
-                                            class="fas fa-arrow-right"></i></button>
                                 </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <button class="theme-btn" type="submit" id="save_action">Check Fares<i class="fas fa-arrow-right"></i></button>
                             </div>
                         </div>
                     </form>
@@ -91,7 +87,7 @@
         </div>
     </div>
 </div>
-<!-- book ride end -->
+<!-- Book Ride End -->
 
 <div class="container-xxl py-5">
     <div class="container">
@@ -115,8 +111,7 @@
 
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
                             <!-- Non AC Price Display -->
-                             
-                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px;font-size: 14px;font-weight: bold;">
+                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                             <!-- AC Price Display -->
@@ -129,17 +124,13 @@
                     <div class="p-4 mt-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="mb-0">{{ category|capfirst }}</h5>
-                            
                             <div class="ps-2">
                                 <p style="font-size: 15px;"><strong>Distance (km):</strong> <span id="distance_{{ category|slugify }}">0</span></p>
-                                
                             </div>
                         </div>
                         
                         <div class="d-flex mb-3">
-                           
                             <small class="border-end me-3 pe-3">
-                                <!-- <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p> -->
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
                             <small class="border-end me-3 pe-3">
@@ -154,55 +145,34 @@
                             </small>
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
-                                <!-- <p><strong>Driver Beta:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p> -->
                             </small>
                         </div>
 
                         <div class="d-flex justify-content-between">
                             <!-- Non A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-right: 5px;">
-                                <input type="hidden" name="source" value="{{ request.GET.location1 }}">
-                                <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
-                                <input type="hidden" name="pickup_date" value="{{ request.GET.pickup_date }}">
-                                <input type="hidden" name="pickup_time" value="{{ request.GET.pickup_time }}">
-                                <input type="hidden" name="category" value="{{ prices.non_ac.category.category_name }}">
-                                <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
-                                <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
-                                <input type="hidden" name="car_type" value="non_ac"> 
-                                <input type="hidden" name="time_slot" id="time_slot_non_ac_{{ category|slugify }}" value=""> <!-- Time Slot Hidden Input -->
-                                <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
-
-                                <button type="submit" class="btn btn-sm btn-secondary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
-                                    Non A/c Not Available
-                                </button>
+                                <input type="hidden" name="category" value="{{ category }}">
+                                <input type="hidden" name="type" value="non_ac">
+                                <button type="submit" class="btn btn-secondary">Non A/C</button>
                             </form>
-                        
+
                             <!-- A/C Booking Button -->
-                            <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-left: 5px;">
-                                <input type="hidden" name="source" value="{{ request.GET.location1 }}">
-                                <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
-                                <input type="hidden" name="pickup_date" value="{{ request.GET.pickup_date }}">
-                                <input type="hidden" name="pickup_time" value="{{ request.GET.pickup_time }}">
-                                <input type="hidden" name="category" value="{{ prices.ac.category.category_name }}">
-                                <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
-                                <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
-                                <input type="hidden" name="car_type" value="ac"> 
-                                <input type="hidden" name="time_slot" id="time_slot_ac_{{ category|slugify }}" value=""> <!-- Time Slot Hidden Input -->
-                                <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
-                                <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #007bff; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
-                                    A/c Not Available
-                                </button>
+                            <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1;">
+                                <input type="hidden" name="category" value="{{ category }}">
+                                <input type="hidden" name="type" value="ac">
+                                <button type="submit" class="btn btn-primary">A/C</button>
                             </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        <!-- Cab Items End -->
     </div>
 </div>
+{% endblock %}
+
                                     
 <script>
     $(document).ready(function() {

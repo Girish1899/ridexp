@@ -1,17 +1,23 @@
 {% extends "./index.html" %}
 {% load static %}
 
-{% block title %}<title> localcabs - Outstation One-Way Taxi Booking | Affordable Outstation Cab Services | RidexpressTaxi </title> {% endblock %}
-{% block meta_description %} <meta name="description" content="Book affordable outstation one-way trips with RidexpressTaxi. Enjoy hassle-free travel to your destination without paying for a return trip. Whether it's a short outstation ride or a long-distance journey, our one-way cab services ensure a safe, comfortable, and economical travel experience." />{% endblock %}
-{% block meta_keywords %} <meta name="keywords" content="outstation one-way taxi, outstation cab booking, long-distance one-way trip, intercity outstation cab, one-way outstation taxi services, [City] to [Destination] one-way taxi, outstation travel, affordable outstation taxi, cheap one-way outstation cabs" />
-<link rel="canonical" href="https://ridexpress.in/outstation_oneway" />
+{% block title %}
+<title> localcabs - Outstation One-Way Taxi Booking | Affordable Outstation Cab Services | RidexpressTaxi </title>
+{% endblock %}
 
+{% block meta_description %}
+<meta name="description" content="Book affordable outstation one-way trips with RidexpressTaxi. Enjoy hassle-free travel to your destination without paying for a return trip. Whether it's a short outstation ride or a long-distance journey, our one-way cab services ensure a safe, comfortable, and economical travel experience." />
+{% endblock %}
+
+{% block meta_keywords %}
+<meta name="keywords" content="outstation one-way taxi, outstation cab booking, long-distance one-way trip, intercity outstation cab, one-way outstation taxi services, [City] to [Destination] one-way taxi, outstation travel, affordable outstation taxi, cheap one-way outstation cabs" />
+<link rel="canonical" href="https://ridexpress.in/outstation_oneway" />
 {% endblock %}
 
 {% block body_content %}
 
- <!-- book ride -->
- <div class="book-ride py-120">
+<!-- book ride -->
+<div class="book-ride py-120">
     <div class="container">
         <div class="row">
             <div class="col-md-10 mx-auto">
@@ -32,7 +38,7 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Drop Off Location</label>
-                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination"disabled>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination" disabled>
                                         <i class="far fa-location-dot"></i>
                                     </div>
                                 </div>
@@ -43,31 +49,26 @@
                                         <div id="dateError" class="invalid-feedback"></div>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Pick Up Time:</label>
                                         <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Ride Type:</label>
                                         <input type="text" class="form-control" id="ridetype" name="ridetype" disabled>
                                     </div>
                                 </div>
-
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label>Trip Type:</label>
                                         <input type="text" class="form-control" id="trip_type" name="trip_type" disabled>
                                     </div>
                                 </div>
-                
                                 <div class="col-lg-3">
-                                    <button class="theme-btn" type="submit" id="save_action">Check Fares<i
-                                            class="fas fa-arrow-right"></i></button>
+                                    <button class="theme-btn" type="submit" id="save_action">Check Fares<i class="fas fa-arrow-right"></i></button>
                                 </div>
                             </div>
                         </div>
@@ -114,26 +115,13 @@
                     <div class="p-4 mt-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="mb-0">{{ category|capfirst }}</h5>
-                            <!-- <small class="border-end me-3 pe-3">
-                                <strong>Seats:</strong>
-                                {% if prices.ac %}
-                                    {{ prices.ac.category.seats }}
-                                {% elif prices.non_ac %}
-                                    {{ prices.non_ac.category.seats }}
-                                {% else %}
-                                    N/A
-                                {% endif %}
-                            </small> -->
                             <div class="ps-2">
                                 <p style="font-size: 15px;"><strong>Distance (km):</strong> <span id="distance_{{ category|slugify }}">0</span></p>
                             </div>
                         </div>
-                        
+
                         <div class="d-flex mb-3">
-                           
-                            
                             <small class="border-end me-3 pe-3">
-                                <!-- <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p> -->
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
@@ -150,7 +138,6 @@
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
                                 <p><strong>Driver Beta A/C:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
-                                <!-- <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p> -->
                             </small>
                         </div>
 
@@ -164,13 +151,13 @@
                                 <input type="hidden" name="category" value="{{ prices.non_ac.category.category_name }}">
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
-                                <input type="hidden" name="car_type" value="non_ac"> 
+                                <input type="hidden" name="car_type" value="non_ac">
                                 <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
                                 <button type="submit" class="btn btn-sm btn-secondary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
                                     Non A/c Not Available
                                 </button>
                             </form>
-                        
+
                             <!-- A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-left: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
@@ -180,22 +167,24 @@
                                 <input type="hidden" name="category" value="{{ prices.ac.category.category_name }}">
                                 <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
                                 <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
-                                <input type="hidden" name="car_type" value="ac"> 
+                                <input type="hidden" name="car_type" value="ac">
                                 <input type="hidden" name="trip_type" value="{{ request.GET.trip_type }}">
-                                <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #007bff; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
+                                <button type="submit" class="btn btn-sm btn-primary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="ac" disabled>
                                     A/c Not Available
                                 </button>
                             </form>
                         </div>
-                        
                     </div>
                 </div>
             </div>
             {% endfor %}
         </div>
+        <!-- Cab Items End -->
     </div>
 </div>
-                        
+
+{% endblock %}
+          
                 
 <script>
     // var ridetype = "local"; 
