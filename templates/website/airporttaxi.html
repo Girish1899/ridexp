@@ -1,95 +1,493 @@
-
 {% extends "./index.html" %}
 {% load static %}
-{% block title %}<title> Airport Taxi - 24/7 Airport Taxi Service | On-Time Airport Transfers </title> {% endblock %}
-{% block meta_description %} <meta name="description"  content=" Need a ride to or from the airport?  offers on-time airport taxi services with 24/7 availability.  Book your airport taxi today for a punctual and affordable transfer, and never worry about missing a flight!" />{% endblock %}
-{% block meta_keywords %} <meta name="keywords"  content="airport taxi service, airport transfer, 24/7 airport cab, reliable airport taxi, affordable airport transfer, on-time airport pickup, airport drop-off service, Bengaluru airport taxi, professional airport cab service, hassle-free airport rides" />
-<meta name="keyphrase" content=" cab rental services in bangalore, taxi serviceslow cost car rental, car hire in bangalore,  cab hire, airport car rental, cheap cab for hire, taxi fare in bangalore, Airport taxi services, cabs from bangalore airport, Airport cabs at best price, ">
+{% block title %}
+<title>Affordable Airport Taxi Services in Bangalore - 24/7 Reliable Transfers</title>
+{% endblock %}
+{% block meta_description %}
+<meta name="description"
+    content="Book reliable and affordable airport taxi services in Bangalore. Enjoy 24/7 availability and on-time pickups for hassle-free airport transfers. Reserve your cab today!" />
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords"
+    content="Bangalore airport taxi service, affordable airport transfer, 24/7 airport cab, reliable airport taxi, on-time airport pickup, airport drop-off service, Bengaluru airport taxi, professional airport cab service, hassle-free airport rides" />
+<meta name="keyphrase"
+    content="cab rental services in Bangalore, taxi services, low-cost car rental, car hire in Bangalore, cab hire, airport car rental, cheap cab for hire, taxi fare in Bangalore, airport taxi services, cabs from Bangalore airport, airport cabs at best price" />
 <link rel="canonical" href="https://ridexpress.in/airport-taxi" />
 {% endblock %}
 {% block body_content %}
-    <main class="main">
-
-        <!-- breadcrumb -->
-        <!-- <div class="site-breadcrumb" style="background: url(assets/img/breadcrumb/01.jpg)">
-            <div class="container">
-                <h2 class="breadcrumb-title">Service Single</h2>
-                <ul class="breadcrumb-menu">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Service Single</li>
-                </ul>
-            </div>
-        </div> -->
-        <!-- breadcrumb end -->
-
-
-        <!-- service-single -->
-        <div class="service-single-area py-120">
-            <div class="container">
-                <div class="service-single-wrapper">
-                    <div class="row">
-                        <div class="col-xl-4 col-lg-4">
-                            <div class="service-sidebar">
-                                <div class="widget category">
-                                    <h4 class="widget-title">All Services</h4>
-                                    <div class="category-list">
-                                        <a href="/airport-taxi"><i class="far fa-long-arrow-right"></i>Airport Transport</a>
-                                        <a href="/taxi_services"><i class="far fa-long-arrow-right"></i>Business Transport</a>
-                                        <a href="/localtaxi"><i class="far fa-long-arrow-right"></i>local Transport</a>
-                                        <a href="/outstationcabs"><i class="far fa-long-arrow-right"></i>Tour Transport</a>
+<main class="main">
+    <div class="hero-section">
+        <!-- <div class="hero-slider owl-carousel owl-theme"> -->
+        <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
+            <!-- <div class="container"> -->
+            <div class="row align-items-center">
+                <h2 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp"
+                    data-delay=".25s">WELCOME TO RIDE EXPRESS!</h2>
+                <div class="container" style="margin-top: -30px;" id="bookingpart">
+                    <div class="container" id="servicecontainer">
+                        <button class="btn tablink" onclick="openPage('Airport','defaultOpen')"
+                            id="defaultOpen">Airport</button>
+                        <button class="btn tablink" onclick="openPage('LocalDrop','local')" id="local">Local</button>
+                        <button class="btn tablink" onclick="openPage('LocalPackage','localpackage')"
+                            id="localpackage">Packages</button>
+                        <button class="btn tablink" onclick="openPage('Outstation','outstation')"
+                            id="outstation">Outstation</button>
+                        <div class="booking-form">
+                            <h4 class="booking-title">Book Your Ride</h4>
+                            <div id="Airport" class="tabcontent">
+                                <form action="{% url 'search_url' %}" id="airportForm">
+                                    <input type="hidden" name="ridetype" value="airport">
+                                    <!-- Radio Buttons for Trip Type -->
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Trip Type:</label>
+                                                <div class="form-check form-check-inline">
+                                                    <input type="radio" id="airport_one_way" name="trip_type"
+                                                        value="one_way" checked class="form-check-input">
+                                                    <label for="airport_one_way" class="form-check-label">One
+                                                        Way</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input type="radio" id="airport_round_trip" name="trip_type"
+                                                        value="round_trip" class="form-check-input">
+                                                    <label for="airport_round_trip" class="form-check-label">Round
+                                                        Trip</label>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <!-- Other Fields -->
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="Airport_source" name="source"
+                                                    required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Off Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="Airport_destination"
+                                                    name="destination" required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Date:</label>
+                                                <input type="text" class="form-control date-picker"
+                                                    placeholder="MM/DD/YY" id="Airport_pickup_date" name="pickup_date"
+                                                    required>
+                                                <div id="dateError" class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Time:</label>
+                                                <input type="time" class="form-control pickup-time"
+                                                    id="Airport_pickup_time" name="pickup_time" required>
+                                                <div id="timeError" class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 align-self-end">
+                                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                    class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div id="LocalDrop" class="tabcontent">
+                                <form action="{% url 'search_url' %}" id="localDropForm">
+                                    <input type="hidden" name="ridetype" value="local">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="LocalDrop_source" name="source"
+                                                    required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Off Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="LocalDrop_destination"
+                                                    name="destination" required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Date:</label>
+                                                <input type="text" class="form-control date-picker"
+                                                    placeholder="MM/DD/YY" id="LocalDrop_pickup_date" name="pickup_date"
+                                                    required>
+                                                <div id="dateError" class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Time:</label>
+                                                <input type="time" class="form-control pickup-time "
+                                                    id="LocalDrop_pickup_time" name="pickup_time" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 align-self-end">
+                                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                    class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div id="LocalPackage" class="tabcontent">
+                                <form action="{% url 'package_booking_list' %}" method="get" id="localPackageForm">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Category:</label>
+                                                <select class="form-control" id="package_category"
+                                                    name="package_category" onchange="getpackage()">
+                                                    <option value="">Select Category</option>
+                                                    {% for category in categories %}
+                                                    <option value="{{ category.package_category_id }}">{{
+                                                        category.category_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Package</label>
+                                                <select class="form-control" id="package" name="package">
+                                                    <option value="">Select Package</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Duration</label>
+                                                <input type="text" class="form-control" id="duration" name="duration"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Price</label>
+                                                <input type="text" class="form-control" id="price" name="price"
+                                                    readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Description:</label>
+                                                <textarea class="form-control" id="description" name="description"
+                                                    rows="2" readonly></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label>Features:</label>
+                                                <textarea class="form-control" id="features" name="features" rows="2"
+                                                    readonly></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="LocalPackage_source" name="source">
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Off Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="LocalPackage_destination"
+                                                    name="destination" required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Date:</label>
+                                                <input type="text" class="form-control date-picker"
+                                                    placeholder="MM/DD/YY" id="LocalPackage_pickup_date"
+                                                    name="pickup_date" required>
+                                                <div id="dateError" class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Time:</label>
+                                                <input type="time" class="form-control pickup-time"
+                                                    id="LocalPackage_pickup_time" name="pickup_time" required>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-2 align-self-end">
+                                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                    class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div id="Outstation" class="tabcontent">
+                                <form action="{% url 'search_url' %}" id="outstationForm">
+                                    <input type="hidden" name="ridetype" value="outstation">
+                                    <!-- Radio Buttons for Trip Type (Single Row) -->
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label>Trip Type:</label>
+                                                <div class="form-check form-check-inline">
+                                                    <input type="radio" id="one_way" name="trip_type" value="one_way"
+                                                        checked class="form-check-input">
+                                                    <label for="one_way" class="form-check-label">One Way</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input type="radio" id="round_trip" name="trip_type"
+                                                        value="round_trip" class="form-check-input">
+                                                    <label for="round_trip" class="form-check-label">Round Trip</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Other Fields -->
+                                    <div class="row">
+                                        <!-- Pick Up Location -->
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Pick Up Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="Outstation_source" name="source"
+                                                    required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Drop Off Location -->
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Off Location:</label>
+                                                <input type="text" class="form-control autocomeple_g"
+                                                    placeholder="Type Location" id="Outstation_destination"
+                                                    name="destination" required>
+                                                <i class="far fa-location-dot"></i>
+                                            </div>
+                                        </div>
+
+                                        <!-- Pick Up Date -->
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Date:</label>
+                                                <input type="text" class="form-control date-picker"
+                                                    placeholder="MM/DD/YY" id="Outstation_pickup_date"
+                                                    name="pickup_date" required>
+                                                <div id="dateError" class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Pick Up Time -->
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <label>Pick Up Time:</label>
+                                                <input type="time" class="form-control pickup-time"
+                                                    id="Outstation_pickup_time" name="pickup_time" required>
+                                            </div>
+                                        </div>
+
+                                        <!-- Submit Button -->
+                                        <div class="col-lg-2 align-self-end">
+                                            <button class="theme-btn" type="submit" id="save_action">Book Taxi<i
+                                                    class="fas fa-arrow-right"></i></button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
+                                    <div class="row drop-fields" style="display:none;">
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Date:</label>
+                                                <input type="text" class="form-control date-picker"
+                                                    placeholder="MM/DD/YY" id="Outstation_drop_date" name="drop_date"
+                                                    required>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-3">
+                                            <div class="form-group">
+                                                <label>Drop Time:</label>
+                                                <input type="time" class="form-control" id="Outstation_drop_time"
+                                                    name="drop_time" required>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-lg-9 mx-auto">
+                    <div class="hero-content text-center">
+                        <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
+                            Airport Taxi at your service! Starts at
+                            <span>₹18/km</span> Pickup <span>And</span> Drop
+                        </h1>
+                        <p data-animation="fadeInLeft" data-delay=".75s">
+                            "Because every journey should be affordable - enjoy safe and comfortable rides at the best
+                            prices." </p>
+                        <div class="hero-btn justify-content-center" data-animation="fadeInUp" data-delay="1s">
+                            <a href="/about" class="theme-btn">About Us<i class="fas fa-arrow-right"></i></a>
+                            <a href="/taxi_services" class="theme-btn theme-btn2">Learn More<i
+                                    class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+   
+
+    <!-- service-single -->
+    <div class="service-single-area py-120">
+        <div class="container">
+            <div class="service-single-wrapper">
+                <div class="row">
+                    <div class="col-xl-4 col-lg-4">
+                        <div class="service-sidebar">
+                            <div class="widget category">
+                                <h4 class="widget-title">All Services</h4>
+                                <div class="category-list">
+                                    <a href="/airport-taxi"><i class="far fa-long-arrow-right"></i>Airport Transport</a>
+                                    <a href="/taxi_services"><i class="far fa-long-arrow-right"></i>Business
+                                        Transport</a>
+                                    <a href="/localtaxi"><i class="far fa-long-arrow-right"></i>Local Transport</a>
+                                    <a href="/outstationcabs"><i class="far fa-long-arrow-right"></i>Tour Transport</a>
                                 </div>
-                                <!-- <div class="widget service-download">
-                                    <h4 class="widget-title">Download</h4>
-                                    <a href="#"><i class="far fa-file-pdf"></i> Download Brochure</a>
-                                    <a href="#"><i class="far fa-file-alt"></i> Download Application</a>
-                                </div> -->
                             </div>
                         </div>
-                        <div class="col-xl-8 col-lg-8">
+                    </div>
+                    <div class="col-xl-8 col-lg-8">
+                        <div class="service-details">
+                            <div class="service-details-img mb-30">
+                                <img src="{% static '/img/taxi/airport.jpg' %}"
+                                    alt="Reliable Airport Taxi Service in Bangalore">
+                            </div>
                             <div class="service-details">
-                                <div class="service-details-img mb-30">
-                                    <img src="{% static '/img/taxi/airport.jpg' %}" alt="airport taxi">
-                                </div>
-                                <div class="service-details">
-                                    <h1 class="mb-30">Hire the Best Airport Taxi Service in Bangalore</h1>
-                                    <p class="mb-20" style="text-align: justify;">
-                                        Need a reliable and cheap taxi to airport in Bangalore? Ridexpress Taxi provides a wide range of cabs to make your airport pickup & drop more comfortable, easier, and faster. You can go safe to your chosen destination with our reliable Bangalore Airport Cabs.
-                                        We provide cab for hassle-free airport pick-up and drop all day and night. Just book a cab for Airport Transfer Bangalore and we will be there on time to pick-up you.
-                                        Check our Airport cabs Bangalore fares and the availability of the type of vehicles.
-                                        
-                                        Our Airport Taxi Transfer services in Bangalore include pickup and drop at Bangalore airport. You can book a cab with us from anywhere and at any time for reliable Airport Transfers service in Bangalore. Our dedicated customer support team solves all your queries all day and night. We offer multiple airport vehicle (AC & NON-AC) options to choose such as Hatchback Sedan, Prime Sedan, and SUV, Tempo Traveller, Mini Bus at the best prices. We provide the best airport transfer service in Bangalore at lowest rates.
-                                    </p>
-                                    <p class="mb-20" style="text-align: justify;">
-                                        Travelling to and from the airport can be a damn challenge in crowded cities. There are enough hassles like road construction, traffic congestion, and the challenge of finding a parking lot to give you a migraine. Don’t need the hassle? If so, book a Cab to Airport Bangalore with us. We ensure that you can get the best Airport Special pickup and drop service all day and night.
+                                <h1 class="mb-30">Hire the Best Airport Taxi Service in Bangalore</h1>
+                                <h2>Why Choose Our Airport Taxi Service?</h2>
+                                <p class="mb-20" style="text-align: justify;">
+                                    At Ridexpress Taxi, we offer the most reliable and affordable airport taxi services
+                                    in Bangalore. Our commitment to punctuality means you’ll never miss a flight. With
+                                    24/7 availability, you can book your taxi anytime, day or night.
+                                    <strong>Experience seamless airport transfers</strong> with a variety of vehicle
+                                    options tailored to meet your needs—whether you prefer a Hatchback or an SUV, we've
+                                    got you covered.
+                                </p>
+                                <h2>Our Airport Transfer Options</h2>
+                                <p class="mb-20" style="text-align: justify;">
+                                    We provide cab for hassle-free airport pick-up and drop all day and night. Just book
+                                    a cab for Airport Transfer Bangalore and we will be there on time to pick you up.
+                                    Our Airport Taxi Transfer services include pickup and drop at Bangalore airport,
+                                    with options for AC and Non-AC vehicles such as Hatchback, Sedan, Prime Sedan, SUV,
+                                    Tempo Traveller, and Mini Bus at the best prices.
+                                </p>
+                                <h2>How to Book Your Taxi</h2>
+                                <p class="mb-20" style="text-align: justify;">
+                                    Booking an airport taxi in Bangalore with us is easy. You can book Airport Cabs
+                                    anytime through our online platform or by phone.
+                                    We ensure that you experience excellent service that you won’t find with other
+                                    airport taxi services. Our dedicated customer support team is available 24/7 to
+                                    address your queries.
+                                </p>
+                                <h2>Traveling to and from the Airport</h2>
+                                <p class="mb-20" style="text-align: justify;">
+                                    Travelling to and from the airport can be challenging in crowded cities. Road
+                                    construction, traffic congestion, and parking difficulties can add to the stress.
+                                    Don’t need the hassle? If so, book a cab to the airport in Bangalore with us. We
+                                    ensure that you get the best Airport Special pickup and drop service all day and
+                                    night.
+                                </p>
+                                <p class="mb-20" style="text-align: justify;">
+                                    We provide airport transfer services for individuals, families, and corporates at
+                                    affordable prices. With our reliable airport taxi service, you can enjoy hassle-free
+                                    airport pick-up and drop.
+                                    It’s simple and easy to book your airport special with us, and we guarantee a safe
+                                    and smooth travel experience.
+                                </p>
+                                <h2>Safety and Reliability</h2>
+                                <p class="mb-20" style="text-align: justify;">
+                                    Kempegowda International Airport is located 40 km away from the city of Bangalore,
+                                    raising some issues for travelers.
+                                    Our airport transfer service is extremely safe and reliable, with well-trained
+                                    drivers who handle traffic congestion while prioritizing passenger safety.
+                                    Whether it’s a late-night pickup or an early morning drop-off, we ensure you arrive
+                                    comfortably and without any troubles. If there is an issue during your Airport
+                                    Special Trip,
+                                    our 24/7 customer support team is just a call away to help you resolve it promptly.
+                                </p>
 
-Booking an airport taxi Bangalore with us is easy. You can book Airport Cabs at any time through online or phone. We have both AC and Non-AC vehicles to choose from and you can experience an excellent service that you have never get with other airport taxi services. We are ready to service you at any time to make your travel convenient and easier.
-                                    </p>
-                                    <!-- <div class="row">
-                                        <div class="col-md-6 mb-20">
-                                            <img src="img/service/03.avif" alt="">
-                                        </div>
-                                        <div class="col-md-6 mb-20">
-                                            <img src="img/service/03.jpeg" alt="">
-                                        </div>
-                                    </div> -->
-                                    <p class="mb-20" style="text-align: justify;">
-                                        We provide airport transfer services from individuals, families to corporates at an affordable price. With our reliable airport taxi service, you can get a hassle-free airport pick-up and drop. It’s simple and easy to book Airport special with us and we guarantee that you’ll have a safe and smooth travel.
+                                <!-- Featured Snippets Section -->
+                                <div class="featured-snippets">
+                                    <h2>Frequently Asked Questions (FAQs)</h2>
 
-                                        Kempegowda International Airport is located 40 km away from the city of Bangalore and this raises some issues. Our airport transfers service in Bangalore is extremely safe and reliable. Our drivers are well-trained to handle the traffic congestions and to set priorities to the safety of the passengers. Whether it’s a late night pickup or an early morning drop, we are here to make sure you arrive at your chosen destination in comfort and without any troubles. If there is an issue during your Airport Special Trip, you can make a call to our 24/7 customer support team and get it solved promptly for Booking.
-                                    </p>
-                                   
+                                    <h3>1. What are the benefits of using an airport taxi service in Bangalore?</h3>
+                                    <p>Using an airport taxi service in Bangalore ensures convenience, reliability, and
+                                        comfort. With professional drivers and a range of vehicle options, you can enjoy
+                                        stress-free travel to and from the airport.</p>
+
+                                    <h3>2. How do I book an airport taxi in Bangalore?</h3>
+                                    <p>You can book an airport taxi in Bangalore easily through our online platform or
+                                        by calling our customer support team, available 24/7.</p>
+
+                                    <h3>3. Are your airport taxi services available 24/7?</h3>
+                                    <p>Yes, we offer airport taxi services 24/7 to ensure you can book your ride at any
+                                        time, day or night.</p>
+
+                                    <h3>4. What types of vehicles do you offer for airport transfers?</h3>
+                                    <p>We offer a variety of vehicles for airport transfers, including Hatchbacks,
+                                        Sedans, SUVs, Tempo Travellers, and Mini Buses to suit your travel needs.</p>
+
+                                    <h3>5. How much does an airport taxi service cost in Bangalore?</h3>
+                                    <p>The cost of our airport taxi services varies based on the type of vehicle and
+                                        distance. Please contact us for a detailed quote.</p>
                                 </div>
+                                <!-- Featured Snippets Section End -->
+
+                                <h2>Contact Us</h2>
+                                <p class="mb-20" style="text-align: justify;">
+                                    For more information about our airport taxi services or to book a ride, please <a
+                                        href="/contact">contact us</a> today!
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- service-single end-->
-        
+    </div>
+    <!-- service-single end-->
 
-    </main>
-    {% endblock body_content %}
-
-
+</main>
+{% endblock body_content %}
