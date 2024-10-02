@@ -32,14 +32,14 @@
         
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Id</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row" >
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Search Vehicle</label>
-                        <div class="col-sm-10">  
+                        <div class="col-sm-12">  
                             <select id="single-select" class="form-control form-control-lg" onchange="fetchVehicleDetails()" >
                                 <option value="" disabled selected>Select Vehicle</option>
                                 {% for vehicle in vehicles %}
@@ -59,108 +59,108 @@
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="vehicle_number" name="vehicle_number" readonly>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="category" name="category" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="brand" name="brand" readonly>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="model" name="model" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Name</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="driver_name" name="driver_name">
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" maxlength="15">
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="email" class="form-control form-control-lg" id="email" name="email">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Password</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="password" name="password">
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <textarea class="form-control form-control-lg" id="address" name="address"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="profile_image" name="profile_image">
                             <img id="profile_image_preview" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
                     
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
                             <img id="address_proof_preview" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Police clearance certificate</label>
                             <input type="file" class="form-control form-control-lg" id="police_clearance" name="police_clearance">
                             <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
      
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">P From date</label>
                             <input type="date" class="form-control form-control-lg" id="pfrom_date" name="pfrom_date">
                         </div>
                     
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">P to date</label>
                             <input type="date" class="form-control form-control-lg" id="pto_date" name="pto_date">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driving License</label>
                             <input type="file" class="form-control form-control-lg" id="driving_license" name="driving_license">
                             <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
 
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">D From date</label>
                             <input type="date" class="form-control form-control-lg" id="dfrom_date" name="dfrom_date">
                         </div>
                     
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">D to date</label>
                             <input type="date" class="form-control form-control-lg" id="dto_date" name="dto_date">
                         </div>
@@ -168,7 +168,7 @@
                         
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select class="form-control form-control-lg" id="status" name="status">
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="active" selected>Active</option>
@@ -176,7 +176,7 @@
                             </select>
                         </div>
                     </div>
-
+<br>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>

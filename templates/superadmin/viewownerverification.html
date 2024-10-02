@@ -65,27 +65,24 @@
                                             <div>{{ i.email }}</div>
                                         </td>
                                         <td>{{ i.address }}</td>
-                            
-                                        <td>
-                                            <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
-                                                {{ i.status }}
-                                            </span>
+                                        <td><span class="badge {% if i.status == 'active' %}bg-gradient-success{% else %}bg-gradient-success{% endif %}">
+                                            {{ i.status }}
+                                          </span>
                                         </td>
                                         <td><a href="{% url 'download_owner_documents' i.owner_id %}" class="btn btn-warning"><i class="fa fa-download"></i></a></td>
                                         <td>{{ i.created_on }}</td>
-                                        
-                                        <td style="display: flex; justify-content: center; align-items: center;">
-                                            <a href="#" class="btn btn-primary" onclick="EditVehicleowner('{{ i.owner_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
-                                            <a href="#" class="btn btn-secondary" onclick="DeleteVehicleowner('{{ i.owner_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
-                                            <a href="#" class="btn btn-warning" onclick="HistoryVehicleowner('{{ i.owner_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
-                                            <a href="{% url 'owner' i.owner_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
-                                        </td>
                                         <td>
                                             {% if i.verified_on %}
                                             {{ i.verified_on }}
                                             {% else %}
                                             N/A
                                             {% endif %}
+                                        </td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <a href="#" class="btn btn-primary" onclick="EditVehicleowner('{{ i.owner_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-secondary" onclick="DeleteVehicleowner('{{ i.owner_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="HistoryVehicleowner('{{ i.owner_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'owner' i.owner_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
                                         </td>
                                     </tr>
                                     {% endfor %}

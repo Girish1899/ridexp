@@ -30,14 +30,14 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Booking Id</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Service Type</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select id="ridetype" name="ridetype" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Service Type</option>
                                 {% for obj in ridetypelist %}
@@ -49,7 +49,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Location</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control autocomeple_g" id="source" name="source" maxlength="1000">
                             <i class="far fa-location-dot"></i>                        
                         </div>
@@ -57,7 +57,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Location</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control autocomeple_g" id="destination" name="destination" maxlength="1000">
                             <i class="far fa-location-dot"></i>                        
                         </div>
@@ -65,14 +65,14 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pick up Date</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="date" class="form-control form-control-lg date-picker" id="pickup_date" name="pickup_date">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pick up Time</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time" name="pickup_time">
                             <div id="timeError" class="invalid-feedback"></div>
                         </div>
@@ -80,7 +80,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Category</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select id="category" name="category" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Category</option>  
                             </select>  
@@ -91,7 +91,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Total Fare</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare" value="{{ details.cost }}" readonly>
                         </div>
                     </div>
@@ -99,7 +99,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">Search Customer</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select id="single-select" class="form-control form-control-lg"
                                 onchange="fetchCustomerDetails()">
                                 <option value="" disabled selected>Select Customer</option>
@@ -118,12 +118,12 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg">* Customer Phone Number</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" maxlength="10" placeholder="Enter Phone Number" autocomplete="off">
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg">* Customer Name</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="customer_name"
                                 name="customer_name" placeholder="Enter Customer Name">
                         </div>
@@ -131,7 +131,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg">* Email</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="email" class="form-control form-control-lg" id="email" name="email"
                                 placeholder="Enter Email">
                         </div>
@@ -139,7 +139,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg">Address</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <textarea class="form-control form-control-lg" id="address" name="address"
                                 placeholder="Enter Address"></textarea>
                         </div>
@@ -147,16 +147,16 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg">Customer Notes</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <textarea class="form-control form-control-lg" id="customer_notes" name="customer_notes" ></textarea>
                         </div>
                     </div>
                     
                     <input type="hidden" id="customer_id" name="customer_id">
-                    
+                    <br>
                     <!-- Add Ride button -->
                     <div class="form-group row">
-                        <div class="col-sm-10 offset-sm-2">
+                        <div class="col-12">
                             <button type="button" class="btn btn-primary" id="save_action">Book Ride</button>
                         </div>
                     </div>
