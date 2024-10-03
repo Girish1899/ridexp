@@ -52,7 +52,7 @@
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ i.company_format }}</td>
                                         <td><div>{{ i.name }}</div>
-                                            <div><span  class="badge badge-pill badge-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" onclick="VerifyOwner('{{ i.owner_id }}', '{{ i.verification_status }}')">
+                                            <div><span  class="badge badge-pill bg-{% if i.verification_status == 'verified' %}gradient-success{% else %}danger{% endif %}" onclick="VerifyOwner('{{ i.owner_id }}', '{{ i.verification_status }}')">
                                                 {% if i.verification_status == 'verified' %}
                                                 Verified
                                                 {% else %}

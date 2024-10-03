@@ -610,8 +610,12 @@
                             processData: false,
                             contentType: false,
                             success: function (result) {
-                                alert("Submitted successfully.Information will be shared with you over WhatsApp after Verification.");
-                                location.href = '{% url "home" %}';
+                                if (result.status === "Success") {
+                                    alert(result.message);  // Display the message from the server
+                                    location.href = '{% url "home" %}';
+                                } else {
+                                    alert("Error: " + result.message);  // Display error message if status is not success
+                                }
                             },
                             error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

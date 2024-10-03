@@ -4840,6 +4840,10 @@ class AddBlogView(TemplateView):
         related_bloglink = request.POST.get('related_bloglink')
         tags = request.POST.get('tags')
         author = request.POST.get('author')
+        meta_title = request.POST.get('meta_title')
+        meta_description = request.POST.get('meta_description')
+        meta_keywords = request.POST.get('meta_keywords')
+        h1tag = request.POST.get('h1tag')
 
         blog = Blogs(
             title=title,
@@ -4852,8 +4856,10 @@ class AddBlogView(TemplateView):
             related_bloglink=related_bloglink,
             tags=tags,
             author=author,
-            created_by=request.user,
-            updated_by=request.user
+            meta_title=meta_title,
+            meta_description=meta_description,
+            meta_keywords=meta_keywords,
+            h1tag=h1tag,
         )
         blog.save()
         return JsonResponse({'status': "Success"})   
@@ -4862,4 +4868,5 @@ class AddBlogView(TemplateView):
 class BlogListView(ListView):
     model = Blogs
     template_name = "superadmin/view_blog.html"
+  
   

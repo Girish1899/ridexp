@@ -1452,7 +1452,29 @@ class AddVehicle(TemplateView):
             vehicle.emission_test=emission_test
 
         vehicle.save()
-        return JsonResponse({'status': "Success"})
+        # Send WhatsApp message after submission
+        
+        payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "pre_verification_vehicle",
+            "destination": vehicle.owner.phone_number,  # Sending to user's phone number
+            "userName": "Ridexpress",
+            "templateParams": [
+                vehicle.owner.name, 
+                f"{vehicle.Vehicle_Number} - {vehicle.model.brand.category.category_name} - {vehicle.model.brand.brand_name} - {vehicle.model.model_name}"
+                ],  # Use the user's name
+            "source": "new-landing-page form",
+            "paramsFallbackValue": {
+                 "FirstName": "user"
+            }
+        }
+        gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+        response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+        if response.status_code == 200:
+            return JsonResponse({'status': "Success", 'message': "Your details have been submitted. Once the verification is done, you will get a WhatsApp message."})
+        else:
+            return JsonResponse({'status': "Error", 'message': "Vehicle added, but failed to send WhatsApp notification."})
 
 class AirportGetRidePricingDetails(APIView):
     def post(self, request):

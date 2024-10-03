@@ -98,9 +98,43 @@
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">Author</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-lg" id="author" name="author">
+                            <select class="form-control" id="author" name="author" required aria-label="Author">
+                                <option value="" disabled selected>Select Author</option>
+                                <option value="Shankar">Shankar</option>
+                                <option value="Vishnu">Vishnu</option>
+                                <option value="Deepak">Deepak</option>
+                                <option value="Nagendra">Nagendra</option>
+                            </select>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Meta Title</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="meta_title" name="meta_title">
+                        </div>
+                    </div><div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Meta Description</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="meta_description" name="meta_description">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Meta Keywords</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="meta_keywords" name="meta_keywords">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">H1</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="h1tag" name="h1tag">
+                        </div>
+                    </div>
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
@@ -127,6 +161,10 @@
             var related_bloglink = $('#related_bloglink').val();
             var tags = $('#tags').val();
             var author = $('#author').val();
+            var meta_title = $('#meta_title').val();
+            var meta_description = $('#meta_description').val();
+            var meta_keywords = $('#meta_keywords').val();
+            var h1tag = $('#h1tag').val();
 
 
 
@@ -147,7 +185,11 @@
                     backlink: backlink,
                     related_bloglink: related_bloglink,
                     tags: tags,
-                    author: author
+                    author: author,
+                    meta_title: meta_title,
+                    meta_description: meta_description,
+                    meta_keywords: meta_keywords,
+                    h1tag: h1tag,
                 },
                 success: function (result) {
                     alert("Blog added successfully");
