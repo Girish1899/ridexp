@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Blogs, Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -2055,3 +2055,35 @@ class AddPackageOrder(APIView):
             print(f"Error saving ride details: {e}")
             return JsonResponse({'status': 'Error', 'message': str(e)})
 
+
+class AddBlogView(TemplateView):
+    template_name = "website/add_blog.html"
+
+    def post(self, request):
+        title = request.POST['title']
+        description = request.POST['description']
+        image = request.POST.get('image')
+        facebook = request.POST.get('facebook')
+        instagram = request.POST.get('instagram')
+        whatsapp = request.POST.get('whatsapp')
+        backlink = request.POST.get('backlink')
+        related_bloglink = request.POST.get('related_bloglink')
+        tags = request.POST.get('tags')
+        author = request.POST.get('author')
+
+        blog = Blogs(
+            title=title,
+            description=description,
+            image=image,
+            facebook=facebook,
+            instagram=instagram,
+            whatsapp=whatsapp,
+            backlink=backlink,
+            related_bloglink=related_bloglink,
+            tags=tags,
+            author=author,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        blog.save()
+        return JsonResponse({'status': "Success"})   
