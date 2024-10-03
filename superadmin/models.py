@@ -898,3 +898,22 @@ class Blogs(models.Model):
     h1tag = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
+
+
+class WebsitePackages(models.Model):
+    title = models.CharField(max_length=255)
+    category = models.CharField(max_length=255)
+    description = models.TextField()
+    top_attraction = models.TextField()
+    why_visit = models.TextField()
+    package_highlights = models.TextField()
+    facebook_link = models.CharField(max_length=1000, blank=True, null=True)
+    instagram_link = models.CharField(max_length=1000, blank=True, null=True)
+    whatsapp_link = models.CharField(max_length=1000, blank=True, null=True)
+    author = models.CharField(max_length=255)
+    meta_title = models.CharField(max_length=1000)
+    meta_description = models.CharField(max_length=1000)
+    meta_keywords = models.CharField(max_length=1000)
+    h1tag = models.CharField(max_length=100)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)

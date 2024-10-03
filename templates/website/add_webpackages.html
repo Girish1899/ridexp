@@ -1,0 +1,226 @@
+{% extends "./index.html" %}
+{% load static %}
+{% block title %}<title>Add Package</title>{% endblock %}
+{% block meta_description %}
+<meta name="description"
+    content="Add new travel packages for various destinations including hill stations, nature gateways, and more." />
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords"
+    content="travel packages, hill station tours, nature gateways, Mysore Dussera, religious tours, book travel packages" />
+{% endblock %}
+{% block body_content %}
+
+<main class="main">
+
+    <div class="contact-area py-120">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="row">
+                    <div class="col-lg-12 align-self-center">
+                        <div class="contact-form">
+                            <form method="post" action="/path/to/package/submit" id="package-form">
+                                {% csrf_token %}
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="title">Package Title</label>
+                                            <input type="text" class="form-control" id="title" name="title"
+                                                placeholder="Package Title" required aria-label="Package Title">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="category">Category</label>
+                                            <select class="form-control" id="category" name="category" required aria-label="Category">
+                                                <option value="hillstation">Hill Station</option>
+                                                <option value="naturegateways">Nature Gateways</option>
+                                                <option value="mysore/dussera">Mysore/Dussera</option>
+                                                <option value="religious">Religious</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="description">Description</label>
+                                            <textarea class="form-control" id="description" name="description" rows="4"
+                                                placeholder="Package Description" required aria-label="Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="top_attraction">Top Attraction</label>
+                                            <textarea class="form-control" id="top_attraction" name="top_attraction" rows="3"
+                                                placeholder="Top Attractions of the Package" required aria-label="Top Attraction"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="why_visit">Why Visit</label>
+                                            <textarea class="form-control" id="why_visit" name="why_visit" rows="3"
+                                                placeholder="Reasons to Visit" required aria-label="Why Visit"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="package_highlights">Package Highlights</label>
+                                            <textarea class="form-control" id="package_highlights" name="package_highlights" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="facebook">Facebook Link</label>
+                                            <input type="text" class="form-control" id="facebook_link" name="facebook_link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="instagram">Instagram Link</label>
+                                            <input type="text" class="form-control" id="instagram_link" name="instagram_link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="whatsapp">WhatsApp Link</label>
+                                            <input type="text" class="form-control" id="whatsapp_link" name="whatsapp_link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="author">Author</label>
+                                            <select class="form-control" id="author" name="author" required aria-label="Author">
+                                                <option value="shankar">Shankar</option>
+                                                <option value="deepak">Deepak</option>
+                                                <option value="vishnu">Vishnu</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row"></div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Meta Title</label>
+                                            <input type="text" class="form-control" id="meta_title" name="meta_title"
+                                                placeholder="Meta Title" required aria-label="Meta Title">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Meta Description</label>
+                                            <input type="text" class="form-control" id="meta_description" name="meta_description"
+                                                placeholder="Meta Description" required aria-label="Meta Description">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Meta Keywords</label>
+                                            <input type="text" class="form-control" id="meta_keywords" name="meta_keywords"
+                                                placeholder="Meta Keywords" required aria-label="Meta Keywords">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">H1 </label>
+                                            <input type="text" class="form-control" id="h1tag" name="h1tag"
+                                                placeholder="Enter Title Again" required aria-label="H1">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var title = $('#title').val();
+            var category = $('#category').val();
+            var description = $('#description').val();
+            var top_attraction = $('#top_attraction').val();
+            var why_visit = $('#why_visit').val();
+            var package_highlights = $('#package_highlights').val();
+            var facebook = $('#facebook').val();
+            var instagram = $('#instagram').val();
+            var whatsapp = $('#whatsapp').val();
+            var author = $('#author').val();
+
+            $.ajax({
+                url: '{% url "add_webpackage" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    title: title,
+                    category: category,
+                    description: description,
+                    top_attraction: top_attraction,
+                    why_visit: why_visit,
+                    package_highlights: package_highlights,
+                    facebook: facebook,
+                    instagram: instagram,
+                    whatsapp: whatsapp,
+                    author: author
+                },
+                success: function (result) {
+                    alert("Package added successfully");
+                    location.href = "{% url 'add_webpackage' %}";
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+{% endblock body_content %}

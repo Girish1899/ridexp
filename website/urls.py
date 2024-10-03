@@ -180,6 +180,9 @@ urlpatterns = [
     path('package_booking_list', PackageBookingList.as_view(), name='package_booking_list'),
     path('add_package_booking', AddPackageOrder.as_view(), name='add_package_booking'),
 
-         path('add_blog_website/', AddBlogView.as_view(), name='add_blog_website'),
+    path('add_blog_website/', AddBlogView.as_view(), name='add_blog_website'),
+
+    path('add_webpackage', AddwebPackages.as_view(), name='add_webpackage'),
+    path('view_webpackage', webPackageList.as_view(), name='view_webpackage'),
 
 ]

@@ -6,7 +6,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Blogs, Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Blogs, Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType, WebsitePackages
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -2092,4 +2092,51 @@ class AddBlogView(TemplateView):
             h1tag=h1tag,
         )
         blog.save()
-        return JsonResponse({'status': "Success"})   
+        return JsonResponse({'status': "Success"}) 
+
+# website packages
+class AddwebPackages(TemplateView):
+    template_name = "website/add_webpackages.html"
+
+    def post(self, request):
+        if request.method == "POST":
+        # Capture the form data from the POST request
+            title = request.POST.get('title')
+            category = request.POST.get('category')
+            description = request.POST.get('description')
+            top_attraction = request.POST.get('top_attraction')
+            why_visit = request.POST.get('why_visit')
+            package_highlights = request.POST.get('package_highlights')
+            facebook_link = request.POST.get('facebook_link')
+            instagram_link = request.POST.get('instagram_link')
+            whatsapp_link = request.POST.get('whatsapp_link')
+            author = request.POST.get('author')
+            
+            # Capture new meta fields
+            meta_title = request.POST.get('meta_title')
+            meta_description = request.POST.get('meta_description')
+            meta_keywords = request.POST.get('meta_keywords')
+            h1tag = request.POST.get('h1tag')
+
+        package = WebsitePackages(
+            title=title,
+            category=category,
+            description=description,
+            top_attraction=top_attraction,
+            why_visit=why_visit,
+            package_highlights=package_highlights,
+            facebook_link=facebook_link,
+            instagram_link=instagram_link,
+            whatsapp_link=whatsapp_link,
+            author=author,
+            meta_title=meta_title,
+            meta_description=meta_description,
+            meta_keywords=meta_keywords,
+            h1tag=h1tag,
+        )
+        package.save()
+        return JsonResponse({'status': "Success"})
+
+class webPackageList(ListView):
+    model = WebsitePackages
+    template_name = "website/view_webpackages.html"  
