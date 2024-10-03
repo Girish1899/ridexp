@@ -270,6 +270,11 @@ urlpatterns = [
     path('package_order_history/<int:order_id>/', PackageOrderHistoryView.as_view(), name='package_order_history'),
     path('UpdatePackageOrder', UpdatePackageOrder.as_view(), name='UpdatePackageOrder'),
 
+     path('add_blog/', AddBlogView.as_view(), name='add_blog'),
+
+    # URL for listing all blogs
+    path('blog_list/', BlogListView.as_view(), name='blog_list'),
+
 
 ]
 

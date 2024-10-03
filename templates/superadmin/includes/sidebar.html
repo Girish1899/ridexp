@@ -29,7 +29,7 @@
           </a>
           <ul class="dropdown-menu w-100" aria-labelledby="adminDropdown">
             <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'userlist' %}">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'useremp' %}">
                 <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="material-icons opacity-10">visibility</i>
                 </div>
@@ -37,7 +37,7 @@
               </a>
             </li>
             <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'useremp' %}">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'userlist' %}">
                 <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
                   <i class="material-icons opacity-10">person</i>
                 </div>
@@ -429,6 +429,16 @@
               <i class="material-icons opacity-10">devices_other</i>
             </div>
             <span class="nav-link-text ms-1">Enquiry</span>
+          </a>
+        </li>
+
+         <!--Blog  -->
+         <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'blog_list' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">devices_other</i>
+            </div>
+            <span class="nav-link-text ms-1">Blogs</span>
           </a>
         </li>
         

@@ -879,3 +879,20 @@ class PackageOrderHistory(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+
+class Blogs(models.Model):
+    blogs_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=1000)
+    description = models.CharField(max_length=50000)
+    image = models.CharField(max_length=1000)
+    facebook = models.CharField(max_length=1000)
+    instagram = models.CharField(max_length=1000)
+    whatsapp = models.CharField(max_length=1000)
+    backlink = models.CharField(max_length=1000)
+    related_bloglink = models.CharField(max_length=1000)
+    tags = models.CharField(max_length=1000)
+    author = models.CharField(max_length=1000)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, related_name='blogs_created', on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(User, related_name='blogs_updated', on_delete=models.SET_NULL, null=True, blank=True)

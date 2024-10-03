@@ -227,12 +227,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label>Duration</label>
-                                                            <input type="text" class="form-control" id="duration" name="duration"  readonly>                                       
-                                                        </div>
-                                                    </div>
+                                                   
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label>Price</label>
@@ -241,20 +236,6 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label>Description:</label>
-                                                            <textarea class="form-control" id="description" name="description" rows="2" readonly></textarea>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label>Features:</label>
-                                                            <textarea class="form-control" id="features" name="features" rows="2" readonly></textarea>
-                                                        </div>
-                                                    </div>  
-                                                </div>
 
                                                 <div class="row">
                                                     <div class="col-lg-3">
@@ -1897,7 +1878,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if ('{{ obj.package_category.package_category_id }}' == package_category) {
                 console.log("Match found for package:", '{{obj.name}}');
                 
-                $('#package').append('<option value="{{ obj.package_id }}" data-price="{{ obj.price }}" data-duration="{{ obj.duration }}" data-description="{{ obj.description|escapejs }}" data-features="{{ obj.features }}">{{ obj.name }}</option>');
+                $('#package').append('<option value="{{ obj.package_id }}" data-price="{{ obj.price }}" >{{ obj.name }}</option>');
             }
         '{% endfor %}'
     }
@@ -1907,14 +1888,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Get the custom data attributes from the selected option
     let price = selectedOption.getAttribute('data-price');
-    let duration = selectedOption.getAttribute('data-duration');
-    let description = selectedOption.getAttribute('data-description');
-    let features = selectedOption.getAttribute('data-features');
 
     document.querySelector('[name="price"]').value = price;
-    document.querySelector('[name="duration"]').value = duration;
-    document.getElementById('description').value = description;  // Use ID selector for the textarea
-    document.querySelector('[name="features"]').value = features;
 });
 </script>
 

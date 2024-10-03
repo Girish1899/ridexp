@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Blogs, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -4824,3 +4824,42 @@ class PackageOrderHistoryView(TemplateView):
         context['history'] = history
         return context        
         
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddBlogView(TemplateView):
+    template_name = "superadmin/add_blog.html"
+
+    def post(self, request):
+        title = request.POST['title']
+        description = request.POST['description']
+        image = request.POST.get('image')
+        facebook = request.POST.get('facebook')
+        instagram = request.POST.get('instagram')
+        whatsapp = request.POST.get('whatsapp')
+        backlink = request.POST.get('backlink')
+        related_bloglink = request.POST.get('related_bloglink')
+        tags = request.POST.get('tags')
+        author = request.POST.get('author')
+
+        blog = Blogs(
+            title=title,
+            description=description,
+            image=image,
+            facebook=facebook,
+            instagram=instagram,
+            whatsapp=whatsapp,
+            backlink=backlink,
+            related_bloglink=related_bloglink,
+            tags=tags,
+            author=author,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        blog.save()
+        return JsonResponse({'status': "Success"})   
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class BlogListView(ListView):
+    model = Blogs
+    template_name = "superadmin/view_blog.html"
+  

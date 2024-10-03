@@ -1,0 +1,164 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'blog_list' %}" style="color: white !important;">View
+                            Blogs</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
+                            Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                        style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Blog</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Blog Title</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="title" name="title">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Description</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="description"
+                                name="description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Image URL</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="image" name="image">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Facebook Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="facebook" name="facebook">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Instagram Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="instagram" name="instagram">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">WhatsApp Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="whatsapp" name="whatsapp">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Backlink</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="backlink" name="backlink">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Related Blog Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="related_bloglink"
+                                name="related_bloglink">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Tags</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="tags" name="tags">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Author</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="author" name="author">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var title = $('#title').val();
+            var description = $('#description').val();
+            var image = $('#image').val();
+            var facebook = $('#facebook').val();
+            var instagram = $('#instagram').val();
+            var whatsapp = $('#whatsapp').val();
+            var backlink = $('#backlink').val();
+            var related_bloglink = $('#related_bloglink').val();
+            var tags = $('#tags').val();
+            var author = $('#author').val();
+
+
+
+
+            $.ajax({
+                url: '{% url "add_blog" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    title: title,
+                    description: description,
+                    image: image,
+                    facebook: facebook,
+                    instagram: instagram,
+                    whatsapp: whatsapp,
+                    backlink: backlink,
+                    related_bloglink: related_bloglink,
+                    tags: tags,
+                    author: author
+                },
+                success: function (result) {
+                    alert("Blog added successfully");
+                    location.href = "{% url 'blog_list' %}";
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}
