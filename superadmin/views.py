@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Blogs, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Blogs, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageName, PackageNameHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -4585,10 +4585,95 @@ class PackageCategoryHistoryView(TemplateView):
         context['package'] = package
         context['history'] = history
         return context
+    
+
+# package name #######################################################################
+
+@login_required(login_url='login')   
+def check_package_name(request):
+    package_name = request.GET.get('package_name', None)
+    cp = PackageName.objects.filter(package_name=package_name)
+    data = {
+        'exists': cp.count() > 0
+    }
+    return JsonResponse(data) 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addpackagename(TemplateView):
+    template_name = "superadmin/add_package_name.html"
+
+    def post(self, request):
+        package_name = request.POST['package_name']
+
+        cl = PackageName(
+            package_name=package_name,
+        )
+        cl.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageNameList(ListView):
+    model = PackageName
+    template_name = "superadmin/view_package_name.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeletePackageName(View):
+    def get(self, request):
+        package_name_id = request.GET.get('package_name_id', None)
+        PackageName.objects.get(package_name_id=package_name_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditPackageName(TemplateView):
+    template_name = 'superadmin/edit_package_name.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['package_name_id'] = self.kwargs['id']
+            plist = PackageName.objects.filter(package_name_id=context['package_name_id'])
+        except:
+            plist = PackageName.objects.filter(package_name_id=context['package_name_id'])
+            
+        context['plist']= list(plist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdatePackageName(APIView):
+    def post(self, request):
+        package_name_id = request.POST['package_name_id']
+        package = PackageName.objects.get(package_name_id=package_name_id)
+
+        # Update the ride type with new data
+        package.package_name = request.POST['package_name']
+        package.save()
+
+        # Create another RidetypeHistory entry after updating the ride type
+        PackageNameHistory.objects.create(
+            package_name_id=package.package_name_id,
+            package_name=package.package_name,
+            created_on=package.created_on,
+            updated_on=package.updated_on,
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class PackageNameHistoryView(TemplateView):
+    template_name = 'superadmin/history_package_name.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        package_name_id = self.kwargs['package_name_id']
+        package = get_object_or_404(PackageName, package_name_id=package_name_id)
+        history = PackageNameHistory.objects.filter(package_name_id=package_name_id).order_by('updated_on')
+        context['package'] = package
+        context['history'] = history
+        return context    
  
-
  # packages #######################################################################
-
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addpackages(TemplateView):
@@ -4597,26 +4682,31 @@ class addpackages(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         pclist = PackageCategories.objects.all()
-        context = {'pclist': list(pclist)}
+        pnlist = PackageName.objects.all()
+        context = {'pclist': list(pclist), 'pnlist': list(pnlist)}
         return context
 
     def post(self, request):
-        name = request.POST['name']
+        package_name_id = request.POST['package_name']
         package_category_id = request.POST['package_category']
         description = request.POST['description']
-        price = request.POST['price']
-        duration = request.POST['duration']
+        price = Decimal(request.POST.get('price', '0') or '0')
         features = request.POST['features']
         status = request.POST['status']
+        extra_km = request.POST['extra_km']
+        extra_charges = request.POST['extra_charges']
+        car_type = request.POST['car_type']
 
         cl = Packages(
-            name=name,
+            package_name=PackageName.objects.get(package_name_id=package_name_id),
             package_category=PackageCategories.objects.get(package_category_id=package_category_id),
             description=description,
             price=price,
-            duration=duration,
             features=features,
             status=status,
+            extra_km=extra_km,
+            extra_charges=extra_charges,
+            car_type=car_type,
             created_by=request.user,
             updated_by=request.user
         )
@@ -4644,6 +4734,7 @@ class EditPackages(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        pnlist = PackageName.objects.all()
         pclist = PackageCategories.objects.all()
         try:
             context['package_id'] = self.kwargs['id']
@@ -4651,7 +4742,7 @@ class EditPackages(TemplateView):
         except:
             plist = Packages.objects.filter(package_id=context['package_id'])
             
-        context = {'pclist':list(pclist),'plist':list(plist)}
+        context = {'pclist':list(pclist),'plist':list(plist),'pnlist':list(pnlist)}
         return context
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -4661,26 +4752,30 @@ class UpdatePackages(APIView):
         package_id = request.POST['package_id']
         package = Packages.objects.get(package_id=package_id)
 
-        package.name = request.POST['name']
+        package.package_name = PackageName.objects.get(package_name_id=request.POST['package_name'])
         package.package_category = PackageCategories.objects.get(package_category_id=request.POST['package_category'])
         package.description = request.POST['description']
         package.price = request.POST['price']
-        package.duration = request.POST['duration']
         package.features = request.POST['features']
         package.status = request.POST['status']
+        package.extra_km = request.POST['extra_km']
+        package.extra_charges = request.POST['extra_charges']
+        package.car_type = request.POST['car_type']
         package.updated_by = request.user
         package.save()
 
         # Create another RidetypeHistory entry after updating the ride type
         PackagesHistory.objects.create(
             package_id=package.package_id,
-            name=package.name,
+            package_name=package.package_name,
             package_category=package.package_category,
             description=package.description,
             price=package.price,
-            duration=package.duration,
             features=package.features,
             status=package.status,
+            extra_km=package.extra_km,
+            extra_charges=package.extra_charges,
+            car_type=package.car_type,
             created_on=package.created_on,
             updated_on=package.updated_on,
             created_by=package.created_by.username if package.created_by else None,

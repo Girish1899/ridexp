@@ -1,4 +1,5 @@
 # website/views.py
+from decimal import Decimal
 import random
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
@@ -6,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Blogs, Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType, WebsitePackages
+from superadmin.models import Blogs, Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageName, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType, WebsitePackages
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -40,8 +41,8 @@ def get_current_time_slot():
 
 def home(request):
         
-    categories = PackageCategories.objects.all() 
-    packages = Packages.objects.all() 
+    categories = PackageCategories.objects.all()
+    packages = Packages.objects.select_related('package_category', 'package_name')
     context = {
         'categories': categories,
         'packages': packages,
@@ -1932,11 +1933,9 @@ class PackageBookingList(TemplateView):
         context = super().get_context_data(**kwargs)
         # Get the form data passed from the previous page
         context['package_category'] = self.request.GET.get('package_category')
-        context['package'] = self.request.GET.get('package')
-        context['duration'] = self.request.GET.get('duration')
+        context['package_name'] = self.request.GET.get('package_name')
         context['price'] = self.request.GET.get('price')
         context['description'] = self.request.GET.get('description')
-        context['features'] = self.request.GET.get('features')
         context['source'] = self.request.GET.get('source')
         context['destination'] = self.request.GET.get('destination')
         context['pickup_date'] = self.request.GET.get('pickup_date')
@@ -1970,7 +1969,7 @@ class AddPackageOrder(APIView):
             pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
             # customer_id = request.POST['customer']
             package_id = request.POST['package']
-            total_amount = request.POST['total_amount']
+            total_amount = Decimal(request.POST.get('total_amount', '0') or '0')
             payment_method = request.POST['payment_method']
             status = request.POST['status']
             source = request.POST['source']

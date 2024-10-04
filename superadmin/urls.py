@@ -254,6 +254,16 @@ urlpatterns = [
     path('UpdatePackageCategory', UpdatePackageCategory.as_view(), name='UpdatePackageCategory'),
     # path('color/<int:color_id>/view/', ViewColor.as_view(), name='color'),
 
+
+    #package_name################  
+    path('add_package_name', addpackagename.as_view(), name='add_package_name'),
+    path('check_package_name/', check_package_name, name='check_package_name'),
+    path('package_name_list', PackageNameList.as_view(), name='package_name_list'),
+    path('DeletePackageName', DeletePackageName.as_view(), name='DeletePackageName'),
+    path('EditPackageName/<int:id>/', EditPackageName.as_view(), name='EditPackageName'),
+    path('PackageNameHistory/<int:package_name_id>/', PackageNameHistoryView.as_view(), name='PackageNameHistory'),
+    path('UpdatePackageName', UpdatePackageName.as_view(), name='UpdatePackageName'),
+
     #package################  
     path('add_packages', addpackages.as_view(), name='add_packages'),
     path('packages_list', PackageList.as_view(), name='packages_list'),

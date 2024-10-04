@@ -803,7 +803,20 @@ class PackageCategoriesHistory(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_by = models.CharField(max_length=100, null=True, blank=True)
-    updated_by = models.CharField(max_length=100, null=True, blank=True)        
+    updated_by = models.CharField(max_length=100, null=True, blank=True) 
+
+class PackageName(models.Model):
+    package_name_id = models.AutoField(primary_key=True)
+    package_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True) 
+
+class PackageNameHistory(models.Model):
+    package_name_id = models.IntegerField()
+    package_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)     
+           
 
 class Packages(models.Model):
     STATUS_CHOICES = [
@@ -812,11 +825,13 @@ class Packages(models.Model):
     ]
     package_id = models.AutoField(primary_key=True)
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE) 
-    name = models.CharField(max_length=255)
+    package_name = models.ForeignKey(PackageName, on_delete=models.CASCADE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.CharField(max_length=255)
     features = models.TextField()
+    extra_km = models.CharField(max_length=100)
+    extra_charges = models.CharField(max_length=100)
+    car_type = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
@@ -830,11 +845,13 @@ class PackagesHistory(models.Model):
     ]
     package_id = models.IntegerField()
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE) 
-    name = models.CharField(max_length=255)
+    package_name = models.ForeignKey(PackageName, on_delete=models.CASCADE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.CharField(max_length=255)
     features = models.TextField()
+    extra_km = models.CharField(max_length=100)
+    extra_charges = models.CharField(max_length=100)
+    car_type = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES) 
@@ -851,8 +868,8 @@ class PackageOrder(models.Model):
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Inactive')
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    payment_method = models.CharField(max_length=50,null=True)
     source = models.CharField(max_length=1000)
     destination = models.CharField(max_length=1000)
     pickup_date = models.DateField()
@@ -870,8 +887,8 @@ class PackageOrderHistory(models.Model):
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    payment_method = models.CharField(max_length=50, null=True)
     source = models.CharField(max_length=1000)
     destination = models.CharField(max_length=1000)
     pickup_date = models.DateField()
