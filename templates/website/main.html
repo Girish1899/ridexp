@@ -1865,75 +1865,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     function getpackage() {
-        // Clear the package dropdown
-        $('#package_name')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="" selected disabled>Select Package</option>');
- 
-        let package_category = document.getElementById('package_category').value;
-        console.log("Selected category:", package_category);
- 
-        // Iterate through the packages and add matching options to the dropdown
-        '{% for obj in packages %}'
-            if ('{{ obj.package_category.package_category_id }}' == package_category) {
-                console.log("Match found for package:", '{{ obj.package_name.package_name }}');
-                $('#package_name').append('<option value="{{ obj.package_id }}" data-price="{{ obj.price }}" data-extra-km="{{ obj.extra_km }}" data-extra-charges="{{ obj.extra_charges }}" data-description="{{ obj.description|escapejs }}" >{{ obj.package_name.package_name }}</option>');
+    $('#package_name')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="" selected disabled>Select Package</option>');
+
+    let package_category = document.getElementById('package_category').value;
+    console.log("Selected category:", package_category);
+
+    let uniquePackages = new Set();
+
+    '{% for obj in packages %}'
+        if ('{{ obj.package_category.package_category_id }}' == package_category) {
+            if (!uniquePackages.has('{{ obj.package_name.package_name }}')) {
+                console.log("Unique package found:", '{{ obj.package_name.package_name }}');
+                $('#package_name').append(
+                    '<option value="{{ obj.package_name_id }}" data-package-id="{{ obj.package_id }}">' +
+                    '{{ obj.package_name.package_name }}' +
+                    '</option>'
+                );
+                uniquePackages.add('{{ obj.package_name.package_name }}');
             }
-        '{% endfor %}'
- 
-        // Clear car type and pricing fields if package category changes
-        $('#car_type')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="" selected disabled>Select Car Type</option>');
-        document.getElementById('price').value = '';
-        document.getElementById('extra_km').value = '';
-        document.getElementById('extra_charges').value = '';
-        document.getElementById('description').value = '';
-    }
- 
-    function getCarType() {
-        // Clear the car type dropdown
-        $('#car_type')
-            .find('option')
-            .remove()
-            .end()
-            .append('<option value="" selected disabled>Select Car Type</option>');
- 
-        let package_id = document.getElementById('package_name').value;
-        console.log("Selected package:", package_id);
- 
-        // Iterate through the packages and add car type options based on selected package
-        '{% for obj in packages %}'
-            if ('{{ obj.package_id }}' == package_id) {
-                console.log("Match found for car type:", '{{ obj.car_type }}');
-                $('#car_type').append('<option value="{{ obj.car_type }}" data-price="{{ obj.price }}" data-extra-km="{{ obj.extra_km }}" data-extra-charges="{{ obj.extra_charges }}" data-description="{{ obj.description|escapejs }}">{{ obj.car_type }}</option>');
-            }
-        '{% endfor %}'
-    }
- 
-    function updatePricing() {
-        let selectedCarType = document.getElementById('car_type').value;
-        console.log("Selected car type:", selectedCarType);
- 
-        let selectedOption = document.querySelector('#car_type option[value="' + selectedCarType + '"]');
- 
-        // Update the price, extra km, extra charges, and description fields based on the selected car type
-        let price = selectedOption.getAttribute('data-price');
-        let extra_km = selectedOption.getAttribute('data-extra-km');
-        let extra_charges = selectedOption.getAttribute('data-extra-charges');
-        let description = selectedOption.getAttribute('data-description');
- 
-        console.log("Description retrieved:", description);
- 
-        document.querySelector('[name="price"]').value = price;
-        document.querySelector('[name="extra_km"]').value = extra_km;
-        document.querySelector('[name="extra_charges"]').value = extra_charges;
-        document.getElementById('description').value = description;
-    }
+        }
+    '{% endfor %}'
+
+    $('#car_type').find('option').remove().end().append('<option value="" selected disabled>Select Car Type</option>');
+    document.getElementById('price').value = '';
+    document.getElementById('extra_km').value = '';
+    document.getElementById('extra_charges').value = '';
+    document.getElementById('description').value = '';
+}
+
+function getCarType() {
+    $('#car_type')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="" selected disabled>Select Car Type</option>');
+
+    let selectedPackageName = document.getElementById('package_name').value;
+    console.log("Selected package:", selectedPackageName);
+
+    '{% for obj in packages %}'
+        if ('{{ obj.package_name_id }}' == selectedPackageName) {
+            console.log("Match found for car type:", '{{ obj.car_type }}');
+            $('#car_type').append(
+                '<option value="{{ obj.car_type }}" data-price="{{ obj.price }}" data-extra-km="{{ obj.extra_km }}" data-extra-charges="{{ obj.extra_charges }}" data-description="{{ obj.description|escapejs }}">{{ obj.car_type }}</option>'
+            );
+        }
+    '{% endfor %}'
+}
+
+function updatePricing() {
+    let selectedCarType = document.getElementById('car_type').value;
+    console.log("Selected car type:", selectedCarType);
+
+    let selectedOption = document.querySelector('#car_type option[value="' + selectedCarType + '"]');
+
+    let price = selectedOption.getAttribute('data-price');
+    let extra_km = selectedOption.getAttribute('data-extra-km');
+    let extra_charges = selectedOption.getAttribute('data-extra-charges');
+    let description = selectedOption.getAttribute('data-description');
+
+    document.querySelector('[name="price"]').value = price;
+    document.querySelector('[name="extra_km"]').value = extra_km;
+    document.querySelector('[name="extra_charges"]').value = extra_charges;
+    document.getElementById('description').value = description;
+}
+
  </script>
  
 
