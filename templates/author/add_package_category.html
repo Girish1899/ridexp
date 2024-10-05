@@ -1,0 +1,105 @@
+{% extends 'author/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'author_package_category_list' %}" style="color: white !important;">View Package Category</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+ 
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Package Category</h6>
+                    </div>
+                    </div>
+
+                <div class="card-body">
+                                
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Category Name</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control form-control-lg" id="category_name" name="category_name">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary mb-2" id="save_category">Submit</button>
+                                    </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#save_category").click(function (event) {
+            event.preventDefault();
+
+            var category_name = $('#category_name').val().trim().toLowerCase();
+            
+            if (category_name.trim() === '') {
+                alert("Please enter color name.");
+                return;
+            }
+
+           
+            console.log("category_name :", category_name);
+
+            $.ajax({
+                url: '{% url "check_package_category" %}',
+                type: "GET",
+                data: { category_name: category_name },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("package category name already exists.");
+                    } else {
+                        // Proceed with form submission
+
+                    $.ajax({
+                        url: '{% url "author_package_category" %}',
+                        type: "POST",
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        data: { category_name : category_name},
+                        success: function (result) {
+                            console.log("result ***: ", result);
+                            alert("Package Category Added Successfully");
+                            location.href = "{% url 'author_package_category_list' %}";
+                        },
+                        error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+ {% endblock content%}    

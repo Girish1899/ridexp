@@ -256,6 +256,10 @@ def login_view(request):
                     request.session['user_type'] = profile.type
                     request.session['user_id'] = profile.profile_id
                     redirect_url = '/hr/hrindex'
+                elif profile.type == 'author':
+                    request.session['user_type'] = profile.type
+                    request.session['user_id'] = profile.profile_id
+                    redirect_url = '/author/authorindex'
                 else:
                     redirect_url = '/'
                 

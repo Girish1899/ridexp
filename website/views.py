@@ -997,8 +997,13 @@ def localtaxi(request):
 
 
 def blog(request):
-    return render(request, 'website/blog.html')
+    blogs = Blogs.objects.all()
+    return render(request, 'website/blog.html', {'blogs': blogs})
 
+class BlogDetailView(View):
+    def get(self, request, id):
+        blog = get_object_or_404(Blogs, blogs_id=id)
+        return render(request, 'website/blog/blog_detail.html', {'blog': blog})
 
 def faq(request):
     return render(request, 'website/faq.html')

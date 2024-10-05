@@ -85,6 +85,7 @@
                 },
                 success: function(response) {
                     if (response.success) {
+                        console.log("Redirect URL: ", response.redirect_url);
                         window.location.href = response.redirect_url;
                     } else {
                         alert(response.message); // Display error message
