@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
+from django.utils.text import slugify
 from django.core.cache import cache
 
 from superadmin.views import adduser
@@ -1001,9 +1002,13 @@ def blog(request):
     return render(request, 'website/blog.html', {'blogs': blogs})
 
 class BlogDetailView(View):
-    def get(self, request, id):
-        blog = get_object_or_404(Blogs, blogs_id=id)
-        return render(request, 'website/blog/blog_detail.html', {'blog': blog})
+    def get(self, request, title):
+        blog = get_object_or_404(Blogs)
+
+        # Verify if the slugified title matches the one in the URL
+        if slugify(blog.title) != title:
+            return redirect('blog_detail', title=slugify(blog.title))
+        return render(request, 'website/blog/blog_detail.html', {'blog': blog,'title_fragment': ' - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services'})
 
 def faq(request):
     return render(request, 'website/faq.html')

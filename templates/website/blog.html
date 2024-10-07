@@ -36,7 +36,7 @@
                             <h4 class="blog-title">
                                 <a href="/blog/{{ blog.backlink }}">{{ blog.title }}</a>
                             </h4>
-                            <a class="theme-btn" href="/blog/{{ blog.blogs_id }}">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="/blog/{{ blog.title|slugify }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>

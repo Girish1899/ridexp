@@ -155,7 +155,7 @@ class addwebpackages(TemplateView):
             facebook_link = request.POST.get('facebook_link')
             instagram_link = request.POST.get('instagram_link')
             whatsapp_link = request.POST.get('whatsapp_link')
-            author = request.POST.get('author')
+            tags = request.POST.get('tags')
             meta_title = request.POST.get('meta_title')
             meta_description = request.POST.get('meta_description')
             meta_keywords = request.POST.get('meta_keywords')
@@ -188,7 +188,7 @@ class addwebpackages(TemplateView):
                 facebook_link=facebook_link,
                 instagram_link=instagram_link,
                 whatsapp_link=whatsapp_link,
-                author=author,
+                tags=tags,
                 meta_title=meta_title,
                 meta_description=meta_description,
                 meta_keywords=meta_keywords,
@@ -257,6 +257,21 @@ class EditwebPackages(TemplateView):
         return context
     
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class EditwebPackages(TemplateView):
+    template_name = 'author/edit_webpackages.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pclist = PackageCategories.objects.all()
+        try:
+            context['webpackage_id'] = self.kwargs['id']
+            package = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
+        except:
+            package = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
+        context = {'pclist': list(pclist), 'package': list(package)}
+        return context
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdatewebPackages(APIView):
     def post(self, request):
         webpackage_id = request.POST['webpackage_id']
@@ -276,7 +291,6 @@ class UpdatewebPackages(APIView):
         meta_description = request.POST['meta_description']
         meta_keywords = request.POST['meta_keywords']
         h1tag = request.POST['h1tag']
-        status = request.POST['status']
 
         package_categoryIdobj = PackageCategories.objects.get(package_category_id=package_category)
 
@@ -323,11 +337,12 @@ class UpdatewebPackages(APIView):
             webpack.meta_description= meta_description
             webpack.meta_keywords= meta_keywords
             webpack.h1tag= h1tag
-            webpack.status = request.POST['status']
             webpack.updated_by = request.user
             webpack.save()
 
         return JsonResponse({'success': True}, status=200)
+
+
     
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AddBlogView(TemplateView):
