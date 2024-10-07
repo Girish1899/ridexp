@@ -416,14 +416,57 @@ class webDeleteBlogs(View):
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class EditwebBlogs(TemplateView):
-    template_name = 'author/edit_blogs.html'
+    template_name = 'author/edit_blog.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
             context['blogs_id'] = self.kwargs['id']
-            blist = Blogs.objects.filter(blogs_id=context['blogs_id'])
+            blog = Blogs.objects.filter(blogs_id=context['blogs_id'])
         except:
-            blist = Blogs.objects.filter(blogs_id=context['blogs_id'])
-        context = {'blist': list(blist)}
+            blog = Blogs.objects.filter(blogs_id=context['blogs_id'])
+        context = {'blog': list(blog)}
         return context 
+    
+class UpdatewebBlogs(APIView):
+    def post(self, request):
+        blogs_id = request.POST.get('blogs_id')
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        image_link = request.POST.get('image_link')
+        facebook = request.POST.get('facebook')
+        instagram = request.POST.get('instagram')
+        whatsapp = request.POST.get('whatsapp')
+        backlink = request.POST.get('backlink')
+        related_bloglink = request.POST.get('related_bloglink')
+        meta_title = request.POST.get('meta_title')
+        meta_description = request.POST.get('meta_description')
+        meta_keywords = request.POST.get('meta_keywords')
+        h1tag = request.POST.get('h1tag')
+
+        try:
+            blog = Blogs.objects.get(blogs_id=blogs_id)
+        except Blogs.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Blog not found'}, status=404)
+
+        # Update fields
+        blog.title = title
+        blog.description = description
+        if image:
+            blog.image = image  # Update the image if a new one is uploaded
+        blog.image_link = image_link
+        blog.facebook = facebook
+        blog.instagram = instagram
+        blog.whatsapp = whatsapp
+        blog.backlink = backlink
+        blog.related_bloglink = related_bloglink
+        blog.meta_title = meta_title
+        blog.meta_description = meta_description
+        blog.meta_keywords = meta_keywords
+        blog.h1tag = h1tag
+
+        # Save the updated blog entry
+        blog.save()
+
+        return JsonResponse({'success': True}, status=200)    

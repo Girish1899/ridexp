@@ -24,4 +24,5 @@ urlpatterns = [
     path('list_author_blogs', BlogListView.as_view(), name='list_author_blogs'),
     path('author_blogs_delete', webDeleteBlogs.as_view(), name='author_blogs_delete'),
     path('author_blogs_edit/<int:id>/', EditwebBlogs.as_view(), name='author_blogs_edit'),
+    path('author_blogs_update', UpdatewebBlogs.as_view(), name='author_blogs_update'),
 ]
