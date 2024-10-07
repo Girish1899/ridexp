@@ -234,8 +234,8 @@ class webPackageList(ListView):
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeletewebPackages(View):
     def get(self, request):
-        package_id = request.GET.get('package_id', None)
-        WebsitePackages.objects.get(package_id=package_id).delete()
+        webpackage_id = request.GET.get('webpackage_id', None)
+        WebsitePackages.objects.get(webpackage_id=webpackage_id).delete()
         data = {
             'deleted': True
         }
@@ -249,24 +249,37 @@ class EditwebPackages(TemplateView):
         context = super().get_context_data(**kwargs)
         pclist = PackageCategories.objects.all()
         try:
-            context['package_id'] = self.kwargs['id']
-            plist = WebsitePackages.objects.filter(package_id=context['package_id'])
+            context['webpackage_id'] = self.kwargs['id']
+            plist = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
         except:
-            plist = WebsitePackages.objects.filter(package_id=context['package_id'])
+            plist = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
         context = {'pclist': list(pclist), 'plist': list(plist)}
         return context
     
 @method_decorator(login_required(login_url='login'), name='dispatch')
-class UpdateCategory(APIView):
+class UpdatewebPackages(APIView):
     def post(self, request):
-        package_id = request.POST['package_id']
-        webpack = get_object_or_404(WebsitePackages, package_id=package_id)
-        original_status = webpack.status
+        webpackage_id = request.POST['webpackage_id']
+        title = request.POST['title']
+        package_category = request.POST['package_category']
+        description = request.POST['description']
+        top_attraction = request.POST['top_attraction']
+        why_visit = request.POST['why_visit']
+        package_highlights = request.POST['package_highlights']
+        image = request.POST['image']
+        image_link = request.POST['image_link']
+        facebook_link = request.POST['facebook_link']
+        instagram_link = request.POST['instagram_link']
+        whatsapp_link = request.POST['whatsapp_link']
+        tags = request.POST['tags']
+        meta_title = request.POST['meta_title']
+        meta_description = request.POST['meta_description']
+        meta_keywords = request.POST['meta_keywords']
+        h1tag = request.POST['h1tag']
+        status = request.POST['status']
 
-        # Update the category with new data
-        webpack.title = request.POST['title']
-        webpack.description = request.POST['description']
-        webpack.top_attraction = request.POST['top_attraction']
+        package_categoryIdobj = PackageCategories.objects.get(package_category_id=package_category)
+
         if 'image' in request.FILES:
             # Handle image resizing before saving
             image = request.FILES['image']
@@ -292,7 +305,24 @@ class UpdateCategory(APIView):
             img_content = ContentFile(img_io.getvalue(), image.name)
 
             # Assign the resized image to the category object
+            
+            webpack=WebsitePackages.objects.get(webpackage_id=webpackage_id)
+            webpack.title= title
+            webpack.package_category= package_categoryIdobj
+            webpack.description= description
+            webpack.top_attraction= top_attraction
+            webpack.why_visit= why_visit
+            webpack.package_highlights= package_highlights
+            webpack.image_link= image_link
             webpack.image.save(image.name, img_content, save=False)
+            webpack.facebook_link= facebook_link
+            webpack.instagram_link= instagram_link
+            webpack.whatsapp_link= whatsapp_link
+            webpack.tags= tags
+            webpack.meta_title= meta_title
+            webpack.meta_description= meta_description
+            webpack.meta_keywords= meta_keywords
+            webpack.h1tag= h1tag
             webpack.status = request.POST['status']
             webpack.updated_by = request.user
             webpack.save()
@@ -315,7 +345,7 @@ class AddBlogView(TemplateView):
             facebook = request.POST.get('facebook_link')
             instagram = request.POST.get('instagram_link')
             whatsapp = request.POST.get('whatsapp_link')
-            author = request.POST.get('author')
+            tags = request.POST.get('tags')
             meta_title = request.POST.get('meta_title')
             meta_description = request.POST.get('meta_description')
             meta_keywords = request.POST.get('meta_keywords')
@@ -330,7 +360,7 @@ class AddBlogView(TemplateView):
                 facebook=facebook,
                 instagram=instagram,
                 whatsapp=whatsapp,
-                author=author,
+                tags=tags,
                 meta_title=meta_title,
                 meta_description=meta_description,
                 meta_keywords=meta_keywords,

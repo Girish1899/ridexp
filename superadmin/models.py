@@ -914,7 +914,7 @@ class Blogs(models.Model):
     whatsapp = models.CharField(max_length=1000)
     backlink = models.CharField(max_length=1000)
     related_bloglink = models.CharField(max_length=1000)
-    author = models.CharField(max_length=1000)
+    tags = models.CharField(max_length=1000)
     meta_title = models.CharField(max_length=1000)
     meta_description = models.CharField(max_length=1000)
     meta_keywords = models.CharField(max_length=1000)
@@ -931,7 +931,7 @@ class WebsitePackages(models.Model):
         ('active', 'Active'),
         ('inactive', 'Inactive'),
     ]
-    package_id = models.AutoField(primary_key=True)
+    webpackage_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE)
     description = models.TextField(help_text="Detailed description of the package")
@@ -943,7 +943,7 @@ class WebsitePackages(models.Model):
     facebook_link = models.CharField(max_length=1000, blank=True, null=True)
     instagram_link = models.CharField(max_length=1000, blank=True, null=True)
     whatsapp_link = models.CharField(max_length=1000, blank=True, null=True)
-    author = models.CharField(max_length=255)
+    tags = models.CharField(max_length=255)
     meta_title = models.CharField(max_length=1000)
     meta_description = models.CharField(max_length=1000)
     meta_keywords = models.CharField(max_length=1000)

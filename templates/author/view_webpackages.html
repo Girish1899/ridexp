@@ -105,9 +105,9 @@
                                         <td>{{ i.created_by }}</td>
                                         <td>{{ i.updated_by }}</td>
                                         <td style="display: flex; justify-content: center; align-items: center;">
-                                            <a href="#" class="btn btn-primary" onclick="EditPackage('{{i.package_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
-                                            <a href="#" class="btn btn-secondary" onclick="DeletePackage('{{i.package_id}}')"><i class="fa fa-trash"></i></a>&nbsp;
-                                            <a href="#" class="btn btn-warning" onclick="HistoryPackage('{{i.package_id}}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-primary" onclick="EditPackage('{{i.webpackage_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-secondary" onclick="DeletePackage('{{i.webpackage_id}}')"><i class="fa fa-trash"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="HistoryPackage('{{i.webpackage_id}}')"><i class="fa fa-clock"></i></a>&nbsp;
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -123,30 +123,30 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
-    function DeletePackage(package_id) {
+    function DeletePackage(webpackage_id) {
         var action = confirm("Are you sure you want to delete this package?");
         if (action != false) {
             $.ajax({
                 url: "author_Packages_delete",
                 data: {
-                    'package_id': package_id,
+                    'webpackage_id': webpackage_id,
                 },
                 dataType: 'json',
                 success: function (data) {
                     if (data.deleted) {
                         alert("Package Deleted Successfully");
                         window.location.href = "{% url 'list_author_packages' %}";
-                        $("#package_id #i-" + package_id).remove();
+                        $("#webpackage_id #i-" + webpackage_id).remove();
                     }
                 }
             });
         }
     }
 
-    function EditPackage(package_id) {
+    function EditPackage(webpackage_id) {
         var action = confirm("Are you sure you want to edit this package?");
         if (action !== false) {
-            window.location.href = "author_Packages_edit/" + package_id;
+            window.location.href = "author_Packages_edit/" + webpackage_id;
         }
     }
 

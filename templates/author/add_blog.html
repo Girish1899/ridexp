@@ -102,9 +102,10 @@
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Author</label>
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Tags</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-lg" id="author" name="author">
+                            <input type="text" class="form-control form-control-lg" id="tags" name="tags">
                         </div>
                     </div>
                     <br>
@@ -165,7 +166,7 @@
             var whatsapp_link = $('#whatsapp_link').val();
             var backlink = $('#backlink').val();
             var related_bloglink = $('#related_bloglink').val();
-            var author = $('#author').val();
+            var tags = $('#tags').val();
             var meta_title = $('#meta_title').val();
             var meta_description = $('#meta_description').val();
             var meta_keywords = $('#meta_keywords').val();
@@ -178,7 +179,7 @@
             formData.append('facebook_link',facebook_link );
             formData.append('instagram_link', instagram_link);
             formData.append('whatsapp_link', whatsapp_link);
-            formData.append('author', author);
+            formData.append('tags', tags);
             formData.append('related_bloglink', related_bloglink);
             formData.append('backlink', backlink);
             formData.append('meta_title', meta_title);
