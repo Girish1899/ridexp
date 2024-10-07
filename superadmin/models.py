@@ -900,6 +900,10 @@ class PackageOrderHistory(models.Model):
 
 
 class Blogs(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
     blogs_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=1000)
     description = models.TextField()
@@ -915,6 +919,7 @@ class Blogs(models.Model):
     meta_description = models.CharField(max_length=1000)
     meta_keywords = models.CharField(max_length=1000)
     h1tag = models.CharField(max_length=500)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_website_blogs')
@@ -922,6 +927,10 @@ class Blogs(models.Model):
 
 
 class WebsitePackages(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
     package_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE)
@@ -939,6 +948,7 @@ class WebsitePackages(models.Model):
     meta_description = models.CharField(max_length=1000)
     meta_keywords = models.CharField(max_length=1000)
     h1tag = models.CharField(max_length=500)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_website_packages')

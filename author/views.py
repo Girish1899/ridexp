@@ -257,6 +257,49 @@ class EditwebPackages(TemplateView):
         return context
     
 @method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCategory(APIView):
+    def post(self, request):
+        package_id = request.POST['package_id']
+        webpack = get_object_or_404(WebsitePackages, package_id=package_id)
+        original_status = webpack.status
+
+        # Update the category with new data
+        webpack.title = request.POST['title']
+        webpack.description = request.POST['description']
+        webpack.top_attraction = request.POST['top_attraction']
+        if 'image' in request.FILES:
+            # Handle image resizing before saving
+            image = request.FILES['image']
+            img = Image.open(image)
+            
+            # Resize image to 880x350 pixels
+            img = img.resize((880, 450), Image.LANCZOS)
+
+            # Get the file extension and set the appropriate format
+            file_extension = os.path.splitext(image.name)[1].lower()
+            if file_extension in ['.jpg', '.jpeg']:
+                format = 'JPEG'
+            elif file_extension == '.png':
+                format = 'PNG'
+            elif file_extension == '.gif':
+                format = 'GIF'
+            else:
+                format = 'JPEG'  # Default format if none of the above match
+
+            # Save the image to an in-memory file
+            img_io = BytesIO()
+            img.save(img_io, format=format)
+            img_content = ContentFile(img_io.getvalue(), image.name)
+
+            # Assign the resized image to the category object
+            webpack.image.save(image.name, img_content, save=False)
+            webpack.status = request.POST['status']
+            webpack.updated_by = request.user
+            webpack.save()
+
+        return JsonResponse({'success': True}, status=200)
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
 class AddBlogView(TemplateView):
     template_name = "author/add_blog.html"
 

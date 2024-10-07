@@ -46,6 +46,7 @@ urlpatterns = [
     path('addride', views.AddRidee.as_view(), name='addride'),
     path('driver/', include('driver.urls')),
     path('hr/', include('hr.urls')),
+    path('author/', include('author.urls')),
     
 
     path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
