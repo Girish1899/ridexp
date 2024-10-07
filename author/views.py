@@ -155,10 +155,10 @@ class addwebpackages(TemplateView):
             facebook_link = request.POST.get('facebook_link')
             instagram_link = request.POST.get('instagram_link')
             whatsapp_link = request.POST.get('whatsapp_link')
-            tags = request.POST.get('tags')
             meta_title = request.POST.get('meta_title')
             meta_description = request.POST.get('meta_description')
             meta_keywords = request.POST.get('meta_keywords')
+            tags = request.POST.get('tags')
             h1tag = request.POST.get('h1tag')
 
             # Print received form data
@@ -184,37 +184,19 @@ class addwebpackages(TemplateView):
                 top_attraction=top_attraction,
                 why_visit=why_visit,
                 package_highlights=package_highlights,
+                image=image,
                 image_link=image_link,
                 facebook_link=facebook_link,
                 instagram_link=instagram_link,
                 whatsapp_link=whatsapp_link,
-                tags=tags,
                 meta_title=meta_title,
                 meta_description=meta_description,
                 meta_keywords=meta_keywords,
+                tags=tags,
                 h1tag=h1tag,
                 created_by=request.user,
                 updated_by=request.user
             )
-
-            # Process image if uploaded
-            if image:
-                try:
-                    print(f"Processing image: {image.name}")
-                    img = Image.open(image)
-                    img = img.resize((880, 450), Image.LANCZOS)
-                    file_extension = os.path.splitext(image.name)[1].lower()
-
-                    # Define format based on extension
-                    format = 'JPEG' if file_extension in ['.jpg', '.jpeg'] else 'PNG' if file_extension == '.png' else 'GIF'
-
-                    img_io = BytesIO()
-                    img.save(img_io, format=format)
-                    img_content = ContentFile(img_io.getvalue(), image.name)
-                    webpackage.image.save(image.name, img_content, save=False)
-                except Exception as img_error:
-                    print(f"Error processing image: {img_error}")
-                    return JsonResponse({'status': "Failed", 'error': "Error processing image."}, status=400)
 
             # Save the package
             webpackage.save()
@@ -250,21 +232,6 @@ class EditwebPackages(TemplateView):
         pclist = PackageCategories.objects.all()
         try:
             context['webpackage_id'] = self.kwargs['id']
-            plist = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
-        except:
-            plist = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
-        context = {'pclist': list(pclist), 'plist': list(plist)}
-        return context
-    
-@method_decorator(login_required(login_url='login'), name='dispatch')
-class EditwebPackages(TemplateView):
-    template_name = 'author/edit_webpackages.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        pclist = PackageCategories.objects.all()
-        try:
-            context['webpackage_id'] = self.kwargs['id']
             package = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
         except:
             package = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
@@ -276,12 +243,14 @@ class UpdatewebPackages(APIView):
     def post(self, request):
         webpackage_id = request.POST['webpackage_id']
         title = request.POST['title']
+        print("########",title)
         package_category = request.POST['package_category']
         description = request.POST['description']
         top_attraction = request.POST['top_attraction']
         why_visit = request.POST['why_visit']
         package_highlights = request.POST['package_highlights']
-        image = request.POST['image']
+        image = request.FILES.get('image')
+
         image_link = request.POST['image_link']
         facebook_link = request.POST['facebook_link']
         instagram_link = request.POST['instagram_link']
@@ -294,54 +263,31 @@ class UpdatewebPackages(APIView):
 
         package_categoryIdobj = PackageCategories.objects.get(package_category_id=package_category)
 
-        if 'image' in request.FILES:
-            # Handle image resizing before saving
-            image = request.FILES['image']
-            img = Image.open(image)
-            
-            # Resize image to 880x350 pixels
-            img = img.resize((880, 450), Image.LANCZOS)
+        webpack = WebsitePackages.objects.get(webpackage_id=webpackage_id)
 
-            # Get the file extension and set the appropriate format
-            file_extension = os.path.splitext(image.name)[1].lower()
-            if file_extension in ['.jpg', '.jpeg']:
-                format = 'JPEG'
-            elif file_extension == '.png':
-                format = 'PNG'
-            elif file_extension == '.gif':
-                format = 'GIF'
-            else:
-                format = 'JPEG'  # Default format if none of the above match
 
-            # Save the image to an in-memory file
-            img_io = BytesIO()
-            img.save(img_io, format=format)
-            img_content = ContentFile(img_io.getvalue(), image.name)
-
-            # Assign the resized image to the category object
-            
-            webpack=WebsitePackages.objects.get(webpackage_id=webpackage_id)
-            webpack.title= title
-            webpack.package_category= package_categoryIdobj
-            webpack.description= description
-            webpack.top_attraction= top_attraction
-            webpack.why_visit= why_visit
-            webpack.package_highlights= package_highlights
-            webpack.image_link= image_link
-            webpack.image.save(image.name, img_content, save=False)
-            webpack.facebook_link= facebook_link
-            webpack.instagram_link= instagram_link
-            webpack.whatsapp_link= whatsapp_link
-            webpack.tags= tags
-            webpack.meta_title= meta_title
-            webpack.meta_description= meta_description
-            webpack.meta_keywords= meta_keywords
-            webpack.h1tag= h1tag
-            webpack.updated_by = request.user
-            webpack.save()
-
-        return JsonResponse({'success': True}, status=200)
-
+        webpack.title= title
+        print("######## 2 ",title)
+        webpack.package_category= package_categoryIdobj
+        webpack.description= description
+        webpack.top_attraction= top_attraction
+        webpack.why_visit= why_visit
+        webpack.package_highlights= package_highlights
+        webpack.image_link= image_link
+        if image:
+            webpack.image = image
+        webpack.facebook_link= facebook_link
+        webpack.instagram_link= instagram_link
+        webpack.whatsapp_link= whatsapp_link
+        webpack.tags= tags
+        webpack.meta_title= meta_title
+        webpack.meta_description= meta_description
+        webpack.meta_keywords= meta_keywords
+        webpack.h1tag= h1tag
+        webpack.updated_by = request.user
+        webpack.save()
+        
+        return JsonResponse({'success': True}, status=200) 
 
     
 @method_decorator(login_required(login_url='login'), name='dispatch')

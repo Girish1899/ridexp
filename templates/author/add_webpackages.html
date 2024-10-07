@@ -124,13 +124,12 @@
                         <br>
 
                         <div class="form-group row">
-                            <label class="col-sm-2 col-form-label col-form-label-lg"
-                                style="color: #454545; font-size: 16px;">Tags</label>
-                            <div class="col-sm-12">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tags</label>
+                            <div class="col-sm-10">
                                 <input type="text" class="form-control form-control-lg" id="tags" name="tags">
                             </div>
-                        </div>
-                        <br>
+                        </div><br>
+
 
                         <div class="form-group row">
                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Meta Title</label>
@@ -191,10 +190,10 @@
             var facebook_link = $('#facebook_link').val();
             var instagram_link = $('#instagram_link').val();
             var whatsapp_link = $('#whatsapp_link').val();
-            var tags = $('#tags').val();
             var meta_title = $('#meta_title').val();
             var meta_description = $('#meta_description').val();
             var meta_keywords = $('#meta_keywords').val();
+            var tags = $('#tags').val();
             var h1tag = $('#h1tag').val();
 
             // Collect form data
@@ -209,10 +208,10 @@
             formData.append('facebook_link',facebook_link );
             formData.append('instagram_link', instagram_link);
             formData.append('whatsapp_link', whatsapp_link);
-            formData.append('tags', tags);
             formData.append('meta_title', meta_title);
             formData.append('meta_description', meta_description);
             formData.append('meta_keywords', meta_keywords);
+            formData.append('tags', tags);
             formData.append('h1tag', h1tag);
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
@@ -227,10 +226,10 @@
             console.log(facebook_link);
             console.log(instagram_link);
             console.log(whatsapp_link);
-            console.log(tags);
             console.log(meta_title);
             console.log(meta_description);
             console.log(meta_keywords);
+            console.log(tags);
             console.log(h1tag);
             // Handle image file upload if present
             var image = $('#image')[0].files[0];

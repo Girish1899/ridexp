@@ -149,9 +149,9 @@
                             <input type="text" class="form-control form-control-lg" id="h1tag" value="{{ package.0.h1tag }}">
                         </div>
                     </div>
-<br>
+
                     <div class="text-center">
-                        <button type="submit" class="btn btn-lg btn-primary" style="background-color: #F3797E; border-color: #F3797E;" id="update_webpackage">Update Package</button>
+                        <button type="submit" class="btn btn-lg btn-primary" style="background-color: #F3797E; border-color: #F3797E;" id="update_package">Update Package</button>
                     </div>
                 </div>
             </div>
@@ -159,11 +159,22 @@
     </div>
 </div>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script>
-$(document).ready(function() { 
-    $('#update_webpackage').click(function(e) {
+$(document).ready(function() {
+    $('#image').change(function() {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            $('#preview').attr('src', e.target.result).show();
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+
+    $('#update_package').click(function(e) {
         e.preventDefault();
 
+        var webpackage_id = $('#webpackage_id').val();
         var title = $('#title').val();
         var package_category = $('#package_category').val();
         var description = $('#description').val();
@@ -174,36 +185,61 @@ $(document).ready(function() {
         var facebook_link = $('#facebook_link').val();
         var instagram_link = $('#instagram_link').val();
         var whatsapp_link = $('#whatsapp_link').val();
-        var tags = $('#tags').val();
         var meta_title = $('#meta_title').val();
         var meta_description = $('#meta_description').val();
         var meta_keywords = $('#meta_keywords').val();
+        var tags = $('#tags').val();
         var h1tag = $('#h1tag').val();
 
-        var formData = new FormData();
-        formData.append('title', title);
-        formData.append('package_category',package_category );
-        formData.append('description', description);
-        formData.append('top_attraction',top_attraction );
-        formData.append('why_visit', why_visit);
-        formData.append('package_highlights', package_highlights);
-        formData.append('image_link', image_link);
-        formData.append('facebook_link',facebook_link );
-        formData.append('instagram_link', instagram_link);
-        formData.append('whatsapp_link', whatsapp_link);
-        formData.append('tags', tags);
-        formData.append('meta_title', meta_title);
-        formData.append('meta_description', meta_description);
-        formData.append('meta_keywords', meta_keywords);
-        formData.append('h1tag', h1tag);
-        formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+        // Collect form data
+            var formData = new FormData();
+            formData.append('webpackage_id', webpackage_id);
+            formData.append('title', title);
+            formData.append('package_category',package_category );
+            formData.append('description', description);
+            formData.append('top_attraction',top_attraction );
+            formData.append('why_visit', why_visit);
+            formData.append('package_highlights', package_highlights);
+            formData.append('image_link', image_link);
+            formData.append('facebook_link',facebook_link );
+            formData.append('instagram_link', instagram_link);
+            formData.append('whatsapp_link', whatsapp_link);
+            formData.append('meta_title', meta_title);
+            formData.append('meta_description', meta_description);
+            formData.append('meta_keywords', meta_keywords);
+            formData.append('tags', tags);
+            formData.append('h1tag', h1tag);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
-        console.log(title);
 
-        var image = $('#image')[0].files[0];
-        if (image) {
-            formData.append('image', image);
-        }
+            console.log(webpackage_id);
+            console.log(title);
+            console.log(package_category);
+            console.log(description);
+            console.log(top_attraction);
+            console.log(why_visit);
+            console.log(package_highlights);
+            console.log(image_link);
+            console.log(facebook_link);
+            console.log(instagram_link);
+            console.log(whatsapp_link);
+            console.log(meta_title);
+            console.log(meta_description);
+            console.log(meta_keywords);
+            console.log(tags);
+            console.log(h1tag);
+
+            var image = $('#image')[0].files[0];
+            if (image) {
+                formData.append('image', image);
+            }
+
+            console.log(image);
+            // Check if required fields are empty
+            if (!$('#title').val().trim() || !$('#package_category').val() || !$('#description').val()) {
+                alert("Title, Category, and Description are required fields.");
+                return;
+            }
 
         $.ajax({
             url: '{% url "author_blogs_update" %}',  // Replace with your update URL
@@ -211,6 +247,9 @@ $(document).ready(function() {
             data: formData,
             processData: false,
             contentType: false,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+                },
             success: function(response) {
                 if (response.success) {
                     alert('Package updated successfully!');
