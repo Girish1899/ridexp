@@ -57,8 +57,35 @@ def our_rides(request):
 
 
 def packages(request):
-    context = None
+    packages = WebsitePackages.objects.filter(status='active').select_related('package_category')
+    categories = PackageCategories.objects.all()  # Get all categories for filtering
+    context = {
+        'packages': packages,
+        'categories': categories
+    }
     return render(request, 'website/taxi.html',context)
+
+# websitepackage
+class PackageDetailView(View):
+    def get(self, request, title):
+        blogs = Blogs.objects.all()
+        blog = None
+
+        # Try to find a blog by matching the slug
+        for b in blogs:
+            if slugify(b.title) == title:
+                blog = b
+                break
+
+        # Handle the case where the blog isn't found
+        if blog is None:
+            return render(request, '404.html')
+
+        # If the slug doesn't match the title, redirect to the correct slugified URL
+        if slugify(blog.title) != title and blog.slug:
+            return redirect('blog_detail', title=slugify(blog.title))
+
+        return render(request, 'website/blog/blog_detail.html', {'blog': blog})
 
 def sitemap(request):
     context = None
@@ -1009,6 +1036,7 @@ def blog(request):
 #         if slugify(blog.title) != title:
 #             return redirect('blog_detail', title=slugify(blog.title))
 #         return render(request, 'website/blog/blog_detail.html', {'blog': blog})
+
 class BlogDetailView(View):
     def get(self, request, title):
         blogs = Blogs.objects.all()

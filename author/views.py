@@ -161,6 +161,7 @@ class addwebpackages(TemplateView):
             meta_keywords = request.POST.get('meta_keywords')
             tags = request.POST.get('tags')
             h1tag = request.POST.get('h1tag')
+            status = request.POST.get('status')
 
             # Print received form data
             print(f"Form data: title={title}, category_id={package_category_id}, description={description}")
@@ -195,6 +196,7 @@ class addwebpackages(TemplateView):
                 meta_keywords=meta_keywords,
                 tags=tags,
                 h1tag=h1tag,
+                status=status,
                 created_by=request.user,
                 updated_by=request.user
             )
@@ -261,6 +263,7 @@ class UpdatewebPackages(APIView):
         meta_description = request.POST['meta_description']
         meta_keywords = request.POST['meta_keywords']
         h1tag = request.POST['h1tag']
+        status = request.POST['status']
 
         package_categoryIdobj = PackageCategories.objects.get(package_category_id=package_category)
 
@@ -285,6 +288,7 @@ class UpdatewebPackages(APIView):
         webpack.meta_description= meta_description
         webpack.meta_keywords= meta_keywords
         webpack.h1tag= h1tag
+        webpack.status=status
         webpack.updated_by = request.user
         webpack.save()
         

@@ -934,6 +934,7 @@ class WebsitePackages(models.Model):
     ]
     webpackage_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True)  # Slug field without auto generation
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE)
     description = models.TextField(help_text="Detailed description of the package")
     top_attraction = models.TextField(help_text="Main attractions for this package, e.g., Mysore Palace")

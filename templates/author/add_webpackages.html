@@ -163,6 +163,18 @@
                         </div>
                         <br>
 
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                            <div class="col-sm-12">    
+                                <select class="form-control form-control-lg" id="status" name="status">
+                                    <option value="" selected disabled>Select Status</option>
+                                    <option value="active" selected>Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+                        <br>
+
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary mb-2" id="save_package">Submit</button>
                         </div>
@@ -195,6 +207,7 @@
             var meta_keywords = $('#meta_keywords').val();
             var tags = $('#tags').val();
             var h1tag = $('#h1tag').val();
+            var status = $('#status').val();
 
             // Collect form data
             var formData = new FormData();
@@ -213,6 +226,7 @@
             formData.append('meta_keywords', meta_keywords);
             formData.append('tags', tags);
             formData.append('h1tag', h1tag);
+            formData.append('status', status);
             formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
 
 
