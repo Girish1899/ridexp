@@ -1,5 +1,4 @@
 from django.urls import path
-from taxipro.views import global_fetch_customer_details
 from telecaller.views import *
 
 
@@ -21,7 +20,6 @@ urlpatterns = [
 
     path('telecallercancelledbookings',CancelledListView.as_view(),name='telecallercancelledbookings'),
     path('telecallercancel_ride', cancel_ride, name='telecallercancel_ride'),
-    path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
     path('telecalleradvance_bookings', AdvanceBookingsList.as_view(), name='telecalleradvance_bookings'),
 
 

@@ -2804,6 +2804,7 @@ class AddRide(TemplateView):
             phone_number = request.POST['phone_number']
             customer_name = request.POST['customer_name']
             email = request.POST['email']
+            password = request.POST['password']
             address = request.POST['address']
 
             print(f"Parsed data: {company_format}, {ride_type_id}, {source}, {destination}, {pickup_date}, {pickup_time}")
@@ -2821,6 +2822,7 @@ class AddRide(TemplateView):
                     customer_name=customer_name,
                     phone_number=phone_number,
                     email=email,
+                    password=password,
                     address=address,
                     status='active',
                     created_by=request.user,
@@ -2938,7 +2940,6 @@ def determine_time_slot(pickup_time):
     else:
         return '6PM - 12AM'
                 
-        
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RideList(ListView):
     model = RideDetails

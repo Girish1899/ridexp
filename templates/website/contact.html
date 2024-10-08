@@ -74,8 +74,7 @@
                                 <h1>Get In Touch</h1>
                                 <p>Our dedicated customer support team is available 24/7 to assist you with bookings, inquiries, or any concerns you may have. Reach out to us today!</p>
                             </div>
-                            <form method="post" action="/path/to/contact/submit" id="contact-form">
-                                {% csrf_token %}
+                            
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group">
@@ -98,11 +97,10 @@
                                     <label for="message">Write Your Message</label>
                                     <textarea name="message" cols="30" rows="5" class="form-control" placeholder="Write Your Message" id="message" required aria-label="Your Message"></textarea>
                                 </div>
-                                <button type="submit" class="theme-btn" id="save_action">Send Message <i class="far fa-paper-plane"></i></button>
+                                <button type="submit" class="theme-btn" id="save_contact">Send Message <i class="far fa-paper-plane"></i></button>
                                 <div class="col-md-12 mt-3">
                                     <div class="form-message text-success"></div>
                                 </div>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -114,12 +112,12 @@
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3889.300990926002!2d77.55844288110087!3d12.888357184280364!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bae151f1d485609%3A0x128233fc8d0b7aa4!2sForum%20South%20Bengaluru!5e0!3m2!1sen!2sin!4v1726231145685!5m2!1sen!2sin" width="800" height="600" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 </main>
-{% endblock body_content %}
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
     <script>
         $(document).ready(function () {
-            $("#save_action").click(function () {
+            $("#save_contact").click(function () {
                 var name = $('#name').val();
                 var email = $('#email').val();
                 var subject = $('#subject').val();
@@ -155,4 +153,5 @@
         });
     </script>    
 
-    
+{% endblock body_content %}
+  

@@ -6,78 +6,73 @@ from django.views.generic import TemplateView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
+# def global_fetch_customer_details_by_phone(request):
+#     phone_number = request.GET.get('phone_number')
+#     if not phone_number:
+#         return JsonResponse({'success': False, 'message': 'Phone number is required'})
 
-
-
-
-# @csrf_exempt
-# def global_fetch_customer_details(request):
-#     phone_number = request.GET.get('phone_number', '')
-#     if phone_number:
-#         try:
-#             customer = Customer.objects.get(phone_number=phone_number)
-#             customer_data = {
-#                 'name': customer.customer_name,
+#     try:
+#         customer = Customer.objects.get(phone_number=phone_number)
+#         is_blocked = customer.status == 'inactive'  # Adjust based on your status field value
+#         return JsonResponse({
+#             'success': True,
+#             'blocked': is_blocked,
+#             'customer': {
+#                 'id': customer.customer_id,
+#                 'customer_name': customer.customer_name,
+#                 'phone_number': customer.phone_number,
 #                 'email': customer.email,
-#                 'address': customer.address,
-#                 'id': customer.customer_id
+#                 'address': customer.address
 #             }
-#             return JsonResponse({'success': True, 'customer': customer_data})
+#         })
+#     except Customer.DoesNotExist:
+#         return JsonResponse({'success': False, 'message': 'Customer not found'})
+
+# def global_fetch_customer_details(request):
+#     if request.method == "GET":
+#         customer_company_format = request.GET.get('customer_company_format', None)
+#         try:
+#             customer = Customer.objects.get(company_format=customer_company_format)
+#             if customer.status == 'inactive':
+#                 response = {
+#                     'success': True,
+#                     'blocked': True,
+#                     'message': 'Customer is blocked'
+#                 }
+#             else:
+#                 response = {
+#                     'success': True,
+#                     'blocked': False,
+#                     'customer': {
+#                         'id': customer.customer_id,
+#                         'phone_number': customer.phone_number,
+#                         'customer_name': customer.customer_name,
+#                         'email': customer.email,
+#                         'address': customer.address,
+#                     }
+#                 }
 #         except Customer.DoesNotExist:
-#             return JsonResponse({'success': False, 'message': 'Customer not found'})
-#     return JsonResponse({'success': False, 'message': 'Invalid request'})
+#             response = {
+#                 'success': False,
+#                 'message': 'Customer not found'
+#             }
+#         return JsonResponse(response)
 
-def global_fetch_customer_details_by_phone(request):
+
+def get_customer_details(request):
     phone_number = request.GET.get('phone_number')
-    if not phone_number:
-        return JsonResponse({'success': False, 'message': 'Phone number is required'})
-
     try:
         customer = Customer.objects.get(phone_number=phone_number)
-        is_blocked = customer.status == 'inactive'  # Adjust based on your status field value
-        return JsonResponse({
-            'success': True,
-            'blocked': is_blocked,
-            'customer': {
-                'id': customer.customer_id,
-                'customer_name': customer.customer_name,
-                'phone_number': customer.phone_number,
-                'email': customer.email,
-                'address': customer.address
-            }
-        })
+        data = {
+            'customer_id': customer.customer_id,
+            'customer_name': customer.customer_name,
+            'email': customer.email,
+            'address': customer.address,
+            'password': customer.password,
+        }
+        return JsonResponse(data)
     except Customer.DoesNotExist:
-        return JsonResponse({'success': False, 'message': 'Customer not found'})
-
-def global_fetch_customer_details(request):
-    if request.method == "GET":
-        customer_company_format = request.GET.get('customer_company_format', None)
-        try:
-            customer = Customer.objects.get(company_format=customer_company_format)
-            if customer.status == 'inactive':
-                response = {
-                    'success': True,
-                    'blocked': True,
-                    'message': 'Customer is blocked'
-                }
-            else:
-                response = {
-                    'success': True,
-                    'blocked': False,
-                    'customer': {
-                        'id': customer.customer_id,
-                        'phone_number': customer.phone_number,
-                        'customer_name': customer.customer_name,
-                        'email': customer.email,
-                        'address': customer.address,
-                    }
-                }
-        except Customer.DoesNotExist:
-            response = {
-                'success': False,
-                'message': 'Customer not found'
-            }
-        return JsonResponse(response)
+        return JsonResponse({'error': 'Customer not found'}, status=404)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addridetype(TemplateView):

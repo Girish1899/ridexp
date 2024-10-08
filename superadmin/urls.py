@@ -1,6 +1,5 @@
 from django.urls import path
 from superadmin.views import *
-from taxipro.views import global_fetch_customer_details
 
 urlpatterns = [
 
@@ -195,7 +194,6 @@ urlpatterns = [
     path('pricing_history/<int:pricing_id>/', PricingHistoryView.as_view(), name='pricing_history'),
 
 # fetch customer
-    path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
     path('update-status/', update_status, name='update_status'),
 
     # commission #############################
@@ -284,7 +282,5 @@ urlpatterns = [
 
     # URL for listing all blogs
     path('blog_list/', BlogListView.as_view(), name='blog_list'),
-
-
 ]
 

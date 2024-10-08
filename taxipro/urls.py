@@ -49,8 +49,9 @@ urlpatterns = [
     path('author/', include('author.urls')),
     
 
-    path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
-    path('global_fetch_customer_details_by_phone/',global_fetch_customer_details_by_phone,name='global_fetch_customer_details_by_phone'),
+    # path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
+    # path('global_fetch_customer_details_by_phone/',global_fetch_customer_details_by_phone,name='global_fetch_customer_details_by_phone'),
+    path('get_customer_details/',get_customer_details,name='get_customer_details'),
 
     path('check_dphonenumber', check_dphonenumber, name='check_dphonenumber'),
     path('global_fetch_vehicle_details/', global_fetch_vehicle_details, name='global_fetch_vehicle_details'),

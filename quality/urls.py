@@ -1,6 +1,5 @@
 from django.urls import path
 from quality.views import *
-from taxipro.views import global_fetch_customer_details
 
 urlpatterns = [
 
@@ -10,7 +9,6 @@ urlpatterns = [
     path('qEditRide/<int:id>/', EditRide.as_view(), name='qEditRide'),
     path('qUpdateRide', UpdateRide.as_view(), name='qUpdateRide'),
     path('qRideHistory/<int:ride_id>/', RideDetailsHistoryView.as_view(),name='qRideHistory'),
-    path('global_fetch_customer_details/',global_fetch_customer_details, name='global_fetch_customer_details'),
     
     #profile
     path('quality_profile', quality_profile_view, name='quality_profile'),
