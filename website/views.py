@@ -3,7 +3,7 @@ from decimal import Decimal
 import random
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
@@ -1001,15 +1001,57 @@ def blog(request):
     blogs = Blogs.objects.all()
     return render(request, 'website/blog.html', {'blogs': blogs})
 
+# class BlogDetailView(View):
+#     def get(self, request, title):
+#         blog = get_object_or_404(Blogs)
+
+#         # Verify if the slugified title matches the one in the URL
+#         if slugify(blog.title) != title:
+#             return redirect('blog_detail', title=slugify(blog.title))
+#         return render(request, 'website/blog/blog_detail.html', {'blog': blog})
 class BlogDetailView(View):
     def get(self, request, title):
-        blog = get_object_or_404(Blogs)
+        blogs = Blogs.objects.all()
+        blog = None
 
-        # Verify if the slugified title matches the one in the URL
-        if slugify(blog.title) != title:
+        # Try to find a blog by matching the slug
+        for b in blogs:
+            if slugify(b.title) == title:
+                blog = b
+                break
+
+        # Handle the case where the blog isn't found
+        if blog is None:
+            return render(request, '404.html')
+
+        # If the slug doesn't match the title, redirect to the correct slugified URL
+        if slugify(blog.title) != title and blog.slug:
             return redirect('blog_detail', title=slugify(blog.title))
-        return render(request, 'website/blog/blog_detail.html', {'blog': blog,'title_fragment': ' - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services'})
 
+        return render(request, 'website/blog/blog_detail.html', {'blog': blog})
+
+# class BlogDetailView(View):
+#     def get(self, request, title):
+#         # Print the title from the URL for debugging
+#         print(f"URL title: {title}")
+        
+#         # Filter blogs by title to see if one matches
+#         try:
+#             blog = get_object_or_404(Blogs, title=title)
+#             print(f"Blog found: {blog.title}")
+#         except Exception as e:
+#             print(f"Error: {e}")
+#             return render(request, '404.html')  # Custom 404 template
+
+#         # Check if the slugified title matches
+#         if slugify(blog.title) != title:
+#             return redirect('blog_detail', title=slugify(blog.title))
+
+#         return render(request, 'website/blog/blog_detail.html', {
+#             'blog': blog,
+#             'title_fragment': ' - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services'
+#         })
+    
 def faq(request):
     return render(request, 'website/faq.html')
 

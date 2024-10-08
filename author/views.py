@@ -4,6 +4,7 @@ from superadmin.models import Blogs, PackageCategories, PackageCategoriesHistory
 from django.contrib.auth.decorators import login_required
 # views.py
 from django.http import JsonResponse
+from django.utils.text import slugify
 from superadmin.models import Profile,User
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View
@@ -300,6 +301,7 @@ class AddBlogView(TemplateView):
 
             # Retrieve data from POST request
             title = request.POST.get('title')
+            slug = slugify(title)
             description = request.POST.get('description')
             image = request.FILES.get('image')
             image_link = request.POST.get('image_link')
@@ -316,6 +318,7 @@ class AddBlogView(TemplateView):
 
             blog = Blogs(
                 title=title,
+                slug=slug,
                 description=description,
                 image_link=image_link,
                 facebook=facebook,

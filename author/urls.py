@@ -18,6 +18,7 @@ urlpatterns = [
     path('list_author_packages', webPackageList.as_view(), name='list_author_packages'),
     path('author_Packages_delete', DeletewebPackages.as_view(), name='author_Packages_delete'),
     path('author_Packages_edit/<int:id>/', EditwebPackages.as_view(), name='author_Packages_edit'),
+    path('author_Packages_update', UpdatewebPackages.as_view(), name='author_Packages_update'),
 
     # Blogs
     path('create_author_blogs', AddBlogView.as_view(), name='create_author_blogs'),

@@ -906,6 +906,7 @@ class Blogs(models.Model):
     ]
     blogs_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=1000)
+    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True)  # Slug field without auto generation
     description = models.TextField()
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
     image_link = models.CharField(max_length=1000, blank=True, null=True)
