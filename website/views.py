@@ -63,7 +63,7 @@ def packages(request):
         'packages': packages,
         'categories': categories
     }
-    return render(request, 'website/taxi.html',context)
+    return render(request, 'website/webpackage.html',context)
 
 # websitepackage
 class PackageDetailView(View):

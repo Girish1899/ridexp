@@ -10,68 +10,438 @@
 
   
 
-<main class="main">
+    <main class="main">
 
-    <!-- breadcrumb -->
-    <div class="site-breadcrumb" style="background: url(/static/img/taxi/explore_india.jfif)">
-        <div class="container">
-            <h2 class="breadcrumb-title">Our Packages</h2>
-            <ul class="breadcrumb-menu">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li class="active">Our Packages</li>
-            </ul>
-        </div>
-    </div>
-    <!-- breadcrumb end -->
-
-
-    <!-- taxi area -->
-    <div class="taxi-area py-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mx-auto">
-                    <div class="site-heading text-center">
-                        <span class="site-title-tagline">Our Packages</span>
-                        <h2 class="site-title">Let's Check Available Packages</h2>
-                        <div class="heading-divider"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="filter-controls">
-                <ul class="filter-btns">
-                    <li class="active" data-filter="*">All</li>
-                    {% for category in categories %}
-                    <li data-filter=".cat{{ category.package_category_id }}">{{ category.category_name }}</li>
-                    {% endfor %}
+        <!-- breadcrumb -->
+        <div class="site-breadcrumb" style="background: url(/static/img/taxi/explore_india.jfif)">
+            <div class="container">
+                <h2 class="breadcrumb-title">Our Packages</h2>
+                <ul class="breadcrumb-menu">
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li class="active">Our Packages</li>
                 </ul>
             </div>
+        </div>
+        <!-- breadcrumb end -->
 
-            <div class="row">
-                {% for package in packages %}
-                <div class="col-md-6 col-lg-4 ">                        
-                    <div class="taxi-item">
-                        <div class="taxi-item-img">
-                            <img src="{% if package.image %}{{ package.image.url }}{% else %}{{ package.image_link }}{% endif %}" alt="{{ package.title|slugify }}">
-                        </div>
-                        <div class="taxi-content">
-                            <div class="taxi-head">
-                                <h4>{{ package.title }}</h4>
-                            </div>
-                            <div class="taxi-feature">
-                                <p style="text-align: justify;">
-                                    {{ package.description|truncatewords:20 }}
-                                </p>
-                            </div>
-                            <a href="/packages/{{ package.title|slugify }}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+
+        <!-- taxi area -->
+        <div class="taxi-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Our Packages</span>
+                            <h2 class="site-title">Let's Check Available Packages</h2>
+                            <div class="heading-divider"></div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
+                <div class="filter-controls">
+                    <ul class="filter-btns">
+                        <li class="active" data-filter="*">All</li>
+                        <li data-filter=".cat1">Hill Station</li>
+                        <li data-filter=".cat2">Nature Getaways</li>
+                        <li data-filter=".cat3">Mysore/Dussehra</li>
+                        <li data-filter=".cat4">Religious</li>
+                    </ul>
+                </div>
+                <div class="row filter-box">
+                    <div class="col-md-6 col-lg-4 filter-item cat3 cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/mysore.webp" alt="bangalore_to_mysore">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Mysore Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">Experience the beauty of Mysore with our curated Bangalore to Mysore travel package. This includes a visit to Mysore Palace, Chamundi Hill, and St. Philomena’s Church. Perfect for a day trip or a weekend getaway.</p>
+                                </div>
+                                <a href="/packages/banaglore_to_mysore" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/coorg.webp" alt="coorg">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Coorg Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Escape to the lush greenery of Coorg with our Bangalore to Coorg travel package. Perfect for nature lovers and coffee enthusiasts, Coorg offers scenic landscapes, trekking opportunities, and coffee plantation tours.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_coorg" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/ooty.jpg" alt="ooty">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Ooty Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                    Discover the charming hill station of Ooty with our exciting Bangalore to Ooty package. This unforgettable tour includes visits to the stunning Ooty Lake, the beautiful Botanical Gardens, and a scenic drive through the breathtaking Nilgiri Hills.</p>
+                                </div>
+                                <a href="/packages/banaglore_to_ooty" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2 cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/chikmaglur.jpg" alt="chikmaglur">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Chikmagalur Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Explore the coffee capital of Karnataka with our Bangalore to Chikmagalur package. Enjoy trekking, coffee plantation visits, and scenic views of the Western Ghats.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_chikmagalur" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2 cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/hampi_bg.jpg" alt="hampi">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Hampi Heritage Tour Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Immerse yourself in history with our Bangalore to Hampi heritage tour. This package covers all the must-see historical sites, including the Hampi ruins, Virupaksha Temple, and the Stone Chariot.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_hampi" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat1 cat2 cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/Nandi_bg.jpg" alt="nandihills">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Nandi Hills Adventure Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Enjoy a thrilling adventure with our Bangalore to Nandi Hills package. This is perfect for those looking for a quick getaway with trekking, cycling, and panoramic views.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_nandi_hills" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/kabini.jpeg" alt="kabini">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Kabini Wildlife Safari Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Experience the wilderness with our Bangalore to Kabini wildlife safari package. This is a perfect getaway for wildlife enthusiasts, offering jeep safaris and boat rides through Kabini’s forests.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_kabini" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/munnar.jpg" alt="munnar">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Munnar Hill Station Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Take a relaxing hill station trip with our Bangalore to Munnar package. Perfect for families and couples, this package includes a scenic drive and visits to tea gardens and waterfalls.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_munnar" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/Pondicherry.jpg" alt="pondicherry">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Pondicherry Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Unwind on the sandy shores of Pondicherry with our Bangalore to Pondicherry Beach package. Explore the French colonial architecture, beaches, and cafes for a perfect beach getaway.
+                                    </p>
+                                </div>
+                                <a href="/packages/banaglore_to_pondicherry" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/melukote.jpg" alt="melukote">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Melukote Pilgrimage Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Explore the ancient religious town of Melukote with our Bangalore to Melukote pilgrimage package. Visit the famous Cheluvanarayana Swamy Temple and enjoy the scenic views from the hilltop.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_melukote" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>   
+
+                    <div class="col-md-6 col-lg-4 filter-item cat3">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/brindavan_gardens.jpg" alt="brindavan_gardens">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Mysore and Brindavan Gardens</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Explore the cultural and historical richness of Mysore and enjoy a musical fountain show at the Brindavan Gardens with our Bangalore to Mysore and Brindavan Gardens package.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_brindavan_gardens" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/agumbe.jfif" alt="agumbe">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Agumbe Rainforest Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Immerse yourself in the dense rainforests of Agumbe, often called the Cherrapunji of the South. This nature getaway offers waterfalls, trekking opportunities, and a chance to spot wildlife like King Cobras.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_agumbe" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/sakleshpur.jpg" alt="sakleshpur">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Sakleshpur Nature Retreat Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Explore the coffee estates and lush greenery of Sakleshpur. This nature retreat package includes visits to Bisle Viewpoint, Manjarabad Fort, and nearby waterfalls, making it ideal for a peaceful escape.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_sakleshpur" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/chikhaldara.jpg" alt="chikhaldara">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Chikhaldara Hill Station Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Escape to the scenic hills of Chikhaldara, the only coffee-growing region in Maharashtra. This package includes visits to the lush green valleys, waterfalls, and the Melghat Tiger Reserve.                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_chikhaldara" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/kodaikanal.jfif" alt="kodaikanal">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Kodaikanal Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Enjoy the beauty of Kodaikanal, the Princess of Hill Stations, with our curated Bangalore to Kodaikanal travel package. This package is perfect for nature lovers and those seeking peace.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_kodaikanal" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/shimla.jfif" alt="shimla">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Shimla Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Explore the majestic beauty of Shimla with our exclusive travel package. Visit the Ridge, Mall Road, and Jakhoo Temple while enjoying the cool weather and scenic landscapes.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_shimla" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>   
+                    
+                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/tirupati.jfif" alt="tirupati">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Tirupati Pilgrimage Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Embark on a spiritual journey with our Bangalore to Tirupati pilgrimage package. Visit the famous Venkateswara Temple and experience the serenity of this sacred destination.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_tirupati" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/wayanad.jpg" alt="wayanad">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Wayanad Nature Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Discover the hidden gems of Wayanad with our exclusive nature getaway package. Enjoy thrilling trekking adventures, visit serene waterfalls, and explore lush wildlife sanctuaries on this tour.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_wayanad" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+      
+                    <div class="col-md-6 col-lg-4 filter-item cat4">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/shravanabelagola.jpg" alt="shravanabelagola">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Shravanabelagola Religious Tour</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Take a spiritual journey to Shravanabelagola, home to the majestic Bahubali statue and one of the most important Jain pilgrimage centers. The package includes visits to the Chandragiri and Vindhyagiri hills.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_shravanabelagola" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4 filter-item cat2 cat3">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/goa.jpg" alt="goa">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Goa Travel Package</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Escape to Goa, India's top beach destination, with our Bangalore to Goa Travel Package. From the very old Portuguese architecture to the beachside shacks,Goa has something for everyone. Goa is a blend of history, culture, and endless fun.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_goa" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4 filter-item cat1">
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <img src="/static/img/taxi/darjeeling.jpg" alt="darjeeling">
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>Bangalore to Darjeeling Hill Station Tour</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">
+                                        Embark on a journey to Darjeeling, the Queen of Hills, with our Bangalore to Darjeeling Hill Station Tour. Nestled in the foothills of the Himalayas, Darjeeling offers stunning views of snow-capped peaks, lush tea gardens, and vibrant Tibetan culture.
+                                    </p>
+                                </div>
+                                <a href="/packages/bangalore_to_darjeeling" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+
+                </div>
             </div>
         </div>
-    </div>
-    <!-- taxi area end -->
+        <!-- taxi area end -->
+        
 
-</main>
-    
+    </main>
+
+
     {% endblock body_content %}

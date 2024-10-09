@@ -46,5 +46,43 @@
     </div>
     <!-- blog area end -->
 </main>
+<style>
+    /* Ensure the images are of a consistent size */
+    .blog-item-img img {
+        width: 100%;
+        height: 200px; /* Set a fixed height for consistency */
+        object-fit: cover; /* Ensures images are cropped to fit nicely */
+    }
+
+    /* Limit blog title to 2 lines */
+    .blog-title a {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.2em; /* You can adjust the font size */
+        line-height: 1.4em; /* Ensure good line spacing */
+    }
+
+    /* Style adjustments to ensure the card layout is consistent */
+    .blog-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .blog-item-info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Consistent button placement */
+    .theme-btn {
+        margin-top: auto;
+    }
+</style>
 
 {% endblock %}
