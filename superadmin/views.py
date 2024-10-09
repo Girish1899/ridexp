@@ -2678,89 +2678,216 @@ class customerGetRidePricingDetails(APIView):
         from decimal import Decimal
         from django.http import JsonResponse
         from datetime import datetime
-        
-        ridetype_id = request.POST['ridetype']
+        print(request.POST)
+
         source = request.POST['source']
         destination = request.POST['destination']
-        pickup_date = request.POST['pickup_date']
-        pickup_time = request.POST['pickup_time']
-        time_slot = request.POST['time_slot']  # Get the time slot from the request
-        
-        try:
-            ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
-        except Ridetype.DoesNotExist:
-            return Response({'error': 'Ride type not found'}, status=400)
+        pickup_date = request.POST.get('pickup_date')
+        pickup_time = request.POST.get('pickup_time')
+        drop_date = request.POST.get('drop_date')
+        drop_time = request.POST.get('drop_time')
+        time_slot = request.POST['time_slot']
+        ridetype_id = request.POST['ridetype']  
+        trip_type = request.POST.get('trip_type')  
+        toll_option = request.POST.get('toll_option') 
+
+        if not source or not destination or not pickup_date or not pickup_time or not time_slot:
+            return JsonResponse({'error': 'Missing required fields'}, status=400)
+
         api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
-        
-        # Initialize the Google Maps client with your API key
         gmaps = googlemaps.Client(key=api_key)
 
-        try:
-            result = gmaps.distance_matrix(
-                origins=[source],
-                destinations=[destination],
-                mode="driving",
-                departure_time=datetime.now()
-            )
-            print(result)
-
-            # Check if the response status is OK
-            if result['status'] == 'OK' and result['rows'][0]['elements'][0]['status'] == 'OK':
-                distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000
-            else:
-                # Handle cases where the distance is not found
-                if result['rows'][0]['elements'][0]['status'] == 'NOT_FOUND':
-                    return Response({'error': 'Address not found'}, status=404)
-                else:
-                    return Response({'error': 'Unable to retrieve distance'}, status=500)
-
-        except Exception as e:
-            return Response({'error': str(e)}, status=500)
-        
-        if distance is None:
-            return Response({'error': 'Unable to retrieve distance'}, status=500)
-
-        print("distance: ", distance)
-
-        # Initialize the costs dictionary
-        pricing_dict = {}
-
-        # Fetch all pricing details filtered by the selected time slot
-        pricing_details = Pricing.objects.select_related('category').filter(
-            ridetype=ridetype,  # Filter by ridetype
-            slots=time_slot
+        result = gmaps.distance_matrix(
+            origins=[source],
+            destinations=[destination],
+            mode="driving",
+            departure_time=datetime.now()
         )
-       
-        # Organize pricing data by category and car type
+        distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000  
+        print(f"Distance calculated: {distance} km")
+
+        costs = {}
+
+        # Fetch the ridetype instance
+        ride_type_instance = Ridetype.objects.filter(ridetype_id=ridetype_id).first()
+        if not ride_type_instance:
+            return JsonResponse({'error': 'Invalid ridetype'}, status=400)
+
+        print(f"Ride Type: {ride_type_instance.name}, Trip Type: {trip_type}, Toll Option: {toll_option}")
+
+        # Fetch pricing details based on time slot and ridetype
+        # pricing_details = Pricing.objects.select_related('category').filter(
+        #     slots=time_slot, ridetype=ride_type_instance
+        # )
+
+        # print(f"Pricing details: {pricing_details}")
+
+        # Call appropriate calculation function based on trip_type
+        if ride_type_instance.name == 'outstation':
+            pricing_details = self.get_outstation_pricing(time_slot, ridetype_id, trip_type)
+            if trip_type == 'round_trip':
+                result = self.calculate_outstation_roundtrip(request, pricing_details, distance)
+            else:
+                result = self.calculate_outstation_oneway(pricing_details, distance)
+        elif ride_type_instance.name == 'local':
+            pricing_details = self.get_local_pricing(time_slot, ridetype_id)
+            result = self.calculate_local(pricing_details, distance)
+        elif ride_type_instance.name == 'airport':
+            pricing_details = self.get_airport_pricing(time_slot, ridetype_id,trip_type)
+            result = self.calculate_airport(pricing_details, distance, toll_option)
+        else:
+            return JsonResponse({'error': 'Invalid ridetype or trip_type'}, status=400)
+
+        return JsonResponse({'costs': result})
+
+    def get_local_pricing(self, time_slot, ridetype_id):
+        """Fetch pricing for local rides."""
+        print(f"Fetching pricing for time slot: {time_slot}, ridetype_id: {ridetype_id}")
+        return Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype_id=ridetype_id
+        )
+
+    def get_airport_pricing(self, time_slot, ridetype_id, trip_type):
+        """Fetch pricing for airport rides with or without toll."""
+        # You can modify this to include toll_option-based pricing if needed
+        return Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype_id=ridetype_id,trip_type=trip_type
+        )
+
+    def get_outstation_pricing(self, time_slot, ridetype_id, trip_type):
+        """Fetch pricing for outstation rides, considering trip type."""
+        return Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype_id=ridetype_id, trip_type=trip_type
+        )
+
+    def calculate_local(self, pricing_details, distance):
+        """Calculate pricing for local rides."""    
         pricing_dict = {}
         for price in pricing_details:
-            category_name = price.category.category_name  # Remove spaces and convert to lowercase
+            category_name = price.category.category_name
             car_type = price.car_type.lower()  # 'ac' or 'non ac'
 
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            # Calculate cost based on distance and pricing details
-            price_per_km_decimal = Decimal(str(price.price_per_km))
-            permit_decimal = Decimal(str(price.permit))
-            toll_price_decimal = Decimal(str(price.toll_price))
-            driver_beta_decimal = Decimal(str(price.driver_beta))
-
-            temp_cost = Decimal(distance) * price_per_km_decimal
-            temp_cost += permit_decimal + toll_price_decimal + driver_beta_decimal
-            category_cost = round(temp_cost, 0)
-
-            pricing_dict[category_name][car_type] = {
-                'distance_km': distance,
-                'cost': category_cost,
-                'permit': permit_decimal,
-                'toll': toll_price_decimal,
-                'beta': driver_beta_decimal,
-                'category': price.category.category_name,
-            }
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
         
-        print("Pricing Dict: ", pricing_dict)
-        return JsonResponse({'costs': pricing_dict})
+        return pricing_dict
+
+    def calculate_airport(self, pricing_details, distance, toll_option):
+        """Calculate pricing for airport rides with toll and no toll options."""
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            toll_price = Decimal(str(price.toll_price)) if toll_option == 'add_toll' else Decimal(0)
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price, toll_price)
+
+        return pricing_dict
+
+    def calculate_outstation_oneway(self, pricing_details, distance):
+        """Calculate pricing for outstation one-way rides."""
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
+
+        return pricing_dict
+
+    def calculate_outstation_roundtrip(self, request, pricing_details, distance):
+        """Calculate pricing for outstation roundtrip rides based on pickup and drop date."""
+        from datetime import datetime
+
+        # Parse the pickup and drop date/time from the request
+        pickup_date_str = request.POST['pickup_date']
+        pickup_time_str = request.POST['pickup_time']
+        drop_date_str = request.POST.get('drop_date')
+        drop_time_str = request.POST.get('drop_time')
+
+        print(f"Pickup Date and Time: {pickup_date_str}")
+        print(f"Drop Date: {drop_date_str}")
+        print(f"Drop Time: {drop_time_str}")
+
+        if not drop_date_str or not drop_time_str:
+            return {"error": "Drop date and time must be provided."}
+
+        # Combine drop date and time for parsing
+        drop_datetime_str = f"{drop_date_str} {drop_time_str}"
+
+        # Convert to datetime objects
+        pickup_datetime = datetime.strptime(pickup_date_str, "%Y-%m-%d %H:%M")
+        
+        # Add check here to avoid ValueError when drop_datetime_str is empty
+        if drop_time_str.strip() == '':
+            return {"error": "Drop time is required."}
+
+        drop_datetime = datetime.strptime(drop_datetime_str, "%Y-%m-%d %H:%M")
+
+        # Calculate the number of days based on pickup and drop dates
+        num_days = self.calculate_days(pickup_datetime, drop_datetime)
+
+        # Cap the distance based on the number of days (250 km per day)
+        daily_km_cap = 250 * num_days
+        applicable_distance = max(distance, daily_km_cap)
+
+        # Calculate the pricing for each vehicle category and type
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            # Calculate the cost for the applicable distance and number of days
+            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price, num_days=num_days)
+
+        return pricing_dict
+
+
+    def calculate_days(self, pickup_datetime, drop_datetime):
+        """Calculate the number of days for a round trip."""
+        num_days = 1  # Start with 1 day at minimum
+        days_difference = (drop_datetime - pickup_datetime).days
+        
+        if days_difference > 0:
+            num_days += days_difference
+            # If drop time is later in the day than pickup time, add an extra day
+            if drop_datetime.time() > pickup_datetime.time():
+                num_days += 1
+        
+        print(f"Total days for the trip: {num_days}")
+        return num_days
+
+    def calculate_cost(self, distance, price, toll_price=Decimal(0), num_days=1):
+        """Helper method to calculate cost based on distance and pricing details."""
+        from decimal import Decimal
+
+        price_per_km_decimal = Decimal(str(price.price_per_km))
+        permit_decimal = Decimal(str(price.permit))
+        toll_price_decimal = Decimal(str(toll_price))
+
+        driver_beta_decimal = Decimal(str(price.driver_beta)) * Decimal(str(num_days))
+
+        # Calculate total cost
+
+        total_cost = (Decimal(distance) * price_per_km_decimal) + permit_decimal + toll_price_decimal + driver_beta_decimal
+        total_cost = round(total_cost, 0)
+
+        return {
+            'distance_km': distance,
+            'cost': total_cost,
+            'permit': permit_decimal,
+            'toll': toll_price_decimal,
+            'beta': driver_beta_decimal,
+            'category': price.category.category_name,
+        }
 
 class AddRide(TemplateView):
     template_name = "superadmin/add_ride.html"
@@ -2788,6 +2915,9 @@ class AddRide(TemplateView):
     def post(self, request):
         try:
             print("Fetching POST data")
+            # Convert date and time
+            # pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
+            # pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
             company_format = request.POST['company_format']
             ride_type_id = request.POST['ridetype']
             source = request.POST.get('source')
@@ -2798,7 +2928,7 @@ class AddRide(TemplateView):
             total_fare = request.POST.get('total_fare')
             customer_id = request.POST['customer']
             customer_notes = request.POST['customer_notes']
-            # car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
             slots = determine_time_slot(pickup_time)
             ride_status = request.POST['ride_status']
             phone_number = request.POST['phone_number']

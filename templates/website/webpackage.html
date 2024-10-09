@@ -59,7 +59,7 @@
                             </div>
                             <div class="taxi-feature">
                                 <p style="text-align: justify;">
-                                    {{ package.description|truncatewords:20 }}
+                                    {{ package.description|truncatewords:35 }}
                                 </p>
                             </div>
                             <a href="/packages/{{ package.title|slugify }}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
@@ -75,7 +75,6 @@
 </main>
 
 <style>
-    /* Ensure the images are of a consistent size */
     .taxi-item img {
         width: 100%;
         height: 200px;
@@ -90,14 +89,13 @@
         text-overflow: ellipsis;
     }
 
-    /* Limit description to 5 lines */
+    /* Limit description to 6 lines */
     .description {
         display: -webkit-box;
-        
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-height: 6.25em; /* Approximately 5 lines depending on font size */
+        max-height: 7.5em; /* Approximately 6 lines depending on font size */
         text-align: justify;
     }
 
@@ -115,6 +113,11 @@
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+    }
+
+    /* Space between rows */
+    .row > [class^='col'] {
+        margin-bottom: 30px;
     }
 </style>
     

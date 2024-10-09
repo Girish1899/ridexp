@@ -57,37 +57,46 @@ def our_rides(request):
     context = None
     return render(request, 'website/our_rides.html',context)
 
-
 def packages(request):
-    packages = WebsitePackages.objects.filter(status='active').select_related('package_category')
-    categories = PackageCategories.objects.all()  # Get all categories for filtering
-    context = {
-        'packages': packages,
-        'categories': categories
-    }
-    return render(request, 'website/webpackage.html',context)
+    context = None
+    return render(request, 'website/taxi.html',context)
+
+# def packages(request):
+#     packages = WebsitePackages.objects.filter(status='active').select_related('package_category')
+#     categories = PackageCategories.objects.all()  # Get all categories for filtering
+#     context = {
+#         'packages': packages,
+#         'categories': categories
+#     }
+#     return render(request, 'website/webpackage.html',context)
 
 # websitepackage
 class PackageDetailView(View):
     def get(self, request, title):
-        blogs = Blogs.objects.all()
-        blog = None
-
-        # Try to find a blog by matching the slug
-        for b in blogs:
-            if slugify(b.title) == title:
-                blog = b
+        package = None
+        packages = WebsitePackages.objects.all()
+        
+        for p in packages:
+            if slugify(p.title) == title or p.slug == title:
+                package = p
                 break
 
-        # Handle the case where the blog isn't found
-        if blog is None:
+        # Handle if the package is not found
+        if package is None:
             return render(request, '404.html')
 
-        # If the slug doesn't match the title, redirect to the correct slugified URL
-        if slugify(blog.title) != title and blog.slug:
-            return redirect('blog_detail', title=slugify(blog.title))
+        # If the URL slug doesn't match the slugified title, redirect to the correct slug
+        if slugify(package.title) != title and package.slug:
+            return redirect('packages_detail', title=slugify(package.title))
 
-        return render(request, 'website/blog/blog_detail.html', {'blog': blog})
+        # Fetch related packages, excluding the current package
+        related_packages = WebsitePackages.objects.filter(status='active').exclude(slug=package.slug)[:3]
+
+        return render(request, 'website/packages/Package_detail.html', {
+            'package': package,
+            'related_packages': related_packages
+        })
+
 
 def sitemap(request):
     context = None
@@ -1026,37 +1035,33 @@ def localtaxi(request):
     return render(request, 'website/localtaxi.html')
 
 def blog(request):
-    page_number = request.GET.get('page', 1)  # Get page number from request
-    blogs_per_page = 12  # Number of blogs to load per page
-    blogs = Blogs.objects.all().order_by('-created_on')  # Load blogs in descending order by date
-    paginator = Paginator(blogs, blogs_per_page)  # Paginate the blogs
+    return render(request, 'website/blog.html')
 
-    # Check for an AJAX request by inspecting the 'X-Requested-With' header
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        blogs_page = paginator.get_page(page_number)
-        blogs_list = []
-        for blog in blogs_page:
-            blogs_list.append({
-                'title': blog.title,
-                'backlink': blog.backlink,
-                'image_url': blog.image.url if blog.image else blog.image_link,
-            })
-        return JsonResponse({
-            'blogs': blogs_list,
-            'has_next': blogs_page.has_next(),  # Check if more pages are available
-        })
+# def blog(request):
+#     page_number = request.GET.get('page', 1)  # Get page number from request
+#     blogs_per_page = 12  # Number of blogs to load per page
+#     blogs = Blogs.objects.all().order_by('-created_on')  # Load blogs in descending order by date
+#     paginator = Paginator(blogs, blogs_per_page)  # Paginate the blogs
 
-    blogs_page = paginator.get_page(1)  # Initial load (first page)
-    return render(request, 'website/blog.html', {'blogs_page': blogs_page})
+#     # Check for an AJAX request by inspecting the 'X-Requested-With' header
+#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#         blogs_page = paginator.get_page(page_number)
+#         blogs_list = []
+#         for blog in blogs_page:
+#             blogs_list.append({
+#                 'title': blog.title,
+#                 'backlink': blog.backlink,
+#                 'image_url': blog.image.url if blog.image else blog.image_link,
+#             })
+#         return JsonResponse({
+#             'blogs': blogs_list,
+#             'has_next': blogs_page.has_next(),  # Check if more pages are available
+#         })
 
-# class BlogDetailView(View):
-#     def get(self, request, title):
-#         blog = get_object_or_404(Blogs)
+#     blogs_page = paginator.get_page(1)  # Initial load (first page)
+#     return render(request, 'website/webblog.html', {'blogs_page': blogs_page})
 
-#         # Verify if the slugified title matches the one in the URL
-#         if slugify(blog.title) != title:
-#             return redirect('blog_detail', title=slugify(blog.title))
-#         return render(request, 'website/blog/blog_detail.html', {'blog': blog})
+
 
 class BlogDetailView(View):
     def get(self, request, title):

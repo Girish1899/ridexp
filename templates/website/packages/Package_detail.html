@@ -1,0 +1,106 @@
+{% extends "../index.html" %}
+{% load static %}
+
+{% block title %}
+    <title>{{ package.meta_title }}</title>
+{% endblock %}
+
+{% block meta_description %}
+    <meta name="description" content="{{ package.meta_description }}" />
+{% endblock %}
+
+{% block meta_keywords %}
+    <meta name="keywords" content="{{ package.meta_keywords }}" />
+    <link rel="canonical" href="https://ridexpress.in/packages/{{ package.slug }}" />
+{% endblock %}
+
+{% block body_content %}
+<main class="main">
+    <!-- breadcrumb -->
+    <div class="site-breadcrumb" style="background: url('{{ package.image_link }}')">
+        <div class="container">
+            <h1 class="breadcrumb-title">{{ package.title }}</h1>
+            <ul class="breadcrumb-menu">
+                <li><a href="/packages">Packages</a></li>
+                <li class="active">{{ package.title }}</li>
+            </ul>
+        </div>
+    </div>
+    <!-- breadcrumb end -->
+
+    <!-- Package details -->
+    <div class="taxi-single pt-120 pb-100">
+        <div class="container">
+            <div class="taxi-single-wrapper">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="taxi-single-img" style="background-image: url('{{ package.image.url }}');">
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="taxi-single-details">
+                            <div class="taxi-single-top">
+                                <h3 class="taxi-single-title">Description</h3>
+                                <p style="text-align: justify;">{{ package.description }}</p>
+                            </div>
+                            <div class="taxi-key-info" style="padding-bottom: 20px; margin-bottom: 20px;border-bottom: 1px solid var(--border-info-color);">
+                                <h4 class="taxi-key-title">Top Attractions</h4>
+                                <p>{{ package.top_attraction }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="taxi-extra-info" style="padding-top: 20px;">
+                            <h4 class="taxi-key-title">Why Choose Our {{ package.title }} ?</h4>
+                            <p style="text-align: justify;">{{ package.why_visit }} </p>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="taxi-extra-info" style="padding-top: 20px;margin-left: 50px;">
+                            <h4 class="taxi-key-title">Package Highlights</h4>
+                            <ul class="taxi-single-list">
+                                {{ package.package_highlights|safe }} <!-- Assuming it's stored as HTML list -->
+                            </ul>
+                        </div>
+                    </div>
+
+                    <center>
+                        <div class="taxi-single-btn">
+                            <a href="#" class="theme-btn">Enquire Now<i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="related-taxi pb-120">
+        <div class="container">
+            <div class="taxi-single-related">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline">Related Packages</span>
+                                <h2 class="site-title">Best Similar Packages For You</h2>
+                                <div class="heading-divider"></div>
+                            </div>
+                        </div>
+                    </div>
+                <div class="row">
+                    {% for related in related_packages %}
+                    <div class="col-lg-4">
+                        <div class="related-package-item">
+                            <img src="{{ related.image.url }}" alt="{{ related.title }}">
+                            <h4>{{ related.title }}</h4>
+                            <a href="{% url 'packages_detail' title=related.slug %}" class="theme-btn">Know More</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %}

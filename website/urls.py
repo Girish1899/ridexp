@@ -18,6 +18,7 @@ urlpatterns = [
     path('localtaxi', views.localtaxi, name='localtaxi'),
     path('blog', views.blog, name='blog'),
     path('blog/<slug:title>/', BlogDetailView.as_view(), name='blog_detail'),
+    path('packages/<slug:title>/', PackageDetailView.as_view(), name='packages_detail'),
     path('packages', views.packages, name='packages'),
     
     path('faq', views.faq, name='faq'),

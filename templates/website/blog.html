@@ -1,165 +1,1426 @@
+
 {% extends "./index.html" %}
 {% load static %}
-{% block title %}
-<title> Blog - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services </title>
-{% endblock %}
-{% block meta_description %}
-<meta name="description" content=" Get the best taxi fares with RidexpressTaxi Services. Enjoy transparent pricing with no hidden costs, whether you need a local, outstation, or airport ride. Check out our competitive rates and book your cab today for affordable and reliable transportation services." />
-{% endblock %}
-{% block meta_keywords %}
-<meta name="keywords" content="taxi fares, affordable taxi pricing, transparent cab rates, competitive taxi fares, local taxi rates, outstation taxi prices, airport taxi fares, clear pricing taxi service, [City] taxi prices" />
+{% block title %}<title> Blog - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services </title> {% endblock %}
+{% block meta_description %} <meta name="description"  content=" Get the best taxi fares with RidexpressTaxi Services. Enjoy transparent pricing with no hidden costs, whether you need a local, outstation, or airport ride. Check out our competitive rates and book your cab today for affordable and reliable transportation services." />{% endblock %}
+{% block meta_keywords %} <meta name="keywords"  content="taxi fares, affordable taxi pricing, transparent cab rates, competitive taxi fares, local taxi rates, outstation taxi prices, airport taxi fares, clear pricing taxi service, [City] taxi prices" />
 <link rel="canonical" href="https://ridexpress.in/blog" />
 {% endblock %}
 {% block body_content %}
-<main class="main">
-    <!-- blog area -->
-    <div class="blog-area py-120">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-6 mx-auto">
-                    <div class="site-heading text-center">
-                        <span class="site-title-tagline"><i class="flaticon-drive"></i> Our Blog</span>
-                        <h1 class="site-title">Latest News & Blog</h1>
-                        <div class="heading-divider"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="row" id="blog-container">
-                <!-- Initial blogs will be loaded here -->
-                {% for blog in blogs_page %}
-                <div class="col-md-6 col-lg-4 blog-item-container">
-                    <div class="blog-item wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:'.25' }}s">
-                        <div class="blog-item-img">
-                            <img src="{% if blog.image %}{{ blog.image.url }}{% else %}{{ blog.image_link }}{% endif %}" alt="{{ blog.title|slugify }}">
-                        </div>
-                        <div class="blog-item-info">
-                            <h4 class="blog-title">
-                                <a href="/blog/{{ blog.backlink }}">{{ blog.title }}</a>
-                            </h4>
-                            <a class="theme-btn" href="/blog/{{ blog.title|slugify }}">Read More<i class="fas fa-arrow-right"></i></a>
+
+    <main class="main">
+
+
+        <!-- blog area -->
+        <div class="blog-area py-120">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 mx-auto">
+                        <div class="site-heading text-center">
+                            <span class="site-title-tagline"><i class="flaticon-drive"></i> Our Blog</span>
+                            <h1 class="site-title">Latest News & Blog</h1>
+                            <div class="heading-divider"></div>
                         </div>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
-            <!-- Loading spinner -->
-            <div id="loading-spinner" class="text-center" style="display:none;">
-                <img src="{% static 'loading.gif' %}" alt="Loading..." />
+                <div class="row">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/1.webp' %}" alt="why_choose_local_cab_services">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/why_choose_local_cab_services">Why Choose Local Cab Services Over Ride-Sharing Apps?</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/why_choose_local_cab_services">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/2.png' %}" alt="top_reasons">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/top_reasons">Top Reasons to Book a Taxi for Airport Pickups and Drop-offs</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/top_reasons">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/3.png' %}" alt="tips">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/tips">10 Tips for Safe and Comfortable Long-Distance Taxi Rides</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/tips">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/4.png' %}" alt="Thumb">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/benefits">The Benefits of Booking a Taxi for Corporate Travel</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/benefits">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/5.webp' %}" alt="Thumb">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/how_to_choose">How to Choose the Best Taxi Service for Outstation Trips</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/how_to_choose">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/6.jpeg' %}" alt="essential_qualities">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/essential_qualities">5 Essential Qualities of a Great Taxi Service</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/essential_qualities">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/6.avif' %}" alt="save_money">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/save_money"> How to Save Money on Your Next Taxi Ride: Budget-Friendly Tips for Travelers</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/save_money">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/8.jpg' %}" alt="exploring_city">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/exploring_city">Exploring the City with Ease: Why Taxis Are the Best Option for Tourists</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/exploring_city">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/9.avif' %}" alt="luxury_taxi">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/luxury_taxi">Luxury Taxi Services: Why Premium Rides Are Worth the Extra Cost</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/luxury_taxi">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/10.avif' %}" alt="the_importance">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/the_importance">The Importance of Professional Drivers in Ensuring Safe Rides</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/the_importance">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/11.jpg' %}" alt="why_taxis">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/why_taxis">Why Taxis are the Best Choice for Last-Minute Travel Plans</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/why_taxis">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/12.jfif' %}" alt="how_taxis">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/how_taxis">How Taxis Offer Better Safety for Solo Travelers</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/how_taxis">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/13.jfif' %}" alt="top_tips">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/top_tips">Top Tips for Finding Reliable Taxi Services in a New City</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/top_tips">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/15.jfif' %}" alt="the_role">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/the_role">The Role of Taxis in Sustainable Urban Transport</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/the_role">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/16.jfif' %}" alt="family_travel">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/family_travel">How Taxis Make Family Travel Easier</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/family_travel">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--  -->
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/14.jfif' %}" alt="eco_friendly">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/eco_friendly">The Rise of Eco-Friendly Taxis: A Sustainable Transportation Solution</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/eco_friendly">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/17.jfif' %}" alt="taxi_improve">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/taxi_improve"> How Taxis Improve Accessibility for Elderly Passengers</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/taxi_improve">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/18.jfif' %}" alt="the_future">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/the_future">The Future of Autonomous Electric Airport Taxis: What to Expect</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/the_future">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/19.jfif' %}" alt="perfect_choice">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/perfect_choice"> Why Taxis Are the Perfect Choice for Night Travelers</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/perfect_choice">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/20.jfif' %}" alt="taxi_companies">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/taxi_companies"> How Taxi Companies Are Adopting Digital Payments</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/taxi_companies">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+            <!-- 23/09 -->
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/reliable_rideshares.avif' %}" alt="reliable_rideshares">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/reliable_rideshares">Why Airport Taxis Are More Reliable Than Rideshares</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/reliable_rideshares">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/airport_needs.jpg' %}" alt="airport_needs">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/airport_needs">How to Choose the Best Airport Taxi for Your Needs</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/airport_needs">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/prebooking_airport.jfif' %}" alt="prebooking_airport">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/prebooking_airport"> The Benefits of Pre-Booking an Airport Taxi Service</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/prebooking_airport">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/airport_etiquette.jpg' %}" alt="airport_etiquette">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/airport_etiquette">Airport Taxi Etiquette: What Every Traveler Should Know</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/airport_etiquette">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/easily_trust.jpg' %}" alt="easily_trust">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/easily_trust">How to Easily Find Trusted Reliable Airport Taxi Services Worldwide</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/easily_trust">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/flight_tracking.jpg' %}" alt="flight_tracking">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/flight_tracking"> The Importance of Flight Tracking for Airport Taxi Services</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/flight_tracking">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/airport_pickup.jpg' %}" alt="airport_pickup">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/airport_pickup">How to Ensure a Stress-Free Airport Pickup with a Taxi Service</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/airport_pickup">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/airport_advantage.jpg' %}" alt="airport_advantage">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/airport_advantage">The Advantages of 24/7 Airport Taxi Services</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/airport_advantage">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/ideal_business.jpg' %}" alt="ideal_business">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/ideal_business"> Why Airport Taxi Services Are Ideal for Business Travelers</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/ideal_business">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/savemoney_onairport.jpg' %}" alt="savemoney_onairport">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/savemoney_onairport">How to Save Money on Airport Taxi Services</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/savemoney_onairport">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/common_mistakes.jpg' %}" alt="common_mistakes">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/common_mistakes">Common Mistakes to Avoid When Booking an Airport Taxi</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/common_mistakes">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/modern_taxi.avif' %}" alt="modern_taxi">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/modern_taxi">The Role of Technology in Modern Airport Taxi Services</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/modern_taxi">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/go_green.avif' %}" alt="go_green">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/go_green">Eco-Friendly Airport Taxi Options: Go Green Traveling</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/go_green">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/major_global.avif' %}" alt="major_global">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/major_global">Top Airport Taxi Services in Major Global Cities</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/major_global">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/passenger_safety.jpg' %}" alt="passenger_safety">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/passenger_safety"> How Airport Taxi Services Ensure Passenger Safety</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/passenger_safety">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/affordable_transfer.jfif' %}" alt="affordable_transfer">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/affordable_transfer">How to Find Affordable Airport Transfers for Large Groups</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/affordable_transfer">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/luxury_travelers.jfif' %}" alt="luxury_travelers">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/luxury_travelers">Best Airport Taxi Services for VIPs and Luxury Travelers</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/luxury_travelers">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/avoid_scams.png' %}" alt="avoid_scams">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/avoid_scams"> The Most Common Airport Taxi Scams and How to Avoid Them</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/avoid_scams">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/booking_idea.jfif' %}" alt="booking_idea">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/booking_idea"> Why Pre-Booking Your Airport Taxi is Always a Good Idea</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/booking_idea">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/your_needs.jpg' %}" alt="your_needs">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/your_needs"> How to Choose the Right Airport Taxi for Your Needs</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/your_needs">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/handle_delays.jpg' %}" alt="handle_delays">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/handle_delays"> How Airport Taxi Services Handle Flight Delays</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/handle_delays">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/ultimate_guide.jpg' %}" alt="ultimate_guide">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/ultimate_guide">The Ultimate Guide to Booking Airport Taxis Online</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/ultimate_guide">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/ridesharing_apps.jpg' %}" alt="ridesharing_apps">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/ridesharing_apps"> How Airport Taxi Services Are Different from Ride-Sharing Apps</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/ridesharing_apps">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/cashless_payments.jpg' %}" alt="cashless_payments">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/cashless_payments">The Growing Convenience of Cashless Payments in Airport Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/cashless_payments">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/safety_during_pandemic.webp' %}" alt="safety_during_pandemic">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/safety_during_pandemic">How Airport Taxis Ensure Passenger Safety During the Pandemic</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/safety_during_pandemic">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- local_blogs -->
+
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/future_of_localcabs.jpeg' %}" alt="The future of local cabs">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/local_future">The Future of Local Cab Services</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/local_future">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/8.jpg' %}" alt="Local cabs are better for the Environment">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/better_environment">Why Local Cabs Are Better for the Environment</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/better_environment">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/transforming_city_travel.jfif' %}" alt="Local Cabs Are Transforming City Travel">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/city_travel">5 Ways Local Cabs Are Transforming City Travel</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/city_travel">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/best_localcabs.jfif' %}" alt="Choose the Best Local Cab">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/bestlocalcabs">How to Choose the Best Local Cab Services for Your Day to Day Life</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/bestlocalcabs">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/green_revolution.jpg' %}" alt="Green Revolution in Local Cab Services">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/electric_taxi">Electric Taxis: The Green Revolution in Local Cab Services</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/electric_taxi">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/affordable_ecofriendly.jfif' %}" alt="Affordable and Eco-Friendly">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/affordable">Affordable and Eco-Friendly: The Best of Both Worlds in Local Cab Services</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/affordable">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/urban_growth.jfif' %}" alt="Sustainable Urban Growth">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/urban_growth">How Local Cabs Contribute to Sustainable Urban Growth</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/urban_growth">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/ride_sharing.jfif' %}" alt="ride_sharing">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/ride_sharing">The Rise of Ride-Sharing and Its Impact on Local Cabs</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/ride_sharing">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/tech_savvy.jfif' %}" alt="local cabs becoming tech-savvy">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/tech_savy">7 Ways Local Cabs Are Becoming More Tech-Savvy</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/tech_savy">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/sustainable_toursim.jfif' %}" alt="Future of Sustainable Tourism">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/tourism">Local Cabs and the Future of Sustainable Tourism</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/tourism">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/redifining_urban_transport.jpg' %}" alt="Redefining Urban Transport">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/hybrid">Hybrid and Electric Cabs: Redefining Urban Transport</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/hybrid">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/reducing_traffic.jfif' %}" alt="Reducing Traffic in Mega Cities">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/mega_cities">The Role of Cabs in Reducing Traffic in Mega Cities</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/mega_cities">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/ride_over_hailingapps.jfif' %}" alt="Local Cabs Over Ride-Hailing Apps">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/benefits">Benefits of Using Local Cabs Over Ride-Hailing Apps</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/benefits">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/fleets_of_sustainability_cabs.jfif' %}" alt="Fleets Are Moving Towards Sustainability">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/fleets">How Taxi Fleets Are Moving Towards Sustainability</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/fleets">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/better_publictransport.jfif' %}" alt="Local Cabs Are Key to Better Public Transport">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/public_transport">Why Local Cabs Are Key to Better Public Transport</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/public_transport">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/save_money_localcabs.jfif' %}" alt="save money on local cabs">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/save_money">10 Tips to Save Money on Your Next Cab Ride</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/save_money">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/localcabs_leadingcharge.jfif' %}" alt="Electric and eco-friendly taxi driving in an urban area">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/localcabs_leadingcharge">Eco-Friendly Taxi: How Local Cabs Are Leading the Charge</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/localcabs_leadingcharge">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/night_hero.jpg' %}" alt="Taxi driving through a vibrant city at night, highlighting nighttime urban transport.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/heroes_of_nighttime_urban_transport">The Unsung Heroes of Night Time Urban Transport</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/heroes_of_nighttime_urban_transport">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/taxi_regulations_the_future.jfif' %}" alt="A taxi driving through city streets showcasing modern regulations in the taxi industry.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/taxi_regulations_the_future">How Taxi Regulations Are Shaping the Future of Local Cabs</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/taxi_regulations_the_future">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/reducing_city_emissions.jfif' %}" alt="Local cab driving through a green urban landscape, symbolizing reduced emissions and sustainable transport.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/reducing_city_emissions">The Positive Impact of Local Cabs on Reducing City Emissions</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/reducing_city_emissions">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/corporate_travel.jfif' %}" alt="A professional driver assisting a business passenger with luggage, highlighting corporate travel support by local cabs.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/localcabs_support_corporate_travel">How Local Cabs Support Businesses with Corporate Travel</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/localcabs_support_corporate_travel">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/green_taxi_initiatives.jfif' %}" alt="A green taxi with a vibrant design, showcasing the eco-friendly initiatives in urban transport.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/green_taxi_initiatives">How Local Cabs Support Businesses with Corporate Travel</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/green_taxi_initiatives">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/sloution_for_miletransport.jfif' %}" alt="A local cab providing last-mile transport in an urban setting, offering convenience for city commuters.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/sloution_for_miletransport">Why Local Cabs Are the Best Solution for Last-Mile Transport</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/sloution_for_miletransport">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/localcabs_best_for_airport.jfif' %}" alt="A reliable taxi parked at the airport terminal, ready to provide convenient airport transfers.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/localcabs_best_for_airport">Why Local Taxis Are Still the Best Option for Airport Transfers</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/localcabs_best_for_airport">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/localcabs/driverless_taxis.jfif' %}" alt="An autonomous driverless taxi driving through an urban environment, representing the future of urban transport.">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="/blog/driverless_taxis">A Look at the Future of Driverless Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/driverless_taxis">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- outstation -->
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/guide_to_outstation.png' %}" alt="guide_to_outstation">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/guide_to_outstation">The Ultimate Guide to Outstation Taxi Bookings</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/guide_to_outstation">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/reasons_to_choose_oustationcabs.png' %}" alt="reasons_to_choose_oustationcabs">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/reasons_to_choose_oustationcabs">Top Reasons to Choose Outstation Taxis for Your Trip</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/reasons_to_choose_oustationcabs">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/best_oustation_services.jpg' %}" alt="best_oustation_services">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/best_oustation_services">How to Choose the Best Outstation Taxi Service</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/best_oustation_services">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/essential_tips.jpg' %}" alt="essential_tips">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/essential_tips">Essential Tips for Safe Outstation Travel by Taxi</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/essential_tips">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/cost_structure.jpg' %}" alt="cost_structure">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/cost_structure">Understanding the Cost Structure of Outstation Taxi</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/cost_structure">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/planning_outstation_trip.jpg' %}" alt="planning_outstation_trip">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/planning_outstation_trip">Planning Your Outstation Trip: A Step-by-Step Approach</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/planning_outstation_trip">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/pre_booking_outstation.jpg' %}" alt="pre_booking_outstation">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/pre_booking_outstation"> The Advantages of Pre-Booking Outstation Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/pre_booking_outstation">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/travelling_with_family.jpg' %}" alt="travelling_with_family">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/travelling_with_family"> Traveling with Family: Tips for Outstation Taxi Bookings</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/travelling_with_family">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/comfortable_outstation_taxi.jpeg' %}" alt="comfortable_outstation_taxi">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/comfortable_outstation_taxi">How to Ensure a Comfortable Outstation Taxi Ride</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/comfortable_outstation_taxi">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/booking_outstation_taxi.jfif' %}" alt="booking_outstation_taxi">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/booking_outstation_taxi">Common Mistakes to Avoid When Booking Outstation Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/booking_outstation_taxi">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/reliable_outstation_taxi.png' %}" alt="reliable_outstation_taxi">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/reliable_outstation_taxi"> How to Find Reliable Outstation Taxi Services</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/reliable_outstation_taxi">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/technology_in_outstation.jpg' %}" alt="technology_in_outstation">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/technology_in_outstation">The Role of Technology in Outstation Taxi Bookings</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/technology_in_outstation">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/budgeting_for_outstation.jpeg' %}" alt="budgeting_for_outstation">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/budgeting_for_outstation">Budgeting for Your Outstation Taxi Trip</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/budgeting_for_outstation">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/cater_to_business.jfif' %}" alt="cater_to_business">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/cater_to_business">How Outstation Taxis Cater to Business Travelers</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/cater_to_business">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/environmental_impact_of_outstation.jpg' %}" alt="environmental_impact_of_outstation">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/environmental_impact_of_outstation">The Environmental Impact of Outstation Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/environmental_impact_of_outstation">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/exploring_cultural_attraction.png' %}" alt="exploring_cultural_attraction">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/exploring_cultural_attraction">Exploring Cultural Attractions: Outstation Taxi Tips</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/exploring_cultural_attraction">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div> 
+                    <!--  -->
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/long_distance_journey.png' %}" alt="long_distance_journey">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/long_distance_journey">How to Prepare for Long-Distance Taxi Journeys.</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/long_distance_journey">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/different_outstation_destination.png' %}" alt="different_outstation_destination">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/different_outstation_destination">Exploring Different Outstation Destinations: A Taxi Journey</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/different_outstation_destination">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/safety_tips_for_outstation.jpg' %}" alt="safety_tips_for_outstation">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/safety_tips_for_outstation">Safety Tips for Traveling by Outstation Taxi</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/safety_tips_for_outstation">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/offbeat_locations.png' %}" alt="offbeat_locations">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/offbeat_locations">Exploring Offbeat Locations with Outstation Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/offbeat_locations">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/family_travel_journeys.png' %}" alt="family_travel_journeys">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/family_travel_journeys"> Family Travel Tips for Outstation Taxi Journeys</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/family_travel_journeys">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/maximum_savings.jpg' %}" alt="maximum_savings">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/maximum_savings">Best Time to Book Outstation Taxis for Maximum Savings.</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/maximum_savings">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".75s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/outstation_taxi_fare.jpg' %}" alt="outstation_taxi_fare">
+                            </div>
+                            <div class="blog-item-info">
+                               
+                                <h4 class="blog-title">
+                                    <a href="/blog/outstation_taxi_fare"> Understanding Outstation Taxi Fare Structures</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/outstation_taxi_fare">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".25s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/outstation_taxi_experience.jpg' %}" alt="outstation_taxi_experience">
+                            </div>
+                            <div class="blog-item-info">
+                                <h4 class="blog-title">
+                                    <a href="/blog/outstation_taxi_experience">How to Make the Most of Your Outstation Taxi Experience</a>
+                                </h4>
+                                <a class="theme-btn" href="/blog/outstation_taxi_experience">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-4">
+                        <div class="blog-item wow fadeInUp" data-wow-delay=".50s">
+                            <div class="blog-item-img">
+                                <img src="{% static 'img/blog/outstation/navigating_language_barriers.png' %}" alt="navigating_language_barriers">
+                            </div>
+                            <div class="blog-item-info">
+                                
+                                <h4 class="blog-title">
+                                    <a href="blog/navigating_language_barriers">Navigating Language Barriers When Booking Outstation Taxis</a>
+                                </h4>
+                                <a class="theme-btn" href="blog/navigating_language_barriers">Read More<i class="fas fa-arrow-right"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                </div>
+              
             </div>
         </div>
-    </div>
-    <!-- blog area end -->
-</main>
+        <!-- blog area end -->
+        
 
-<style>
-    /* Same styles as before */
-</style>
+    </main>
 
-<!-- Infinite scroll JavaScript -->
-<script>
-    let page = 2;  // Start loading from the second page
-let hasNextPage = true;
-let loadedBlogs = new Set();  // Track blog backlinks that have been loaded
+    {% endblock body_content %}
 
-window.addEventListener('scroll', () => {
-    if (hasNextPage && window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-        loadMoreBlogs();
-    }
-});
-
-function loadMoreBlogs() {
-    const spinner = document.getElementById('loading-spinner');
-    spinner.style.display = 'block';
-
-    fetch(`/blog?page=${page}`, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'  // Indicate this is an AJAX request
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        spinner.style.display = 'none';
-
-        if (data.blogs.length) {
-            const blogContainer = document.getElementById('blog-container');
-            
-            data.blogs.forEach(blog => {
-                // Only insert blog if it hasn't been loaded before
-                if (!loadedBlogs.has(blog.backlink)) {
-                    loadedBlogs.add(blog.backlink);  // Mark the blog as loaded
-                    
-                    const blogItem = `
-                        <div class="col-md-6 col-lg-4 blog-item-container">
-                            <div class="blog-item wow fadeInUp">
-                                <div class="blog-item-img">
-                                    <img src="${blog.image_url}" alt="${blog.title}">
-                                </div>
-                                <div class="blog-item-info">
-                                    <h4 class="blog-title">
-                                        <a href="/blog/${blog.backlink}">${blog.title}</a>
-                                    </h4>
-                                    <a class="theme-btn" href="/blog/${blog.title}">Read More<i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>`;
-                    
-                    blogContainer.insertAdjacentHTML('beforeend', blogItem);
-                }
-            });
-
-            hasNextPage = data.has_next;  // Update if there are more pages to load
-            page++;  // Move to the next page
-        } else {
-            hasNextPage = false;
-        }
-    })
-    .catch(error => {
-        console.error('Error loading more blogs:', error);
-    });
-}
-
-</script>
-
-<style>
-    /* Ensure the images are of a consistent size */
-    .blog-item-img img {
-        width: 100%;
-        height: 200px; /* Set a fixed height for consistency */
-        object-fit: cover; /* Ensures images are cropped to fit nicely */
-    }
-
-    /* Limit blog title to 2 lines */
-    .blog-title a {
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        font-size: 1.2em; /* You can adjust the font size */
-        line-height: 1.3em; /* Ensure good line spacing */
-    }
-
-    /* Style adjustments to ensure the card layout is consistent */
-    .blog-item {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-    }
-
-    .blog-item-info {
-        flex-grow: 1;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    /* Consistent button placement */
-    .theme-btn {
-        margin-top: auto;
-    }
-    .row > [class^='col'] {
-        margin-bottom: 30px; /* Adjust the bottom margin for spacing between rows */
-    }
-</style>
-
-{% endblock %}

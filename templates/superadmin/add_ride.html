@@ -41,9 +41,29 @@
                             <select id="ridetype" name="ridetype" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Service Type</option>
                                 {% for obj in ridetypelist %}
-                                <option value="{{ obj.ridetype_id }}">{{ obj.name }}</option>
+                                    <option value="{{ obj.ridetype_id }}" data-name="{{ obj.name }}">{{ obj.name }}</option>
                                 {% endfor %}
                             </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Radio Button Section for Oneway/Roundtrip -->
+                    <div id="ride_options" class="form-group row" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Trip Type</label>
+                        <div class="col-sm-12">
+                            <div id="trip_type_buttons">
+                                <!-- Radio buttons for Oneway, Roundtrip will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Radio Button Section for Toll Option (Only for Airport) -->
+                    <div id="toll_options" class="form-group row" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Toll Option</label>
+                        <div class="col-sm-12">
+                            <div id="toll_type_buttons">
+                                <!-- Radio buttons for Add Toll, No Toll will be added here dynamically -->
+                            </div>
                         </div>
                     </div>
 
@@ -75,6 +95,18 @@
                         <div class="col-sm-12">
                             <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time" name="pickup_time">
                             <div id="timeError" class="invalid-feedback"></div>
+                        </div>
+                    </div>
+
+                    <!-- Hidden input fields for Drop Date and Drop Time -->
+                    <div id="drop_details" class="form-group row" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Date</label>
+                        <div class="col-sm-12">
+                            <input type="date" id="drop_date" name="drop_date" class="form-control form-control-lg">
+                        </div>
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Time</label>
+                        <div class="col-sm-12">
+                            <input type="time" id="drop_time" name="drop_time" class="form-control form-control-lg">
                         </div>
                     </div>
 
@@ -149,7 +181,7 @@
                             <button type="button" class="btn btn-primary" id="save_action">Book Ride</button>
                         </div>
                     </div>
-                    
+
                     <!-- <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div> -->
@@ -205,6 +237,57 @@
         document.getElementById('pickup_date').setAttribute('min', today);
     });
 
+    $(document).ready(function () {
+    $('#ridetype').on('change', function () {
+        var selectedRidetypeName = $(this).find('option:selected').data('name').toLowerCase();
+        var tripOptionsHtml = '<label><input type="radio" name="trip_type" value="one_way" checked> Oneway</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + 
+                              '<label><input type="radio" name="trip_type" value="round_trip"> Roundtrip</label>';
+        
+        // Reset options and hide initially
+        $('#trip_type_buttons').html('');
+        $('#toll_type_buttons').html('');
+        $('#ride_options, #toll_options, #drop_details').hide();  // Hide drop details initially
+
+        if (selectedRidetypeName === 'airport') {
+            // Show both Oneway/Roundtrip options and Add Toll/No Toll options for Airport
+            $('#trip_type_buttons').html(tripOptionsHtml);
+            $('#ride_options').show();
+
+            var tollOptionsHtml = '<label><input type="radio" name="toll_option" value="add_toll"> Add Toll</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                                  '<label><input type="radio" name="toll_option" value="no_toll" checked > No Toll</label>';
+            $('#toll_type_buttons').html(tollOptionsHtml);
+            $('#toll_options').show();
+        } else if (selectedRidetypeName === 'outstation') {
+            // Only show Oneway/Roundtrip options for Outstation
+            $('#trip_type_buttons').html(tripOptionsHtml);
+            $('#ride_options').show();
+        }
+    });
+
+    // Add event listener for the Trip Type (Oneway/Roundtrip)
+    $('body').on('change', 'input[name="trip_type"]', function () {
+        var tripType = $('input[name="trip_type"]:checked').val();
+        var selectedRidetypeName = $('#ridetype').find('option:selected').data('name').toLowerCase();
+
+
+        if (tripType === 'round_trip' && selectedRidetypeName === 'outstation') {
+            // Show Drop Date and Drop Time for Roundtrip
+            $('#drop_details').show();
+        } else {
+            // Hide Drop Date and Drop Time for Oneway
+            $('#drop_details').hide();
+        }
+
+        // Update ride pricing details
+        getRidePricingDetails();
+    });
+
+    // Add event listener for Toll Option (only for airport rides)
+    $('body').on('change', 'input[name="toll_option"]', function () {
+        // Update ride pricing details when toll option changes
+        getRidePricingDetails();
+    });
+
     function getTimeSlot(pickupTime) {
         var time = pickupTime.split(":");
         var hour = parseInt(time[0]);
@@ -218,7 +301,7 @@
         } else if (hour >= 18 && hour < 24) {
             return '6PM - 12AM';
         } else {
-            return null;  // Invalid time
+            return null;
         }
     }
     function getRidePricingDetails() {
@@ -227,7 +310,14 @@
         var destination = $('#destination').val();
         var pickup_date = $('#pickup_date').val();
         var pickup_time = $('#pickup_time').val();
-        var time_slot = getTimeSlot(pickup_time);  // Calculate time slot
+        var time_slot = getTimeSlot(pickup_time);
+
+        var drop_date = $('#drop_date').val();
+        var drop_time = $('#drop_time').val();
+
+        var trip_type = $('input[name="trip_type"]:checked').val();
+
+        var toll_option = $('input[name="toll_option"]:checked').val();
 
         if (ridetype && source && destination && pickup_date && pickup_time) {
             // Disable Category Dropdown and Show Loading Indicator
@@ -245,7 +335,11 @@
                     destination: destination,
                     pickup_date: pickup_date,
                     pickup_time: pickup_time,
-                    time_slot: time_slot, // Replace with actual logic for time_slot
+                    time_slot: time_slot,
+                    toll_option: toll_option,
+                    trip_type: trip_type,
+                    drop_date: drop_date,
+                    drop_time: drop_time
                 },
                 success: function(response) {
                     console.log(response);  // Check if response is correct
@@ -307,6 +401,7 @@
                 $('#categoryError').text('Please select a valid category.');
             }
         });
+    });
 </script>
 
 <script>
@@ -355,6 +450,8 @@
         var destination = $('#destination').val();
         var pickup_date = $('#pickup_date').val();
         var pickup_time = $('#pickup_time').val();
+        var drop_date = $('#drop_date').val();
+        var drop_time = $('#drop_time').val();
         var category = $('#category').val();
         var total_fare = $('#total_fare').val();
         var customer = $('#customer_id').val();
@@ -363,9 +460,10 @@
         var customer_name = $('#customer_name').val();
         var email = $('#email').val();
         var address = $('#address').val();
+        var password = $('#password').val();
 
         // Validation for required fields
-        if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !total_fare || !phone_number || !customer_name || !email ) {
+        if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !total_fare || !phone_number || !customer_name || !email || !password) {
             alert('Please fill out all required fields.');
             return false;
         }
@@ -402,7 +500,10 @@
                     phone_number: phone_number,
                     customer_name: customer_name,
                     email: email,
-                    address: address
+                    address: address,
+                    password: password,
+                    drop_date: drop_date,
+                    drop_time: drop_time
                 },
                 success: function (result) {
                     alert("Ride Booked successfully");

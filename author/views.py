@@ -146,6 +146,7 @@ class addwebpackages(TemplateView):
 
             # Retrieve data from POST request
             title = request.POST.get('title')
+            slug = slugify(title)
             package_category_id = request.POST.get('package_category')
             description = request.POST.get('description')
             top_attraction = request.POST.get('top_attraction')
@@ -181,6 +182,7 @@ class addwebpackages(TemplateView):
             # Create package object
             webpackage = WebsitePackages(
                 title=title,
+                slug=slug,
                 package_category=package_category,
                 description=description,
                 top_attraction=top_attraction,
@@ -247,6 +249,7 @@ class UpdatewebPackages(APIView):
         webpackage_id = request.POST['webpackage_id']
         title = request.POST['title']
         print("########",title)
+        slug = slugify(title)
         package_category = request.POST['package_category']
         description = request.POST['description']
         top_attraction = request.POST['top_attraction']
@@ -272,6 +275,7 @@ class UpdatewebPackages(APIView):
 
         webpack.title= title
         print("######## 2 ",title)
+        webpack.slug=slug
         webpack.package_category= package_categoryIdobj
         webpack.description= description
         webpack.top_attraction= top_attraction
@@ -400,6 +404,7 @@ class UpdatewebBlogs(APIView):
     def post(self, request):
         blogs_id = request.POST.get('blogs_id')
         title = request.POST.get('title')
+        slug = slugify(title)
         description = request.POST.get('description')
         image = request.FILES.get('image')
         image_link = request.POST.get('image_link')
@@ -420,6 +425,7 @@ class UpdatewebBlogs(APIView):
 
         # Update fields
         blog.title = title
+        blog.slug=slug
         blog.description = description
         if image:
             blog.image = image  # Update the image if a new one is uploaded
