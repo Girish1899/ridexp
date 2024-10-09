@@ -20,6 +20,8 @@ from django.core.cache import cache
 
 from superadmin.views import adduser
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+
 
 
 
@@ -1023,10 +1025,29 @@ def outstationcabs(request):
 def localtaxi(request):
     return render(request, 'website/localtaxi.html')
 
-
 def blog(request):
-    blogs = Blogs.objects.all()
-    return render(request, 'website/blog.html', {'blogs': blogs})
+    page_number = request.GET.get('page', 1)  # Get page number from request
+    blogs_per_page = 12  # Number of blogs to load per page
+    blogs = Blogs.objects.all().order_by('-created_on')  # Load blogs in descending order by date
+    paginator = Paginator(blogs, blogs_per_page)  # Paginate the blogs
+
+    # Check for an AJAX request by inspecting the 'X-Requested-With' header
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        blogs_page = paginator.get_page(page_number)
+        blogs_list = []
+        for blog in blogs_page:
+            blogs_list.append({
+                'title': blog.title,
+                'backlink': blog.backlink,
+                'image_url': blog.image.url if blog.image else blog.image_link,
+            })
+        return JsonResponse({
+            'blogs': blogs_list,
+            'has_next': blogs_page.has_next(),  # Check if more pages are available
+        })
+
+    blogs_page = paginator.get_page(1)  # Initial load (first page)
+    return render(request, 'website/blog.html', {'blogs_page': blogs_page})
 
 # class BlogDetailView(View):
 #     def get(self, request, title):
