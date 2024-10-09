@@ -282,5 +282,8 @@ urlpatterns = [
 
     # URL for listing all blogs
     path('blog_list/', BlogListView.as_view(), name='blog_list'),
+
+    path('send_otp_admin/', SendOtp.as_view(), name='send_otp_admin'),
+    path('verify_otp_admin/', VerifyOtp.as_view(), name='verify_otp_admin'),
 ]
 

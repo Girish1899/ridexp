@@ -28,6 +28,9 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.db.models import OuterRef, Subquery, Max
 from rest_framework.response import Response
+from django.core.cache import cache
+import random
+
 
 def report(request):
     report_type = request.GET.get('report_type', 'daily')
@@ -2806,29 +2809,30 @@ class customerGetRidePricingDetails(APIView):
         from datetime import datetime
 
         # Parse the pickup and drop date/time from the request
-        pickup_date_str = request.POST['pickup_date']
-        pickup_time_str = request.POST['pickup_time']
+        pickup_date_str = request.POST.get('pickup_date')
+        pickup_time_str = request.POST.get('pickup_time')
         drop_date_str = request.POST.get('drop_date')
         drop_time_str = request.POST.get('drop_time')
 
-        print(f"Pickup Date and Time: {pickup_date_str}")
-        print(f"Drop Date: {drop_date_str}")
-        print(f"Drop Time: {drop_time_str}")
-
+        # Ensure that pickup and drop date/time are provided
+        if not pickup_date_str or not pickup_time_str:
+            return {"error": "Pickup date and time must be provided."}
         if not drop_date_str or not drop_time_str:
             return {"error": "Drop date and time must be provided."}
 
+        # Combine pickup date and time for parsing
+        pickup_datetime_str = f"{pickup_date_str} {pickup_time_str}"
+        
         # Combine drop date and time for parsing
         drop_datetime_str = f"{drop_date_str} {drop_time_str}"
 
-        # Convert to datetime objects
-        pickup_datetime = datetime.strptime(pickup_date_str, "%Y-%m-%d %H:%M")
-        
-        # Add check here to avoid ValueError when drop_datetime_str is empty
-        if drop_time_str.strip() == '':
-            return {"error": "Drop time is required."}
-
-        drop_datetime = datetime.strptime(drop_datetime_str, "%Y-%m-%d %H:%M")
+        try:
+            # Convert to datetime objects
+            pickup_datetime = datetime.strptime(pickup_datetime_str, "%Y-%m-%d %H:%M")
+            drop_datetime = datetime.strptime(drop_datetime_str, "%Y-%m-%d %H:%M")
+        except ValueError as e:
+            # Return a meaningful error message in case of parsing issues
+            return {"error": f"Invalid date/time format: {str(e)}"}
 
         # Calculate the number of days based on pickup and drop dates
         num_days = self.calculate_days(pickup_datetime, drop_datetime)
@@ -2842,27 +2846,28 @@ class customerGetRidePricingDetails(APIView):
         for price in pricing_details:
             category_name = price.category.category_name
             car_type = price.car_type.lower()
+            toll_price = Decimal(str(price.toll_price))
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
             # Calculate the cost for the applicable distance and number of days
-            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price, num_days=num_days)
+            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price,toll_price=toll_price, num_days=num_days)
 
         return pricing_dict
 
-
     def calculate_days(self, pickup_datetime, drop_datetime):
         """Calculate the number of days for a round trip."""
-        num_days = 1  # Start with 1 day at minimum
-        days_difference = (drop_datetime - pickup_datetime).days
-        
-        if days_difference > 0:
-            num_days += days_difference
-            # If drop time is later in the day than pickup time, add an extra day
-            if drop_datetime.time() > pickup_datetime.time():
-                num_days += 1
-        
+        if drop_datetime.date() > pickup_datetime.date():
+            num_days = 1
+            end_of_pickup_day = pickup_datetime.replace(hour=23, minute=59, second=59)
+
+            if drop_datetime > end_of_pickup_day:
+                num_days += (drop_datetime.date() - pickup_datetime.date()).days
+        else:
+            num_days = 1
+
         print(f"Total days for the trip: {num_days}")
+
         return num_days
 
     def calculate_cost(self, distance, price, toll_price=Decimal(0), num_days=1):
@@ -2995,6 +3000,7 @@ class AddRide(TemplateView):
             print(f'customer_notes: {customer_notes}')
             print(f'pricing: {pricing_instance}')
             
+        
             ride_details = RideDetails(
                 company_format=next_company_format,
                 customer=customer,
@@ -3018,26 +3024,26 @@ class AddRide(TemplateView):
             print("Ride details saved successfully.")
             
             whatsapp = {
-                "apiKey": "",
-                "campaignName": "newbooking_confirmation_local",
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking confirmation",
                 "destination": customer.phone_number,
-                "userName": "Deepam Taxi",
+                "userName": "Ridexpress",
                 "templateParams": [
-                    customer.customer_name,
-                    next_company_format,
-                    date.today(),
-                    datetime.now().strftime('%H:%M'),
-                    source,
-                    destination,
-                    f"{pickup_date} {pickup_time}",
-                    total_fare
-                ],
-                "source": "new-landing-page form",
-                "media": {},
-                "buttons": [],
-                "carouselCards": [],
-                "location": {}
-            }
+                        customer_name,
+                        company_format,
+                        pickup_date +'  ' +pickup_time,    
+                        source,
+                        destination
+                    ],
+                    "source": "new-landing-page form",
+                    "media": {},
+                    "buttons": [],
+                    "carouselCards": [],
+                    "location": {},
+                    "paramsFallbackValue": {
+                        "FirstName": "user"
+                    }
+                    }
             
             gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
             response = requests.post(gateway_url, json=whatsapp)
@@ -3069,6 +3075,73 @@ def determine_time_slot(pickup_time):
         return '12PM - 6PM'
     else:
         return '6PM - 12AM'
+
+
+###################################################        #
+
+class SendOtp(View):
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        customer_name = request.POST.get('customer_name')
+        otp = str(random.randint(100000, 999999))  # Generate a random 6-digit OTP
+
+        # Store OTP in cache with a 5-minute expiration
+        cache.set(f'otp_{phone_number}', otp, timeout=300)
+
+        # WhatsApp API payload for OTP
+        whatsapp_payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "otp_verification",
+            "destination": phone_number,
+            "userName": "Ridexpress",
+            "templateParams": [str(otp)],
+            "source": "new-landing-page form",
+            "buttons": [
+                {
+                    "type": "button",
+                    "sub_type": "url",
+                    "index": 0,
+                    "parameters": [
+                        {
+                            "type": "text",
+                            "text": otp  # Send OTP in the message
+                        }
+                    ]
+                }
+            ]
+        }
+
+        try:
+            response = requests.post("https://backend.aisensy.com/campaign/t1/api/v2", json=whatsapp_payload)
+            if response.status_code == 200:
+                return JsonResponse({'status': 'Success', 'message': 'OTP sent successfully.'})
+            else:
+                return JsonResponse({'status': 'Error', 'message': 'Failed to send OTP.'})
+        except requests.RequestException as e:
+            return JsonResponse({'status': 'Error', 'message': f'Error sending OTP: {e}'})
+
+class VerifyOtp(View):
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        otp = request.POST.get('otp')
+
+        print(f"OTP verification attempt for phone number: {phone_number}, entered OTP: {otp}")
+
+        cached_otp = cache.get(f'otp_{phone_number}')
+        
+        print(f"Cached OTP for phone number {phone_number}: {cached_otp}")
+
+        if not cached_otp:
+            print(f"No OTP found in cache for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'OTP expired. Please request a new one.'})
+
+        if cached_otp == otp:
+            cache.delete(f'otp_{phone_number}')
+            print(f"OTP verified successfully for phone number: {phone_number}")
+            return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully.'})
+        else:
+            print(f"Incorrect OTP entered for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})
                 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class RideList(ListView):
