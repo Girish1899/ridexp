@@ -2973,12 +2973,38 @@ class AddRide(TemplateView):
             category_instance = Category.objects.get(category_name=category_name)
 
             # Retrieve pricing instance
-            pricing_instance = Pricing.objects.get(
-                category=category_instance,
-                car_type=car_type_name,
-                ridetype=ridetype,
-                slots=slots,
-            )
+            # trip_type = request.POST.get('trip_type', '').strip()
+            # print('trip_type from request:', trip_type)  # This should print the trip_type value
+
+            try:
+                if ridetype.name.lower() == 'local':
+                    pricing_instance = Pricing.objects.get(
+                        category=category_instance,
+                        car_type=car_type_name,
+                        ridetype=ridetype,
+                        slots=slots,
+                    )
+                    
+                else:
+                # Exclude triptype filter for local rides
+                    trip_type = request.POST.get('trip_type', '').strip()
+                    print('trip_type from request:', trip_type)  # This should print the trip_type value
+                    pricing_instance = Pricing.objects.get(
+                        category=category_instance,
+                        car_type=car_type_name,
+                        ridetype=ridetype,
+                        slots=slots,
+                        trip_type=trip_type,  
+                    )
+
+                    print('after request trip type',trip_type)
+
+            except Pricing.DoesNotExist:
+                return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
+       
+
+
+
             print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
             # Determine ride status based on pickup date

@@ -216,8 +216,7 @@
 </center>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script>
-$('.pickup-time').change(function() {
+<script>$('.pickup-time').change(function() {
     var selectedDate = new Date($('.date-picker').val());
     var today = new Date();
     var selectedTime = $(this).val();
@@ -342,17 +341,17 @@ $('.pickup-time').change(function() {
         var pickup_date = $('#pickup_date').val();
         var pickup_time = $('#pickup_time').val();
         var time_slot = getTimeSlot(pickup_time);
-
         var drop_date = $('#drop_date').val();
         var drop_time = $('#drop_time').val();
 
+        var trip_type = $('input[name="trip_type"]:checked').val() || '';  // Ensure the value exists or fallback to empty string
+        var toll_option = $('input[name="toll_option"]:checked').val() || ''; // Same for toll_option
+
         console.log('ridetype', ridetype);
-        console.log('drop date', drop_date);  // Check if drop_date is captured correctly
+        console.log('drop date', drop_date);  
         console.log('drop time', drop_time);
-
-        var trip_type = $('input[name="trip_type"]:checked').val();
-
-        var toll_option = $('input[name="toll_option"]:checked').val();
+        console.log('trip_type before sending:', trip_type);  // Add this to confirm it's being fetched
+        console.log('toll_option', toll_option);
 
         if (ridetype && source && destination && pickup_date && pickup_time) {
             // Disable Category Dropdown and Show Loading Indicator
@@ -374,7 +373,8 @@ $('.pickup-time').change(function() {
                     toll_option: toll_option,
                     trip_type: trip_type,
                     drop_date: drop_date,
-                    drop_time: drop_time
+                    drop_time: drop_time,
+                    trip_type: trip_type
                 },
                 success: function(response) {
                     console.log(response);  // Check if response is correct
@@ -477,6 +477,7 @@ $('.pickup-time').change(function() {
         $('#confirmBookingBtn').click(function (event) {
         event.preventDefault();
 
+        var trip_type = $('input[name="trip_type"]:checked').val() || '';
         // Collect booking details
         var bookingDetails = {
          company_format : $('#company_format').val(),
@@ -496,9 +497,12 @@ $('.pickup-time').change(function() {
          email : $('#email').val(),
          address : $('#address').val(),
          password : $('#password').val(),
+         trip_type : trip_type,
          ride_status: 'currentbookings',
 
         };
+
+        console.log('triptype', trip_type);
 
         // Validation for required fields
         if ( !ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !total_fare || !phone_number || !customer_name || !email || !password) {
