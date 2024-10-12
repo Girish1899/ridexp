@@ -31,7 +31,7 @@
                                         <div class="form-group row">
                                             <input type="hidden" class="form-control" id="pricing_id" name="pricing_id" value="{{ plist.0.pricing_id }}">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-12">
                                                 <select name="select" id="category" name="category" class="form-control form-control-lg">
                                                     <option value="" selected disabled>Select Category</option>
                                                     {% for obj in catlist %}
@@ -43,7 +43,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Ride Type</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-12">
                                                 <select id="ridetype" name="ridetype" class="form-control form-control-lg">
                                                     <option value="" selected disabled>Select Ride Type</option>
                                                     {% for obj in rlist %}
@@ -55,7 +55,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-12">
                                             <select class="form-control form-control-lg" id="car_type" name="car_type">
                                                 <option value="" selected disabled>Select Car Type</option>
                                                 <option {% if plist.0.car_type == 'ac' %}selected{% endif %}>ac</option>
@@ -67,7 +67,7 @@
                                          <!-- Trip Type Radio Buttons (Initially Hidden) -->
                                         <div class="form-group row" id="trip_type_section" style="display: none;">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-12">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way" {% if plist.0.trip_type == "one_way" %}checked{% endif %}>
                                                     <label class="form-check-label" for="one_way" style="color: black;">One Way</label>
@@ -81,7 +81,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Time Slot</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-12">
                                                 <select class="form-control form-control-lg" id="slots" name="slots">
                                                     <option value="" selected disabled>Select Time Slot</option>
                                                     <option value="12AM - 6AM" {% if plist.0.slots == "12AM - 6AM" %} selected {% endif %} >12AM - 6AM</option>
@@ -94,14 +94,14 @@
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Beta</label>
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-12">
                                             <input type="number" class="form-control form-control-lg" id="driver_beta" name="driver_beta" value="{{ plist.0.driver_beta }}">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Toll Price</label>
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-12">
                                             <input type="number" class="form-control form-control-lg" id="toll_price" name="toll_price" value="{{ plist.0.toll_price }}">
                                         </div>
                                     </div>
@@ -110,14 +110,14 @@
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit</label>
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-12">
                                             <input type="number" class="form-control form-control-lg" id="permit" name="permit" value="{{ plist.0.permit }}">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price Per KM</label>
-                                        <div class="col-sm-10">
+                                        <div class="col-sm-12">
                                             <input type="number" class="form-control form-control-lg" id="price_per_km" name="price_per_km" value="{{ plist.0.price_per_km }}">
                                         </div>
                                     </div>

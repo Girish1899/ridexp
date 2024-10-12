@@ -92,9 +92,14 @@ class PackageDetailView(View):
         # Fetch related packages, excluding the current package
         related_packages = WebsitePackages.objects.filter(status='active').exclude(slug=package.slug)[:3]
 
+        top_attractions = package.top_attraction.split(',')
+        package_highlights = package.package_highlights.split(',')
+
         return render(request, 'website/packages/Package_detail.html', {
             'package': package,
-            'related_packages': related_packages
+            'related_packages': related_packages,
+            'top_attractions': top_attractions,
+            'package_highlights': package_highlights
         })
 
 
@@ -1082,7 +1087,9 @@ class BlogDetailView(View):
         if slugify(blog.title) != title and blog.slug:
             return redirect('blog_detail', title=slugify(blog.title))
 
-        return render(request, 'website/blog/blog_detail.html', {'blog': blog})
+        description = blog.description.split(',')
+
+        return render(request, 'website/blog/blog_detail.html', {'blog': blog,'description': description})
 
 # class BlogDetailView(View):
 #     def get(self, request, title):

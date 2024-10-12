@@ -17,7 +17,7 @@
 {% block body_content %}
 <main class="main">
     <!-- breadcrumb -->
-    <div class="site-breadcrumb" style="background: url('{{ package.image_link }}')">
+    <div class="site-breadcrumb" style="background: url(/static/img/taxi/explore_india.jfif)">
         <div class="container">
             <h1 class="breadcrumb-title">{{ package.title }}</h1>
             <ul class="breadcrumb-menu">
@@ -34,8 +34,7 @@
             <div class="taxi-single-wrapper">
                 <div class="row">
                     <div class="col-lg-6">
-                        <div class="taxi-single-img" style="background-image: url('{{ package.image.url }}');">
-                        </div>
+                        <div class="taxi-single-img" style="background-image: url('{{ package.image_link }}');"></div>
                     </div>
                     <div class="col-lg-6">
                         <div class="taxi-single-details">
@@ -45,7 +44,11 @@
                             </div>
                             <div class="taxi-key-info" style="padding-bottom: 20px; margin-bottom: 20px;border-bottom: 1px solid var(--border-info-color);">
                                 <h4 class="taxi-key-title">Top Attractions</h4>
-                                <p>{{ package.top_attraction }}</p>
+                                <ul class="taxi-single-list">
+                                    {% for attraction in top_attractions %}
+                                        <li><i class="far fa-check-circle"></i>{{ attraction }}</li>
+                                    {% endfor %}
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -61,7 +64,9 @@
                         <div class="taxi-extra-info" style="padding-top: 20px;margin-left: 50px;">
                             <h4 class="taxi-key-title">Package Highlights</h4>
                             <ul class="taxi-single-list">
-                                {{ package.package_highlights|safe }} <!-- Assuming it's stored as HTML list -->
+                                {% for highlight in package_highlights %}
+                                    <li><i class="far fa-star"></i>{{ highlight }}</li>
+                                {% endfor %}                            
                             </ul>
                         </div>
                     </div>
@@ -88,13 +93,25 @@
                             </div>
                         </div>
                     </div>
-                <div class="row">
+                    <div class="row">
                     {% for related in related_packages %}
-                    <div class="col-lg-4">
-                        <div class="related-package-item">
-                            <img src="{{ related.image.url }}" alt="{{ related.title }}">
-                            <h4>{{ related.title }}</h4>
-                            <a href="{% url 'packages_detail' title=related.slug %}" class="theme-btn">Know More</a>
+                    <div class="col-md-6 col-lg-4 filter-item cat2">
+
+                        <div class="taxi-item">
+                            <div class="taxi-img">
+                                <div class="related-package-item">
+                                    <img src="{{ related.image.url }}" alt="{{ related.title }}">
+                                </div>
+                            </div>
+                            <div class="taxi-content">
+                                <div class="taxi-head">
+                                    <h4>{{ related.title }}</h4>
+                                </div>
+                                <div class="taxi-feature">
+                                    <p style="text-align: justify;">{{ related.description }}</p>
+                                </div>
+                                <a href="{% url 'packages_detail' title=related.slug %}" class="theme-btn">Know More</a>
+                            </div>
                         </div>
                     </div>
                     {% endfor %}

@@ -30,7 +30,12 @@
                             <div class="blog-info">
                                 <div class="blog-details">
                                     <h3 class="blog-details-title mb-20">{{ blog.title }}</h3>
-                                    <p>{{ blog.description }}</p>
+                                    <!-- <p>{{ blog.description }}</p> -->
+                                    <p class="mb-10" style="text-align: justify;">
+                                    {% for desc in description %}
+                                        <li>{{ desc }}</li>
+                                    {% endfor %}  
+                                    </p>
                                     <hr>
                                     <div class="blog-details-tags pb-20">
                                         <h5>Tags : </h5>

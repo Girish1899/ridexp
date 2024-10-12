@@ -35,14 +35,14 @@
                         <input type="hidden" class="form-control" id="model_status" name="model_status" value="{{ vehiclelist.0.model.status }}">
                         <input type="hidden" class="form-control" id="owner_status" name="owner_status" value="{{ vehiclelist.0.owner.status }}">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ vehiclelist.0.company_format }}" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Vehicle Owner</label>
-                        <div class="col-sm-10">  
+                        <div class="col-sm-12">  
                             <select id="single-select"  name="owner" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Owner Id</option>
                                 {% for obj in ownerlist %}
@@ -57,7 +57,7 @@
                     <div class="form-group row">
                         <input type="hidden" class="form-control" id="original_Vehicle_Number" name="original_Vehicle_Number" value="{{ vehiclelist.0.Vehicle_Number }}">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number *</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="Vehicle_Number" name="Vehicle_Number" value="{{ vehiclelist.0.Vehicle_Number }}" maxlength="10">
                         </div>
                     </div>
