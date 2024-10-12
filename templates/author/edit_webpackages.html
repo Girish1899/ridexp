@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item"><a href="{% url 'list_author_packages' %}" style="color: white !important;">View Packages</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'list-author-packages' %}" style="color: white !important;">View Packages</a></li>
                     <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
@@ -255,7 +255,7 @@ $(document).ready(function() {
             }
 
         $.ajax({
-            url: '{% url "author_Packages_update" %}',  // Replace with your update URL
+            url: '{% url "author-Packages-update" %}',  // Replace with your update URL
             type: 'POST',
             data: formData,
             processData: false,
@@ -266,7 +266,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     alert('Package updated successfully!');
-                    window.location.href = "{% url 'list_author_packages' %}"; // Redirect to package list
+                    window.location.href = "{% url 'list-author-packages' %}"; // Redirect to package list
                 } else {
                     alert('Error: ' + response.message);
                 }

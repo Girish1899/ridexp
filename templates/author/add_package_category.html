@@ -12,7 +12,7 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item" ><a href="{% url 'author_package_category_list' %}" style="color: white !important;">View Package Category</a></li>
+                    <li class="breadcrumb-item" ><a href="{% url 'author-package-category-list' %}" style="color: white !important;">View Package Category</a></li>
                     <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
@@ -67,7 +67,7 @@
             console.log("category_name :", category_name);
 
             $.ajax({
-                url: '{% url "check_package_category" %}',
+                url: '{% url "check-package-category" %}',
                 type: "GET",
                 data: { category_name: category_name },
                 success: function (data) {
@@ -77,7 +77,7 @@
                         // Proceed with form submission
 
                     $.ajax({
-                        url: '{% url "author_package_category" %}',
+                        url: '{% url "author-package-category" %}',
                         type: "POST",
                         headers: {
                             'X-CSRFToken': '{{ csrf_token }}'
@@ -86,7 +86,7 @@
                         success: function (result) {
                             console.log("result ***: ", result);
                             alert("Package Category Added Successfully");
-                            location.href = "{% url 'author_package_category_list' %}";
+                            location.href = "{% url 'author-package-category-list' %}";
                         },
                         error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

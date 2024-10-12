@@ -11,7 +11,7 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item"><a href="{% url 'list_author_blogs' %}" style="color: white !important;">View
+                    <li class="breadcrumb-item"><a href="{% url 'list-author-blogs' %}" style="color: white !important;">View
                             Blogs</a></li>
                     <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
                             Back</a></li>
@@ -200,14 +200,14 @@
                 return;
             }
             $.ajax({
-                url: '{% url "create_author_blogs" %}',
+                url: '{% url "create-author-blogs" %}',
                 type: "POST",
                 data: formData,
                 processData: false,  // Important for file upload
                 contentType: false, 
                 success: function (result) {
                     alert("Blog added successfully");
-                    location.href = "{% url 'list_author_blogs' %}";
+                    location.href = "{% url 'list-author-blogs' %}";
                 },
 
                 error: function (xhr, status, error) {
