@@ -2718,13 +2718,6 @@ class customerGetRidePricingDetails(APIView):
 
         print(f"Ride Type: {ride_type_instance.name}, Trip Type: {trip_type}, Toll Option: {toll_option}")
 
-        # Fetch pricing details based on time slot and ridetype
-        # pricing_details = Pricing.objects.select_related('category').filter(
-        #     slots=time_slot, ridetype=ride_type_instance
-        # )
-
-        # print(f"Pricing details: {pricing_details}")
-
         # Call appropriate calculation function based on trip_type
         if ride_type_instance.name == 'outstation':
             pricing_details = self.get_outstation_pricing(time_slot, ridetype_id, trip_type)
@@ -2773,7 +2766,9 @@ class customerGetRidePricingDetails(APIView):
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
+            toll_price = Decimal(str(price.toll_price))
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price,toll_price)
         
         return pricing_dict
 
@@ -2800,7 +2795,9 @@ class customerGetRidePricingDetails(APIView):
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price)
+            toll_price = Decimal(str(price.toll_price))    
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price,toll_price)
 
         return pricing_dict
 
