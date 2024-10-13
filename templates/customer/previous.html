@@ -73,34 +73,28 @@
                                         <td>{{ i.booking_datetime }}</td>
 
                                         <td>
+                                            {% if i.driver %}
                                             <div>
-                                                <button class="btn btn-info"
-                                                    style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{
-                                                    i.driver.vehicle.company_format }}</button>
+                                                <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.company_format }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white"
-                                                    style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{
-                                                    i.driver.vehicle.Vehicle_Number }}</button>
+                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.Vehicle_Number }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-warning text-white"
-                                                    style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{
-                                                    i.driver.vehicle.model.brand.brand_name }}</button>
+                                                <button class="btn btn-warning text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-danger text-white"
-                                                    style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{
-                                                    i.driver.vehicle.model.model_name }}</button>
+                                                <button class="btn btn-danger text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white"
-                                                    style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{
-                                                    i.driver.vehicle.model.brand.category.category_name }}</button>
+                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
                                             </div>
 
                                             <div>{{ i.driver.name }}</div>
                                             <div>{{ i.driver.phone_number }}</div>
+                                            {% else %}
+                                             <div style="color: red;">Driver not assigned</div>
+                                            {% endif %}
                                         </td>
 
 
