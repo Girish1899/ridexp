@@ -4018,33 +4018,51 @@ class addprice(TemplateView):
         context = {'catlist': list(catlist),'rlist':list(rlist)}
         return context
 
-    def post(self, request):
-        category = request.POST['category']
-        ridetype = request.POST['ridetype']
-        slots = request.POST['slots']
-        driver_beta = Decimal(request.POST.get('driver_beta', '0') or '0')
-        toll_price = Decimal(request.POST.get('toll_price', '0') or '0')
-        car_type = request.POST['car_type']
-        trip_type = request.POST.get('trip_type')
-        permit = Decimal(request.POST.get('permit', '0') or '0')
-        price_per_km = Decimal(request.POST.get('price_per_km', '0') or '0')
+     # Validation function to check if the pricing combination already exists
+    def validate_pricing_exists(self, category_id, ridetype_id, car_type, slots, trip_type):
+        category = Category.objects.get(category_id=category_id)
+        ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
 
-
-        br = Pricing(
-            category=Category.objects.get(category_id=category),
-            ridetype=Ridetype.objects.get(ridetype_id=ridetype),
-            slots=slots,
-            driver_beta=driver_beta,
-            toll_price=toll_price,
+        return Pricing.objects.filter(
+            category=category,
+            ridetype=ridetype,
             car_type=car_type,
-            trip_type=trip_type,
-            permit=permit,
-            price_per_km=price_per_km,
-            created_by=request.user,
-            updated_by=request.user
-        )
-        br.save()
-        return JsonResponse({'status':"Success"})
+            slots=slots,
+            trip_type=trip_type
+        ).exists()
+    
+    def post(self, request):
+        if request.method == "POST":
+            category = request.POST['category']
+            ridetype = request.POST['ridetype']
+            slots = request.POST['slots']
+            driver_beta = Decimal(request.POST.get('driver_beta', '0') or '0')
+            toll_price = Decimal(request.POST.get('toll_price', '0') or '0')
+            car_type = request.POST['car_type']
+            trip_type = request.POST.get('trip_type')
+            permit = Decimal(request.POST.get('permit', '0') or '0')
+            price_per_km = Decimal(request.POST.get('price_per_km', '0') or '0')
+
+            if self.validate_pricing_exists(category, ridetype, car_type, slots, trip_type):
+                return JsonResponse({'status': 'Duplicate'}, status=400)
+            
+            br = Pricing(
+                category=Category.objects.get(category_id=category),
+                ridetype=Ridetype.objects.get(ridetype_id=ridetype),
+                slots=slots,
+                driver_beta=driver_beta,
+                toll_price=toll_price,
+                car_type=car_type,
+                trip_type=trip_type,
+                permit=permit,
+                price_per_km=price_per_km,
+                created_by=request.user,
+                updated_by=request.user
+            )
+            br.save()
+            return JsonResponse({'status': 'Success'}, status=200)
+
+        return JsonResponse({'status': 'Invalid Request'}, status=400)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class PriceList(ListView):

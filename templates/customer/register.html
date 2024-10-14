@@ -218,11 +218,12 @@
                                 status: status,
                                 // company_format: company_format,
                             },
+                            
                             success: function (result) {
                                 var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
                                 myModal.show();
 
-                                // location.href = "{% url 'customer_login' %}";
+                                location.href = "{% url 'customer_login' %}";
                             },
                             error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

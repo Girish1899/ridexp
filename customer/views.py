@@ -55,7 +55,7 @@ class regcustomer(TemplateView):
         cust.save()
 
         # Return success response
-        return JsonResponse({'status': "Success"})
+        return JsonResponse({'status': "Success",'redirect_url': 'customer_login '})
 
 def check_phonenumber(request):
     phone_number = request.GET.get('phone_number', None)
@@ -107,7 +107,7 @@ class custlogin(TemplateView):
 
             if customer.password == password:  # Dummy password check
 #            Redirect to booking page on successful login
-                return JsonResponse({'success': True, 'redirect_url': 'customer_addbooking      '})
+                return JsonResponse({'success': True, 'redirect_url': 'customer_addbooking '})
             else:
                 return JsonResponse({'success': False, 'message': 'Invalid password.'})
 
