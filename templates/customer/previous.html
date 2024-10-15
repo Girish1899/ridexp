@@ -14,18 +14,17 @@
 
         <div class="row">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Previous Bookings List</h4>
-                        <br>
-                        <!-- <button id="toggleFilterReport" class="btn btn-primary">Show</button> -->
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-
-                            <table id="example" class="display" style="min-width: 845px">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Previous Bookings</h6>
+                        </div>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
                                 <thead>
-                                    <tr>
+                                    <tr style="color: black !important;">
                                         <th>Booking Id</th>
                                         <th>Pickup date</th>
                                         <th>Pickup time</th>
@@ -67,7 +66,7 @@
                                         <td>
                                             <div>{{ i.destination }}</div>
                                         </td>
-                                        <td><button class="btn btn-warning text-white" disabled>
+                                        <td><button class="btn btn-warning " >
                                                 {{ i.total_fare }}
                                             </button></td>
                                         <td>{{ i.booking_datetime }}</td>
@@ -78,16 +77,16 @@
                                                 <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.company_format }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.Vehicle_Number }}</button>
+                                                <button class="btn btn-success" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.Vehicle_Number }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-warning text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
+                                                <button class="btn btn-warning " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-danger text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
+                                                <button class="btn btn-danger " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
+                                                <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
                                             </div>
 
                                             <div>{{ i.driver.name }}</div>
@@ -99,7 +98,7 @@
 
 
                                         <td>
-                                            <span class="badge badge-pill badge-danger">{{ i.ride_status }}</span><br>
+                                            <span class="badge bg-gradient-danger">{{ i.ride_status }}</span><br>
                                         </td>
                                     </tr>
                                     {% endfor %}
