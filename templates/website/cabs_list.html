@@ -91,9 +91,14 @@
                                 </div>                                
                 
                                 <div class="col-lg-3">
-                                    <button class="theme-btn" type="submit" id="save_action">Check Fares<i
+                                    <button class="theme-btn" type="submit" id="check_fares">Check Fares<i
                                             class="fas fa-arrow-right"></i></button>
                                 </div>
+
+                                <div class="col-lg-3">
+                                    <button class="theme-btn" type="button" id="modify_action">Modify</button>
+                                </div>
+
                             </div>
                         </div>
                     </form>
@@ -247,9 +252,23 @@
     }
     if (params.trip_type) {
         document.getElementById('trip_type').value = params.trip_type; 
-        $("#save_action").click();
+        $("#check_fares").click();
     }
+
+    $('#source, #destination, #pickup_date, #pickup_time, #ridetype' ,).on('change', function() {
+        $("#check_fares").click();
+    });
 });
+
+// clears the existing price 
+function clearAllCategoryData() {
+    var categories = document.querySelectorAll("[id^='price_ac_'], [id^='price_non_ac_']");
+    categories.forEach(function(element) {
+        var categorySlug = element.id.split("_").slice(2).join("_");
+        updatePriceAndButton(categorySlug, "ac", null);
+        updatePriceAndButton(categorySlug, "non_ac", null);
+    });
+}
 
 // Function to update category details
 function updateCategoryDetails(category, costData) {
@@ -341,6 +360,21 @@ function getTimeSlot(pickupTime) {
     }
 }
 
+function syncHiddenFields(categorySlug) {
+    const source = $('#source').val();
+    const destination = $('#destination').val();
+    const pickup_date = $('#pickup_date').val();
+    const pickup_time = $('#pickup_time').val();
+    const ridetype = $('#ridetype').val();
+
+    // Update hidden fields for the selected category (ac/non_ac)
+    $(`input[name="source"]`).val(source);
+    $(`input[name="destination"]`).val(destination);
+    $(`input[name="pickup_date"]`).val(pickup_date);
+    $(`input[name="pickup_time"]`).val(pickup_time);
+    $(`input[name="ridetype"]`).val(ridetype);
+}
+
 // Capture the change event for the toll option radio buttons
 $('input[name="toll_option"]').change(function() {
     var tollOption = $('input[name="toll_option"]:checked').val();
@@ -349,6 +383,7 @@ $('input[name="toll_option"]').change(function() {
 });
 
 // Function to handle the AJAX request for fetching pricing details
+
 function fetchPricingDetails(tollOption) {
     var trip_type = $('#trip_type').val();
     var ridetype = $('#ridetype').val();
@@ -389,6 +424,9 @@ function fetchPricingDetails(tollOption) {
         },
         success: function(result) {
             console.log("Received data: ", result); 
+
+            clearAllCategoryData();
+
             costs = result.costs;  // Store the costs data
 
             // Loop through costs and update each category
@@ -405,10 +443,28 @@ function fetchPricingDetails(tollOption) {
 }
 
 // Trigger the fetchPricingDetails function on button click as well
-$("#save_action").click(function(event) {
+$("#check_fares").click(function(event) {
     event.preventDefault();
     var tollOption = $('input[name="toll_option"]:checked').val(); // Get the selected toll option
     fetchPricingDetails(tollOption);
+});
+
+$("#modify_action").click(function(event) {
+    event.preventDefault();
+    
+    // Enable form fields for modification
+    $('#source').prop('disabled', false);
+    $('#destination').prop('disabled', false);
+    $('#pickup_date').prop('disabled', false);
+    $('#pickup_time').prop('disabled', false);
+
+    // Change the "Check Fares" button to become active again
+    $('#check_fares').prop('disabled', false);
+});
+
+$('form').on('submit', function(event) {
+    var categorySlug = $(this).find('input[name="car_type"]').val();  // Get car type (ac/non_ac)
+    syncHiddenFields(categorySlug);  // Sync hidden fields before form submission
 });
 
 // });
