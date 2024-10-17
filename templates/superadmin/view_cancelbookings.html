@@ -266,7 +266,7 @@
                 success: function (data) {
                     if (data.success) {
                     alert("Booking Restored Successfully");
-                    window.location.href = "{% url 'cancelledbookings' %}";
+                    window.location.href = "{% url 'telecallercancelledbookings' %}";
                 } else {
                     alert(data.message || "Error occurred");
                 }
