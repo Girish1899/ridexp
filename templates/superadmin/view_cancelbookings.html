@@ -174,13 +174,13 @@
                                         <td>{{ i.source }}</td>
                                         <td>
                                             <div>{{ i.destination }}</div>
-                                            <span class="badge badge-pill badge-success text-white">{{ i.ridetype.name }}</span>
+                                            <span class="badge badge-pill bg-gradient-success">{{ i.ridetype.name }}</span>
                                         </td>                                                                               
                                         <td>{{ i.customer_notes }}</td>
                                         <td>
-                                            <div><button class="btn btn-warning text-white" >{{ i.total_fare }}</button></div>
-                                            <div style="margin-top: 3px;"><span class="badge badge-pill badge-danger text-white">{{i.driver.vehicle.car_type}}</span></div>
-                                            <div style="margin-top: 3px;"><span class="badge badge-pill badge-success text-white">{{ i.driver.vehicle.model.brand.category.category_name }}</span></div>
+                                            <div><button class="btn btn-warning " >{{ i.total_fare }}</button></div>
+                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{i.pricing.car_type}}</span></div>
+                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-success">{{ i.category.category_name }}</span></div>
                                         </td> 
                                         <!-- <td>
                                             <div>
@@ -202,11 +202,11 @@
                                             <div>{{ i.driver.name }}</div>
                                             <div>{{ i.driver.phone_number }}</div>
                                         </td> -->
-                                        <td><div><span class="badge badge-pill badge-danger text-white">{{i.created_by}}</span></div>
+                                        <td><div><span class="badge badge-pill bg-gradient-danger">{{i.created_by}}</span></div>
                                             <div>{{i.booking_datetime}}</div>
                                         </td>
                                         <td>
-                                            <div><span class="badge badge-pill badge-danger text-white">{{ i.cancelled_by }}</span></div>
+                                            <div><span class="badge badge-pill bg-gradient-danger">{{ i.cancelled_by }}</span></div>
                                             <div>{{ i.cancelled_on }}</div>
                                             <div style="color: red;">{{ i.comments }}</div>
 
@@ -266,7 +266,7 @@
                 success: function (data) {
                     if (data.success) {
                     alert("Booking Restored Successfully");
-                    window.location.href = "{% url 'telecallercancelledbookings' %}";
+                    window.location.href = "{% url 'cancelledbookings' %}";
                 } else {
                     alert(data.message || "Error occurred");
                 }

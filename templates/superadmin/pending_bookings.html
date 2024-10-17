@@ -12,10 +12,8 @@
 
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item"><a href="{% url 'addbooking' %}" style="color: white !important;">Add
-                            Booking</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
-                            Back</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'addbooking' %}" style="color: white !important;">Add Booking</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
@@ -27,8 +25,7 @@
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-0 d-flex justify-content-between align-items-center"
                             style="background-color: #F3797E;">
-                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Pending
-                                Bookings</h6>
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Pending Bookings</h6>
 
                             <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
                         </div>
@@ -181,17 +178,13 @@
                                             <td>{{ i.source }}</td>
                                             <td>
                                                 <div>{{ i.destination }}</div>
-                                                <span class="badge badge-pill badge-success text-white">{{
-                                                    i.ridetype.name }}</span>
+                                                <span class="badge badge-pill bg-gradient-success">{{i.ridetype.name }}</span>
                                             </td>
                                             <td>{{ i.customer_notes }}</td>
                                             <td>
-                                                <div><button class="btn btn-warning text-white">{{ i.total_fare
-                                                        }}</button></div>
-                                                <div>{{i.pricing.car_type}}</div>
-                                                <div style="margin-top: 3px;"><span
-                                                        class="badge badge-pill badge-danger text-white">{{
-                                                        i.category.category_name }}</span></div>
+                                                <div><button class="btn btn-warning">{{ i.total_fare}}</button></div>
+                                                <div><span class="badge badge-pill bg-gradient-danger ">{{i.pricing.car_type}}</span></div>
+                                                <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger ">{{i.category.category_name }}</span></div>
                                             </td>
                                             <td>
                                                 <div style="color: red">{{ i.updated_by }}</div>

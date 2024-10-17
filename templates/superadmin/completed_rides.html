@@ -188,51 +188,44 @@
                                             <td>{{ i.destination }}<br>
                                                 <!-- <span class="badge badge-pill badge-success">{{ i.ridetype.name }}</span>
                                     <span class="badge badge-pill badge-success">{{ i.driver.vehicle.Vehicle_Number }}</span> -->
-                                                <button class="btn btn-success text-white"
-                                                    style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.ridetype.name }}</button>
+                                                <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.ridetype.name }}</button>
 
                                             </td>
                                             <td>{{ i.customer_notes }}</td>
 
                                             <td>
                                                 <div>
-                                                    <button class="btn btn-info"
-                                                        style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.company_format }}</button>
+                                                    <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.company_format }}</button>
                                                 </div>
                                                 <div>
-                                                    <button class="btn btn-success text-white"
-                                                        style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.Vehicle_Number }}</button>
+                                                    <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{i.driver.vehicle.Vehicle_Number }}</button>
                                                 </div>
                                                 <div>
-                                                    <button class="btn btn-warning text-white"
-                                                        style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{i.driver.vehicle.model.brand.brand_name }}</button>
+                                                    <button class="btn btn-warning " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{i.driver.vehicle.model.brand.brand_name }}</button>
                                                 </div>
                                                 <div>
-                                                    <button class="btn btn-danger text-white"
-                                                        style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{i.driver.vehicle.model.model_name }}</button>
+                                                    <button class="btn btn-danger" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{i.driver.vehicle.model.model_name }}</button>
                                                 </div>
                                                 <div>
-                                                    <button class="btn btn-success text-white"
-                                                        style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{i.driver.vehicle.model.brand.category.category_name }}</button>
+                                                    <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{i.driver.vehicle.model.brand.category.category_name }}</button>
                                                 </div>
 
                                                 <div>{{ i.driver.name }}</div>
                                                 <div>{{ i.driver.phone_number }}</div>
                                             </td>
 
-                                            <td><button class="btn btn-warning text-white">{{ i.total_fare }}</button>
+                                            <td><button class="btn btn-warning ">{{ i.total_fare }}</button>
                                             </td>
 
-                                            <td><span class="badge badge-pill badge-danger">{{i.created_by}}</span><br>
+                                            <td><span class="badge badge-pill bg-gradient-danger">{{i.created_by}}</span><br>
                                                 <div style="color: blue;">{{i.booking_datetime}}</div>
                                             </td>
                                             <td>
-                                                <span class="badge badge-pill badge-danger">{{ i.assigned_by }}</span>
+                                                <span class="badge badge-pill bg-gradient-danger">{{ i.assigned_by }}</span>
                                                 <div style="color: blue;">{{ i.assigned_on }}</div>
                                             </td>
                                             <td>
-                                                <a href="#" class="btn btn-primary invoice-btn"
-                                                    data-ride-id="{{ i.ride_id }}">Invoice</a>
+                                                <a href="#" class="btn btn-primary invoice-btn" data-ride-id="{{ i.ride_id }}">Invoice</a>
                                             </td>
                                         </tr>
                                         {% endfor %}

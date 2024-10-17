@@ -320,18 +320,23 @@
             url: '{% url "distributercancel_ride" %}',
             type: "POST",
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
+                'X-CSRFToken': '{{ csrf_token }}' // Make sure you are using CSRF tokens for POST requests in Django
             },
             data: JSON.stringify({ comments: comments, ride_id: rideId }),
             contentType: 'application/json; charset=utf-8',
             success: function(result) {
-                console.log("Success: ", result);
-                alert("Submitted successfully.");
-                location.reload(); // Reload page after successful assignment
+                if (result.status === 'success') {
+                    console.log("Ride successfully cancelled!");
+                    alert("Ride cancelled successfully. A WhatsApp message has been sent to the customer.");
+                    location.reload(); // Reload the page after success
+                } else {
+                    console.error("Cancellation failed: ", result.message);
+                    alert("Failed to cancel the ride: " + result.message);
+                }
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", xhr.responseText);
-                alert('Failed to assign driver.');
+                alert("Failed to cancel the ride. Please try again.");
             }
         });
     });
@@ -381,12 +386,18 @@
             contentType: 'application/json; charset=utf-8',
             success: function(result) {
                 console.log("Success: ", result);
-                alert("Driver assigned successfully.");
-                location.reload(); // Reload page after successful assignment
+                
+                if (result.status === 'success') {
+                    alert("Driver assigned successfully. A message has been sent to the customer.");
+                } else {
+                    alert("Failed to assign driver: " + (result.message || "Unknown error."));
+                }
+                
+                location.reload(); // Reload page after handling the message
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", xhr.responseText);
-                alert('Failed to assign driver.');
+                alert('Failed to assign driver. Please try again.');
             }
         });
     });

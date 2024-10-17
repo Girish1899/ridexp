@@ -1,19 +1,19 @@
 {% extends 'distributer/base.html' %}
 {% load static %}
 {% block content %}
-
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Cancelled Booking</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
+                    <h4>Assigned Drivers For Advance Bookings</h4>
                 </div>
             </div>
+
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'indexd' %}">Dashboard</a></li>
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'distributeraddride' %}" style="color: white !important;">Add Booking</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
@@ -24,7 +24,7 @@
                 <div class="card my-4">
                     <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                         <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-0 d-flex justify-content-between align-items-center" style="background-color: #F3797E;">
-                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Cancelled Bookings</h6>
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">CompletedBookings</h6>
                             
                             <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
                         </div>
@@ -128,25 +128,24 @@
                                     <label>To Time</label>
                                     <input id="to-time-picker" type="time" class="form-control">
                                 </div>
-
                             </div>
                         </div><br>
 
                         <div class="table-responsive p-0">
-                           
                             <table class="table align-items-center justify-content-center mb-0">
                                 <thead>
                                     <tr style="color: black !important;">
-                                        <th>Serial No</th>                                     
+                                        <th>Serial No</th>
                                         <th>Booking Id/Pickup time/Pickup date</th>
-                                        <th>Customer Name/email/address/PhNo</th>
+                                        <th>Customer Name/email/address/ph No</th>
                                         <th>Pickup Place</th>
                                         <th>Drop Place/ Ride Type</th> 
-                                        <th>Customer Comments</th>
+                                        <th>Customer Comments</th>                             
                                         <th>RateDetails/ vehicleType/ A/c or Non A/c</th>
-                                        <!-- <th>Vehicle Id/ Vehicle No/ Type/ Name/ ph No</th> -->
+                                        <th>Vehicle Id/ Vehicle No/ Type/ Name/ ph No</th>
                                         <th>Booked By</th>
-                                        <th>Canelled By/ Reason</th>
+                                        <th>Dispatched By/ Dispatched On</th>
+                
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,44 +166,44 @@
                                         <td>{{ i.source }}</td>
                                         <td>
                                             <div>{{ i.destination }}</div>
-                                            <span class="badge badge-pill bg-gradient-success">{{ i.ridetype.name }}</span>
-                                        </td>                                                                               
+                                            <span class="badge badge-pill bg-gradient-danger">{{ i.ridetype.name }}</span>
+                                        </td>
+                                        
+                                       
                                         <td>{{ i.customer_notes }}</td>
                                         <td>
                                             <div><button class="btn btn-warning " >{{ i.total_fare }}</button></div>
-                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{i.pricing.car_type}}</span></div>
-                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-success">{{ i.category.category_name }}</span></div>
-                                        </td> 
-                                        <!-- <td>
+                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{i.driver.vehicle.car_type}}</span></div>
+                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-success">{{ i.driver.vehicle.model.brand.category.category_name }}</span></div>
+                                        </td>
+                                        <td>
                                             <div>
                                                 <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.company_format }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.Vehicle_Number }}</button>
+                                                <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.Vehicle_Number }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-warning text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.model.brand.brand_name }}</button>
+                                                <button class="btn btn-warning " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-danger text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.model.model_name }}</button>
+                                                <button class="btn btn-danger" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.model.brand.category.category_name }}</button>
+                                                <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
                                             </div>
                                             
                                             <div>{{ i.driver.name }}</div>
                                             <div>{{ i.driver.phone_number }}</div>
-                                        </td> -->
-                                        <td><div><span style="color: red;">{{i.created_by}}</span></div>
-                                            <div>{{i.booking_datetime}}</div>
                                         </td>
-                                        <td>
-                                            <div><span class="badge badge-pill bg-gradient-danger ">{{ i.cancelled_by }}</span></div>
-                                            <div>{{ i.cancelled_on }}</div>
-                                            <div style="color: red;">{{ i.comments }}</div>
+                                        <td><div style="color: red;">{{i.created_by}}</div>
+                                            <div>{{i.booking_datetime}}</div>
 
                                         </td>
-                                        <!-- <td><button type="button" class="btn btn-success btn-sm btn-custom-sm" onclick="Restoreride('{{i.ride_id}}', '{{i.pickup_date}}')">Restore</button></td> -->
+                                        <td>
+                                            <div ><span class="badge badge-pill bg-gradient-danger">{{ i.assigned_by }}</span></div>
+                                            <div style="color: blue;">{{ i.assigned_on }}</div>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -216,38 +215,16 @@
         </div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     
 <script>
-    document.getElementById('download-excel').addEventListener('click', function() {
-        const table = document.querySelector('#example');
-        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
-        XLSX.writeFile(wb, 'completed_bookings.xlsx');
-    });
-    
-    document.getElementById('download-csv').addEventListener('click', function() {
-        const table = document.querySelector('#example');
-        const wb = XLSX.utils.table_to_book(table, { sheet: "Sheet JS" });
-        XLSX.writeFile(wb, 'completed_bookings.csv', { bookType: 'csv' });
-    });
-    
-    document.getElementById('download-pdf').addEventListener('click', function() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.autoTable({ html: '#example' });
-        doc.save('completed_bookings.pdf');
-    });
-    </script>
-
-<script>
-    
-// Toggle Filter Report visibility
-$('#toggleFilterReport').click(function() {
+    // Toggle Filter Report visibility
+    $('#toggleFilterReport').click(function() {
         var filterReport = $('.filter_report');
         if (filterReport.is(':visible')) {
             filterReport.hide();
@@ -519,7 +496,6 @@ $('#toggleFilterReport').click(function() {
     }
 });
 
-
 </script>
 
 <style>
@@ -528,6 +504,4 @@ $('#toggleFilterReport').click(function() {
     }
 </style>
 
-
-
-{% endblock content %}
+{% endblock %}

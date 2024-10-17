@@ -70,8 +70,8 @@ urlpatterns = [
 
 
     # User 
-    path('check_phno',check_phno,name='check_phno'),
-    path('check_useremail',check_useremail,name='check_useremail'),
+    # path('check_phno',check_phno,name='check_phno'),
+    # path('check_useremail',check_useremail,name='check_useremail'),
     path('adduser', adduser.as_view(), name='adduser'),
     path('userlist', UserList.as_view(), name='userlist'),
     path('useremp', UserEmpList.as_view(), name='useremp'),

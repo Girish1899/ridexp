@@ -1692,22 +1692,22 @@ class ProfileHistoryView(TemplateView):
         return context
 
 # @login_required(login_url='login')
-def check_phno(request):
-    phone_number = request.GET.get('phone_number', None)
-    ph = Profile.objects.filter(phone_number=phone_number)
-    data = {
-        'exists': ph.count() > 0
-    }
-    return JsonResponse(data)
+# def check_phno(request):
+#     phone_number = request.GET.get('phone_number', None)
+#     ph = Profile.objects.filter(phone_number=phone_number)
+#     data = {
+#         'exists': ph.count() > 0
+#     }
+#     return JsonResponse(data)
 
 # @login_required(login_url='login')
-def check_useremail(request):
-    email = request.GET.get('email', None)
-    em = User.objects.filter(email=email)
-    data = {
-        'exists': em.count() > 0
-    }
-    return JsonResponse(data)   
+# def check_useremail(request):
+#     email = request.GET.get('email', None)
+#     em = User.objects.filter(email=email)
+#     data = {
+#         'exists': em.count() > 0
+#     }
+#     return JsonResponse(data)   
 
 # contact ###############################
 class ContactList(ListView):
