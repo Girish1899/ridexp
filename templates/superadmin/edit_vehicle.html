@@ -18,14 +18,13 @@
             </div>
         </div>
 
-
         <div class="col-xl-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Car</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
                     <div class="form-group row">
@@ -60,7 +59,7 @@
                         <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="Vehicle_Number" name="Vehicle_Number" value="{{ vehiclelist.0.Vehicle_Number }}" maxlength="10">
                         </div>
-                    </div>
+                    </div><br>
 
                     <!-- <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle No.*</label>
@@ -81,7 +80,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
                                 <option value="" selected disabled>Select Car Category</option>
                                 {% for obj in catlist %}
@@ -93,7 +92,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
                                 <option value="" selected disabled>Select Car Brand</option>
                                 {% for obj in blist %}
@@ -101,11 +100,11 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Model *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="model" name="model" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Car Model</option>
                                 {% for obj in modellist %}
@@ -117,16 +116,16 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
-                        <div class="col-sm-4">    
+                        <div class="col-sm-3">    
                             <select class="form-control form-control-lg" id="year" name="year">
                                 <option value="" selected disabled>{{ vehiclelist.0.year }}</option>
                             </select>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="commission_type" name="commission_type" class="form-control form-control-lg" onchange="updateCommissionPercentage()">
                                 <option value="" selected disabled>Select Commission Type</option>
                                 {% for obj in ctypelist %}
@@ -136,14 +135,14 @@
                         </div>
                         
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Percentage *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" id="commission_percentage" name="commission_percentage" value="{{ vehiclelist.0.commission_type.commission_percentage }}" disabled>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car body color *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="color" name="color" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Car Body Color</option>
                                 {% for obj in colorlist %}
@@ -155,7 +154,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Transmission Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="transmission" name="transmission" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Car Transmission Type</option>
                                 {% for obj in tlist %}
@@ -163,12 +162,12 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
+                    </div><br>
 
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select id="vehicle_type" name="vehicle_type" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Fuel Type</option>
                                 {% for obj in vtypelist %}
@@ -180,34 +179,34 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select class="form-control form-control-lg" id="car_type" name="car_type">
                                 <option value="" selected disabled>Select Car Type</option>
                                 <option {% if vehiclelist.0.car_type == 'AC' %}selected{% endif %}>AC</option>
                                 <option {% if vehiclelist.0.car_type == 'NON AC' %}selected{% endif %}>NON AC</option>
                             </select>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="date" class="form-control form-control-lg" id="insurance_expiry" name="insurance_expiry" value="{% if vehiclelist.0.insurance_expiry %}{{ vehiclelist.0.insurance_expiry|date:'Y-m-d' }}{% endif %}">
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Drive Type *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-2">
                             <select class="form-control form-control-lg" id="drive_status" name="drive_status">
                                 <option value="" selected disabled>Select Drive Status</option>
                                 <option value="selfdrive" {% if vehiclelist.0.drive_status == "selfdrive" %} selected {% endif %}>Self Drive</option>
                                 <option value="otherdrive" {% if vehiclelist.0.drive_status == "otherdrive" %} selected {% endif %}>Other Drive</option>
                             </select>
                         </div>
-                    </div><hr>
+                    </div><hr><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Registration Certificate *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate" >
                             {% if vehiclelist.0.registration_certificate %}
                             <img id="preview2" src="{{ vehiclelist.0.registration_certificate.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -219,7 +218,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate" >
                             {% if vehiclelist.0.fc_certificate %}
                             <img id="preview3" src="{{ vehiclelist.0.fc_certificate.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -227,11 +226,11 @@
                             <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Policy *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy" >
                             {% if vehiclelist.0.insurance_policy %}
                             <img id="preview4" src="{{ vehiclelist.0.insurance_policy.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -243,7 +242,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details" >
                             {% if vehiclelist.0.tax_details %}
                             <img id="preview5" src="{{ vehiclelist.0.tax_details.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -251,12 +250,12 @@
                             <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    </div>
+                    </div><br>
                     
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details" >
                             {% if vehiclelist.0.permit_details %}
                             <img id="preview6" src="{{ vehiclelist.0.permit_details.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -268,7 +267,7 @@
 
                     <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test" >
                             {% if vehiclelist.0.emission_test %}
                             <img id="preview7" src="{{ vehiclelist.0.emission_test.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -276,11 +275,11 @@
                             <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <select class="form-control form-control-lg" id="vehicle_status" name="vehicle_status">
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="active" {% if vehiclelist.0.vehicle_status == "active" %} selected {% endif %}>Active</option>

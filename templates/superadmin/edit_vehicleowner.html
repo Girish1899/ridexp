@@ -65,11 +65,11 @@
                                             <div class="col-sm-12">                                            
                                                 <textarea class="form-control" rows="2" id="address" name="address">{{ ownerlist.0.address }}</textarea>
                                             </div>
-                                        </div>
+                                        </div><br>
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <input type="file" class="form-control form-control-lg" id="image" name="image" >
                                                 {% if ownerlist.0.image %}
                                                 <img id="preview1" src="{{ ownerlist.0.image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -79,7 +79,7 @@
                                             </div>
 
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof" >
                                                 {% if ownerlist.0.address_proof %}
                                                 <img id="preview2" src="{{ ownerlist.0.address_proof.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -91,7 +91,7 @@
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
-                                            <div class="col-sm-4">
+                                            <div class="col-sm-3">
                                                 <input type="file" class="form-control form-control-lg" id="identity" name="identity" >
                                                 {% if ownerlist.0.identity %}
                                                 <img id="preview3" src="{{ ownerlist.0.identity.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">

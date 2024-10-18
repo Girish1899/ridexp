@@ -37,21 +37,21 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" value="{{ brandlist.category.category_name }}" style="color: #454545; font-size: 16px;" disabled>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand Name</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="brand_name" name="brand_name" value="{{ brandlist.brand_name }}" disabled>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" value="{{ brandlist.get_status_display }}" disabled>
                         </div>
                     </div>
@@ -59,24 +59,24 @@
                     <hr>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created On</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{% if brandlist.created_on %}{{ brandlist.created_on|date:'Y-m-d' }}{% endif %}" disabled>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated On</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{% if brandlist.updated_on %}{{ brandlist.updated_on|date:'Y-m-d' }}{% endif %}" disabled>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created By</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{{ brandlist.created_by }}" disabled>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated By</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg"  value="{{ brandlist.updated_by }}" disabled>
                         </div>
                     </div>
