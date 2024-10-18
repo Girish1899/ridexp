@@ -35,15 +35,15 @@
                                         <th>Serial No</th>
                                         <th>Package Title</th>
                                         <th>Category</th>
-                                        <th>Top Attraction</th>
+                                        <!-- <th>Top Attraction</th>
                                         <th>Description</th>
                                         <th>Why Visit</th>
-                                        <th>Package Highlights</th>
-                                        <th>Image</th>
-                                        <th>Image Link</th>
-                                        <th>Facebook Link</th>
+                                        <th>Package Highlights</th> -->
+                                        <!-- <th>Image</th>
+                                        <th>Image Link</th> -->
+                                        <!-- <th>Facebook Link</th>
                                         <th>Instagram Link</th>
-                                        <th>WhatsApp Link</th>
+                                        <th>WhatsApp Link</th> -->
                                         <th>Meta Title</th>
                                         <th>Meta Description</th>
                                         <th>Meta Keywords</th>
@@ -59,11 +59,11 @@
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ i.title }}</td>
                                         <td>{{ i.package_category.category_name }}</td>
-                                        <td>{{ i.top_attraction }}</td>
+                                        <!-- <td>{{ i.top_attraction }}</td>
                                         <td>{{ i.description }}</td>
                                         <td>{{ i.why_visit }}</td>
-                                        <td>{{ i.package_highlights }}</td>
-                                        <td>
+                                        <td>{{ i.package_highlights }}</td> -->
+                                        <!-- <td>
                                             {% if i.image %}
                                                 <img src="{{ i.image.url }}" alt="Package Image" width="100" height="100">
                                             {% else %}
@@ -76,8 +76,8 @@
                                             {% else %}
                                                 No Image Link
                                             {% endif %}
-                                        </td>
-                                        <td>
+                                        </td> -->
+                                        <!-- <td>
                                             {% if i.facebook_link %}
                                                 <a href="{{ i.facebook_link }}" target="_blank">Facebook</a>
                                             {% else %}
@@ -97,7 +97,7 @@
                                             {% else %}
                                                 No WhatsApp Link
                                             {% endif %}
-                                        </td>
+                                        </td> -->
                                         <td>{{ i.meta_title }}</td>
                                         <td>{{ i.meta_description }}</td>
                                         <td>{{ i.meta_keywords }}</td>
@@ -146,7 +146,7 @@
     function EditPackage(webpackage_id) {
         var action = confirm("Are you sure you want to edit this package?");
         if (action !== false) {
-            window.location.href = "author_Packages_edit/" + webpackage_id;
+            window.location.href = "author-Packages-edit/" + webpackage_id;
         }
     }
 

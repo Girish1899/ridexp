@@ -607,7 +607,7 @@ class RideList(ListView):
     
         
         # Fetch rides with a pickup date of today and status as current bookings
-        current_rides = RideDetails.objects.filter(ride_status='currentbookings', pickup_date=today)
+        current_rides = RideDetails.objects.filter(ride_status='currentbookings', pickup_date__exact=today)
 
         print(f"Current rides count: {current_rides.count()}")
         

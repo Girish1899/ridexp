@@ -36,14 +36,13 @@
                                     <tr style="color: black !important;">
                                     <th>Serial No</th>
                                     <th>Title</th>
-                                    <th>Description</th>
-                                    <th>Image</th>
-                                    <th>Image Link</th>
-                                    <th>facebook Link</th>
+                                    <!-- <th>Description</th> -->
+                                    <!-- <th>Image</th>
+                                    <th>Image Link</th> -->
+                                    <!-- <th>facebook Link</th>
                                     <th>Whatsapp Link</th>
-                                    <th>Instagram Link</th>
+                                    <th>Instagram Link</th> -->
                                     <th>Backlink</th>
-                                    <th>Author</th>
                                     <th>Related Bloglink</th>
                                     <th>Meta Title</th>
                                     <th>Meta Description</th>
@@ -59,8 +58,8 @@
                                 <tr style="color: #030000;">
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ i.title }}</td>
-                                    <td>{{ i.description }}</td>
-                                    <td>
+                                    <!-- <td>{{ i.description }}</td> -->
+                                    <!-- <td>
                                         {% if i.image %}
                                             <img src="{{ i.image.url }}" alt="Package Image" width="100" height="100">
                                         {% else %}
@@ -73,8 +72,8 @@
                                         {% else %}
                                             No Image Link
                                         {% endif %}
-                                    </td>
-                                    <td>
+                                    </td> -->
+                                    <!-- <td>
                                         {% if i.facebook_link %}
                                             <a href="{{ i.facebook_link }}" target="_blank">Facebook</a>
                                         {% else %}
@@ -94,9 +93,8 @@
                                         {% else %}
                                             No WhatsApp Link
                                         {% endif %}
-                                    </td>
+                                    </td> -->
                                     <td>{{ i.backlink }}</td>
-                                    <td>{{ i.author }}</td>
                                     <td>{{ i.related_bloglink }}</td>
                                     <td>{{ i.meta_title }}</td>
                                     <td>{{ i.meta_description }}</td>
@@ -146,7 +144,7 @@
     function EditBlogs(blogs_id) {
         var action = confirm("Are you sure you want to edit this Blogs?");
         if (action !== false) {
-            window.location.href = "author_blogs_edit/" + blogs_id; // Add a slash here
+            window.location.href = "author-blogs-edit/" + blogs_id; // Add a slash here
         }
     };
     
