@@ -383,7 +383,7 @@ class UpdateBrand(APIView):
 
         # Update the brand with new data
         brand.brand_name = request.POST['brand_name']
-        brand.category = request.POST['category']
+        brand.category = Category.objects.get(category_id=request.POST.get('category'))
         brand.status = request.POST['status']
         brand.updated_by = request.user
         brand.save()
