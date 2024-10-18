@@ -6,98 +6,122 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
+                    <h4>Call History for Ride ID: {{ ride.company_format }}</h4>
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item active" ><a href="{% url 'telecalleraddride' %}" style="color: white !important;">Add Bookings</a></li>
-                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                    <li class="breadcrumb-item">
+                        <a href="javascript:history.back()" style="color: white !important;">Go Back</a>
+                    </li>
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
+        <!-- Ride and Customer Profile Section -->
         <div class="row">
             <div class="col-12">
-              <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                  <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
-                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Call History </h6>
-                  </div>
-                </div>
-                <div class="card-body px-0 pb-2">
-                  <div class="table-responsive p-0">
-                    <table class="table align-items-center justify-content-center mb-0">
-                      <thead>
-                        <tr style="color: black !important;">
-                                        <th>Booking ID</th>         
-                                        <th>Customer name</th>
-                                        <th>Customer phone number</th>
-                                        <th>Customer email</th>                               
-                                        <th>Ridetype</th>
-                                        <th>Source</th>
-                                        <th>Destination</th>
-                                        <th>Pickup date</th>
-                                        <th>Pickup time</th>
-                                        <th>Category</th>
-                                        <th>Brand</th>
-                                        <th>model</th>                                       
-                                        <th>Total Fare</th>
-                                        <th>Customer address</th>
-                                        <th>Customer Notes</th>
-                                        <th>Status</th>
-                                        <th>booking datetime</th>
-                                        <th>Updated On</th>
-                                        <th>Updated by</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody id="callHistoryBody" style="color: #030000;">
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <!-- Data will be populated here -->
-                                </tbody>
-                  
-                            </table>
-                          </div>
+                <div class="card profile-card shadow-sm p-4">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="card border-light mb-3">
+                                <div class="card-header bg-primary" style="color: white;">Ride Details</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Ride ID: {{ ride.company_format }}</h5>
+                                    <p class="card-text">Source: {{ ride.source }}</p>
+                                    <p class="card-text">Destination: {{ ride.destination }}</p>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+
+                        <div class="col-md-4">
+                            <div class="card border-light mb-3">
+                                <div class="card-header bg-success" style="color: white;">Customer Details</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Name: {{ ride.customer.customer_name }}</h5>
+                                    <p class="card-text">Phone: {{ ride.customer.phone_number }}</p>
+                                    <p class="card-text">Email: {{ ride.customer.email }}</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-2">
+                            <div class="card border-light mb-3">
+                                <div class="card-header bg-info" style="color: white;">Call Summary</div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Total Calls: <span class="badge bg-warning">{{ callSummary.totalCalls }}</span></h5>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
+                </div>
             </div>
         </div>
 
-<script>
-
-    function EditRide(ride_id) {
-        var action = confirm("Are you sure you want to edit this ride?");
-        if (action !== false) {
-            window.location.href = "telecallerEditRide/" + ride_id;
-        }
-    };
-</script>
+        <!-- Call History Table -->
+        <div class="row mt-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header p-0 position-relative">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                            <h6 class="text-capitalize ps-3" style="color: white;">Call History Details</h6>
+                        </div>
+                    </div>
+                    <div class="card-body px-0 pb-2">
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black !important;">
+                                        <th>Date</th>
+                                        <th>Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="callHistoryBody" style="color: #030000;">
+                                    <!-- Data will be populated here via JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        let callHistoryData = JSON.parse(localStorage.getItem('callHistoryData'));
-        if (callHistoryData) {
-            let tbody = document.getElementById('callHistoryBody');
-            callHistoryData.forEach(function(rowData) {
+        let rideId = '{{ ride_id }}';
+        let callHistoryData = JSON.parse(localStorage.getItem('callHistory')) || {};
+        let tbody = document.getElementById('callHistoryBody');
+        let totalCallsElement = document.querySelector('.badge.bg-warning');  // To update total calls
+
+        if (callHistoryData[rideId]) {
+            let history = callHistoryData[rideId];
+            totalCallsElement.textContent = history.callTimes.length;  // Update the total call count
+
+            history.callTimes.forEach(time => {
                 let row = document.createElement('tr');
-                rowData.forEach(function(cellData) {
-                    let cell = document.createElement('td');
-                    cell.textContent = cellData;
-                    row.appendChild(cell);
-                });
+
+                let dateCell = document.createElement('td');
+                dateCell.textContent = new Date(time).toLocaleDateString();
+                row.appendChild(dateCell);
+
+                let timeCell = document.createElement('td');
+                timeCell.textContent = new Date(time).toLocaleTimeString();
+                row.appendChild(timeCell);
+
                 tbody.appendChild(row);
             });
+        } else {
+            totalCallsElement.textContent = 0;  // Set total calls to 0 if no history found
+            let noDataRow = document.createElement('tr');
+            let noDataCell = document.createElement('td');
+            noDataCell.setAttribute('colspan', 2);
+            noDataCell.textContent = 'No call history found for this ride.';
+            noDataRow.appendChild(noDataCell);
+            tbody.appendChild(noDataRow);
         }
     });
 </script>
 
-    
 {% endblock content %}
-

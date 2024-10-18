@@ -10,6 +10,7 @@ urlpatterns = [
     path('telecallercustomerlist', CustomerList.as_view(), name='telecallercustomerlist'),
     path('telecallerEditCustomer/<int:id>/', EditCustomer.as_view(), name='telecallerEditCustomer'),
     path('telecallerUpdateCustomer', UpdateCustomer.as_view(), name='telecallerUpdateCustomer'),  
+    path('tele_check_phonenumber', check_phonenumber, name='tele_check_phonenumber'),
 
     # ride details ###########################
     path('fetch_customer_details/', get_customer_details, name='fetch_customer_details'),
@@ -30,8 +31,9 @@ urlpatterns = [
 
 
     #profile
-    path('profile', profile.as_view(), name='tele_profile'),
+    path('tele_profile', profile.as_view(), name='tele_profile'),
+    path('telecaller-profile', telecaller_profile_view, name='telecaller-profile'),
     path('update-user/', UpdateUserView.as_view(), name='tele_update_user'),
-    path('callhistory', CalHistory.as_view(), name='callhistory'),
+    path('callhistory/<int:ride_id>/', call_history_view, name='callhistory'),
 
 ]

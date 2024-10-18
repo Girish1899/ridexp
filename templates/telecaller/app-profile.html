@@ -1,9 +1,7 @@
 {% extends 'telecaller/base.html' %}
 {% load static %}
 {% block content%}
-<link rel="stylesheet" 
-          href=
-"https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css" />
     
         <!--**********************************
             Content body start
@@ -13,7 +11,7 @@
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
-                            <h4>Hi {{userlist.0.username}}, welcome back!</h4>
+                            <h4>Hi {{profile.user.username}}, welcome back!</h4>
                         </div>
                     </div>
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -31,7 +29,7 @@
                                 <div class="photo-content">
                                     <div class="cover-photo"></div>
                                     <div class="profile-photo">
-                                        <img src="{% static 'images/profile/profile.png' %}" class="img-fluid rounded-circle" alt="">
+                                        <img src="{% static 'images/profileimg.jpeg' %}" class="img-fluid rounded-circle" alt="">
                                     </div>
                                 </div>
                                 <div class="profile-info">
@@ -40,13 +38,13 @@
                                             <div class="row">
                                                 <div class="col-xl-4 col-sm-4 border-right-1 prf-col">
                                                     <div class="profile-name">
-                                                        <h4 class="text-primary">{{userlist.0.username}}</h4>
-                                                        <p>{{userlist.0.date_joined}}</p>
+                                                        &nbsp;<h4 class="text-primary">{{profile.type}}</h4>
+                                                        <p>{{profile.date_joined}}</p>
                                                     </div>
                                                 </div>
                                                 <div class="col-xl-4 col-sm-4 border-right-1 prf-col">
                                                     <div class="profile-email">
-                                                        <h4 class="text-muted">{{userlist.0.email}}</h4>
+                                                        <h4 class="text-muted">{{profile.user.email}}</h4>
                                                         <p>Email</p>
                                                     </div>
                                                 </div>
@@ -94,45 +92,50 @@
                                 <div class="profile-tab">
                                     <div class="custom-tab-1">
                                         <ul class="nav nav-tabs">
-                                            <li class="nav-item"><a href="#my-posts" data-toggle="tab" class="nav-link active show">Work</a>
+                                            <li class="nav-item"><a href="#about-me" data-toggle="tab" class="nav-link active show">About me</a>
                                             </li>
-                                            <li class="nav-item"><a href="#about-me" data-toggle="tab" class="nav-link">About me</a>
-                                            </li>
-                                            <li class="nav-item"><a href="#profile-settings" data-toggle="tab" class="nav-link">My Profile</a>
-                                            </li>
+                                           
+                                            
+                                           
                                         </ul>
                                         <div class="tab-content">
-                                            <div id="my-posts" class="tab-pane fade active show">
-                                                <h4>COMING SOON</h4>
-                                            </div>
-                                            <div id="about-me" class="tab-pane fade">
-                                                <h4>COMING SOON</h4>
-                                            </div>
-                                            <div id="profile-settings" class="tab-pane fade">
-                                                <div class="pt-3">
-                                                    <div class="settings-form">
-                                                        <h4 class="text-primary">Account Setting</h4>
-                                                        <form onsubmit="return false;">
-                                                            <div class="form-row">
-                                                                <div class="form-group col-md-6">
-                                                                    <label>Username</label>
-                                                                    <input type="text" id="username" placeholder="username" class="form-control" value={{userlist.0.username}}>
-                                                                </div>
-                                                                <div class="form-group col-md-6" style="display: none;">
-                                                                    <label>Password</label>
-                                                                    <div style="display:flex;"><input type="password" id="password" placeholder="Password" class="form-control" value={{userlist.0.password}}>
-                                                                    <i class="bi bi-eye-slash" id="togglePassword" style="margin:2%;"></i></div>
-                                                                </div>
-                                                            </div>
-                                                           
-                                                         
-                                                         
-                                                            <button class="btn btn-primary" type="submit" id="update-button">
-                                                                update</button>
-                                                        </form>
+                                           
+                                            <div id="about-me" class="tab-pane fade active show">
+                                                
+                                                <div class="profile-personal-info">
+                                                    <h4 class="text-primary mb-4">Personal Information</h4>
+                                                    <div class="row mb-4">
+                                                        <div class="col-3">
+                                                            <h5 class="f-w-500">Name <span class="pull-right">:</span>
+                                                            </h5>
+                                                        </div>
+                                                        <div class="col-9"><span style="color: black;">{{profile.user.username}}</span>
+                                                        </div>
                                                     </div>
+                                                    <div class="row mb-4">
+                                                        <div class="col-3">
+                                                            <h5 class="f-w-500">Email <span class="pull-right">:</span>
+                                                            </h5>
+                                                        </div>
+                                                        <div class="col-9"><span style="color: black;">{{profile.user.email}}</span>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div class="row mb-4">
+                                                        <div class="col-3">
+                                                            <h5 class="f-w-500">Address <span class="pull-right">:</span></h5>
+                                                        </div>
+                                                        <div class="col-9"><span style="color: black;">{{profile.address}}</span>
+                                                        </div>
+                                                    </div>
+                                                    
                                                 </div>
                                             </div>
+
+                                           
+
+                                            
                                         </div>
                                     </div>
                                 </div>
@@ -142,50 +145,5 @@
                 </div>
             </div>
         </div>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script>
-             $('#update-button').click(function(event) {
-                event.preventDefault();
-                $.ajax({
-                    type: 'POST',
-                    url: '{% url "tele_update_user" %}',
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    data: {
-                        'username': $('#username').val(),
-                        'password': $('#password').val()
-                    },
-                    success: function(response) {
-                        if (response['status'] === 'success') {
-                            alert('User info updated successfully.Please login using new credentials!');
-                            window.location.href = "{% url 'login' %}";
-                        } else {
-                            alert('Error: ' + response['message']);
-                        }
-                        //window.location.href = "{% url 'profile' %}";
-                    },
-                    error: function(response) {
-                        alert('An error occurred.');
-                        print(response)
-                    }
-                });
-            });
-
-            const togglePassword = document
-            .querySelector('#togglePassword');
-        const password = document.querySelector('#password');
-        togglePassword.addEventListener('click', () => {
-            // Toggle the type attribute using
-            // getAttribure() method
-            const type = password
-                .getAttribute('type') === 'password' ?
-                'text' : 'password';
-            password.setAttribute('type', type);
-            // Toggle the eye and bi-eye icon
-            this.classList.toggle('bi-eye');
-        });
-
-
-        </script>
+        
         {% endblock content%}

@@ -21,117 +21,116 @@
 
         <div class="row">
             <div class="col-12">
-              <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center" style="background-color: #F3797E;">
-                      <h6 class="text-white text-capitalize ps-3 mb-0" style="color: white !important;">Current Bookings List</h6>
-                      <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
-                    </div>
-                  </div>
-                <div class="card-body px-0 pb-2">
-                    <div class="filter_report" style="display:none;">
-                        <div>
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="example">
-                                    <p class="mb-1">Select Date</p>
-                                    <input id="single-date-picker" class="form-control" type="text" placeholder="Select Date">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="example">
-                                    <p class="mb-1">Select Date Range</p>
-                                    <input id="date-range-picker" class="form-control" type="text" placeholder="Select Date Range">
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Time Frame</p>
-                                    <select id="time-frame" class="form-control form-control-lg">
-                                        <option value="">Select Time Frame</option>
-                                        <option value="today">Today</option>
-                                        <option value="yesterday">Yesterday</option>
-                                        <option value="this-month">This Month</option>
-                                        <option value="last-month">Last Month</option>
-                                        <option value="this-year">This Year</option>
-                                        <option value="last-year">Last Year</option>
-                                    </select>
-                                </div>
-                            </div>
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-0 d-flex justify-content-between align-items-center" style="background-color: #F3797E;">
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Current Bookings</h6>
                             
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Service Type</p>
-                                    <select id="single-select" class="form-control form-control-lg">
-                                        <option value="">Select Service</option>
-                                        {% for service in services %}
-                                        <option value="{{ service.ridetype_id }}">{{ service.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Booking Id</p>
-                                    <select id="single-select1" class="form-control form-control-lg">
-                                        <option value="">Select Booking Id</option>
-                                        {% for booking in bookings %}
-                                        <option value="{{ booking.ride_id }}">{{ booking.company_format }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Vehicle Type</p>
-                                    <select id="vehicle-type" class="form-control form-control-lg">
-                                        <option value="">Select Vehicle type</option>
-                                        {% for category in categories %}
-                                        <option value="{{ category.category_id }}">{{ category.category_name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Vehicle ID</p>
-                                    <select id="vehicle-id" class="form-control form-control-lg">
-                                        <option value="">Select Vehicle ID</option>
-                                        {% for vehicle in vehicles %}
-                                        <option value="{{ vehicle.vehicle_id }}">{{ vehicle.company_format }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <p class="mb-1">Driver ID</p>
-                                    <select id="driver-id" class="form-control form-control-lg">
-                                        <option value="">Select Driver ID</option>
-                                        {% for driver in drivers %}
-                                        <option value="{{ driver.driver_id }}">{{ driver.company_format }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label>From Time</label>
-                                <input id="from-time-picker" type="time" class="form-control">
-                            </div>
-                            <div class="col-md-2">
-                                <label>To Time</label>
-                                <input id="to-time-picker" type="time" class="form-control">
-                            </div>
+                            <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
                         </div>
-                    </div>
-                </div><br>
+                        <div class="card-body px-0 pb-2">
+                        <div class="filter_report" style="display:none;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date</p>
+                                        <input id="single-date-picker" class="form-control" type="text" placeholder="Select Date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date Range</p>
+                                        <input id="date-range-picker" class="form-control" type="text" placeholder="Select Date Range">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Time Frame</p>
+                                        <select id="time-frame" class="form-control form-control-lg">
+                                            <option value="">Select Time Frame</option>
+                                            <option value="today">Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="this-month">This Month</option>
+                                            <option value="last-month">Last Month</option>
+                                            <option value="this-year">This Year</option>
+                                            <option value="last-year">Last Year</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Service Type</p>
+                                        <select id="single-select" class="form-control form-control-lg">
+                                            <option value="">Select Service</option>
+                                            {% for service in services %}
+                                            <option value="{{ service.ridetype_id }}">{{ service.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Booking Id</p>
+                                        <select id="single-select1" class="form-control form-control-lg">
+                                            <option value="">Select Booking Id</option>
+                                            {% for booking in bookings %}
+                                            <option value="{{ booking.ride_id }}">{{ booking.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle Type</p>
+                                        <select id="vehicle-type" class="form-control form-control-lg">
+                                            <option value="">Select Vehicle type</option>
+                                            {% for category in categories %}
+                                            <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle ID</p>
+                                        <select id="vehicle-id" class="form-control form-control-lg">
+                                            <option value="">Select Vehicle ID</option>
+                                            {% for vehicle in vehicles %}
+                                            <option value="{{ vehicle.vehicle_id }}">{{ vehicle.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <p class="mb-1">Driver ID</p>
+                                        <select id="driver-id" class="form-control form-control-lg">
+                                            <option value="">Select Driver ID</option>
+                                            {% for driver in drivers %}
+                                            <option value="{{ driver.driver_id }}">{{ driver.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>From Time</label>
+                                    <input id="from-time-picker" type="time" class="form-control">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>To Time</label>
+                                    <input id="to-time-picker" type="time" class="form-control">
+                                </div>
+                            </div>
+                        </div><br>
+
 
                   <div class="table-responsive p-0">
                     <table class="table align-items-center justify-content-center mb-0">
@@ -190,33 +189,17 @@
                                     <button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#cancelBookingModal" data-ride-id="{{ i.ride_id }}">Cancel Booking</button>
                                 </td>
                                           
-                                        <td>
-                                            <button type="button" class="btn btn-success" style="margin-top: 0px;" 
-                                                onclick="makeCall('{{ i.customer.phone_number }}', [
-                                                    '{{ i.company_format }}', 
-                                                    '{{ i.customer.customer_name }}', 
-                                                    '{{ i.customer.phone_number }}', 
-                                                    '{{ i.customer.email }}', 
-                                                    '{{ i.ridetype.name }}', 
-                                                    '{{ i.source }}', 
-                                                    '{{ i.destination }}', 
-                                                    '{{ i.pickup_date }}', 
-                                                    '{{ i.pickup_time }}', 
-                                                    '{{ i.model.brand.category.category_name }}', 
-                                                    '{{ i.model.brand.brand_name }}', 
-                                                    '{{ i.model.model_name }}', 
-                                                    '{{ i.total_fare }}', 
-                                                    '{{ i.customer.address }}', 
-                                                    '{{ i.customer_notes }}', 
-                                                    '{{ i.ride_status }}', 
-                                                    '{{ i.booking_datetime }}', 
-                                                    '{{ i.updated_on }}', 
-                                                    '{{ i.updated_by }}'
-                                                ])">
-                                                CALL
-                                            </button>
-                                            <!-- <button type="button" class="btn btn-success" style="margin-top: 0px;" onclick="makeCall('{{ i.customer.phone_number }}')">CALL</button> -->
-                                        </td>
+                                <td>   
+                                    <!-- Call Button -->
+                                    <button type="button" class="btn btn-success" onclick="makeCall('{{ i.ride_id }}', '{{ i.customer.phone_number }}')">
+                                        Call
+                                    </button>
+
+                                    <!-- Call History Button -->
+                                    <button type="button" class="btn btn-info">
+                                        <a href="{% url 'callhistory' i.ride_id %}" style="color: white !important;">View Call History</a>
+                                    </button>
+                                </td>
                                                                                                                     
                                     </tr>
                                     {% endfor %}
@@ -334,72 +317,60 @@
     $(document).ready(function() {
     console.log("Document is ready!");
 
-    // Assign Driver Button Click Event
-    $(document).on('click', '.assign-driver-btn', function() {
-        console.log("Assign driver button clicked!");
-
-        const driverId = $(this).data('driver-id');
-        const rideId = $('#assignDriverModal').data('ride-id');
-
-        console.log("Driver ID: ", driverId); // Debugging statement
-        console.log("Ride ID: ", rideId);     // Debugging statement
-
-        // Check if driverId is correctly retrieved
-        if (!driverId) {
-            console.error("Driver ID is missing");
-            alert("Driver ID is missing.");
-            return;
-        }
-
-        $.ajax({
-            url: '{% url "assign_driver" %}',
-            type: "POST",
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            data: JSON.stringify({ driver_id: driverId, ride_id: rideId }),
-            contentType: 'application/json; charset=utf-8',
-            success: function(result) {
-                console.log("Success: ", result);
-                
-                if (result.status === 'success') {
-                    alert("Driver assigned successfully. A message has been sent to the customer.");
-                } else {
-                    alert("Failed to assign driver: " + (result.message || "Unknown error."));
-                }
-                
-                location.reload(); // Reload page after handling the message
-            },
-            error: function(xhr, status, error) {
-                console.error("Error: ", xhr.responseText);
-                alert('Failed to assign driver. Please try again.');
-            }
-        });
-    });
-
-    // Modal Show Event
-    $('#assignDriverModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
-        var modal = $(this);
-        modal.data('ride-id', rideId); // Store ride ID in modal attribute
-
-        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
-    });
-});
-
-
     function EditRide(ride_id) {
-    var action = confirm("Are you sure you want to edit this ride?");
-    if (action !== false) {
-        window.location.href = "telecallerEditRide/" + ride_id;
+        var action = confirm("Are you sure you want to edit this ride?");
+        if (action !== false) {
+            window.location.href = "telecallerEditRide/" + ride_id;
+        }
     }
 
-    function HistoryRide(ride_id) {
-        window.location.href = "RideHistory/" + ride_id; // Add a slash here
-    };
-}; 
+    // Function to make a call and store call history
+    window.makeCall = function(rideId, phoneNumber) {
+            // Confirm before calling
+            var action = confirm("Are you sure you want to call this customer?");
+            if (!action) return;
 
+            // Initiate the call
+            window.location.href = "tel:" + phoneNumber;
+
+            // Get the current call history from localStorage
+            let callHistory = JSON.parse(localStorage.getItem('callHistory')) || {};
+
+            // If this ride ID doesn't exist in call history, initialize it
+            if (!callHistory[rideId]) {
+                callHistory[rideId] = {
+                    phoneNumber: phoneNumber,
+                    callCount: 0,
+                    callTimes: []
+                };
+            }
+
+            // Increment call count and store the current time
+            callHistory[rideId].callCount += 1;
+            callHistory[rideId].callTimes.push(new Date().toLocaleString());
+
+            // Save the updated history back to localStorage
+            localStorage.setItem('callHistory', JSON.stringify(callHistory));
+        };
+
+        // Function to display call history
+        // window.showCallHistory = function(rideId) {
+        //     let callHistory = JSON.parse(localStorage.getItem('callHistory')) || {};
+        //     let history = callHistory[rideId];
+
+        //     if (!history) {
+        //         alert("No call history found for this ride.");
+        //         return;
+        //     }
+
+            
+        //     // Display the call history details
+        //     // let message = Phone Number: ${history.phoneNumber}\n +
+        //     //               Number of Calls: ${history.callCount}\n +
+        //     //               Call Times:\n + history.callTimes.join('\n');
+        //     // alert(message);
+        // };
+    });
 </script>
 
 <script>

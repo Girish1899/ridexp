@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View
 from rest_framework.response import Response
 from rest_framework import status
-from superadmin.models import  Brand, Category, Model, RideDetails,Pricing, RideDetailsHistory,User,Customer,Driver,Ridetype,Vehicle
+from superadmin.models import  Brand, Category, Model, Profile, RideDetails,Pricing, RideDetailsHistory,User,Customer,Driver,Ridetype,Vehicle
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.db.models import Q
@@ -40,9 +40,19 @@ def index(request):
     return render(request,'telecaller/index.html',context)
 
 
-class CalHistory(ListView):
-    model = RideDetails
-    template_name = "telecaller/callhistory.html"
+def call_history_view(request, ride_id):
+    try:
+        ride = RideDetails.objects.get(ride_id=ride_id)  # Assuming ride_id is the field in the model
+    except RideDetails.DoesNotExist:
+        # Handle the case where the ride does not exist
+        ride = None
+
+    # Pass the ride object to the template along with the ride_id
+    context = {
+        'ride_id': ride_id,
+        'ride': ride,  # Pass the specific ride details
+    }
+    return render(request, 'telecaller/callhistory.html', context)
 
 
 # customer###################################
@@ -851,6 +861,11 @@ class profile(TemplateView):
             
         context['userlist']= list(userlist)
         return context
+    
+@login_required
+def telecaller_profile_view(request):
+    profile = get_object_or_404(Profile, user=request.user, type='telecaller')
+    return render(request, 'telecaller/app-profile.html', {'profile': profile})
     
 # @method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdateUserView(View):

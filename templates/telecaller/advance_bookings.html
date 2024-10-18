@@ -21,115 +21,116 @@
 
         <div class="row">
             <div class="col-12">
-              <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3 d-flex justify-content-between align-items-center" style="background-color: #F3797E;">
-                      <h6 class="text-white text-capitalize ps-3 mb-0" style="color: white !important;">Advance Bookings List</h6>
-                      <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
-                    </div>
-                  </div>
-                <div class="card-body px-0 pb-2">
-                    <div class="filter_report" style="display:none;">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="example">
-                                    <p class="mb-1">Select Date</p>
-                                    <input id="single-date-picker" class="form-control" type="text" placeholder="Select Date">
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="example">
-                                    <p class="mb-1">Select Date Range</p>
-                                    <input id="date-range-picker" class="form-control" type="text" placeholder="Select Date Range">
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Time Frame</p>
-                                    <select id="time-frame" class="form-control form-control-lg">
-                                        <option value="">Select Time Frame</option>
-                                        <option value="today">Today</option>
-                                        <option value="yesterday">Yesterday</option>
-                                        <option value="this-month">This Month</option>
-                                        <option value="last-month">Last Month</option>
-                                        <option value="this-year">This Year</option>
-                                        <option value="last-year">Last Year</option>
-                                    </select>
-                                </div>
-                            </div>
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-0 d-flex justify-content-between align-items-center" style="background-color: #F3797E;">
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Current Bookings</h6>
                             
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Service Type</p>
-                                    <select id="single-select" class="form-control form-control-lg">
-                                        <option value="">Select Service</option>
-                                        {% for service in services %}
-                                        <option value="{{ service.ridetype_id }}">{{ service.name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Booking Id</p>
-                                    <select id="single-select1" class="form-control form-control-lg">
-                                        <option value="">Select Booking Id</option>
-                                        {% for booking in bookings %}
-                                        <option value="{{ booking.ride_id }}">{{ booking.company_format }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Vehicle Type</p>
-                                    <select id="vehicle-type" class="form-control form-control-lg">
-                                        <option value="">Select Vehicle type</option>
-                                        {% for category in categories %}
-                                        <option value="{{ category.category_id }}">{{ category.category_name }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="form-group">
-                                    <p class="mb-1">Vehicle ID</p>
-                                    <select id="vehicle-id" class="form-control form-control-lg">
-                                        <option value="">Select Vehicle ID</option>
-                                        {% for vehicle in vehicles %}
-                                        <option value="{{ vehicle.vehicle_id }}">{{ vehicle.company_format }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <div class="form-group">
-                                    <p class="mb-1">Driver ID</p>
-                                    <select id="driver-id" class="form-control form-control-lg">
-                                        <option value="">Select Driver ID</option>
-                                        {% for driver in drivers %}
-                                        <option value="{{ driver.driver_id }}">{{ driver.company_format }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="col-md-2">
-                                <label>From Time</label>
-                                <input id="from-time-picker" type="time" class="form-control">
-                            </div>
-                            <div class="col-md-2">
-                                <label>To Time</label>
-                                <input id="to-time-picker" type="time" class="form-control">
-                            </div>
+                            <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
                         </div>
-                    </div><br>
+                        <div class="card-body px-0 pb-2">
+                        <div class="filter_report" style="display:none;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date</p>
+                                        <input id="single-date-picker" class="form-control" type="text" placeholder="Select Date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date Range</p>
+                                        <input id="date-range-picker" class="form-control" type="text" placeholder="Select Date Range">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Time Frame</p>
+                                        <select id="time-frame" class="form-control form-control-lg">
+                                            <option value="">Select Time Frame</option>
+                                            <option value="today">Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="this-month">This Month</option>
+                                            <option value="last-month">Last Month</option>
+                                            <option value="this-year">This Year</option>
+                                            <option value="last-year">Last Year</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Service Type</p>
+                                        <select id="single-select" class="form-control form-control-lg">
+                                            <option value="">Select Service</option>
+                                            {% for service in services %}
+                                            <option value="{{ service.ridetype_id }}">{{ service.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Booking Id</p>
+                                        <select id="single-select1" class="form-control form-control-lg">
+                                            <option value="">Select Booking Id</option>
+                                            {% for booking in bookings %}
+                                            <option value="{{ booking.ride_id }}">{{ booking.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle Type</p>
+                                        <select id="vehicle-type" class="form-control form-control-lg">
+                                            <option value="">Select Vehicle type</option>
+                                            {% for category in categories %}
+                                            <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle ID</p>
+                                        <select id="vehicle-id" class="form-control form-control-lg">
+                                            <option value="">Select Vehicle ID</option>
+                                            {% for vehicle in vehicles %}
+                                            <option value="{{ vehicle.vehicle_id }}">{{ vehicle.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <p class="mb-1">Driver ID</p>
+                                        <select id="driver-id" class="form-control form-control-lg">
+                                            <option value="">Select Driver ID</option>
+                                            {% for driver in drivers %}
+                                            <option value="{{ driver.driver_id }}">{{ driver.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>From Time</label>
+                                    <input id="from-time-picker" type="time" class="form-control">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>To Time</label>
+                                    <input id="to-time-picker" type="time" class="form-control">
+                                </div>
+                            </div>
+                        </div><br>
+
                   <div class="table-responsive p-0">
                     <table class="table align-items-center justify-content-center mb-0">
                       <thead>
