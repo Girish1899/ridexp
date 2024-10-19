@@ -39,7 +39,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Service Type</label>
                         <div class="col-sm-12">
-                            <select id="ridetype" name="ridetype" class="form-control form-control-lg">
+                            <select id="ridetype" name="ridetype" class="form-control form-control-lg" onchange="checkRideType()">
                                 <option value="" selected disabled>Select Service Type</option>
                                 {% for obj in ridetypelist %}
                                 <option value="{{ obj.ridetype_id }}" {% if obj.ridetype_id == ride.0.ridetype.ridetype_id %}selected{% endif %}>{{ obj.name }}</option>
@@ -49,21 +49,31 @@
                     </div>
 
                     <!-- Radio Button Section for Oneway/Roundtrip -->
-                    <div id="ride_options" class="form-group row" style="display: none;">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Trip Type</label>
+                    <div class="form-group row" id="trip_type_section" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
                         <div class="col-sm-12">
-                            <div id="trip_type_buttons">
-                                <!-- Radio buttons for Oneway, Roundtrip will be added here dynamically -->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way" {% if ride.0.pricing.trip_type == "one_way" %}checked{% endif %}>
+                                <label class="form-check-label" for="one_way" style="color: black;">One Way</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="trip_type" id="round_trip" value="round_trip" {% if ride.0.pricing.trip_type == "round_trip" %}checked{% endif %}>
+                                <label class="form-check-label" for="round_trip" style="color: black;">Round Trip</label>
                             </div>
                         </div>
                     </div>
                     
-                    <!-- Radio Button Section for Toll Option (Only for Airport) -->
-                    <div id="toll_options" class="form-group row" style="display: none;">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Toll Option</label>
+                    <!-- Toll Options (for Airport Rides) -->
+                    <div class="form-group row" id="toll_options" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Toll Option</label>
                         <div class="col-sm-12">
-                            <div id="toll_type_buttons">
-                                <!-- Radio buttons for Add Toll, No Toll will be added here dynamically -->
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="toll_option" id="add_toll" value="add_toll" {% if ride.0.pricing.toll_price == 'add_toll' %}checked{% endif %}>
+                                <label class="form-check-label" for="add_toll">Add Toll</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="toll_option" id="no_toll" value="no_toll" {% if ride.0.pricing.toll_price == 'no_toll' %}checked{% endif %}>
+                                <label class="form-check-label" for="no_toll">No Toll</label>
                             </div>
                         </div>
                     </div>
@@ -113,10 +123,10 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Category</label>
                         <div class="col-sm-12">
-                            <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                            <select id="category" name="category" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Category</option>
                                 {% for obj in catlist %}
-                                <option value="{{ obj.category_id }}" {% if obj.category_id == category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == ride.0.category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
                                 {% endfor %}
                             </select>
                             <div id="categoryError" class="invalid-feedback"></div>                          
@@ -166,7 +176,7 @@
                     </div>
 
                     <div class="col-12">
-                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Save Changes</button>
+                        <button type="submit" class="btn btn-primary mb-2" id="confirmBookingBtn">Save Changes</button>
                     </div>
                 </div>
             </div>
@@ -209,73 +219,62 @@
 });
 </script>
 <script>
-    // Set the minimum date to today's date
     document.addEventListener('DOMContentLoaded', function() {
+        // Set the minimum date to today's date
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var mm = String(today.getMonth() + 1).padStart(2, '0');
         var yyyy = today.getFullYear();
-
         today = yyyy + '-' + mm + '-' + dd;
         document.getElementById('pickup_date').setAttribute('min', today);
+    
+        // Log when the page loads and check the initial ride type
+        console.log("Page loaded. Checking initial ride type.");
+        checkRideType();
     });
-
-    $(document).ready(function () {
-    $('#ridetype').on('change', function () {
-        var selectedRidetypeName = $(this).find('option:selected').data('name').toLowerCase();
-        var tripOptionsHtml = '<label><input type="radio" name="trip_type" value="one_way" checked> Oneway</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' + 
-                              '<label><input type="radio" name="trip_type" value="round_trip"> Roundtrip</label>';
+    
+    function checkRideType() {
+        // Get the selected ride type and log it
+        var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
+        console.log("Selected Ride Type: ", selectedRideType);
         
-        // Reset options and hide initially
-        $('#trip_type_buttons').html('');
-        $('#toll_type_buttons').html('');
-        $('#ride_options, #toll_options, #drop_details').hide();  // Hide drop details initially
+        // Show/Hide Trip Type section based on selected ride type
+        $('#trip_type_section').toggle(selectedRideType.includes('outstation') || selectedRideType.includes('airport'));
+        
+        // Show/Hide Toll Option section only for Airport rides
+        $('#toll_options').toggle(selectedRideType.includes('airport'));
+    }
+    
+    $(document).ready(function () {
+        console.log("Document ready. Binding events.");
+    
+        // Recheck ride type when ridetype changes
+        $('#ridetype').change(function () {
+            console.log("Ride Type changed.");
+            checkRideType();
+        });
+    
+        // Handle showing Drop Date and Time based on Trip Type selection
+        $('input[name="trip_type"]').change(function () {
+            var tripType = $('input[name="trip_type"]:checked').val();
+            console.log("Trip Type selected: ", tripType);
+            $('#drop_details').toggle(tripType === 'round_trip');
+            getRidePricingDetails();  // Update ride pricing details
+        });
+    
+        // Event listener for Toll Option (for airport rides)
+        $('input[name="toll_option"]').change(function () {
+            var tollOption = $('input[name="toll_option"]:checked').val();
+            console.log("Toll Option selected: ", tollOption);
+            getRidePricingDetails();  // Update ride pricing details
+        });
+    
+        // Add event listener for Drop Date selection
+        $('#drop_date, #drop_time').on('change', function () {
+            console.log('Drop date or time selected:', $(this).val());  // Log the selected drop date or time
+            getRidePricingDetails();  // Fetch ride pricing details whenever drop date or time changes
+        });
 
-        if (selectedRidetypeName === 'airport') {
-            // Show both Oneway/Roundtrip options and Add Toll/No Toll options for Airport
-            $('#trip_type_buttons').html(tripOptionsHtml);
-            $('#ride_options').show();
-
-            var tollOptionsHtml = '<label><input type="radio" name="toll_option" value="add_toll"> Add Toll</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
-                                  '<label><input type="radio" name="toll_option" value="no_toll" checked > No Toll</label>';
-            $('#toll_type_buttons').html(tollOptionsHtml);
-            $('#toll_options').show();
-        } else if (selectedRidetypeName === 'outstation') {
-            // Only show Oneway/Roundtrip options for Outstation
-            $('#trip_type_buttons').html(tripOptionsHtml);
-            $('#ride_options').show();
-        }
-    });
-
-    // Add event listener for the Trip Type (Oneway/Roundtrip)
-    $('body').on('change', 'input[name="trip_type"]', function () {
-        var tripType = $('input[name="trip_type"]:checked').val();
-        var selectedRidetypeName = $('#ridetype').find('option:selected').data('name').toLowerCase();
-
-
-        if (tripType === 'round_trip' && selectedRidetypeName === 'outstation') {
-            // Show Drop Date and Drop Time for Roundtrip
-            $('#drop_details').show();
-        } else {
-            // Hide Drop Date and Drop Time for Oneway
-            $('#drop_details').hide();
-        }
-
-        // Update ride pricing details
-        getRidePricingDetails();
-    });
-
-    // Add event listener for Drop Date selection
-    $('#drop_date, #drop_time').on('change', function () {
-        console.log('Drop date or time selected:', $(this).val());  // Log the selected drop date or time
-        getRidePricingDetails();  // Fetch ride pricing details whenever drop date or time changes
-    });
-
-    // Add event listener for Toll Option (only for airport rides)
-    $('body').on('change', 'input[name="toll_option"]', function () {
-        // Update ride pricing details when toll option changes
-        getRidePricingDetails();
-    });
 
     function getTimeSlot(pickupTime) {
         var time = pickupTime.split(":");
@@ -304,6 +303,7 @@
         var drop_time = $('#drop_time').val();
 
         var trip_type = $('input[name="trip_type"]:checked').val() || '';  // Ensure the value exists or fallback to empty string
+        console.log('trip_type:', trip_type);
         var toll_option = $('input[name="toll_option"]:checked').val() || ''; // Same for toll_option
 
         console.log('ridetype', ridetype);
@@ -317,8 +317,8 @@
             $('#category').prop('disabled', true).html('<option>Loading...</option>');
                 $('#total_fare').val('');
             $.ajax({
-                url: '{% url "global_fetch_customer_details" %}',
-                type: "GET",
+                url: '{% url "global_customerGetRidePricingDetails" %}',
+                type: 'POST',
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
@@ -379,6 +379,7 @@
             // Clear any previous validation messages
             $('#categoryError').text('');
             // Fetch new Category options based on updated inputs
+            console.log("Inputs changed, calling getRidePricingDetails...");
             getRidePricingDetails();
         });
         $('#category').on('change', function() {
@@ -395,13 +396,16 @@
                 $('#categoryError').text('Please select a valid category.');
             }
         });
+
     });
+    
+
 </script>
 
 <script>
     $(document).ready(function () {
 
-    // Customer details autofill when phone number changes
+        // Customer details autofill when phone number changes
         $('#phone_number').on('change', function () {
             var phoneNumber = $(this).val();
 
@@ -430,34 +434,35 @@
                 }
             });
         });
-    
+    });
 
         
-        $('#confirmBookingBtn').click(function (event) {
+    $('#confirmBookingBtn').click(function (event) {
         event.preventDefault();
+        console.log("Confirm Booking button clicked."); 
 
         var trip_type = $('input[name="trip_type"]:checked').val() || '';
         // Collect booking details
         var bookingDetails = {
-         company_format : $('#company_format').val(),
-         ridetype : $('#ridetype').val(),
-         source : $('#source').val(),
-         destination : $('#destination').val(),
-         pickup_date : $('#pickup_date').val(),
-         pickup_time : $('#pickup_time').val(),
-         drop_date : $('#drop_date').val(),
-         drop_time : $('#drop_time').val(),
-         category : $('#category').val(),
-         total_fare : $('#total_fare').val(),
-         customer : $('#customer_id').val(),
-         customer_notes : $('#customer_notes').val(),
-         phone_number : $('#phone_number').val(),
-         customer_name : $('#customer_name').val(),
-         email : $('#email').val(),
-         address : $('#address').val(),
-         password : $('#password').val(),
-         trip_type : trip_type,
-         ride_status: 'currentbookings',
+            company_format : $('#company_format').val(),
+            ridetype : $('#ridetype').val(),
+            source : $('#source').val(),
+            destination : $('#destination').val(),
+            pickup_date : $('#pickup_date').val(),
+            pickup_time : $('#pickup_time').val(),
+            drop_date : $('#drop_date').val(),
+            drop_time : $('#drop_time').val(),
+            category : $('#category').val(),
+            total_fare : $('#total_fare').val(),
+            customer : $('#customer_id').val(),
+            customer_notes : $('#customer_notes').val(),
+            phone_number : $('#phone_number').val(),
+            customer_name : $('#customer_name').val(),
+            email : $('#email').val(),
+            address : $('#address').val(),
+            password : $('#password').val(),
+            trip_type : trip_type,
+            ride_status: 'currentbookings',
 
         };
 
@@ -492,6 +497,7 @@
                     bookingDetails.drop_date = formattedDropDate;
                 }
     
+                console.log("update ftn called")
     
                 $.ajax({
                     url: '{% url "UpdateRide" %}',
@@ -504,7 +510,28 @@
                         if (result["status"] != "Error") {
                             var company_format = result['company_format']; // Get company_format from the backend
     
-                            alert("Booking updated sucessfully");
+                            // Construct the message with company_format
+                            var message = `Hello ${customer_name},
+        
+                            Thank you for choosing Ridexpress!
+        
+                            We’re happy to confirm your booking:
+        
+                            Booking Id & Price: ${company_format} 
+                            Pickup Date & Time: ${bookingDetails.pickup_date} ${bookingDetails.pickup_time}
+                            Pickup Location: ${bookingDetails.source}
+                            Drop-off Location: ${bookingDetails.destination}
+        
+                            Cab details will be provided shortly. If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+        
+                            We look forward to serving you!
+        
+                            Best regards,
+                            Ridexpress
+                            support@ridexpress.in
+                            ridexpress.in`;
+    
+                            alert("Thank you for booking with us. Information will be shared with you over WhatsApp.");
                             location.href = "{% url 'ridelist' %}";
                         } else {
                             alert("Oops, something went wrong. Please try again. " + result['message']);
@@ -519,43 +546,37 @@
                 console.error(e);
             }
         }
-    
-        $(document).ready(function () {
-            $('#closeOtpModal').click(function () {
-                $('#otpModal').modal('hide'); // Hide the modal when close button is clicked
-            });
-        });
     });
-    
     </script>
     
     <script>
         function initAutocomplete() {
-              const inputs = document.querySelectorAll('.autocomeple_g');
-        
-              inputs.forEach(input => {
-              const autocomplete = new google.maps.places.Autocomplete(input);
-        
-              autocomplete.addListener('place_changed', function() {
-                const place = autocomplete.getPlace();
-                if (!place.geometry) {
-                  window.alert("No details available for input: '" + place.name + "'");
-                  return;
-                }
-                console.log('Place details for', input.id, ':', place);
-                });
-                });
-            }
-        
-            document.addEventListener('DOMContentLoaded', function() {
-                const script = document.createElement('script');
-                script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
-                script.async = true;
-                script.defer = true;
-                document.head.appendChild(script);
-            });
+
+            const inputs = document.querySelectorAll('.autocomeple_g');
     
-          // Initialize datepicker
+            inputs.forEach(input => {
+            const autocomplete = new google.maps.places.Autocomplete(input);
+    
+            autocomplete.addListener('place_changed', function() {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+                window.alert("No details available for input: '" + place.name + "'");
+                return;
+            }
+            console.log('Place details for', input.id, ':', place);
+            });
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const script = document.createElement('script');
+            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+            script.async = true;
+            script.defer = true;
+            document.head.appendChild(script);
+        });
+
+        // Initialize datepicker
         $('.date-picker').datepicker({
             format: 'mm/dd/yyyy',
             autoclose: true,
