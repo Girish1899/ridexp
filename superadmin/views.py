@@ -8,7 +8,7 @@ import requests
 from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
-from .models import Accounts, Blogs, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageName, PackageNameHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from .models import Accounts, Blogs, Brand, BrandHistory,Category, CategoryHistory, ContactUs, DailyVehicleComm,Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageName, PackageNameHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, Profile, ProfileHistory, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory, WebsitePackages
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -22,7 +22,7 @@ from datetime import date, timedelta
 import zipfile
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
-import logging
+from django.utils.text import slugify
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
@@ -3749,109 +3749,253 @@ class EditRide(TemplateView):
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdateRide(APIView):
+
+    def parse_date(self, date_str):
+        """Helper function to parse dates in multiple formats"""
+        for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+            try:
+                return datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+        raise ValueError(f"Date {date_str} is not in a recognized format.")
+    
     @csrf_exempt
     def post(self, request):
+        # Retrieve and validate ride_id from request
+        ride_id = request.POST.get('ride_id')
+        if not ride_id:
+            return JsonResponse({'success': False, 'error': 'Missing ride_id'}, status=400)
+
         try:
-            # Retrieve POST data
-            ride_id = request.POST['ride_id']
-            company_format = request.POST['company_format']
-            ride_type_id = request.POST['ridetype']
-            source = request.POST.get('source',None)
-            destination = request.POST.get('destination',None)
-            pickup_date = request.POST['pickup_date']
-            pickup_time = request.POST['pickup_time']
-            category = request.POST['category']
-            total_fare = request.POST['total_fare']
-            customer_id = request.POST['customer']
-            customer_notes = request.POST['customer_notes']
-            # ride_status = request.POST['ride_status']
-            phone_number = request.POST['phone_number']
-            customer_name = request.POST['customer_name']
-            email = request.POST['email']
-            address = request.POST['address']
-            slots = determine_time_slot(pickup_time)
+            ride_id = int(ride_id)
+        except ValueError:
+            return JsonResponse({'success': False, 'error': 'Invalid ride_id'}, status=400)
 
-            # Fetch the existing ride details
-            ride_details = RideDetails.objects.get(ride_id=ride_id)
-
-            # Handle customer: Get existing or create new one
-            try:
-                customer = Customer.objects.get(phone_number=phone_number)
-                # Update customer information if necessary
-                customer.customer_name = customer_name
-                customer.email = email
-                customer.address = address
-                customer.updated_by = request.user
-            except Customer.DoesNotExist:
-                # Create new customer with a unique company_format
-                last_customer = Customer.objects.all().order_by('-customer_id').first()
-                new_customer_id = last_customer.customer_id + 1 if last_customer else 1
-                customer_company_format = f'CUST{new_customer_id:02}'
-                customer = Customer(
-                    customer_id=new_customer_id,
-                    company_format=customer_company_format,
-                    customer_name=customer_name,
-                    phone_number=phone_number,
-                    email=email,
-                    address=address,
-                    status='active',
-                    created_by=request.user,
-                    updated_by=request.user
-                )
-            customer.save()
-
-            # Ensure objects exist in database before saving
-            ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
-            category_name = category.split('|')[0]
-            car_type_name = category.split('|')[1]
-            category_instance = Category.objects.get(category_name=category_name)
-
-            # Retrieve pricing instance
-            pricing_instance = Pricing.objects.get(
-                category=category_instance,
-                car_type=car_type_name,
-                ridetype=ridetype,
-                slots=slots,
-            )
-            print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
-
-            # Determine ride status based on pickup date
-            today = date.today().isoformat()
-            ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
-
-            # Update ride details
-            # ride_details.company_format = ride_details.company_format  # Retain existing company format
-            ride_details.customer = customer
-            ride_details.ridetype = ridetype
-            ride_details.category = category
-            ride_details.source = source
-            ride_details.destination = destination
-            ride_details.pickup_date = pickup_date
-            ride_details.pickup_time = pickup_time
-            ride_details.total_fare = total_fare
-            ride_details.customer_notes = customer_notes
-            ride_details.ride_status = ride_status
-            ride_details.updated_by = request.user
-
-            ride_details.save()
-
-            return JsonResponse({'status': "Success", 'message': 'Ride details updated successfully'})
+        # Retrieve the ride object
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)
         except RideDetails.DoesNotExist:
-            return JsonResponse({'status': 'Error', 'message': f'Ride with ID {ride_id} does not exist.'})
-        except Exception as e:
-            return JsonResponse({'status': 'Error', 'message': str(e)})
+            return JsonResponse({'success': False, 'error': 'Ride not found'}, status=404)
+
+        # Update customer if provided
+        customer_id = request.POST.get('customer')
+        if customer_id:
+            try:
+                # Customer handling
+                phone_number = request.POST.get('phone_number')
+                customer_name = request.POST.get('customer_name')
+                email = request.POST.get('email')
+                address = request.POST.get('address')
+                password = request.POST.get('password')
+
+                if phone_number:
+                    customer, created = Customer.objects.get_or_create(
+                        phone_number=phone_number,
+                        defaults={
+                            'customer_name': customer_name,
+                            'email': email,
+                            'address': address,
+                            'password': password,
+                            'created_by': request.user,
+                            'updated_by': request.user,
+                        }
+                    )
+                    if not created:
+                        customer.customer_name = customer_name
+                        customer.email = email
+                        customer.address = address
+                        customer.updated_by = request.user
+                        customer.save()
+                    ride.customer = customer
+            except (ValueError, Customer.DoesNotExist):
+                return JsonResponse({'success': False, 'error': 'Invalid customer details'}, status=400)
+                
+
+        # Update ridetype if provided
+        ridetype_id = request.POST.get('ridetype')
+        if ridetype_id:
+            try:
+                ridetype_id = int(ridetype_id)
+                ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
+                ride.ridetype = ridetype
+            except (ValueError, Ridetype.DoesNotExist):
+                return JsonResponse({'success': False, 'error': 'Invalid ridetype_id'}, status=400)
+
+        # Update model if provided
+        category_id = request.POST.get('category')
+        if category_id:
+            try:
+                category_id = int(category_id)
+                category = Category.objects.get(category_id=category_id)
+                ride.category = category
+            except (ValueError, Model.DoesNotExist):
+                return JsonResponse({'success': False, 'error': 'Invalid category_id'}, status=400)
+
+        # Update driver if provided
+        driver_id = request.POST.get('driver')
+        if driver_id:
+            try:
+                driver_id = int(driver_id)
+                driver = Driver.objects.get(driver_id=driver_id)
+                ride.driver = driver
+            except (ValueError, Driver.DoesNotExist):
+                return JsonResponse({'success': False, 'error': 'Invalid driver_id'}, status=400)
+
+        # Update other fields
+        ride.company_format = request.POST.get('company_format', ride.company_format)
+        ride.source = request.POST.get('source', ride.source)
+        ride.destination = request.POST.get('destination', ride.destination)
+        ride.pickup_date = request.POST.get('pickup_date', ride.pickup_date)
+        ride.pickup_time = request.POST.get('pickup_time', ride.pickup_time)
+        ride.total_fare = request.POST.get('total_fare', ride.total_fare)
+        ride.customer_notes = request.POST.get('customer_notes', ride.customer_notes)
+        ride.ride_status = request.POST.get('ride_status', ride.ride_status)
+        ride.updated_by = request.user
+        drop_date_str = request.POST.get('drop_date', '')
+        drop_time_str = request.POST.get('drop_time', '')
+
+        ride.drop_date = self.parse_date(drop_date_str) if drop_date_str else None
+        ride.drop_time = datetime.strptime(drop_time_str, '%H:%M').time() if drop_time_str else None
+        # phone_number = request.POST['phone_number']
+        # customer_name = request.POST['customer_name']
+        # email = request.POST['email']
+        # password = request.POST['password']
+        # address = request.POST['address']
+        slots = determine_time_slot(ride.pickup_time)
+
+
+        print(f"Parsed data: {ride.company_format}, {ride.ridetype_id}, {ride.source}, {ride.destination}, {ride.pickup_date}, {ride.pickup_time}")
+
         
-def determine_time_slot(pickup_time_str):
-    # Determine the time slot based on pickup_time_str
-    pickup_time = datetime.strptime(pickup_time_str, '%H:%M').time()
-    if time(0, 0) <= pickup_time < time(6, 0):
-        return '12AM - 6AM'
-    elif time(6, 0) <= pickup_time < time(12, 0):
-        return '6AM - 12PM'
-    elif time(12, 0) <= pickup_time < time(18, 0):
-        return '12PM - 6PM'
-    else:
-        return '6PM - 12AM'     
+        
+
+        ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
+        category_name = category.split('|')[0]
+        car_type_name = category.split('|')[1]
+        category_instance = Category.objects.get(category_name=category_name)
+
+        # Retrieve pricing instance
+        # trip_type = request.POST.get('trip_type', '').strip()
+        # print('trip_type from request:', trip_type)  # This should print the trip_type value
+
+        try:
+            if ridetype.name.lower() == 'local':
+                pricing_instance = Pricing.objects.get(
+                    category=category_instance,
+                    car_type=car_type_name,
+                    ridetype=ridetype,
+                    slots=slots,
+                )
+                
+            else:
+            # Exclude triptype filter for local rides
+                trip_type = request.POST.get('trip_type', '').strip()
+                print('trip_type from request:', trip_type)  # This should print the trip_type value
+                pricing_instance = Pricing.objects.get(
+                    category=category_instance,
+                    car_type=car_type_name,
+                    ridetype=ridetype,
+                    slots=slots,
+                    trip_type=trip_type,  
+                )
+
+                print('after request trip type',trip_type)
+
+        except Pricing.DoesNotExist:
+            return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
+       
+        try:
+            ride.save()
+        except IntegrityError as e:
+            return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+        try:
+            whatsapp = {
+                    "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                    "campaignName": "booking confirmation",
+                    "destination": customer.phone_number,
+                    "userName": "Ridexpress",
+                    "templateParams": [
+                            customer_name,
+                            ride.company_format,
+                            ride.pickup_date +'  ' +ride.categorypickup_time,    
+                            ride.source,
+                            ride.destination
+                        ],
+                        "source": "new-landing-page form",
+                        "media": {},
+                        "buttons": [],
+                        "carouselCards": [],
+                        "location": {},
+                        "paramsFallbackValue": {
+                            "FirstName": "user"
+                        }
+                        }
+                
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=whatsapp)
+
+            if response.status_code == 200:
+                print("Message sent successfully")
+            else:
+                print(f"Failed to send message: {response.status_code}")
+                print(response.text)
+
+            # return JsonResponse({'status': 'Success', 'message': 'Ride details added successfully'})
+
+        except Exception as e:
+            print(f"An error occurred while sending WhatsApp message: {e}")
+            return JsonResponse({'status': 'Error', 'message': 'Failed to send WhatsApp message.'})
+
+        # Update ride status based on pickup date
+        today = date.today().isoformat()
+        ride.ride_status = 'advancebookings' if ride.pickup_date > today else 'currentbookings'
+
+        # Create a RideDetailsHistory entry after updating the ride
+        try:
+            RideDetailsHistory.objects.create(
+                ride_id=ride.ride_id,
+                company_format=ride.company_format,
+                ridetype=ride.ridetype,
+                source=ride.source,
+                destination=ride.destination,
+                pickup_date=ride.pickup_date,
+                pickup_time=ride.pickup_time,
+                category=ride.category,
+                driver=ride.driver,
+                assigned_by=ride.assigned_by.username if ride.assigned_by else None,
+                cancelled_by=ride.cancelled_by.username if ride.cancelled_by else None,
+                total_fare=ride.total_fare,
+                customer=ride.customer,
+                customer_notes=ride.customer_notes,
+                ride_status=ride.ride_status,
+                drop_date=ride.drop_date,
+                drop_time=ride.drop_time,
+                pricing = pricing_instance,
+                booking_datetime=ride.booking_datetime,
+                created_on=ride.created_on,
+                updated_on=ride.updated_on,
+                created_by=ride.created_by.username if ride.created_by else None,
+                updated_by=request.user.username,
+                comments=ride.comments
+            )
+
+        except (IntegrityError, Exception) as e:
+            return JsonResponse({'success': False, 'error': 'An error occurred while logging ride history: {}'.format(str(e))}, status=500)
+
+        return JsonResponse({'success': True, 'message': 'Ride updated and WhatsApp message sent successfully'}, status=200)
+    
+class RideDetailsHistoryView(TemplateView):
+    template_name = 'superadmin/history_ride.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ride_id = self.kwargs['ride_id']
+        ride = get_object_or_404(RideDetails, ride_id=ride_id)
+        history = RideDetailsHistory.objects.filter(ride_id=ride_id).order_by('updated_on')
+        context['ride'] = ride
+        context['history'] = history
+        return context
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class profile(TemplateView):
@@ -5169,48 +5313,319 @@ class PackageOrderHistoryView(TemplateView):
         return context        
         
 
+# packages ############
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addwebpackages(TemplateView):
+    template_name = "superadmin/add_webpackages.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pclist = PackageCategories.objects.all()
+        context = {'pclist': list(pclist)}
+        return context
+
+    def post(self, request):
+        try:
+            # Print that the POST request is received
+            print("POST request received")
+
+            # Retrieve data from POST request
+            title = request.POST.get('title')
+            slug = slugify(title)
+            package_category_id = request.POST.get('package_category')
+            description = request.POST.get('description')
+            top_attraction = request.POST.get('top_attraction')
+            why_visit = request.POST.get('why_visit')
+            package_highlights = request.POST.get('package_highlights')
+            image = request.FILES.get('image')
+            image_link = request.POST.get('image_link')
+            facebook_link = request.POST.get('facebook_link')
+            instagram_link = request.POST.get('instagram_link')
+            whatsapp_link = request.POST.get('whatsapp_link')
+            meta_title = request.POST.get('meta_title')
+            meta_description = request.POST.get('meta_description')
+            meta_keywords = request.POST.get('meta_keywords')
+            tags = request.POST.get('tags')
+            h1tag = request.POST.get('h1tag')
+            status = request.POST.get('status')
+
+            # Print received form data
+            print(f"Form data: title={title}, category_id={package_category_id}, description={description}")
+
+            # Validate required fields
+            if not title or not package_category_id:
+                print("Missing required fields: title or category")
+                return JsonResponse({'status': "Failed", 'error': "Title and category are required."}, status=400)
+
+            # Fetch category object
+            try:
+                package_category = PackageCategories.objects.get(package_category_id=package_category_id)
+            except PackageCategories.DoesNotExist:
+                print(f"Package category not found: {package_category_id}")
+                return JsonResponse({'status': "Failed", 'error': "Invalid package category."}, status=400)
+
+            # Create package object
+            webpackage = WebsitePackages(
+                title=title,
+                slug=slug,
+                package_category=package_category,
+                description=description,
+                top_attraction=top_attraction,
+                why_visit=why_visit,
+                package_highlights=package_highlights,
+                image=image,
+                image_link=image_link,
+                facebook_link=facebook_link,
+                instagram_link=instagram_link,
+                whatsapp_link=whatsapp_link,
+                meta_title=meta_title,
+                meta_description=meta_description,
+                meta_keywords=meta_keywords,
+                tags=tags,
+                h1tag=h1tag,
+                status=status,
+                created_by=request.user,
+                updated_by=request.user
+            )
+
+            # Save the package
+            webpackage.save()
+            print("Package saved successfully")
+            return JsonResponse({'status': "Success"})
+
+        except Exception as e:
+            # Print the exception
+            print(f"Error saving package: {e}")
+            return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
+        
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class webPackageList(ListView):
+    model = WebsitePackages
+    template_name = "superadmin/view_webpackages.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeletewebPackages(View):
+    def get(self, request):
+        webpackage_id = request.GET.get('webpackage_id', None)
+        WebsitePackages.objects.get(webpackage_id=webpackage_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditwebPackages(TemplateView):
+    template_name = 'superadmin/edit_webpackages.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        pclist = PackageCategories.objects.all()
+        try:
+            context['webpackage_id'] = self.kwargs['id']
+            package = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
+        except:
+            package = WebsitePackages.objects.filter(webpackage_id=context['webpackage_id'])
+        context = {'pclist': list(pclist), 'package': list(package)}
+        return context
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdatewebPackages(APIView):
+    def post(self, request):
+        webpackage_id = request.POST['webpackage_id']
+        title = request.POST['title']
+        print("########",title)
+        slug = slugify(title)
+        package_category = request.POST['package_category']
+        description = request.POST['description']
+        top_attraction = request.POST['top_attraction']
+        why_visit = request.POST['why_visit']
+        package_highlights = request.POST['package_highlights']
+        image = request.FILES.get('image')
+
+        image_link = request.POST['image_link']
+        facebook_link = request.POST['facebook_link']
+        instagram_link = request.POST['instagram_link']
+        whatsapp_link = request.POST['whatsapp_link']
+        tags = request.POST['tags']
+        meta_title = request.POST['meta_title']
+        meta_description = request.POST['meta_description']
+        meta_keywords = request.POST['meta_keywords']
+        h1tag = request.POST['h1tag']
+        status = request.POST['status']
+
+        package_categoryIdobj = PackageCategories.objects.get(package_category_id=package_category)
+
+        webpack = WebsitePackages.objects.get(webpackage_id=webpackage_id)
+
+
+        webpack.title= title
+        print("######## 2 ",title)
+        webpack.slug=slug
+        webpack.package_category= package_categoryIdobj
+        webpack.description= description
+        webpack.top_attraction= top_attraction
+        webpack.why_visit= why_visit
+        webpack.package_highlights= package_highlights
+        webpack.image_link= image_link
+        if image:
+            webpack.image = image
+        webpack.facebook_link= facebook_link
+        webpack.instagram_link= instagram_link
+        webpack.whatsapp_link= whatsapp_link
+        webpack.tags= tags
+        webpack.meta_title= meta_title
+        webpack.meta_description= meta_description
+        webpack.meta_keywords= meta_keywords
+        webpack.h1tag= h1tag
+        webpack.status=status
+        webpack.updated_by = request.user
+        webpack.save()
+        
+        return JsonResponse({'success': True}, status=200) 
+
+    
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AddBlogView(TemplateView):
     template_name = "superadmin/add_blog.html"
 
     def post(self, request):
-        title = request.POST['title']
-        description = request.POST['description']
-        image = request.POST.get('image')
-        facebook = request.POST.get('facebook')
-        instagram = request.POST.get('instagram')
-        whatsapp = request.POST.get('whatsapp')
-        backlink = request.POST.get('backlink')
-        related_bloglink = request.POST.get('related_bloglink')
-        tags = request.POST.get('tags')
-        author = request.POST.get('author')
-        meta_title = request.POST.get('meta_title')
-        meta_description = request.POST.get('meta_description')
-        meta_keywords = request.POST.get('meta_keywords')
-        h1tag = request.POST.get('h1tag')
+        try:
+            print("POST request received")
 
-        blog = Blogs(
-            title=title,
-            description=description,
-            image=image,
-            facebook=facebook,
-            instagram=instagram,
-            whatsapp=whatsapp,
-            backlink=backlink,
-            related_bloglink=related_bloglink,
-            tags=tags,
-            author=author,
-            meta_title=meta_title,
-            meta_description=meta_description,
-            meta_keywords=meta_keywords,
-            h1tag=h1tag,
-        )
-        blog.save()
-        return JsonResponse({'status': "Success"})   
+            # Retrieve data from POST request
+            title = request.POST.get('title')
+            slug = slugify(title)
+            description = request.POST.get('description')
+            image = request.FILES.get('image')
+            image_link = request.POST.get('image_link')
+            facebook = request.POST.get('facebook_link')
+            instagram = request.POST.get('instagram_link')
+            whatsapp = request.POST.get('whatsapp_link')
+            tags = request.POST.get('tags')
+            meta_title = request.POST.get('meta_title')
+            meta_description = request.POST.get('meta_description')
+            meta_keywords = request.POST.get('meta_keywords')
+            h1tag = request.POST.get('h1tag')
+            backlink = request.POST.get('backlink')
+            related_bloglink = request.POST.get('related_bloglink')
+
+            blog = Blogs(
+                title=title,
+                slug=slug,
+                description=description,
+                image_link=image_link,
+                facebook=facebook,
+                instagram=instagram,
+                whatsapp=whatsapp,
+                tags=tags,
+                meta_title=meta_title,
+                meta_description=meta_description,
+                meta_keywords=meta_keywords,
+                h1tag=h1tag,
+                backlink=backlink,
+                related_bloglink=related_bloglink,
+                created_by=request.user,
+                updated_by=request.user
+            )
+
+            # Process image if uploaded
+            if image:
+                try:
+                    print(f"Processing image: {image.name}")
+                    img = Image.open(image)
+                    img = img.resize((880, 450), Image.LANCZOS)
+                    file_extension = os.path.splitext(image.name)[1].lower()
+
+                    # Define format based on extension
+                    format = 'JPEG' if file_extension in ['.jpg', '.jpeg'] else 'PNG' if file_extension == '.png' else 'GIF'
+
+                    img_io = BytesIO()
+                    img.save(img_io, format=format)
+                    img_content = ContentFile(img_io.getvalue(), image.name)
+                    blog.image.save(image.name, img_content, save=False)
+                except Exception as img_error:
+                    print(f"Error processing image: {img_error}")
+                    return JsonResponse({'status': "Failed", 'error': "Error processing image."}, status=400)
+
+            blog.save()
+            print("Blogs saved successfully")
+            return JsonResponse({'status': "Success"})
+
+        except Exception as e:
+            # Print the exception
+            print(f"Error saving blogs: {e}")
+            return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class BlogListView(ListView):
     model = Blogs
     template_name = "superadmin/view_blog.html"
-  
-  
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class webDeleteBlogs(View):
+    def get(self, request):
+        blogs_id = request.GET.get('blogs_id', None)
+        Blogs.objects.get(blogs_id=blogs_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditwebBlogs(TemplateView):
+    template_name = 'superadmin/edit_blog.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['blogs_id'] = self.kwargs['id']
+            blog = Blogs.objects.filter(blogs_id=context['blogs_id'])
+        except:
+            blog = Blogs.objects.filter(blogs_id=context['blogs_id'])
+        context = {'blog': list(blog)}
+        return context 
+    
+class UpdatewebBlogs(APIView):
+    def post(self, request):
+        blogs_id = request.POST.get('blogs_id')
+        title = request.POST.get('title')
+        slug = slugify(title)
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        image_link = request.POST.get('image_link')
+        facebook = request.POST.get('facebook')
+        instagram = request.POST.get('instagram')
+        whatsapp = request.POST.get('whatsapp')
+        backlink = request.POST.get('backlink')
+        related_bloglink = request.POST.get('related_bloglink')
+        meta_title = request.POST.get('meta_title')
+        meta_description = request.POST.get('meta_description')
+        meta_keywords = request.POST.get('meta_keywords')
+        h1tag = request.POST.get('h1tag')
+
+        try:
+            blog = Blogs.objects.get(blogs_id=blogs_id)
+        except Blogs.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Blog not found'}, status=404)
+
+        # Update fields
+        blog.title = title
+        blog.slug=slug
+        blog.description = description
+        if image:
+            blog.image = image  # Update the image if a new one is uploaded
+        blog.image_link = image_link
+        blog.facebook = facebook
+        blog.instagram = instagram
+        blog.whatsapp = whatsapp
+        blog.backlink = backlink
+        blog.related_bloglink = related_bloglink
+        blog.meta_title = meta_title
+        blog.meta_description = meta_description
+        blog.meta_keywords = meta_keywords
+        blog.h1tag = h1tag
+
+        # Save the updated blog entry
+        blog.save()
+
+        return JsonResponse({'success': True}, status=200)    

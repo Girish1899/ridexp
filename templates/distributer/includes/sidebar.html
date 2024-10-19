@@ -104,10 +104,6 @@
             </li>
           </ul>
         </li>
-        
-
-       
-        
 
         <!--Drivers -->
         
@@ -127,14 +123,52 @@
                 <span class="nav-link-text ms-1">View Drivers</span>
               </a>
             </li>
-           <!-- <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewdriververification' %}">
+          </ul>
+        </li>
+
+        {% comment %} Enquiry {% endcomment %}
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'dispatch-enquirylist' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">devices_other</i>
+            </div>
+            <span class="nav-link-text ms-1">Enquiry</span>
+          </a>
+        </li>
+
+        {% comment %} blogs/package {% endcomment %}
+        <li class="nav-item dropdown">
+          <a class="nav-link text-white dropdown-toggle" href="#" id="authorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">local_offer</i>
+            </div>
+            <span class="nav-link-text ms-1">Author Blog/Package</span>
+          </a>
+          <ul class="dropdown-menu w-100" aria-labelledby="authorDropdown">
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'dispatch-create-author-blogs' %}">
                 <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">verified_user</i>
+                  <i class="material-icons opacity-10">assignment</i>
                 </div>
-                <span class="nav-link-text ms-1">Driver Verification</span>
+                <span class="nav-link-text ms-1">Add Blogs</span>
               </a>
-            </li> -->
+            </li>
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'dispatch-author-package-category-list' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">visibility</i>
+                </div>
+                <span class="nav-link-text ms-1">View Package Category</span>
+              </a>
+            </li>
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'dispatch-list-author-packages' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">visibility</i>
+                </div>
+                <span class="nav-link-text ms-1">View Packages</span>
+              </a>
+            </li>
           </ul>
         </li>
         

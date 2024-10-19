@@ -18,6 +18,8 @@
             <span class="nav-link-text ms-1">TeleCaller Dashboard</span>
           </a>
         </li>
+        
+        {% comment %} Customer {% endcomment %}
         <li class="nav-item">
           <a class="nav-link text-white " href="{% url 'telecallercustomerlist' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -26,49 +28,108 @@
             <span class="nav-link-text ms-1">Customer</span>
           </a>
         </li>
-        <!-- <li class="nav-item">
-          <a class="nav-link text-white d-flex align-items-center w-100" href="#">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">beenhere</i>
-            </div>
-            <span class="nav-link-text ms-1">CALL History</span>
-          </a>
-        </li> -->
-  <!-- Bookings -->
+
+        {% comment %} driver {% endcomment %}
         <li class="nav-item">
-          <a class="nav-link text-white" href="{% url 'telecalleraddride' %}">
+          <a class="nav-link text-white " href="{% url 'televiewdriver' %}">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">assignment</i>
+              <i class="material-icons opacity-10">person</i>
             </div>
-            <span class="nav-link-text ms-1">Add Bookings</span>
+            <span class="nav-link-text ms-1">View Drivers</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="{% url 'telecallerridelist' %}">
+
+        <!-- bookings -->
+        <li class="nav-item dropdown">
+          <a class="nav-link text-white dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">assignment</i>
+              <i class="material-icons opacity-10">book</i>
             </div>
-            <span class="nav-link-text ms-1">View Current Booking</span>
+            <span class="nav-link-text ms-1">Bookings</span>
+          </a>
+          <ul class="dropdown-menu w-100" aria-labelledby="bookingsDropdown">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'telecalleraddride' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">assignment</i>
+                </div>
+                <span class="nav-link-text ms-1">Add Bookings</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'telecallerridelist' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">assignment</i>
+                </div>
+                <span class="nav-link-text ms-1">View Current Booking</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'telecalleradvance_bookings' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">assignment</i>
+                </div>
+                <span class="nav-link-text ms-1">View Advance Booking</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="{% url 'telecallercancelledbookings' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">backspace</i>
+                </div>
+                <span class="nav-link-text ms-1">View Cancelled Bookings</span>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        {% comment %} Enquiry {% endcomment %}
+        <li class="nav-item">
+          <a class="nav-link text-white " href="{% url 'tele-enquirylist' %}">
+            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+              <i class="material-icons opacity-10">devices_other</i>
+            </div>
+            <span class="nav-link-text ms-1">Enquiry</span>
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="{% url 'telecalleradvance_bookings' %}">
+
+        {% comment %} blogs/package {% endcomment %}
+        <li class="nav-item dropdown">
+          <a class="nav-link text-white dropdown-toggle" href="#" id="authorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">assignment</i>
+              <i class="material-icons opacity-10">local_offer</i>
             </div>
-            <span class="nav-link-text ms-1">View Advance Booking</span>
+            <span class="nav-link-text ms-1">Author Blog/Package</span>
           </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="{% url 'telecallercancelledbookings' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">backspace</i>
-            </div>
-            <span class="nav-link-text ms-1">View Cancelled Bookings</span>
-          </a>
+          <ul class="dropdown-menu w-100" aria-labelledby="authorDropdown">
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'tele-create-author-blogs' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">assignment</i>
+                </div>
+                <span class="nav-link-text ms-1">Add Blogs</span>
+              </a>
+            </li>
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'tele-author-package-category-list' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">visibility</i>
+                </div>
+                <span class="nav-link-text ms-1">View Package Category</span>
+              </a>
+            </li>
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'tele-list-author-packages' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">visibility</i>
+                </div>
+                <span class="nav-link-text ms-1">View Packages</span>
+              </a>
+            </li>
+          </ul>
         </li>
         
-
+      
 
     </ul>
 </div>

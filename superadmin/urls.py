@@ -285,5 +285,20 @@ urlpatterns = [
 
     path('send_otp_admin/', SendOtp.as_view(), name='send_otp_admin'),
     path('verify_otp_admin/', VerifyOtp.as_view(), name='verify_otp_admin'),
+
+    # author
+    # packages
+    path('sup-create-author-packages', addwebpackages.as_view(), name='sup-create-author-packages'),
+    path('sup-list-author-packages', webPackageList.as_view(), name='sup-list-author-packages'),
+    path('sup-author-Packages-delete', DeletewebPackages.as_view(), name='sup-author-Packages-delete'),
+    path('sup-author-Packages-edit/<int:id>/', EditwebPackages.as_view(), name='sup-author-Packages-edit'),
+    path('sup-author-Packages-update', UpdatewebPackages.as_view(), name='sup-author-Packages-update'),
+
+    # Blogs
+    path('sup-create-author-blogs', AddBlogView.as_view(), name='sup-create-author-blogs'),
+    path('sup-list-author-blogs', BlogListView.as_view(), name='sup-list-author-blogs'),
+    path('sup-author-blogs-delete', webDeleteBlogs.as_view(), name='sup-author-blogs-delete'),
+    path('sup-author-blogs-edit/<int:id>/', EditwebBlogs.as_view(), name='sup-author-blogs-edit'),
+    path('sup-author-blogs-update', UpdatewebBlogs.as_view(), name='sup-author-blogs-update'),
 ]
 

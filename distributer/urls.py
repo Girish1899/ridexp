@@ -55,6 +55,33 @@ urlpatterns = [
     path('distributer_invoice/<int:ride_id>/', InvoiceView.as_view(), name='distributer_invoice_view'),
 
 
+    #  enquiry ################################
+    path('dispatch-enquirylist', EnquiryList.as_view(), name='dispatch-enquirylist'),   
+
+    # author
+
+    # package category
+    path('dispatch-author-package-category', addpackagecategory.as_view(), name='dispatch-author-package-category'),
+    path('dispatch-check-package-category/', check_package_category, name='dispatch-check-package-category'),
+    path('dispatch-author-package-category-list', PackageCategoryList.as_view(), name='dispatch-author-package-category-list'),
+    path('dispatch-author-DeletePackageCategory', DeletePackageCategory.as_view(), name='dispatch-author-DeletePackageCategory'),
+    path('dispatch-author-EditPackageCategory/<int:id>/', EditPackageCategory.as_view(), name='dispatch-author-EditPackageCategory'),
+    path('dispatch-author-PackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='dispatch-author-PackageCategoryHistory'),
+    path('dispatch-author-UpdatePackageCategory', UpdatePackageCategory.as_view(), name='dispatch-author-UpdatePackageCategory'),
+
+    # packages
+    path('dispatch-create-author-packages', addwebpackages.as_view(), name='dispatch-create-author-packages'),
+    path('dispatch-list-author-packages', webPackageList.as_view(), name='dispatch-list-author-packages'),
+    path('dispatch-author-Packages-delete', DeletewebPackages.as_view(), name='dispatch-author-Packages-delete'),
+    path('dispatch-author-Packages-edit/<int:id>/', EditwebPackages.as_view(), name='dispatch-author-Packages-edit'),
+    path('dispatch-author-Packages-update', UpdatewebPackages.as_view(), name='dispatch-author-Packages-update'),
+
+    # Blogs
+    path('dispatch-create-author-blogs', AddBlogView.as_view(), name='dispatch-create-author-blogs'),
+    path('dispatch-list-author-blogs', BlogListView.as_view(), name='dispatch-list-author-blogs'),
+    path('dispatch-author-blogs-delete', webDeleteBlogs.as_view(), name='dispatch-author-blogs-delete'),
+    path('dispatch-author-blogs-edit/<int:id>/', EditwebBlogs.as_view(), name='dispatch-author-blogs-edit'),
+    path('dispatch-author-blogs-update', UpdatewebBlogs.as_view(), name='dispatch-author-blogs-update'),
     
 
 ]

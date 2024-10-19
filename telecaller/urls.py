@@ -36,4 +36,35 @@ urlpatterns = [
     path('update-user/', UpdateUserView.as_view(), name='tele_update_user'),
     path('callhistory/<int:ride_id>/', call_history_view, name='callhistory'),
 
+    # driver
+    path('televiewdriver', DriverListView.as_view(), name='televiewdriver'),
+
+    #  enquiry ################################
+    path('tele-enquirylist', EnquiryList.as_view(), name='tele-enquirylist'),   
+
+    # author
+
+    # package category
+    path('tele-author-package-category', addpackagecategory.as_view(), name='tele-author-package-category'),
+    path('tele-check-package-category/', check_package_category, name='tele-check-package-category'),
+    path('tele-author-package-category-list', PackageCategoryList.as_view(), name='tele-author-package-category-list'),
+    path('tele-author-DeletePackageCategory', DeletePackageCategory.as_view(), name='tele-author-DeletePackageCategory'),
+    path('tele-author-EditPackageCategory/<int:id>/', EditPackageCategory.as_view(), name='tele-author-EditPackageCategory'),
+    path('tele-author-PackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='tele-author-PackageCategoryHistory'),
+    path('tele-author-UpdatePackageCategory', UpdatePackageCategory.as_view(), name='tele-author-UpdatePackageCategory'),
+
+    # packages
+    path('tele-create-author-packages', addwebpackages.as_view(), name='tele-create-author-packages'),
+    path('tele-list-author-packages', webPackageList.as_view(), name='tele-list-author-packages'),
+    path('tele-author-Packages-delete', DeletewebPackages.as_view(), name='tele-author-Packages-delete'),
+    path('tele-author-Packages-edit/<int:id>/', EditwebPackages.as_view(), name='tele-author-Packages-edit'),
+    path('tele-author-Packages-update', UpdatewebPackages.as_view(), name='tele-author-Packages-update'),
+
+    # Blogs
+    path('tele-create-author-blogs', AddBlogView.as_view(), name='tele-create-author-blogs'),
+    path('tele-list-author-blogs', BlogListView.as_view(), name='tele-list-author-blogs'),
+    path('tele-author-blogs-delete', webDeleteBlogs.as_view(), name='tele-author-blogs-delete'),
+    path('tele-author-blogs-edit/<int:id>/', EditwebBlogs.as_view(), name='tele-author-blogs-edit'),
+    path('tele-author-blogs-update', UpdatewebBlogs.as_view(), name='tele-author-blogs-update'),
+
 ]

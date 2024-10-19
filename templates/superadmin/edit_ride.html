@@ -123,11 +123,8 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Category</label>
                         <div class="col-sm-12">
-                            <select id="category" name="category" class="form-control form-control-lg">
+                            <select name="select" id="category" name="category" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Category</option>
-                                {% for obj in catlist %}
-                                <option value="{{ obj.category_id }}" {% if obj.category_id == ride.0.category.category_id %}selected{% endif %}>{{ obj.category_name }}</option>
-                                {% endfor %}
                             </select>
                             <div id="categoryError" class="invalid-feedback"></div>                          
                         </div>
@@ -158,6 +155,13 @@
                         <label class="col-sm-2 col-form-label col-form-label-lg">* Customer Email</label>
                         <div class="col-sm-12">
                             <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ ride.0.customer.email }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg">* Password</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="password" name="password" value="{{ ride.0.customer.email }}" readonly placeholder="Enter New Password">
                         </div>
                     </div>
 
@@ -307,6 +311,7 @@
         var toll_option = $('input[name="toll_option"]:checked').val() || ''; // Same for toll_option
 
         console.log('ridetype', ridetype);
+        console.log('category', category);
         console.log('drop date', drop_date);  
         console.log('drop time', drop_time);
         console.log('trip_type before sending:', trip_type);  // Add this to confirm it's being fetched
@@ -463,7 +468,7 @@
             password : $('#password').val(),
             trip_type : trip_type,
             ride_status: 'currentbookings',
-
+            ride_id: $('#ride_id').val(),
         };
 
         console.log('triptype', trip_type);
@@ -473,6 +478,11 @@
             alert('Please fill out all required fields.');
             return false;
         }  
+
+        confirmBooking(bookingDetails);
+
+    });
+
 
         function confirmBooking(bookingDetails) {
             try {
@@ -546,7 +556,6 @@
                 console.error(e);
             }
         }
-    });
     </script>
     
     <script>

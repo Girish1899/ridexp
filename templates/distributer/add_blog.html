@@ -1,4 +1,4 @@
-{% extends 'superadmin/base.html' %}
+{% extends 'distributer/base.html' %}
 {% load static %}
 {% block content %}
 <div class="content-body">
@@ -198,14 +198,14 @@
                 return;
             }
             $.ajax({
-                url: '{% url "sup-create-author-blogs" %}',
+                url: '{% url "dispatch-create-author-blogs" %}',
                 type: "POST",
                 data: formData,
                 processData: false,  // Important for file upload
                 contentType: false, 
                 success: function (result) {
                     alert("Blog added successfully");
-                    location.href = "{% url 'sup-create-author-blogs' %}";
+                    location.href = "{% url 'dispatch-create-author-blogs' %}";
                 },
 
                 error: function (xhr, status, error) {

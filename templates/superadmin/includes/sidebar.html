@@ -440,16 +440,32 @@
           </a>
         </li>
 
-         <!--Blog  -->
-         <li class="nav-item">
-          <a class="nav-link text-white " href="{% url 'blog_list' %}">
+        <li class="nav-item dropdown">
+          <a class="nav-link text-white dropdown-toggle" href="#" id="authorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
             <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">devices_other</i>
+              <i class="material-icons opacity-10">local_offer</i>
             </div>
-            <span class="nav-link-text ms-1">Blogs</span>
+            <span class="nav-link-text ms-1">Author Blog/Package</span>
           </a>
+          <ul class="dropdown-menu w-100" aria-labelledby="authorDropdown">
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'sup-create-author-blogs' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">assignment</i>
+                </div>
+                <span class="nav-link-text ms-1">Add Blogs</span>
+              </a>
+            </li>
+            <li class="nav-item w-80">
+              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'sup-list-author-packages' %}">
+                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                  <i class="material-icons opacity-10">visibility</i>
+                </div>
+                <span class="nav-link-text ms-1">View Packages</span>
+              </a>
+            </li>
+          </ul>
         </li>
-        
 
       </ul>
     </div>
