@@ -2893,6 +2893,15 @@ class customerGetRidePricingDetails(APIView):
 
 class AddRide(TemplateView):
     template_name = "superadmin/add_ride.html"
+
+    def parse_date(self, date_str):
+        """Helper function to parse dates in multiple formats"""
+        for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+            try:
+                return datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+        raise ValueError(f"Date {date_str} is not in a recognized format.")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -2938,6 +2947,11 @@ class AddRide(TemplateView):
             email = request.POST['email']
             password = request.POST['password']
             address = request.POST['address']
+            drop_date_str = request.POST.get('drop_date', '')
+            drop_time_str = request.POST.get('drop_time', '')
+
+            drop_date = self.parse_date(drop_date_str) if drop_date_str else None
+            drop_time = datetime.strptime(drop_time_str, '%H:%M').time() if drop_time_str else None
 
             print(f"Parsed data: {company_format}, {ride_type_id}, {source}, {destination}, {pickup_date}, {pickup_time}")
 
@@ -2999,9 +3013,6 @@ class AddRide(TemplateView):
             except Pricing.DoesNotExist:
                 return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
        
-
-
-
             print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
             # Determine ride status based on pickup date
@@ -3036,6 +3047,8 @@ class AddRide(TemplateView):
                 total_fare=total_fare,
                 customer_notes=customer_notes,
                 ride_status=ride_status,
+                drop_date=drop_date,
+                drop_time=drop_time,
                 assigned_by=request.user,
                 cancelled_by=request.user,
                 created_by=request.user,

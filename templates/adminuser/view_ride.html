@@ -6,85 +6,187 @@
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
-                    <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
+                    <h4>Hi Welcome Back!</h4>
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item" ><a href="{% url 'adindex' %}" style="color: white !important;">Dashboard</a></li>
+                            Booking</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
+                            Back</a></li>
                 </ol>
             </div>
         </div>
-
+        <!-- row -->
 
         <div class="row">
             <div class="col-12">
-              <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                  <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
-                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Current Bookings</h6>
-                  </div>
-                </div>
-                <div class="card-body px-0 pb-2">
-                  <div class="table-responsive p-0">
-                    <table class="table align-items-center justify-content-center mb-0">
-                      <thead>
-                        <tr style="color: black !important;">
+                <div class="card my-4">
+                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-2 pb-0 d-flex justify-content-between align-items-center" style="background-color: #F3797E;">
+                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Current Bookings</h6>
+                            
+                            <button id="toggleFilterReport" class="btn btn-primary me-3">Show</button>
+                        </div>
+                        <div class="card-body px-0 pb-2">
+                        <div class="filter_report" style="display:none;">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date</p>
+                                        <input id="single-date-picker" class="form-control" type="text" placeholder="Select Date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="example">
+                                        <p class="mb-1">Select Date Range</p>
+                                        <input id="date-range-picker" class="form-control" type="text" placeholder="Select Date Range">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Time Frame</p>
+                                        <select id="time-frame" class="form-control form-control-lg">
+                                            <option value="">Select Time Frame</option>
+                                            <option value="today">Today</option>
+                                            <option value="yesterday">Yesterday</option>
+                                            <option value="this-month">This Month</option>
+                                            <option value="last-month">Last Month</option>
+                                            <option value="this-year">This Year</option>
+                                            <option value="last-year">Last Year</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Service Type</p>
+                                        <select id="single-select" class="form-control form-control-lg">
+                                            <option value="">Select Service</option>
+                                            {% for service in services %}
+                                            <option value="{{ service.ridetype_id }}">{{ service.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Booking Id</p>
+                                        <select id="single-select1" class="form-control form-control-lg">
+                                            <option value="">Select Booking Id</option>
+                                            {% for booking in bookings %}
+                                            <option value="{{ booking.ride_id }}">{{ booking.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle Type</p>
+                                        <select id="vehicle-type" class="form-control form-control-lg">
+                                            <option value="">Select Vehicle type</option>
+                                            {% for category in categories %}
+                                            <option value="{{ category.category_id }}">{{ category.category_name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <p class="mb-1">Vehicle ID</p>
+                                        <select id="vehicle-id" class="form-control form-control-lg">
+                                            <option value="">Select Vehicle ID</option>
+                                            {% for vehicle in vehicles %}
+                                            <option value="{{ vehicle.vehicle_id }}">{{ vehicle.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                        <p class="mb-1">Driver ID</p>
+                                        <select id="driver-id" class="form-control form-control-lg">
+                                            <option value="">Select Driver ID</option>
+                                            {% for driver in drivers %}
+                                            <option value="{{ driver.driver_id }}">{{ driver.company_format }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-2">
+                                    <label>From Time</label>
+                                    <input id="from-time-picker" type="time" class="form-control">
+                                </div>
+                                <div class="col-md-2">
+                                    <label>To Time</label>
+                                    <input id="to-time-picker" type="time" class="form-control">
+                                </div>
+                            </div>
+                        </div><br>
+
+                        <div class="table-responsive p-0">
+                            <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black;">
+                                        <th>Serial No</th>
                                         <th>Booking Id/Pickup time/Pickup date</th>
-                                        <th>Customer Name/email/address</th>
-                                        <th>Customer PhNo</th>
-                                        <th>Ridetype</th>
+                                        <th>Customer Name/email/ Mobile</th>
+                                        <th>AssignBooking</th>
                                         <th>Pickup Place</th>
-                                        <th>Drop Place</th>
-                                        <th>Total Fare</th>
-                                        <th>Category</th>
-                                        <th>Customer Comments</th>
-                                        <th>Booking datetime</th>
-                                        <th>Created On/Created By/Modified On/Modified By</th>
-                                        <!-- <th>Action</th> -->
+                                        <th>Drop Place/ Service</th>  
+                                        <th>Customer Comments</th>                            
+                                        <th>RateDetails/ A/c or Non A/c / vehicleType</th>
+                                        <th>Booked By</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for i in object_list %}
-                                    <tr style="color: #030000;">
+                                    <tr style="color: #030000;" data-ridetype="{{ i.ridetype_id }}" data-rideid="{{ i.ride_id }}" data-categoryid="{{ i.category_id }}" data-vehicleid="{{ i.driver.vehicle.vehicle_id }}" data-driverid="{{ i.driver_id }}">
+                                        <td>{{ forloop.counter }}</td>
                                         <td>
                                             <div>{{ i.company_format }}</div>
                                             <div style="color: blue;">{{ i.pickup_time }}</div>
                                             <div style="color: blue;">{{ i.pickup_date }}</div>
                                         </td>
                                         <td>
-                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.customer_name }}</div>
-                                            <div>{{ i.customer.email }}</div>
-                                            <div style="color: rgb(61, 148, 219);">{{ i.customer.address }}</div>
+                                            <div>{{ i.customer.customer_name }}</div>
+                                            <div style="color: red">{{ i.customer.phone_number }}</div>
+                                            <div >{{ i.customer.email }}</div>
                                         </td>
-                                        <td style="color: red">{{ i.customer.phone_number }}</td>
-                                        <td>{{ i.ridetype.name }}</td>
+                                        <td><button type="button" class="btn btn-success btn-sm btn-custom-sm" data-toggle="modal" data-target="#assignDriverModal" data-ride-id="{{ i.ride_id }}">Assign Driver</button></td>
                                         <td>{{ i.source }}</td>
-                                        <td>{{ i.destination }}</td>
-                                        <td>{{ i.total_fare }}</td>
-                                        <td>{{ i.model.brand.category.category_name }}</td>
-                                        <td>{{ i.customer_notes }}</td>
-                                        <td>{{ i.booking_datetime }}</td>
-                                        <td>
-                                            <div style="color: red">{{ i.created_on }}</div>
-                                            <div style="color: red">{{ i.created_by }}</div>
-                                            <div>{{ i.updated_on }}</div>
-                                            <div>{{ i.updated_by }}</div>
+                                        <td><div>{{ i.destination }}</div>
+                                            <span class="badge badge-pill bg-gradient-success">{{ i.ridetype.name }}</span>
                                         </td>
-                                        <!-- <td
-                                            style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 200px;">
-                                            <a href="#" class="btn btn-primary btn-sm btn-custom-sm"
-                                                onclick="EditRide('{{ i.ride_id }}')"><i class="fa fa-edit"></i></a>
-                                            <a href="#" class="btn btn-warning btn-sm btn-custom-sm"
-                                                onclick="HistoryRide('{{i.ride_id}}')"><i class="fa fa-clock"></i></a> 
-                                            <button type="button" class="btn btn-success btn-sm btn-custom-sm"
-                                                data-toggle="modal" data-target="#assignDriverModal"
-                                                data-ride-id="{{ i.ride_id }}">Assign Driver</button>
-                                            <button type="button" class="btn btn-danger btn-sm btn-custom-sm"
-                                                data-toggle="modal" data-target="#cancelBookingModal"
-                                                data-ride-id="{{ i.ride_id }}">Cancel Booking</button>
-                                        </td> -->
+                                        <td>{{ i.customer_notes }}</td>
+                                        <td>
+                                            <div><button class="btn btn-warning" >{{ i.total_fare }}</button></div>
+                                            <div><span class="badge badge-pill bg-gradient-danger">{{i.pricing.car_type}}</span></div>
+                                            <!-- <div style="padding-top: 3px;">permit<span class="badge badge-pill badge-success">{{i.pricing.permit}}</span></div>
+                                            <div style="padding-top: 3px;">beta<span class="badge badge-pill badge-success">{{i.pricing.driver_beta}}</span></div>
+                                            <div style="padding-top: 3px;">toll<span class="badge badge-pill badge-success">{{i.pricing.toll_price}}</span></div>
+                                            <div style="padding-top: 3px;">price/km<span class="badge badge-pill badge-success">{{i.pricing.price_per_km}}</span></div> -->
+                                            <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{ i.category.category_name }}</span></div>
+                                        </td>
+                                        <td>
+                                            <div style="color: red">{{ i.created_by }}</div>
+                                            <div style="color: blue;">{{ i.booking_datetime }}</div>
+                                        </td>
+
+                                        <td style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 150px;">
+                                            <a href="#" class="btn btn-primary btn-sm btn-custom-sm" onclick="EditRide('{{ i.ride_id }}')"><i class="fa fa-edit"></i></a>
+                                            <a href="#" class="btn btn-warning btn-sm btn-custom-sm" onclick="HistoryRide('{{i.ride_id}}')"><i class="fa fa-clock"></i></a>
+                                            <button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#cancelBookingModal" data-ride-id="{{ i.ride_id }}">Cancel Booking</button>
+                                        </td>                                                                                                                      
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -97,6 +199,7 @@
     </div>
 </div>
 
+<!-- Assign Driver Modal -->
 <div class="modal fade" id="assignDriverModal" tabindex="-1" role="dialog" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -115,6 +218,7 @@
                                 <th>Vehicle Id</th>
                                 <th>Vehicle Number</th>
                                 <th>Category</th>
+                                <th>A/c or Non A/c</th>
                                 <th>Phone Number</th>
                                 <th>Driver Status</th>
                             </tr>
@@ -131,12 +235,13 @@
                                 </td>
                                 <td>{{ driver.vehicle.Vehicle_Number }}</td>
                                 <td>{{ driver.vehicle.model.brand.category.category_name }}</td>
+                                <td><span class="badge bg-gradient-success">{{ driver.vehicle.car_type }}</span></td>
                                 <td>{{ driver.phone_number }}</td>
                                 <td>
                                     {% if driver.driver_status == 'free' %}
-                                        <span class="badge badge-success">{{ driver.driver_status }}</span>
+                                        <span class="badge bg-gradient-success">{{ driver.driver_status }}</span>
                                     {% elif driver.driver_status == 'occupied' %}
-                                        <span class="badge badge-warning">{{ driver.driver_status }}</span>
+                                        <span class="badge bg-gradient-warning">{{ driver.driver_status }}</span>
                                     {% endif %}
                                 </td>
                             </tr>
@@ -166,7 +271,7 @@
                     <div class="form-group">
                         <label for="cancelComments">Comments</label>
                         <textarea class="form-control" id="comments" name="comments" rows="3" required></textarea>
-                    </div>
+                    </div><br>
                     <button type="button" class="btn btn-danger cancel-btn">Cancel Booking</button>
             </div>
         </div>
@@ -174,7 +279,362 @@
 </div>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<!-- Popper.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    
+<script>
+    $(document).ready(function() {
+    // Update data-comments attribute whenever textarea value changes
+    $('#comments').on('input', function() {
+        const comments = $(this).val();
+        $('.cancel-btn').attr('data-comments', comments);
+    });
+
+    // Handle cancel button click
+    $(document).on('click', '.cancel-btn', function() {
+        console.log("Submit button clicked!");
+
+        const comments = $(this).data('comments');
+        const rideId = $('#cancelBookingModal').data('ride-id');
+
+        console.log("comments: ", comments); // Debugging statement
+        console.log("Ride ID: ", rideId);     // Debugging statement
+
+        // Check if comments are provided
+        if (!comments) {
+            console.error("Comments are missing");
+            alert("Please provide cancellation comments.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "adcancel_ride" %}', // Django URL for the cancel_ride view
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}' // Make sure you are using CSRF tokens for POST requests in Django
+            },
+            data: JSON.stringify({ comments: comments, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                if (result.status === 'success') {
+                    console.log("Ride successfully cancelled!");
+                    alert("Ride cancelled successfully. A WhatsApp message has been sent to the customer.");
+                    location.reload(); // Reload the page after success
+                } else {
+                    console.error("Cancellation failed: ", result.message);
+                    alert("Failed to cancel the ride: " + result.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert("Failed to cancel the ride. Please try again.");
+            }
+        });
+    });
+
+    // Modal Show Event to store the ride ID
+    $('#cancelBookingModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+});
+
+</script>
+
+<script>
+    
+    $(document).ready(function() {
+    console.log("Document is ready!");
+
+    // Assign Driver Button Click Event
+    $(document).on('click', '.assign-driver-btn', function() {
+        console.log("Assign driver button clicked!");
+
+        const driverId = $(this).data('driver-id');
+        const rideId = $('#assignDriverModal').data('ride-id');
+
+        console.log("Driver ID: ", driverId); // Debugging statement
+        console.log("Ride ID: ", rideId);     // Debugging statement
+
+        // Check if driverId is correctly retrieved
+        if (!driverId) {
+            console.error("Driver ID is missing");
+            alert("Driver ID is missing.");
+            return;
+        }
+
+        $.ajax({
+            url: '{% url "adassign_driver" %}',
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            data: JSON.stringify({ driver_id: driverId, ride_id: rideId }),
+            contentType: 'application/json; charset=utf-8',
+            success: function(result) {
+                console.log("Success: ", result);
+                
+                if (result.status === 'success') {
+                    alert("Driver assigned successfully. A message has been sent to the customer.");
+                } else {
+                    alert("Failed to assign driver: " + (result.message || "Unknown error."));
+                }
+                
+                location.reload(); // Reload page after handling the message
+            },
+            error: function(xhr, status, error) {
+                console.error("Error: ", xhr.responseText);
+                alert('Failed to assign driver. Please try again.');
+            }
+        });
+    });
+
+    // Modal Show Event
+    $('#assignDriverModal').on('show.bs.modal', function(event) {
+        var button = $(event.relatedTarget); // Button that triggered the modal
+        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var modal = $(this);
+        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+
+        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    });
+});
+
+
+    function EditRide(ride_id) {
+    var action = confirm("Are you sure you want to edit this ride?");
+    if (action !== false) {
+        window.location.href = "EditRide/" + ride_id;
+    }
+
+    function HistoryRide(ride_id) {
+        window.location.href = "RideHistory/" + ride_id; // Add a slash here
+    };
+}; 
+
+</script>
+
+<script>
+
+$('#toggleFilterReport').click(function() {
+    var filterReport = $('.filter_report');
+    filterReport.toggle();
+    $(this).text(filterReport.is(':visible') ? 'Hide' : 'Show');
+});
+
+$(document).ready(function() {
+    // Initialize Select2 and Flatpickr plugins
+    $("#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame").select2();
+    flatpickr("#single-date-picker", {
+        dateFormat: "Y-m-d",
+        onChange: filterTable
+    });
+    flatpickr("#date-range-picker", {
+        mode: "range",
+        dateFormat: "Y-m-d",
+        onChange: filterTable
+    });
+
+    var table = $('#example').DataTable();
+    
+    // Add change event listeners
+    $('#from-time-picker, #to-time-picker').on('change', filterTable);
+    $('#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame').on('change', filterTable);
+    
+    function filterTable() {
+        var serviceType = $('#single-select').val();
+        var bookingId = $('#single-select1').val();
+        var vehicleType = $('#vehicle-type').val();
+        var vehicleId = $('#vehicle-id').val();
+        var driverId = $('#driver-id').val();
+        var singleDate = $('#single-date-picker').val();
+        var dateRange = $('#date-range-picker').val();
+        var fromTime = $('#from-time-picker').val();
+        var toTime = $('#to-time-picker').val();
+        var timeFrame = $('#time-frame').val();
+
+        // Parse date range
+        var startDate = null, endDate = null;
+        if (dateRange) {
+            var dates = dateRange.split(" to ");
+            if (dates.length === 2) {
+                startDate = new Date(dates[0]);
+                endDate = new Date(dates[1]);
+                endDate.setHours(23, 59, 59, 999);
+            }
+        }
+
+        // Calculate time frame dates
+        var today = new Date();
+        var selectedStartDate = null;
+        var selectedEndDate = null;
+
+        if (timeFrame === "today") {
+            selectedStartDate = new Date(today.setHours(0, 0, 0, 0));
+            selectedEndDate = new Date(today.setHours(23, 59, 59, 999));
+        } else if (timeFrame === "yesterday") {
+            selectedStartDate = new Date(today.setDate(today.getDate() - 1).setHours(0, 0, 0, 0));
+            selectedEndDate = new Date(today.setHours(23, 59, 59, 999));
+        } else if (timeFrame === "this-month") {
+            selectedStartDate = new Date(today.getFullYear(), today.getMonth(), 1);
+            selectedEndDate = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59, 999);
+        } else if (timeFrame === "last-month") {
+            selectedStartDate = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+            selectedEndDate = new Date(today.getFullYear(), today.getMonth(), 0, 23, 59, 59, 999);
+        } else if (timeFrame === "this-year") {
+            selectedStartDate = new Date(today.getFullYear(), 0, 1);
+            selectedEndDate = new Date(today.getFullYear(), 11, 31, 23, 59, 59, 999);
+        } else if (timeFrame === "last-year") {
+            selectedStartDate = new Date(today.getFullYear() - 1, 0, 1);
+            selectedEndDate = new Date(today.getFullYear() - 1, 11, 31, 23, 59, 59, 999);
+        }
+
+        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+            var row = $(table.row(dataIndex).node());
+            var pickupDateText = row.find('td:nth-child(2) div:nth-child(3)').text().trim();  
+            var pickupTimeText = row.find('td:nth-child(2) div:nth-child(2)').text().trim();  
+
+            var pickupDate = new Date(pickupDateText);
+            var pickupTime = parseTime(pickupTimeText);  
+            var showRow = true;
+
+            // Single date filter
+            if (singleDate) {
+                var selectedDate = new Date(singleDate);  
+                selectedDate.setHours(0, 0, 0, 0);  
+                pickupDate.setHours(0, 0, 0, 0);    
+                if (pickupDate.getTime() !== selectedDate.getTime()) {
+                    showRow = false;
+                }
+            }
+
+            // Date range filter
+            if (startDate && endDate && showRow) {
+                if (pickupDate < startDate || pickupDate > endDate) {
+                    showRow = false;
+                }
+            }
+
+            // Time frame filter
+            if (selectedStartDate && selectedEndDate && showRow) {
+                if (pickupDate < selectedStartDate || pickupDate > selectedEndDate) {
+                    showRow = false;
+                }
+            }
+
+             // Time filtering
+             if (fromTime && toTime && showRow) {
+                var fromTimeParsed = parseTime(fromTime);
+                var toTimeParsed = parseTime(toTime);
+
+                // Check if fromTime is greater than toTime (crossing midnight)
+                if (fromTimeParsed > toTimeParsed) {
+                    // Cross midnight logic
+                    showRow = !(pickupTime < fromTimeParsed && pickupTime >= toTimeParsed);
+                } else {
+                    showRow = pickupTime >= fromTimeParsed && pickupTime <= toTimeParsed;
+                }
+            }
+
+            // Other filters
+            if (serviceType && row.data('ridetype') != serviceType) showRow = false;
+            if (bookingId && row.data('rideid') != bookingId) showRow = false;
+            if (vehicleType && row.data('categoryid') != vehicleType) showRow = false;
+            if (vehicleId && row.data('vehicleid') != vehicleId) showRow = false;
+            if (driverId && row.data('driverid') != driverId) showRow = false;
+
+            return showRow;
+        });
+
+        table.draw();
+        $.fn.dataTable.ext.search.pop();
+    }
+
+    // Function to parse time in various formats
+    function parseTime(timeString) {
+        var timeParts = timeString.match(/(\d{1,2}):(\d{2})\s*(a\.m\.|p\.m\.|AM|PM)?/i);
+        if (timeParts) {
+            var hours = parseInt(timeParts[1], 10);
+            var minutes = parseInt(timeParts[2], 10);
+            var period = timeParts[3];
+
+            if (period) {
+                period = period.toLowerCase();
+                if (period.includes('p') && hours < 12) {
+                    hours += 12;
+                } else if (period.includes('a') && hours === 12) {
+                    hours = 0;
+                }
+            }
+
+            // Use current date
+            var now = new Date();
+            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
+        } else {
+            // Handle 24-hour format directly
+            timeParts = timeString.match(/(\d{1,2}):(\d{2})/);
+            if (timeParts) {
+                var hours = parseInt(timeParts[1], 10);
+                var minutes = parseInt(timeParts[2], 10);
+                var now = new Date();
+                return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
+            } else {
+                // Handle cases like "4 p.m." or "4 PM"
+                timeParts = timeString.match(/(\d{1,2})\s*(a\.m\.|p\.m\.|AM|PM)/i);
+                if (timeParts) {
+                    var hours = parseInt(timeParts[1], 10);
+                    var period = timeParts[2].toLowerCase();
+
+                    if (period.includes('p') && hours < 12) {
+                        hours += 12;
+                    } else if (period.includes('a') && hours === 12) {
+                        hours = 0;
+                    }
+
+                    var now = new Date();
+                    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, 0, 0);
+                }
+            }
+        }
+        return null;
+    }
+});
 
 
 </script>
+
+<style>
+    .mb-1 {
+        color: black;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+
+</style>
 {% endblock content %}

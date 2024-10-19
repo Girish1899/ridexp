@@ -28,7 +28,9 @@ urlpatterns = [
 
     # User 
     path('aduserlist', views.UserList.as_view(), name='aduserlist'),
-    path('adUserHistory/<int:user_id>/', ProfileHistoryView.as_view(), name='adUser_history'),
+    path('adUserHistory/<int:user_id>/', ProfileHistoryView.as_view(), name='adUserHistory'),
+    path('aduseremp', UserEmpList.as_view(), name='aduseremp'),
+
 
     # customer 
     path('adcustomerlist', views.CustomerList.as_view(), name='adcustomerlist'),
@@ -39,7 +41,7 @@ urlpatterns = [
     path('adVehicleownerHistory/<int:owner_id>/', VehicleOwnerHistoryView.as_view(), name='adVehicleowner_history'),
 
     # driverss####################### 
-    path('adviewdriver', views.DriverListView.as_view(), name='adviewdriver'),
+    path('adviewdriver', DriverListView.as_view(), name='adviewdriver'),
     path('adDriverHistory/<int:driver_id>/', DriverHistoryView.as_view(), name='addriver_history'),
 
     # vehicle ############################## 
@@ -47,7 +49,7 @@ urlpatterns = [
     path('adVehicleHistory/<int:vehicle_id>/', VehicleHistoryView.as_view(), name='adVehicle_history'),
 
      # ride ############################## 
-    path('ADaddbooking', AddRide.as_view(), name='ADaddbooking'),
+    path('adaddbookings', AddRide.as_view(), name='adaddbookings'),
     path('adridelist/<int:ride_id>/', RideList.as_view(), name='adridelist'),
     path('adridelist',RideList.as_view(), name='adridelist'),
     path('adcompleted-bookings-filter/', completed_bookings_filter, name='adcompleted_bookings_filter'),
@@ -74,6 +76,49 @@ urlpatterns = [
 ################## price details ###########################
     path('adpricinglist', PriceList.as_view(), name='adpricinglist'),
     path('adpricing_history/<int:pricing_id>/', PricingHistoryView.as_view(), name='adpricing_history'),
+
+
+    path('adcolorList', colorList.as_view(), name='adcolorList'),
+    path('adColorHistory/<int:color_id>/', ColorHistoryView.as_view(), name='adColorHistory'),
+    path('adTransmissionHistory/<int:transmission_id>/', TransmissionHistoryView.as_view(), name='adtransmission_history'),
+    path('adTransmissionListView',TransmissionListView.as_view(),name='adTransmissionListView'),
+    path('advehicleblocklist', VehicleBlockList.as_view(), name='advehicleblocklist'),
+    path('adcustomer_profile/<int:customer_id>/', CustomerProfileHistoryView.as_view(), name='adcustomer_profile'),
+    path('adcust_profile_list', CustomerProfileList.as_view(), name='adcust_profile_list'),
+
+    path('advehicles/', VehicleListView.as_view(), name='advehicles'),
+    path('advehicles/<str:vehicle_id>/daily-summary/', VehicleDailySummaryView.as_view(), name='advehicle_daily_summary'),
+    path('advehicle/<int:vehicle_id>/details/<str:date>/', BookingDetailsView.as_view(), name='adbooking_details'),
+
+    path('adaccounts_list', AccountsListView.as_view(), name='adaccounts_list'),
+
+    #contact #########################
+    path('adcontactlist', ContactList.as_view(), name='adcontactlist'),
+
+#  enquiry ################################
+    path('adenquirylist', EnquiryList.as_view(), name='adenquirylist'), 
+
+    # package #######################
+
+    path('adpackage_category_list', PackageCategoryList.as_view(), name='adpackage_category_list'),
+    path('adpackage_name_list', PackageNameList.as_view(), name='adpackage_name_list'),
+    path('adpackages_list', PackageList.as_view(), name='adpackages_list'),
+    path('adpackage_order_list', PackageOrderList.as_view(), name='adpackage_order_list'),
+
+    path('adPackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='adPackageCategoryHistory'),
+    path('adPackageNameHistory/<int:package_name_id>/', PackageNameHistoryView.as_view(), name='adPackageNameHistory'),
+    path('adPackagesHistory/<int:package_id>/', PackagesHistoryView.as_view(), name='adPackagesHistory'),
+    path('adpackage_order_history/<int:order_id>/', PackageOrderHistoryView.as_view(), name='adpackage_order_history'),
+
+    path('adupdate_ride_status/<int:ride_id>/',update_ride_status, name='adupdate_ride_status'),
+    path('adview_assignlater', AssignLaterList.as_view(), name='adview_assignlater'),
+
+    path('send_otp_adminuser/', SendOtp.as_view(), name='send_otp_adminuser'),
+    path('verify_otp_adminuser/', VerifyOtp.as_view(), name='verify_otp_adminuser'),
+    path('AdminPricingDetails', customerGetRidePricingDetails.as_view(), name='AdminPricingDetails'),
+    path('adcancel_ride', cancel_ride, name='adcancel_ride'),
+    path('adassign_driver', assign_driver, name='adassign_driver'),
+    path('adadvanceassign_driver', advanceassign_driver, name='adadvanceassign_driver'),
 
 
 

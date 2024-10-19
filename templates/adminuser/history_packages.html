@@ -1,0 +1,76 @@
+{% extends 'adminuser/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Package Category History for {{ package.name }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'packages_list' %}" style="color: white !important;">View Packages</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- row -->
+
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">History Records</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black !important;">
+                                        <th>Serial No</th>
+                                        <th>Package Name </th>
+                                        <th>Package Category Name </th>
+                                        <th>Description </th>
+                                        <th>Price </th>
+                                        <th>Duration </th>
+                                        <th>Features </th>
+                                        <th>Status </th>
+                                        <th>Created On/Created by</th>
+                                        <th>Updated By</th>
+                                        <th>Updated On</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.name }}</td>
+                                        <td>{{ record.package_category.category_name }}</td>
+                                        <td>{{ record.description }}</td>
+                                        <td>{{ record.price }}</td>
+                                        <td>{{ record.duration }}</td>
+                                        <td>{{ record.features }}</td>
+                                        <td>{{ record.status }}</td>
+                                        <td>
+                                            <div>{{ record.created_on }}</div>
+                                            <div>{{ record.created_by }}</div>
+                                        </td>
+                                        <td style="color: green;">{{ record.updated_by }}</td>
+                                        <td style="color: red">{{ record.updated_on }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
