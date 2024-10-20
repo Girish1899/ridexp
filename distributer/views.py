@@ -7,21 +7,26 @@ from django.db import IntegrityError
 from django.shortcuts import render
 import re
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render,redirect
 from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from rest_framework.response import Response
 from rest_framework import status
-from superadmin.models import Blogs, Brand,Category, DriverHistory, Enquiry,Model, PackageCategories, PackageCategoriesHistory, Pricing, Profile, RideDetails, RideDetailsHistory,User,Customer,Driver,Ridetype,Vehicle, WebsitePackages
+from superadmin.models import Blogs, Brand, BrandHistory,Category, CategoryHistory, Color, ColorHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, Pricing, Profile, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User,Customer,Driver,Ridetype,Vehicle, VehicleHistory, VehicleOwner, VehicleOwnerHistory, VehicleType, VehicleTypeHistory, WebsitePackages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
+from django.utils import timezone
+from django.db.models import Sum, Count
+import zipfile
+from django.http import HttpResponse
 from django.core.cache import cache
 import requests
 from docxtpl import DocxTemplate
 from docx2pdf import convert
 from django.utils.text import slugify
+from django.views.decorators.http import require_POST
 from PIL import Image
 from io import BytesIO
 import os
@@ -43,6 +48,1832 @@ def index(request):
         'vehicle_count': vehicle_count,
     }
     return render(request,'distributer/index.html',context)
+
+# brand ########################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addbrand(TemplateView):
+    template_name = "distributer/add_brand.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        brands = Brand.objects.all().values('category_id', 'brand_name')
+        context['catlist'] = catlist
+        context['brands'] = brands
+        return context
+
+    def post(self, request):
+        user_type = self.request.session.get('user_type')
+        if user_type != "distributer":
+            return redirect('login')
+        
+        category = request.POST['category']
+        brand_name = request.POST['brand_name']
+        status = request.POST['status']
+
+        brand = Brand()
+        brand.category = Category.objects.get(category_id=category)
+        brand.brand_name = brand_name
+        brand.status = status
+        brand.created_by = request.user
+        brand.updated_by = request.user
+        brand.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class BrandListView(ListView):
+
+    model = Brand
+    template_name = "distributer/view_brand.html"
+
+    def get(self, request, *args, **kwargs):
+        user_typ = self.request.session.get('user_type')
+        if user_typ !="distributer":
+            return redirect('login')
+        else:
+            return super().get(request, *args, **kwargs)
+        
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteBrand(View):
+    def  get(self, request):
+        
+        brand_id = request.GET.get('brand_id', None)
+        Brand.objects.get(brand_id=brand_id).delete()
+        data = {
+            'deleted': True
+            }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')   
+class EditBrand(TemplateView):
+    template_name = 'distributer/edit_brand.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')  # Filter only active categories
+        try:
+            context['brand_id'] = self.kwargs['id']
+            brandlist = Brand.objects.filter(brand_id=context['brand_id'])
+        except:
+            brandlist = Brand.objects.filter(brand_id=context['brand_id'])
+
+        brands = Brand.objects.all().values('category_id', 'brand_name')
+
+        context.update({
+            'brandlist': list(brandlist),
+            'catlist': list(catlist),
+            'brands': brands
+        })
+        return context    
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateBrand(APIView):  
+    def post(self, request):
+        brand_id = request.POST['brand_id']
+        brand = get_object_or_404(Brand, brand_id=brand_id)
+        original_brand_status = brand.status
+
+        # Update the brand with new data
+        brand.brand_name = request.POST['brand_name']
+        brand.category = Category.objects.get(category_id=request.POST.get('category'))
+        brand.status = request.POST['status']
+        brand.updated_by = request.user
+        brand.save()
+
+        # Create a BrandHistory entry after updating the brand
+        BrandHistory.objects.create(
+            brand_id=brand.brand_id,
+            category=brand.category,
+            brand_name=brand.brand_name,
+            status=brand.status,
+            created_on=brand.created_on,
+            updated_on=brand.updated_on,
+            created_by=brand.created_by.username if brand.created_by else None,
+            updated_by=request.user.username
+        )
+
+        if original_brand_status != brand.status:
+            models = brand.models.all() 
+            for model in models:
+                if model.status != brand.status:
+                    model.status = brand.status
+                    model.save()
+
+                    vehicles = model.vehicles.all() 
+                    for vehicle in vehicles:
+                        if vehicle.vehicle_status != brand.status:
+                            vehicle.vehicle_status = brand.status
+                            vehicle.save()
+
+        return JsonResponse({'success': True}, status=200)
+
+class BrandHistoryView(TemplateView):
+    template_name = 'distributer/history_brand.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        brand_id = self.kwargs['brand_id']
+        brand = get_object_or_404(Brand, brand_id=brand_id)
+        history = BrandHistory.objects.filter(brand_id=brand_id).order_by('updated_on')
+        context['brand'] = brand
+        context['history'] = history
+        return context  
+    
+@csrf_exempt
+def toggle_brand_status(request):
+    if request.method == 'POST':
+        brand_id = request.POST.get('brand_id')
+        new_status = request.POST.get('status')
+        try:
+            brand = Brand.objects.get(pk=brand_id)
+            brand.status = new_status
+            brand.save()
+            BrandHistory.objects.create(
+            brand_id=brand.brand_id,
+            category=brand.category,
+            brand_name=brand.brand_name,
+            status=brand.status,
+            created_on=brand.created_on,
+            updated_on=brand.updated_on,
+            created_by=brand.created_by.username if brand.created_by else None,
+            updated_by=request.user.username
+        )
+            return JsonResponse({'success': True})
+        except Brand.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Brand not found'})
+    return JsonResponse({'success': False, 'error': 'Invalid request'})  
+
+class ViewBrand(View):
+    template_name = 'distributer/detailview_brand.html'
+
+    def get(self, request, brand_id):
+        brandlist = get_object_or_404(Brand, pk=brand_id)
+        return render(request, self.template_name, {'brandlist': brandlist})  
+    
+# category#################################################
+@login_required(login_url='login')
+def check_category(request):
+    category_name = request.GET.get('category_name', None)
+    categories = Category.objects.filter(category_name=category_name)
+    data = {
+        'exists': categories.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addcategory(TemplateView):
+    template_name = "distributer/add_category.html"
+
+    def post(self, request):
+        category_name = request.POST['category_name']
+        seats = request.POST['seats']
+        image = request.FILES.get('image')
+        category_status = request.POST['category_status']
+        cat = Category(
+            category_name=category_name,
+            seats = seats,
+            category_status=category_status,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        if image:
+            # Open the uploaded image
+            img = Image.open(image)
+            
+            # Resize image to 880x350 pixels
+            img = img.resize((880, 450), Image.LANCZOS)
+
+            # Get the file extension and set the appropriate format
+            file_extension = os.path.splitext(image.name)[1].lower()
+            if file_extension in ['.jpg', '.jpeg']:
+                format = 'JPEG'
+            elif file_extension == '.png':
+                format = 'PNG'
+            elif file_extension == '.gif':
+                format = 'GIF'
+            else:
+                format = 'JPEG'  # Default format if none of the above match
+
+            # Save the image to an in-memory file
+            img_io = BytesIO()
+            img.save(img_io, format=format)
+            img_content = ContentFile(img_io.getvalue(), image.name)
+
+            # Assign the resized image to the category object
+            cat.image.save(image.name, img_content, save=False)
+
+        cat.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CategoryListView(ListView):
+    model = Category
+    template_name = "distributer/view_category.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCategory(View):
+    def get(self, request):
+        category_id = request.GET.get('category_id', None)
+        Category.objects.get(category_id=category_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')   
+class EditCategory(TemplateView):
+    template_name = 'distributer/edit_category.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['category_id'] = self.kwargs['id']
+            catlist = Category.objects.filter(category_id=context['category_id'])
+        except:
+            catlist = Category.objects.filter(category_id=context['category_id'])
+            
+        context['catlist']= list(catlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCategory(APIView):
+    def post(self, request):
+        category_id = request.POST['category_id']
+        category = get_object_or_404(Category, category_id=category_id)
+        original_category_status = category.category_status
+
+        # Update the category with new data
+        category.category_name = request.POST['category_name']
+        category.seats = request.POST['seats']
+        if 'image' in request.FILES:
+            # Handle image resizing before saving
+            image = request.FILES['image']
+            img = Image.open(image)
+            
+            # Resize image to 880x350 pixels
+            img = img.resize((880, 450), Image.LANCZOS)
+
+            # Get the file extension and set the appropriate format
+            file_extension = os.path.splitext(image.name)[1].lower()
+            if file_extension in ['.jpg', '.jpeg']:
+                format = 'JPEG'
+            elif file_extension == '.png':
+                format = 'PNG'
+            elif file_extension == '.gif':
+                format = 'GIF'
+            else:
+                format = 'JPEG'  # Default format if none of the above match
+
+            # Save the image to an in-memory file
+            img_io = BytesIO()
+            img.save(img_io, format=format)
+            img_content = ContentFile(img_io.getvalue(), image.name)
+
+            # Assign the resized image to the category object
+            category.image.save(image.name, img_content, save=False)
+        category.category_status = request.POST['category_status']
+        category.updated_by = request.user
+        category.save()
+
+        # Create a CategoryHistory entry after updating the category
+        CategoryHistory.objects.create(
+            category_id=category.category_id,
+            category_name=category.category_name,
+            seats=category.seats,
+            image=category.image,
+            category_status=category.category_status,
+            created_on=category.created_on,
+            updated_on=category.updated_on,
+            created_by=category.created_by.username if category.created_by else None,
+            updated_by=request.user.username
+        )
+
+        if original_category_status != category.category_status:
+            brands = category.brands.all() 
+            for brand in brands:
+                if brand.status != category.category_status:
+                    brand.status = category.category_status
+                    brand.save()
+
+                    models = brand.models.all()  
+                    for model in models:
+                        if model.status != category.category_status:
+                            model.status = category.category_status
+                            model.save()
+
+                            vehicles = model.vehicles.all() 
+                            for vehicle in vehicles:
+                                if vehicle.vehicle_status != category.category_status:
+                                    vehicle.vehicle_status = category.category_status
+                                    vehicle.save()
+
+        return JsonResponse({'success': True}, status=200)
+
+class CategoryHistoryView(TemplateView):
+    template_name = 'distributer/history_category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs['category_id']
+        category = get_object_or_404(Category, category_id=category_id)
+        history = CategoryHistory.objects.filter(category_id=category_id).order_by('updated_on')
+        context['category'] = category
+        context['history'] = history
+        return context
+    
+@require_POST
+def toggle_category_status(request):
+    category_id = request.POST.get('category_id')
+    new_status = request.POST.get('new_status')
+    
+    try:
+        category = Category.objects.get(pk=category_id)
+        category.category_status = new_status
+        category.save()
+        CategoryHistory.objects.create(
+            category_id=category.category_id,
+            category_name=category.category_name,
+            seats=category.seats,
+            image=category.image,
+            category_status=category.category_status,
+            created_on=category.created_on,
+            updated_on=category.updated_on,
+            created_by=category.created_by.username if category.created_by else None,
+            updated_by=request.user.username
+        )
+        return JsonResponse({'success': True})
+    except Category.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Category not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})  
+
+    # detail view category 
+class ViewCategory(View):
+    template_name = 'distributer/detailview_category.html'
+
+    def get(self, request, category_id):
+        category = get_object_or_404(Category, pk=category_id)
+        return render(request, self.template_name, {'category': category})
+
+        
+
+# model ########################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addmodel(TemplateView):
+    template_name = "distributer/add_model.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        blist = Brand.objects.filter(status='active')
+        models = Model.objects.all()
+        context = {'catlist': list(catlist), 'blist': list(blist), 'models': models}
+        return context
+
+    def post(self, request):
+        brand = request.POST['brand']
+        model_name = request.POST['model_name']
+        status = request.POST['status']
+
+        model = Model(
+            brand=Brand.objects.get(brand_id=brand),
+            model_name=model_name,
+            status=status,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        model.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ModelListView(ListView):
+    model = Model
+    template_name = "distributer/view_model.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteModel(View):
+    def get(self, request):
+        model_id = request.GET.get('model_id', None)
+        Model.objects.get(model_id=model_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditModel(TemplateView):
+    template_name = 'distributer/edit_model.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        blist = Brand.objects.filter(status='active')
+        try:
+            context['model_id'] = self.kwargs['id']
+            mlist = Model.objects.filter(model_id=context['model_id'])
+        except:
+            mlist = Model.objects.filter(model_id=context['model_id'])
+
+        models = Model.objects.all().values('brand_id', 'model_name')
+    
+        context.update({
+            'blist': list(blist),
+            'catlist': list(catlist),
+            'mlist': list(mlist),
+            'models': models
+        })
+        return context    
+        # context = {'blist':list(blist),'catlist':list(catlist),'mlist':list(mlist)}
+        # return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateModel(APIView):
+    def post(self, request):
+        model_id = request.POST['model_id']
+        model_name = request.POST['model_name']
+        brand_id = request.POST['brand']
+        status = request.POST['status']
+
+        # Check if a model with the same name exists for the selected brand, excluding the current model
+        if Model.objects.filter(brand_id=brand_id, model_name=model_name).exclude(model_id=model_id).exists():
+            return JsonResponse({'success': False, 'message': "Model already exists for the selected brand."}, status=400)
+
+        model = get_object_or_404(Model, model_id=model_id)
+        original_model_status = model.status
+
+        # Update the model with new data
+        model.model_name = model_name
+        model.brand_id = brand_id
+        model.status = status
+        model.updated_by = request.user
+        model.save()
+
+        # Create a ModelHistory entry after updating the model
+        ModelHistory.objects.create(
+            model_id=model.model_id,
+            brand=model.brand,
+            model_name=model.model_name,
+            status=model.status,
+            created_on=model.created_on,
+            updated_on=model.updated_on,
+            created_by=model.created_by.username if model.created_by else None,
+            updated_by=request.user.username
+        )
+
+        # Update corresponding vehicles if the status has changed
+        if original_model_status != model.status:
+            vehicles = model.vehicles.all()  # Assuming vehicles is the related name for Vehicle in Model
+            for vehicle in vehicles:
+                if vehicle.vehicle_status != model.status:
+                    vehicle.vehicle_status = model.status
+                    vehicle.save()
+
+        return JsonResponse({'success': True}, status=200)
+
+class ModelHistoryView(TemplateView):
+    template_name = 'distributer/history_model.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        model_id = self.kwargs['model_id']
+        model = get_object_or_404(Model, model_id=model_id)
+        history = ModelHistory.objects.filter(model_id=model_id).order_by('updated_on')
+        context['model'] = model
+        context['history'] = history
+        return context
+    
+@require_POST
+def toggle_model_status(request):
+    model_id = request.POST.get('model_id')
+    new_status = request.POST.get('status')
+
+    try:
+        model = Model.objects.get(model_id=model_id)
+        if new_status not in dict(Model.STATUS_CHOICES).keys():
+            return JsonResponse({'success': False, 'message': 'Invalid status'}, status=400)
+
+        # Update the model status
+        model.status = new_status
+        model.save()
+        ModelHistory.objects.create(
+            model_id=model.model_id,
+            brand=model.brand,
+            model_name=model.model_name,
+            status=model.status,
+            created_on=model.created_on,
+            updated_on=model.updated_on,
+            created_by=model.created_by.username if model.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True})
+    except Model.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Model not found'}, status=404)   
+
+class ViewModel(View):
+    template_name = 'distributer/detailview_model.html'
+
+    def get(self, request, model_id):
+        mlist = get_object_or_404(Model, pk=model_id)
+        return render(request, self.template_name, {'mlist': mlist})         
+    
+# vehicletype ############################
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addvehicletype(TemplateView):
+    template_name = "distributer/add_vehicletype.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_vehicletype = VehicleType.objects.all().order_by('-vehicle_type_id').first()
+        if last_vehicletype:
+            last_company_format = int(last_vehicletype.company_format.replace('VT', ''))
+            next_company_format = f'VT{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VT01'
+        context['next_company_format'] = next_company_format
+        context['vehicletypes'] = VehicleType.objects.all()
+        return context
+
+    def post(self, request):
+        vehicle_type_name = request.POST['vehicle_type_name']
+        company_format = request.POST.get('company_format', '')
+
+        vt = VehicleType(
+            vehicle_type_name=vehicle_type_name,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        vt.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class vehicletypeList(ListView):
+    model = VehicleType
+    template_name = "distributer/view_vehicletype.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Deletevehicletype(View):
+    def get(self, request):
+        vehicle_type_id = request.GET.get('vehicle_type_id', None)
+        VehicleType.objects.get(vehicle_type_id=vehicle_type_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Editvehicletype(TemplateView):
+    template_name = 'distributer/edit_vehicletype.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['vehicle_type_id'] = self.kwargs['id']
+            vtlist = VehicleType.objects.filter(vehicle_type_id=context['vehicle_type_id'])
+        except:
+            vtlist = VehicleType.objects.filter(vehicle_type_id=context['vehicle_type_id'])
+            
+        context['vtlist']= list(vtlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Updatevehicletype(APIView):
+    def post(self, request):
+        vehicle_type_id = request.POST['vehicle_type_id']
+        vehicle_type = VehicleType.objects.get(vehicle_type_id=vehicle_type_id)
+
+        # Update the vehicle type with new data
+        vehicle_type.company_format = request.POST['company_format']
+        vehicle_type.vehicle_type_name = request.POST['vehicle_type_name']
+        vehicle_type.updated_by = request.user
+        vehicle_type.save()
+
+        # Create another VehicleTypeHistory entry after updating the vehicle type
+        VehicleTypeHistory.objects.create(
+            vehicle_type_id=vehicle_type.vehicle_type_id,
+            company_format=vehicle_type.company_format,
+            vehicle_type_name=vehicle_type.vehicle_type_name,
+            created_on=vehicle_type.created_on,
+            updated_on=vehicle_type.updated_on,
+            created_by=vehicle_type.created_by.username if vehicle_type.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class VehicleTypeHistoryView(TemplateView):
+    template_name = 'distributer/history_vehicletype.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_type_id = self.kwargs['vehicle_type_id']
+        vehicle_type = get_object_or_404(VehicleType, vehicle_type_id=vehicle_type_id)
+        history = VehicleTypeHistory.objects.filter(vehicle_type_id=vehicle_type_id)
+        context['vehicle_type'] = vehicle_type
+        context['history'] = history
+        return context
+
+@login_required(login_url='login')   
+def check_vehicletype(request):
+    vehicle_type_name = request.GET.get('vehicle_type_name', None)
+    vehicletypes = VehicleType.objects.filter(vehicle_type_name=vehicle_type_name)
+    data = {
+        'exists': vehicletypes.count() > 0
+    }
+    return JsonResponse(data)
+
+
+class ViewVehicletype(View):
+    template_name = 'distributer/detailview_vehicletype.html'
+
+    def get(self, request, vehicle_type_id):
+        vtlist = get_object_or_404(VehicleType, pk=vehicle_type_id)
+        return render(request, self.template_name, {'vtlist': vtlist})  
+    
+# ridetype #########################################
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addridetype(TemplateView):
+    template_name = "distributer/add_ridetype.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_ridetype = Ridetype.objects.all().order_by('-ridetype_id').first()
+        if last_ridetype:
+            last_company_format = int(last_ridetype.company_format.replace('RT', ''))
+            next_company_format = f'RT{last_company_format + 1:02}'
+        else:
+            next_company_format = 'RT01'
+        context['next_company_format'] = next_company_format
+        context['ridetypes'] = Ridetype.objects.all()
+        return context
+
+    def post(self, request):
+        name = request.POST['name']
+        company_format = request.POST.get('company_format', '')
+
+        rt = Ridetype(
+            name=name,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        rt.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class ridetypeList(ListView):
+    model = Ridetype
+    template_name = "distributer/view_ridetype.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Deleteridetype(View):
+    def get(self, request):
+        ridetype_id = request.GET.get('ridetype_id', None)
+        Ridetype.objects.get(ridetype_id=ridetype_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Editridetype(TemplateView):
+    template_name = 'distributer/edit_ridetype.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['ridetype_id'] = self.kwargs['id']
+            rtlist = Ridetype.objects.filter(ridetype_id=context['ridetype_id'])
+        except:
+            rtlist = Ridetype.objects.filter(ridetype_id=context['ridetype_id'])
+            
+        context['rtlist']= list(rtlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Updateridetype(APIView):
+    def post(self, request):
+        ridetype_id = request.POST['ridetype_id']
+        ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
+
+        # Update the ride type with new data
+        ridetype.company_format = request.POST['company_format']
+        ridetype.name = request.POST['name']
+        ridetype.updated_by = request.user
+        ridetype.save()
+
+        # Create another RidetypeHistory entry after updating the ride type
+        RidetypeHistory.objects.create(
+            ridetype_id=ridetype.ridetype_id,
+            company_format=ridetype.company_format,
+            name=ridetype.name,
+            created_on=ridetype.created_on,
+            updated_on=ridetype.updated_on,
+            created_by=ridetype.created_by.username if ridetype.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class RidetypeHistoryView(TemplateView):
+    template_name = 'distributer/history_ridetype.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        ridetype_id = self.kwargs['ridetype_id']
+        ridetype = get_object_or_404(Ridetype, ridetype_id=ridetype_id)
+        history = RidetypeHistory.objects.filter(ridetype_id=ridetype_id).order_by('updated_on')
+        context['ridetype'] = ridetype
+        context['history'] = history
+        return context
+
+@login_required(login_url='login')   
+def check_ridetype(request):
+    name = request.GET.get('name', None)
+    ridetypes = Ridetype.objects.filter(name=name)
+    data = {
+        'exists': ridetypes.count() > 0
+    }
+    return JsonResponse(data)
+
+class ViewRidetype(View):
+    template_name = 'distributer/detailview_ridetype.html'
+
+    def get(self, request, ridetype_id):
+        rtlist = get_object_or_404(Ridetype, pk=ridetype_id)
+        return render(request, self.template_name, {'rtlist': rtlist})  
+    
+# transmission #################################################
+@login_required(login_url='login')
+def check_transmission(request):
+    transmission_name = request.GET.get('transmission_name', None)
+    transmissions = Transmission.objects.filter(transmission_name=transmission_name)
+    data = {
+        'exists': transmissions.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addtransmission(TemplateView):
+    template_name = "distributer/add_transmission.html"
+
+    def post(self, request):
+        transmission_name = request.POST['transmission_name']
+        trans = Transmission(
+            transmission_name=transmission_name,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        trans.save()
+        return JsonResponse({'status': "Success"})
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class TransmissionListView(ListView):
+    model = Transmission
+    template_name = "distributer/view_transmission.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteTransmission(View):
+    def get(self, request):
+        transmission_id = request.GET.get('transmission_id', None)
+        Transmission.objects.get(transmission_id=transmission_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')   
+class EditTransmission(TemplateView):
+    template_name = 'distributer/edit_transmission.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['transmission_id'] = self.kwargs['id']
+            tlist = Transmission.objects.filter(transmission_id=context['transmission_id'])
+        except:
+            tlist = Transmission.objects.filter(transmission_id=context['transmission_id'])
+            
+        context['tlist']= list(tlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateTransmission(APIView):
+    def post(self, request):
+        transmission_id = request.POST['transmission_id']
+        transmission = get_object_or_404(Transmission, transmission_id=transmission_id)
+
+        # Update the category with new data
+        transmission.transmission_name = request.POST['transmission_name']
+        transmission.updated_by = request.user
+        transmission.save()
+
+        # Create a CategoryHistory entry after updating the category
+        TransmissionHistory.objects.create(
+            transmission_id=transmission.transmission_id,
+            transmission_name=transmission.transmission_name,
+            created_on=transmission.created_on,
+            updated_on=transmission.updated_on,
+            created_by=transmission.created_by.username if transmission.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class TransmissionHistoryView(TemplateView):
+    template_name = 'distributer/history_transmission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        transmission_id = self.kwargs['transmission_id']
+        transmission = get_object_or_404(Transmission, transmission_id=transmission_id)
+        history = TransmissionHistory.objects.filter(transmission_id=transmission_id).order_by('updated_on')
+        context['transmission'] = transmission
+        context['history'] = history
+        return context 
+
+class ViewTransmission(View):
+    template_name = 'distributer/detailview_transmission.html'
+
+    def get(self, request, transmission_id):
+        tlist = get_object_or_404(Transmission, pk=transmission_id)
+        return render(request, self.template_name, {'tlist': tlist})          
+
+
+# color #######################################################################
+
+@login_required(login_url='login')   
+def check_color(request):
+    name = request.GET.get('name', None)
+    colors = Color.objects.filter(name=name)
+    data = {
+        'exists': colors.count() > 0
+    }
+    return JsonResponse(data) 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addcolor(TemplateView):
+    template_name = "distributer/add_color.html"
+
+    def post(self, request):
+        name = request.POST['name']
+
+        cl = Color(
+            name=name,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        cl.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class colorList(ListView):
+    model = Color
+    template_name = "distributer/view_color.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Deletecolor(View):
+    def get(self, request):
+        color_id = request.GET.get('color_id', None)
+        Color.objects.get(color_id=color_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Editcolor(TemplateView):
+    template_name = 'distributer/edit_color.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['color_id'] = self.kwargs['id']
+            clist = Color.objects.filter(color_id=context['color_id'])
+        except:
+            clist = Color.objects.filter(color_id=context['color_id'])
+            
+        context['clist']= list(clist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class Updatecolor(APIView):
+    def post(self, request):
+        color_id = request.POST['color_id']
+        color = Color.objects.get(color_id=color_id)
+
+        # Update the ride type with new data
+        color.name = request.POST['name']
+        color.updated_by = request.user
+        color.save()
+
+        # Create another RidetypeHistory entry after updating the ride type
+        ColorHistory.objects.create(
+            color_id=color.color_id,
+            name=color.name,
+            created_on=color.created_on,
+            updated_on=color.updated_on,
+            created_by=color.created_by.username if color.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class ColorHistoryView(TemplateView):
+    template_name = 'distributer/history_color.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        color_id = self.kwargs['color_id']
+        color = get_object_or_404(Color, color_id=color_id)
+        history = ColorHistory.objects.filter(color_id=color_id).order_by('updated_on')
+        context['color'] = color
+        context['history'] = history
+        return context
+
+
+class ViewColor(View):
+    template_name = 'distributer/detailview_color.html'
+
+    def get(self, request, color_id):
+        clist = get_object_or_404(Color, pk=color_id)
+        return render(request, self.template_name, {'clist': clist})  
+
+
+    
+# customer###################################
+
+def check_phonenumber(request):
+    phone_number = request.GET.get('phone_number', None)
+    ph = Customer.objects.filter(phone_number=phone_number)
+    data = {
+        'exists': ph.count() > 0
+    }
+    return JsonResponse(data)
+
+@csrf_exempt
+def update_status(request):
+    if request.method == 'POST':
+        customer_id = request.POST.get('customer_id')
+        new_status = request.POST.get('new_status')
+        block_reason = request.POST.get('block_reason', '')
+
+        try:
+            customer = Customer.objects.get(pk=customer_id)
+            customer.status = new_status
+            if new_status == 'inactive':
+                customer.block_reason = block_reason
+            else:
+                customer.block_reason = ''  # Clear block reason if reactivating
+            customer.save()
+
+            # Optionally, create a CustomerHistory entry here as well
+            CustomerHistory.objects.create(
+                customer_id=customer.customer_id,
+                company_format=customer.company_format,
+                customer_name=customer.customer_name,
+                phone_number=customer.phone_number,
+                address=customer.address,
+                email=customer.email,
+                password=customer.password,
+                status=customer.status,
+                block_reason=customer.block_reason,
+                created_on=customer.created_on,
+                updated_on=customer.updated_on,
+                created_by=customer.created_by.username if customer.created_by else None,
+                updated_by=request.user.username
+            )
+
+            return JsonResponse({'success': True})
+        except Customer.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Customer not found'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addcustomer(TemplateView):
+    template_name = "distributer/add_customer.html"
+
+    def get_context_data(self, **kwargs):
+            context = super().get_context_data(**kwargs)
+            last_cust = Customer.objects.all().order_by('-customer_id').first()
+            if last_cust:
+                last_company_format = int(last_cust.company_format.replace('CUST', ''))
+                next_company_format = f'CUST{last_company_format + 1:02}'
+            else:
+                next_company_format = 'CUST01'
+            context['next_company_format'] = next_company_format
+            return context
+
+    def post(self, request):
+        customer_name = request.POST['customer_name']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+        password = request.POST['password']
+        address = request.POST['address']
+        status = request.POST['status']
+        company_format = request.POST.get('company_format', '')
+
+        cust = Customer(
+            customer_name=customer_name,
+            phone_number=phone_number,
+            password=password,
+            email=email,
+            address=address,
+            status=status,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        cust.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CustomerList(ListView):
+    model = Customer
+    template_name = "distributer/view_customer.html"
+    def get_queryset(self):
+        # First query: Get customers with ride count
+        customers = Customer.objects.annotate(
+            ride_count=Count('ridedetails')
+        )
+
+        # Second query: Calculate total fare for completed bookings
+        completed_rides_totals = RideDetails.objects.filter(
+            ride_status='completedbookings'
+        ).values('customer').annotate(
+            total_fare=Sum('total_fare')
+        ).values('customer', 'total_fare')
+
+        # Convert to a dictionary for fast lookup
+        fare_dict = {item['customer']: item['total_fare'] for item in completed_rides_totals}
+
+        # Annotate customers with the total fare of completed bookings
+        for customer in customers:
+            customer.total_fare = fare_dict.get(customer.pk, 0.0)
+
+        return customers
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCustomer(View):
+    def get(self, request):
+        customer_id = request.GET.get('customer_id', None)
+        Customer.objects.get(customer_id=customer_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditCustomer(TemplateView):
+    template_name = 'distributer/edit_customer.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['customer_id'] = self.kwargs['id']
+            customerlist = Customer.objects.filter(customer_id=context['customer_id'])
+        except:
+            customerlist = Customer.objects.filter(customer_id=context['customer_id'])
+            
+        context['customerlist']= list(customerlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCustomer(APIView):  
+    def post(self, request):
+        customer_id = request.POST['customer_id']
+        customer = Customer.objects.get(customer_id=customer_id)
+
+        # Update the customer with new data
+        customer.company_format = request.POST['company_format']
+        customer.customer_name = request.POST['customer_name']
+        customer.phone_number = request.POST['phone_number']
+        customer.address = request.POST['address']
+        customer.email = request.POST['email']
+        customer.password = request.POST['password']
+        customer.status = request.POST['status']
+        customer.updated_by = request.user
+        customer.save()
+
+        # Create another CustomerHistory entry after updating the customer
+        CustomerHistory.objects.create(
+            customer_id=customer.customer_id,
+            company_format=customer.company_format,
+            customer_name=customer.customer_name,
+            phone_number=customer.phone_number,
+            address=customer.address,
+            email=customer.email,
+            password=customer.password,
+            status=customer.status,
+            created_on=customer.created_on,
+            updated_on=customer.updated_on,
+            created_by=customer.created_by.username if customer.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+
+class CustomerHistoryView(TemplateView):
+    template_name = 'distributer/history_customer.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        customer_id = self.kwargs['customer_id']
+        customer = get_object_or_404(Customer, customer_id=customer_id)
+        history = CustomerHistory.objects.filter(customer_id=customer_id).order_by('updated_on')
+        context['customer'] = customer
+        context['history'] = history
+        return context
+
+class ViewCustomer(View):
+    template_name = 'distributer/detailview_customer.html'
+
+    def get(self, request, customer_id):
+        customerlist = get_object_or_404(Customer, pk=customer_id)
+        return render(request, self.template_name, {'customerlist': customerlist}) 
+
+class CustomerProfileHistoryView(View):
+    def get(self, request, customer_id):
+        customer = get_object_or_404(Customer, pk=customer_id)
+        rides = RideDetails.objects.filter(customer=customer)
+        current_bookings = rides.filter(ride_status='currentbookings')
+        completed_bookings = rides.filter(ride_status='completedbookings')
+        cancelled_bookings = rides.filter(ride_status='cancelledbookings')
+        advanced_bookings = rides.filter(ride_status='advancebookings')
+        assigned_bookings = rides.filter(ride_status='assignbookings')
+        ongoing_booking = rides.filter(ride_status='ongoingbookings')
+        # Add other statuses as needed
+
+        context = {
+            'customer': customer,
+            'current_bookings': current_bookings,
+            'completed_bookings': completed_bookings,
+            'cancelled_bookings': cancelled_bookings,
+            'advanced_bookings': advanced_bookings,
+            'assigned_bookings': assigned_bookings,
+            'ongoing_booking': ongoing_booking,
+            # Include other categories in the context
+        }
+        return render(request, 'distributer/customer_bookings.html', context)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CustomerProfileList(ListView):
+    model = Customer
+    template_name = "distributer/cust_profile_list.html" 
+
+    def get_queryset(self):
+        # First query: Get customers with ride count
+        customers = Customer.objects.annotate(
+            ride_count=Count('ridedetails')
+        )
+
+        # Second query: Calculate total fare for completed bookings
+        completed_rides_totals = RideDetails.objects.filter(
+            ride_status='completedbookings'
+        ).values('customer').annotate(
+            total_fare=Sum('total_fare')
+        ).values('customer', 'total_fare')
+
+        # Convert to a dictionary for fast lookup
+        fare_dict = {item['customer']: item['total_fare'] for item in completed_rides_totals}
+
+        # Annotate customers with the total fare of completed bookings
+        for customer in customers:
+            customer.total_fare = fare_dict.get(customer.pk, 0.0)
+
+        return customers
+    
+# owner ###########################################################################################
+@login_required(login_url='login')
+def check_ownerphonenumber(request):
+    phone_number = request.GET.get('phone_number', None)
+    ph = VehicleOwner.objects.filter(phone_number=phone_number)
+    data = {
+        'exists': ph.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddOwnerView(TemplateView):
+    template_name = "distributer/add_vehicleowner.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_owner = VehicleOwner.objects.all().order_by('-owner_id').first()
+        if last_owner:
+            last_company_format = int(last_owner.company_format.replace('VO', ''))
+            next_company_format = f'VO{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VO01'
+        context['next_company_format'] = next_company_format
+        return context
+
+    def post(self, request):
+        name = request.POST['name']
+        phone_number = request.POST['phone_number']
+        email = request.POST['email']
+        address = request.POST['address']
+        status = request.POST['status']
+        company_format = request.POST.get('company_format', '')
+        image = request.FILES['image']
+        address_proof = request.FILES['address_proof']
+        identity = request.FILES['identity']
+        holdername = request.POST['holdername']
+        ac_number = request.POST['ac_number']
+        bankname = request.POST['bankname']
+        ifsc_code = request.POST['ifsc_code']
+
+        vo = VehicleOwner(
+            name=name,
+            phone_number=phone_number,
+            email=email,
+            address=address,
+            status=status,
+            company_format=company_format,
+            image=image,
+            address_proof=address_proof,
+            identity=identity,
+            holdername=holdername,
+            ac_number=ac_number,
+            bankname=bankname,
+            ifsc_code=ifsc_code,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        vo.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class OwnerListView(ListView):
+    model = VehicleOwner
+    template_name = "distributer/view_vehicleowner.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteOwnerView(View):
+    def get(self, request):
+        owner_id = request.GET.get('owner_id', None)
+        VehicleOwner.objects.get(owner_id=owner_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditOwnerView(TemplateView):
+    template_name = 'distributer/edit_vehicleowner.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['owner_id'] = self.kwargs['id']
+            ownerlist = VehicleOwner.objects.filter(owner_id=context['owner_id'])
+        except:
+            ownerlist = VehicleOwner.objects.filter(owner_id=context['owner_id'])
+            
+        context['ownerlist'] = list(ownerlist)
+        return context
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateOwnerView(APIView):  
+    def post(self, request):
+        owner_id = request.POST['owner_id']
+        owner = get_object_or_404(VehicleOwner, owner_id=owner_id)
+        original_owner_status = owner.status
+
+        # Update the owner with new data
+        owner.company_format = request.POST['company_format']
+        owner.name = request.POST['name']
+        owner.phone_number = request.POST['phone_number']
+        owner.address = request.POST['address']
+        owner.email = request.POST['email']
+        if 'image' in request.FILES:
+            owner.image = request.FILES['image']
+        if 'address_proof' in request.FILES:
+            owner.address_proof = request.FILES['address_proof']
+        if 'identity' in request.FILES:
+            owner.identity = request.FILES['identity']
+        owner.status = request.POST['status']
+        owner.holdername = request.POST['holdername']
+        owner.ac_number = request.POST['ac_number']
+        owner.bankname = request.POST['bankname']
+        owner.ifsc_code = request.POST['ifsc_code']
+        owner.updated_by = request.user
+        owner.save()
+
+        # Create a VehicleOwnerHistory entry after updating the owner
+        VehicleOwnerHistory.objects.create(
+            owner_id=owner.owner_id,
+            company_format=owner.company_format,
+            name=owner.name,
+            phone_number=owner.phone_number,
+            address=owner.address,
+            email=owner.email,
+            image=owner.image.url if owner.image else None,
+            address_proof=owner.address_proof.url if owner.address_proof else None,
+            identity=owner.identity.url if owner.identity else None,
+            status=owner.status,
+            holdername=owner.holdername,
+            ac_number=owner.ac_number,
+            bankname=owner.bankname,
+            ifsc_code=owner.ifsc_code,
+            created_on=owner.created_on,
+            updated_on=owner.updated_on,
+            created_by=owner.created_by.username if owner.created_by else None,
+            updated_by=request.user.username
+        )
+
+        # Update corresponding vehicles if the status has changed
+        if original_owner_status != owner.status:
+            vehicles = owner.vehicle_set.all()  # Access related vehicles through reverse relationship
+            for vehicle in vehicles:
+                if vehicle.vehicle_status != owner.status:
+                    vehicle.vehicle_status = owner.status
+                    vehicle.save()
+
+        return JsonResponse({'success': True}, status=200)
+
+class VehicleOwnerHistoryView(TemplateView):
+    template_name = 'distributer/history_vehicleowner.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        owner_id = self.kwargs['owner_id']
+        owner = get_object_or_404(VehicleOwner, owner_id=owner_id)
+        history = VehicleOwnerHistory.objects.filter(owner_id=owner_id).order_by('updated_on')
+        context['owner'] = owner
+        context['history'] = history
+        return context
+
+class ViewOwner(View):
+    template_name = 'distributer/detailview_owner.html'
+
+    def get(self, request, owner_id):
+        ownerlist = get_object_or_404(VehicleOwner, pk=owner_id)
+        return render(request, self.template_name, {'ownerlist': ownerlist}) 
+    
+
+def download_owner_documents(request, owner_id):
+    # Fetch the vehicle object
+    owner = VehicleOwner.objects.get(pk=owner_id)
+
+    # List of all image fields in the Vehicle model
+    image_fields = [
+        owner.identity,
+        owner.address_proof,
+        owner.image,
+    ]
+
+    # Create a ZIP file in memory
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename={owner.company_format}_documents.zip'
+    
+    folder_name = owner.company_format  # Folder name inside the ZIP
+
+    with zipfile.ZipFile(response, 'w') as zip_file:
+        for field in image_fields:
+            if field:
+                # Get the path of the image
+                file_path = field.path
+                # Get the file name
+                file_name = os.path.basename(file_path)
+                # Add the file to the ZIP under the specified folder
+                zip_file.write(file_path, os.path.join(folder_name, file_name))
+    
+    return response
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class OwnerVerification(ListView):
+    model = VehicleOwner
+    template_name = "distributer/viewownerverification.html"   
+
+def verify_owner(request):
+    owner_id = request.GET.get('owner_id')
+    owner = VehicleOwner.objects.get(owner_id=owner_id)
+    if owner.verification_status != 'verified':
+        owner.verification_status = 'verified'
+        owner.verified_on = timezone.now()
+        owner.save()
+        return JsonResponse({'verified': True})
+    return JsonResponse({'verified': False})   
+
+@require_POST
+def toggle_owner_status(request):
+    owner_id = request.POST.get('owner_id')
+    new_status = request.POST.get('new_status')
+    block_reason = request.POST.get('block_reason', '')
+  
+    try:
+        owner = VehicleOwner.objects.get(pk=owner_id)
+        owner.status = new_status
+        if new_status == 'inactive':
+                owner.block_reason = block_reason
+        else:
+            owner.block_reason = ''
+        owner.save()
+        VehicleOwnerHistory.objects.create(
+            owner_id=owner.owner_id,
+            company_format=owner.company_format,
+            name=owner.name,
+            phone_number=owner.phone_number,
+            address=owner.address,
+            email=owner.email,
+            image=owner.image.url if owner.image else None,
+            address_proof=owner.address_proof.url if owner.address_proof else None,
+            identity=owner.identity.url if owner.identity else None,
+            status=owner.status,
+            block_reason=block_reason,
+            holdername=owner.holdername,
+            ac_number=owner.ac_number,
+            bankname=owner.bankname,
+            ifsc_code=owner.ifsc_code,
+            created_on=owner.created_on,
+            updated_on=owner.updated_on,
+            created_by=owner.created_by.username if owner.created_by else None,
+            updated_by=request.user.username
+        )
+        return JsonResponse({'success': True})
+    except Category.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Owner not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})  
+
+# vehicle ######################
+@login_required(login_url='login')
+def check_vehicleno(request):
+    Vehicle_Number = request.GET.get('Vehicle_Number', None)
+    vehicleno = Vehicle.objects.filter(Vehicle_Number=Vehicle_Number)
+    data = {
+        'exists': vehicleno.count() > 0
+    }
+    return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AddVehicle(TemplateView):
+    template_name = "distributer/add_vehicle.html"
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Fetching data for dropdowns
+        context['catlist'] = Category.objects.filter(category_status='active')
+        context['blist'] = Brand.objects.filter(status='active')
+        context['ownerlist'] = VehicleOwner.objects.filter(status='active',verification_status='verified')
+        context['modellist'] = Model.objects.filter(status='active')
+        context['vtypelist'] = VehicleType.objects.all()
+        context['ctypelist'] = CommissionType.objects.all()
+        context['colorlist'] = Color.objects.all()
+        context['tlist'] = Transmission.objects.all()
+        
+        # Setting next company format
+        last_vehicle = Vehicle.objects.all().order_by('-vehicle_id').first()
+        if last_vehicle:
+            last_company_format = int(last_vehicle.company_format.replace('VEH', ''))
+            next_company_format = f'VEH{last_company_format + 1:02}'
+        else:
+            next_company_format = 'VEH01'
+        context['next_company_format'] = next_company_format
+        
+        return context
+    
+    def post(self, request):
+        vehicle_number = request.POST['Vehicle_Number']
+        model_id = request.POST['model']
+        year = request.POST['year']
+        insurance_expiry = request.POST['insurance_expiry']
+        car_type = request.POST['car_type']
+        color_id = request.POST['color']
+        transmission_id = request.POST['transmission']
+        owner_id = request.POST['owner']
+        vehicle_type_id = request.POST['vehicle_type']
+        commission_id = request.POST['commission_type']
+        registration_certificate = request.FILES.get('registration_certificate')
+        fc_certificate = request.FILES.get('fc_certificate')
+        insurance_policy = request.FILES.get('insurance_policy')
+        permit_details = request.FILES.get('permit_details')
+        tax_details = request.FILES.get('tax_details')
+        emission_test = request.FILES.get('emission_test')
+        vehicle_status = request.POST['vehicle_status']
+        drive_status = request.POST['drive_status']
+        company_format = request.POST.get('company_format', '')
+
+        vehicle = Vehicle(
+            Vehicle_Number=vehicle_number,
+            model=Model.objects.get(model_id=model_id),
+            year=year,
+            insurance_expiry=insurance_expiry,
+            car_type=car_type,
+            color=Color.objects.get(color_id=color_id),
+            transmission=Transmission.objects.get(transmission_id=transmission_id),
+            owner=VehicleOwner.objects.get(owner_id=owner_id),
+            vehicle_type=VehicleType.objects.get(vehicle_type_id=vehicle_type_id),
+            commission_type=CommissionType.objects.get(commission_id=commission_id),
+            vehicle_status=vehicle_status,
+            drive_status=drive_status,
+            company_format=company_format,
+            created_by=request.user,
+            updated_by=request.user
+        )
+
+        if registration_certificate:
+            vehicle.registration_certificate=registration_certificate
+        if fc_certificate:
+            vehicle.fc_certificate=fc_certificate
+        if insurance_policy:
+            vehicle.insurance_policy=insurance_policy
+        if tax_details:
+            vehicle.tax_details=tax_details
+        if permit_details:
+            vehicle.permit_details=permit_details
+        if emission_test:
+            vehicle.emission_test=emission_test
+
+        vehicle.save()
+        return JsonResponse({'status': "Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class VehicleList(ListView):
+    model = Vehicle
+    template_name = "distributer/view_vehicle.html"
+
+    def get_queryset(self):
+        return Vehicle.objects.filter(Q(vehicle_status='active'))
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class VehicleBlockList(ListView):
+    model = Vehicle
+    template_name = "distributer/view_vehicleblock.html"
+
+    def get_queryset(self):
+        return Vehicle.objects.filter(Q(vehicle_status='inactive'))
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteVehicle(View):
+    def get(self, request):
+        vehicle_id = request.GET.get('vehicle_id', None)
+        Vehicle.objects.get(vehicle_id=vehicle_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditVehicle(TemplateView):
+    template_name = 'distributer/edit_vehicle.html'
+  
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        catlist = Category.objects.filter(category_status='active')
+        blist = Brand.objects.filter(status='active')
+        modellist = Model.objects.filter(status='active')
+        ownerlist = VehicleOwner.objects.filter(status='active',verification_status='verified')
+        vtypelist = VehicleType.objects.all()
+        ctypelist = CommissionType.objects.all()
+        colorlist = Color.objects.all()
+        tlist = Transmission.objects.all()
+        try:
+            context['vehicle_id'] = self.kwargs['id']
+            vehiclelist = Vehicle.objects.filter(vehicle_id=context['vehicle_id'])
+        except:
+            vehiclelist = Vehicle.objects.filter(vehicle_id=context['vehicle_id'])
+            
+        context = {'blist':list(blist),'catlist':list(catlist),'modellist':list(modellist),'ownerlist':list(ownerlist),'vtypelist':list(vtypelist),'ctypelist':list(ctypelist),'vehiclelist':list(vehiclelist),'colorlist':list(colorlist),'tlist':list(tlist)}
+        return context
+
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateVehicle(View):
+    def post(self, request):
+        vehicle_id = request.POST.get('vehicle_id')
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        vehicle.company_format = request.POST.get('company_format')
+        vehicle.Vehicle_Number = request.POST.get('Vehicle_Number')
+        vehicle.model = Model.objects.get(model_id=request.POST.get('model'))
+        vehicle.year = request.POST.get('year')
+        vehicle.insurance_expiry = request.POST.get('insurance_expiry')
+        vehicle.car_type = request.POST.get('car_type')
+
+        if 'registration_certificate' in request.FILES:
+            vehicle.registration_certificate = request.FILES['registration_certificate']
+
+        if 'fc_certificate' in request.FILES:
+            vehicle.fc_certificate = request.FILES['fc_certificate']
+
+        if 'insurance_policy' in request.FILES:
+            vehicle.insurance_policy = request.FILES['insurance_policy']    
+
+        if 'tax_details' in request.FILES:
+            vehicle.tax_details = request.FILES['tax_details']  
+
+        if 'permit_details' in request.FILES:
+            vehicle.permit_details = request.FILES['permit_details']
+
+        if 'emission_test' in request.FILES:
+            vehicle.emission_test = request.FILES['emission_test']         
+    
+
+        vehicle.owner = VehicleOwner.objects.get(owner_id=request.POST.get('owner'))
+        vehicle.vehicle_type = VehicleType.objects.get(vehicle_type_id=request.POST.get('vehicle_type'))
+        vehicle.commission_type = CommissionType.objects.get(commission_id=request.POST.get('commission_type'))
+        vehicle.color = Color.objects.get(color_id=request.POST.get('color'))
+        vehicle.transmission = Transmission.objects.get(transmission_id=request.POST.get('transmission'))
+        vehicle.vehicle_status = request.POST.get('vehicle_status')
+        vehicle.drive_status = request.POST.get('drive_status')
+        vehicle.updated_by = request.user
+        vehicle.save()
+
+        VehicleHistory.objects.create(
+            vehicle_id=vehicle.vehicle_id,
+            company_format=vehicle.company_format,
+            Vehicle_Number=vehicle.Vehicle_Number,
+            model=vehicle.model,
+            year=vehicle.year,
+            insurance_expiry=vehicle.insurance_expiry,
+            car_type=vehicle.car_type,
+            registration_certificate=vehicle.registration_certificate,
+            fc_certificate=vehicle.fc_certificate,
+            insurance_policy=vehicle.insurance_policy,
+            tax_details=vehicle.tax_details,
+            permit_details=vehicle.permit_details,
+            emission_test=vehicle.emission_test,
+            color=vehicle.color,
+            transmission=vehicle.transmission,
+            owner=vehicle.owner,
+            vehicle_type=vehicle.vehicle_type,
+            commission_type=vehicle.commission_type,
+            vehicle_status=vehicle.vehicle_status,
+            drive_status=vehicle.drive_status,
+            created_on=vehicle.created_on,
+            updated_on=vehicle.updated_on,
+            created_by=vehicle.created_by.username if vehicle.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True, 'message': 'Vehicle updated successfully'}, status=200)
+    
+class VehicleHistoryView(TemplateView):
+    template_name = 'distributer/history_vehicle.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = get_object_or_404(Vehicle, vehicle_id=vehicle_id)
+        history = VehicleHistory.objects.filter(vehicle_id=vehicle_id).order_by('updated_on')
+        context['vehicle'] = vehicle
+        context['history'] = history
+        return context
+
+@csrf_exempt
+def vehicleupdate_status(request):
+    if request.method == 'POST':
+        vehicle_id = request.POST.get('vehicle_id')
+        new_status = request.POST.get('new_status')
+        block_reason = request.POST.get('block_reason', '')
+
+        try:
+            vehicle = Vehicle.objects.get(pk=vehicle_id)
+            vehicle.vehicle_status = new_status
+            if new_status == 'inactive':
+                vehicle.block_reason = block_reason
+            else:
+                vehicle.block_reason = ''  # Clear block reason if reactivating
+            vehicle.save()
+
+            # Optionally, create a CustomerHistory entry here as well
+            VehicleHistory.objects.create(
+            vehicle_id=vehicle.vehicle_id,
+            company_format=vehicle.company_format,
+            Vehicle_Number=vehicle.Vehicle_Number,
+            model=vehicle.model,
+            year=vehicle.year,
+            insurance_expiry=vehicle.insurance_expiry,
+            car_type=vehicle.car_type,
+            registration_certificate=vehicle.registration_certificate,
+            fc_certificate=vehicle.fc_certificate,
+            insurance_policy=vehicle.insurance_policy,
+            tax_details=vehicle.tax_details,
+            permit_details=vehicle.permit_details,
+            emission_test=vehicle.emission_test,
+            color=vehicle.color,
+            transmission=vehicle.transmission,
+            owner=vehicle.owner,
+            vehicle_type=vehicle.vehicle_type,
+            commission_type=vehicle.commission_type,
+            vehicle_status=vehicle.vehicle_status,
+            block_reason=vehicle.block_reason,
+            created_on=vehicle.created_on,
+            updated_on=vehicle.updated_on,
+            created_by=vehicle.created_by.username if vehicle.created_by else None,
+            updated_by=request.user.username
+        )
+
+            return JsonResponse({'success': True})
+        except Customer.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Vehicle not found'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    
+
+def download_vehicle_documents(request, vehicle_id):
+    # Fetch the vehicle object
+    vehicle = Vehicle.objects.get(pk=vehicle_id)
+
+    # List of all image fields in the Vehicle model
+    image_fields = [
+        vehicle.registration_certificate,
+        vehicle.fc_certificate,
+        vehicle.insurance_policy,
+        vehicle.tax_details,
+        vehicle.permit_details,
+        vehicle.emission_test,
+    ]
+
+    # Create a ZIP file in memory
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename={vehicle.company_format}_documents.zip'
+    
+    folder_name = vehicle.company_format  # Folder name inside the ZIP
+
+    with zipfile.ZipFile(response, 'w') as zip_file:
+        for field in image_fields:
+            if field:
+                # Get the path of the image
+                file_path = field.path
+                # Get the file name
+                file_name = os.path.basename(file_path)
+                # Add the file to the ZIP under the specified folder
+                zip_file.write(file_path, os.path.join(folder_name, file_name))
+    
+    return response
+
+class ViewVehicle(View):
+    template_name = 'distributer/detailview_vehicle.html'
+
+    def get(self, request, vehicle_id):
+        vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
+        driver = Driver.objects.filter(vehicle=vehicle).first()  # Get the associated driver, if any
+        return render(request, self.template_name, {'vehicle': vehicle, 'driver': driver})
+    
+def verify_vehicle(request):
+    vehicle_id = request.GET.get('vehicle_id')
+    vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+    owner = vehicle.owner
+    
+    if owner.verification_status != 'verified':
+        return JsonResponse({'verified': False, 'message': 'Owner is not verified'})
+
+    if vehicle.verification_status != 'verified':
+        vehicle.verification_status = 'verified'
+        vehicle.verified_on = timezone.now()
+        vehicle.save()
+        message = f"""
+        Hello {vehicle.owner.name},
+        Thank you for choosing Ridexpress,
+        We are pleased to inform you that your vehicle profile has been successfully verified!:
+        Attachment ID: {vehicle.company_format}
+        Cab Details: {vehicle.Vehicle_Number} - {vehicle.model.brand.category.category_name} - {vehicle.model.brand.brand_name} - {vehicle.model.model_name}
+
+        If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+        We look forward to serving you!
+
+        Best regards,
+        Ridexpress
+        support@ridexpress.in
+        ridexpress.in
+        """
+
+        payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "attachment_details",
+            "destination": vehicle.owner.phone_number,
+            "userName": "Ridexpress",
+            "templateParams": [
+                str(vehicle.owner.name),
+                str(vehicle.company_format),
+                f"{vehicle.Vehicle_Number} - {vehicle.model.brand.category.category_name} - {vehicle.model.brand.brand_name} - {vehicle.model.model_name}"
+            ],
+            "source": "new-landing-page form",
+            "media": {},
+            "buttons": [],
+            "carouselCards": [],
+            "location": {},
+            "paramsFallbackValue": {
+                "FirstName": "user"
+            }
+        }
+
+        gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+        response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+        if response.status_code == 200:
+            print("WhatsApp message sent successfully:", response.json())
+        else:
+            print("Failed to send WhatsApp message:", response.text)
+
+        return JsonResponse({'verified': True})
+    return JsonResponse({'verified': False})    
 
 
 # driver ################################
@@ -478,6 +2309,15 @@ class customerGetRidePricingDetails(APIView):
 
 class AddRide(TemplateView):
     template_name = "distributer/add_ride.html"
+
+    def parse_date(self, date_str):
+        """Helper function to parse dates in multiple formats"""
+        for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+            try:
+                return datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+        raise ValueError(f"Date {date_str} is not in a recognized format.")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -523,6 +2363,12 @@ class AddRide(TemplateView):
             email = request.POST['email']
             password = request.POST['password']
             address = request.POST['address']
+
+            drop_date_str = request.POST.get('drop_date', '')
+            drop_time_str = request.POST.get('drop_time', '')
+
+            drop_date = self.parse_date(drop_date_str) if drop_date_str else None
+            drop_time = datetime.strptime(drop_time_str, '%H:%M').time() if drop_time_str else None
 
             print(f"Parsed data: {company_format}, {ride_type_id}, {source}, {destination}, {pickup_date}, {pickup_time}")
 
@@ -621,6 +2467,8 @@ class AddRide(TemplateView):
                 total_fare=total_fare,
                 customer_notes=customer_notes,
                 ride_status=ride_status,
+                drop_date=drop_date,
+                drop_time=drop_time,
                 assigned_by=request.user,
                 cancelled_by=request.user,
                 created_by=request.user,
