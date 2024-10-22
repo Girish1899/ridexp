@@ -9,26 +9,31 @@
                     <h4>Commission History for Commission ID: {{ commission.commission_id }}</h4>
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'adindex' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item"><a href="{% url 'adcommissionlist' %}">Commission List</a></li>
-                    <li class="breadcrumb-item active">Commission History</li>
+            
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'commissionlist' %}" style="color: white !important;">View Commission</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">History Records</h4>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table id="example" class="display" style="min-width: 845px">
+        <!-- row -->
+
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">History Records</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
                                 <thead>
-                                    <tr>
+                                    <tr style="color: black !important;">
+                                        <th>Serial No</th>
                                         <th>Commission Name </th>
                                         <th>Commission Type </th>
                                         <th>Created On</th>
@@ -40,6 +45,7 @@
                                 <tbody style="color: #030000;">
                                     {% for record in history %}
                                     <tr>
+                                        <td>{{ forloop.counter }}</td>
                                         <td>{{ record.commission_name }}</td>
                                         <td>{{ record.commission_percentage }}</td>
                                         <td>{{ record.created_on }}</td>

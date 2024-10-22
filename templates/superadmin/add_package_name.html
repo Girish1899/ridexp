@@ -1,0 +1,105 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'package_name_list' %}" style="color: white !important;">View Package Name</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+ 
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Package Name</h6>
+                    </div>
+                    </div>
+
+                <div class="card-body">
+                                
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Category Name</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control form-control-lg" id="package_name" name="package_name">
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary mb-2" id="save_category">Submit</button>
+                                    </div>
+
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </div>
+                <!-- </div> -->
+            </div>
+        </div>
+        
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#save_category").click(function (event) {
+            event.preventDefault();
+
+            var package_name = $('#package_name').val().trim().toLowerCase();
+            
+            if (package_name.trim() === '') {
+                alert("Please enter package name.");
+                return;
+            }
+
+           
+            console.log("package_name :", package_name);
+
+            $.ajax({
+                url: '{% url "check_package_name" %}',
+                type: "GET",
+                data: { package_name: package_name },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("package name name already exists.");
+                    } else {
+                        // Proceed with form submission
+
+                    $.ajax({
+                        url: '{% url "add_package_name" %}',
+                        type: "POST",
+                        headers: {
+                            'X-CSRFToken': '{{ csrf_token }}'
+                        },
+                        data: { package_name : package_name},
+                        success: function (result) {
+                            console.log("result ***: ", result);
+                            alert("Package Name Added Successfully");
+                            location.href = "{% url 'package_name_list' %}";
+                        },
+                        error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+
+ {% endblock content%}    

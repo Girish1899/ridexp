@@ -19,20 +19,20 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car/Taxi Name</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="category_name" name="category_name" value="{{ category.category_name }}" disabled>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">No of Persons</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="number" class="form-control form-control-lg" id="seats" name="seats" value="{{ category.seats }}" disabled>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Image</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <div class="image-wrapper">
                                 {% if category.image %}
                                 <img src="{{ category.image.url }}" alt="Image" class="category-image">
@@ -45,7 +45,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" value="{{ category.get_category_status_display }}" disabled>
                         </div>
                     </div>
@@ -53,24 +53,24 @@
                     <hr>
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created On</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{% if category.created_on %}{{ category.created_on|date:'Y-m-d' }}{% endif %}" disabled>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated On</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{% if category.updated_on %}{{ category.updated_on|date:'Y-m-d' }}{% endif %}" disabled>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created By</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{{ category.created_by }}" disabled>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated By</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg"  value="{{ category.updated_by }}" disabled>
                         </div>
                     </div>

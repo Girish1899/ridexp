@@ -1,6 +1,5 @@
 from django.urls import path
 from superadmin.views import *
-from taxipro.views import global_fetch_customer_details
 
 urlpatterns = [
 
@@ -71,8 +70,8 @@ urlpatterns = [
 
 
     # User 
-    path('check_phno',check_phno,name='check_phno'),
-    path('check_useremail',check_useremail,name='check_useremail'),
+    # path('check_phno',check_phno,name='check_phno'),
+    # path('check_useremail',check_useremail,name='check_useremail'),
     path('adduser', adduser.as_view(), name='adduser'),
     path('userlist', UserList.as_view(), name='userlist'),
     path('useremp', UserEmpList.as_view(), name='useremp'),
@@ -195,7 +194,6 @@ urlpatterns = [
     path('pricing_history/<int:pricing_id>/', PricingHistoryView.as_view(), name='pricing_history'),
 
 # fetch customer
-    path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
     path('update-status/', update_status, name='update_status'),
 
     # commission #############################
@@ -254,6 +252,16 @@ urlpatterns = [
     path('UpdatePackageCategory', UpdatePackageCategory.as_view(), name='UpdatePackageCategory'),
     # path('color/<int:color_id>/view/', ViewColor.as_view(), name='color'),
 
+
+    #package_name################  
+    path('add_package_name', addpackagename.as_view(), name='add_package_name'),
+    path('check_package_name/', check_package_name, name='check_package_name'),
+    path('package_name_list', PackageNameList.as_view(), name='package_name_list'),
+    path('DeletePackageName', DeletePackageName.as_view(), name='DeletePackageName'),
+    path('EditPackageName/<int:id>/', EditPackageName.as_view(), name='EditPackageName'),
+    path('PackageNameHistory/<int:package_name_id>/', PackageNameHistoryView.as_view(), name='PackageNameHistory'),
+    path('UpdatePackageName', UpdatePackageName.as_view(), name='UpdatePackageName'),
+
     #package################  
     path('add_packages', addpackages.as_view(), name='add_packages'),
     path('packages_list', PackageList.as_view(), name='packages_list'),
@@ -270,6 +278,27 @@ urlpatterns = [
     path('package_order_history/<int:order_id>/', PackageOrderHistoryView.as_view(), name='package_order_history'),
     path('UpdatePackageOrder', UpdatePackageOrder.as_view(), name='UpdatePackageOrder'),
 
+     path('add_blog/', AddBlogView.as_view(), name='add_blog'),
 
+    # URL for listing all blogs
+    path('blog_list/', BlogListView.as_view(), name='blog_list'),
+
+    path('send_otp_admin/', SendOtp.as_view(), name='send_otp_admin'),
+    path('verify_otp_admin/', VerifyOtp.as_view(), name='verify_otp_admin'),
+
+    # author
+    # packages
+    path('sup-create-author-packages', addwebpackages.as_view(), name='sup-create-author-packages'),
+    path('sup-list-author-packages', webPackageList.as_view(), name='sup-list-author-packages'),
+    path('sup-author-Packages-delete', DeletewebPackages.as_view(), name='sup-author-Packages-delete'),
+    path('sup-author-Packages-edit/<int:id>/', EditwebPackages.as_view(), name='sup-author-Packages-edit'),
+    path('sup-author-Packages-update', UpdatewebPackages.as_view(), name='sup-author-Packages-update'),
+
+    # Blogs
+    path('sup-create-author-blogs', AddBlogView.as_view(), name='sup-create-author-blogs'),
+    path('sup-list-author-blogs', BlogListView.as_view(), name='sup-list-author-blogs'),
+    path('sup-author-blogs-delete', webDeleteBlogs.as_view(), name='sup-author-blogs-delete'),
+    path('sup-author-blogs-edit/<int:id>/', EditwebBlogs.as_view(), name='sup-author-blogs-edit'),
+    path('sup-author-blogs-update', UpdatewebBlogs.as_view(), name='sup-author-blogs-update'),
 ]
 

@@ -27,7 +27,12 @@ SECRET_KEY = 'django-insecure-h=grwu1iy%6zs0qiib_t&4pgbe$i^*^koad_)4ec7s4-!g2yoq
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['ridexpress.in', 'www.ridexpress.in', 'localhost', '127.0.0.1']
+
+# ALLOWED_HOSTS = ['ridexpress.in', 'www.ridexpress.in', ]
+
+CSRF_TRUSTED_ORIGINS = ['https://ridexpress.in', 'https://www.ridexpress.in']
 
 
 # Application definition
@@ -52,6 +57,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'tempus_dominus',
     'website',
+    'author',
 ]
 
 

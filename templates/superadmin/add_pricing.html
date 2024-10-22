@@ -188,8 +188,9 @@
                             location.href = "{% url 'pricinglist' %}";
                         },
                         error: function (xhr, status, error) {
-                            if (xhr.status === 400 && xhr.responseJSON.status === "Duplicate") {
-                                alert("A pricing entry with the same category, ride type, car type, and time slot already exists.");
+                            var response = xhr.responseJSON;
+                            if (xhr.status === 400 && response.status === "Duplicate") {
+                                alert(response.message);  // Show the specific message returned from the server
                             } else {
                                 alert("An error occurred while adding pricing details.");
                                 console.error(xhr.responseText);

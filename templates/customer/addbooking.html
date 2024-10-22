@@ -8,121 +8,200 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
+                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <a href="{% url 'current' %}" style="color: white;"><button  class="btn btn-primary">View Current Booking</button></a>
-                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'current' %}" style="color: white !important;">View
+                            Current Booking</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
+                            Back</a></li>
+                </ol>
             </div>
         </div>
-        
+
         <div class="col-xl-12">
-            <div class="card">
-                <div class="card-header">
-                    <!-- <h4 class="card-title">Add Ride Details</h4> -->
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                        style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Book Now</h6>
+                    </div>
                 </div>
+
                 <div class="card-body">
-                    <!-- <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Booking Id</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
-                        </div>
-                    </div> -->
+
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Service Type</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Service Type</label>
+                        <div class="col-sm-12">
                             <select id="ridetype" name="ridetype" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Service Type</option>
                                 {% for obj in ridetypelist %}
-                                <option value="{{ obj.ridetype_id }}">{{ obj.name }}</option>
+                                <option value="{{ obj.ridetype_id }}" data-name="{{ obj.name }}">{{ obj.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Location</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control autocomeple_g" id="source" name="source" maxlength="1000">
-                            <i class="far fa-location-dot"></i>                        
+                    <!-- Radio Button Section for Oneway/Roundtrip -->
+                    <div id="ride_options" class="form-group row" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Trip Type</label>
+                        <div class="col-sm-12">
+                            <div id="trip_type_buttons">
+                                <!-- Radio buttons for Oneway, Roundtrip will be added here dynamically -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Radio Button Section for Toll Option (Only for Airport) -->
+                    <div id="toll_options" class="form-group row" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Toll Option</label>
+                        <div class="col-sm-12">
+                            <div id="toll_type_buttons">
+                                <!-- Radio buttons for Add Toll, No Toll will be added here dynamically -->
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Location</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control autocomeple_g" id="destination" name="destination" maxlength="1000">
-                            <i class="far fa-location-dot"></i>                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Pickup Location</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control autocomeple_g" id="source" name="source"
+                                maxlength="1000">
+                            <i class="far fa-location-dot"></i>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pick up Date</label>
-                        <div class="col-sm-10">
-                            <input type="date" class="form-control form-control-lg date-picker" id="pickup_date" name="pickup_date">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Drop Location</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control autocomeple_g" id="destination" name="destination"
+                                maxlength="1000">
+                            <i class="far fa-location-dot"></i>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pick up Time</label>
-                        <div class="col-sm-10">
-                            <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time" name="pickup_time">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Pick up Date</label>
+                        <div class="col-sm-12">
+                            <input type="date" class="form-control form-control-lg date-picker" id="pickup_date"
+                                name="pickup_date">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Pick up Time</label>
+                        <div class="col-sm-12">
+                            <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time"
+                                name="pickup_time">
                             <div id="timeError" class="invalid-feedback"></div>
                         </div>
                     </div>
 
+                    <!-- Hidden input fields for Drop Date and Drop Time -->
+                    <div id="drop_details" class="form-group row" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Drop Date</label>
+                        <div class="col-sm-12">
+                            <input type="date" id="drop_date" name="drop_date" class="form-control form-control-lg">
+                        </div>
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Drop Time</label>
+                        <div class="col-sm-12">
+                            <input type="time" id="drop_time" name="drop_time" class="form-control form-control-lg">
+                        </div>
+                    </div>
+
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Category</label>
-                        <div class="col-sm-10">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Category</label>
+                        <div class="col-sm-12">
                             <select id="category" name="category" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Category</option>
-                                
-                            </select>  
-                            <div id="categoryError" class="invalid-feedback"></div>                          
-                        </div>
-                    </div>
-                    
 
-                    <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Total Fare</label>
-                        <div class="col-sm-10">
-                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare" value="{{ details.cost }}" readonly>
+                            </select>
+                            <div id="categoryError" class="invalid-feedback"></div>
                         </div>
                     </div>
 
+
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: black; font-size: 16px !important;">Customer Notes</label>
-                        <div class="col-sm-10">
-                            <textarea class="form-control form-control-lg" id="customer_notes" name="customer_notes" ></textarea>
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">* Total Fare</label>
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control form-control-lg" id="total_fare" name="total_fare"
+                                value="{{ details.cost }}" readonly>
                         </div>
                     </div>
-                    
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: black; font-size: 16px !important;">Customer Notes</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="customer_notes"
+                                name="customer_notes"></textarea>
+                        </div>
+                    </div>
+
                     <!-- <input type="hidden" id="customer_id" name="customer_id">  -->
-                    
-                    <!-- Add Ride button -->
+
+                    <!-- Add Ride button --><br>
                     <div class="form-group row">
-                        <div class="col-sm-10 offset-sm-2">
-                            <button type="button" class="btn btn-primary" id="save_action">Book Ride</button>
+                        <div class="col-12">
+                            <button type="button" class="btn btn-primary" id="confirmBookingBtn">Book Ride</button>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<!-- Add OTP Modal -->
+<center>
+    <div id="otpModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Enter OTP</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="closeOtpModal"
+                        style="border: none; background: none; font-size: 1.5rem; cursor: pointer;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p style="color: black;">An OTP has been sent to your WhatsApp number. Please enter it below to
+                        confirm your booking.</p>
+                    <input type="text" id="otpInput" class="form-control" placeholder="Enter OTP" />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" id="verifyOtpBtn">Verify OTP</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</center>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     // Timepicker validation event listener
-    $('.pickup-time').change(function() {
+    $('.pickup-time').change(function () {
         var selectedDate = new Date($('.date-picker').val());
         var today = new Date();
         var selectedTime = $(this).val();
 
         today.setHours(0, 0, 0, 0);
-        
+
         if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
             var now = new Date();
             var selectedHours = parseInt(selectedTime.split(':')[0]);
@@ -132,26 +211,26 @@
             var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
 
             // Check if the selected time is earlier than the current time
-        if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
-            $(this).val(''); // Clear invalid time
-            $(this).addClass('is-invalid');
-            $('#timeError').text('Please select a current or future time.');
+            if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
+                $(this).val(''); // Clear invalid time
+                $(this).addClass('is-invalid');
+                $('#timeError').text('Please select a current or future time.');
+            } else {
+                $(this).removeClass('is-invalid');
+                $(this).addClass('is-valid');
+                $('#timeError').text('');
+            }
         } else {
+            // If the date is in the future, any time is valid
             $(this).removeClass('is-invalid');
             $(this).addClass('is-valid');
             $('#timeError').text('');
         }
-    } else {
-        // If the date is in the future, any time is valid
-        $(this).removeClass('is-invalid');
-        $(this).addClass('is-valid');
-        $('#timeError').text('');
-    }
-});
+    });
 </script>
 <script>
     // Set the minimum date to today's date
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function () {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -161,74 +240,146 @@
         document.getElementById('pickup_date').setAttribute('min', today);
     });
 
-    function getTimeSlot(pickupTime) {
-        var time = pickupTime.split(":");
-        var hour = parseInt(time[0]);
-        
-        if (hour >= 0 && hour < 6) {
-            return '12AM - 6AM';
-        } else if (hour >= 6 && hour < 12) {
-            return '6AM - 12PM';
-        } else if (hour >= 12 && hour < 18) {
-            return '12PM - 6PM';
-        } else if (hour >= 18 && hour < 24) {
-            return '6PM - 12AM';
-        } else {
-            return null;  // Invalid time
-        }
-    }
-    function getRidePricingDetails() {
-        var ridetype = $('#ridetype').val();
-        var source = $('#source').val();
-        var destination = $('#destination').val();
-        var pickup_date = $('#pickup_date').val();
-        var pickup_time = $('#pickup_time').val();
-        var time_slot = getTimeSlot(pickup_time);  // Calculate time slot
+    $(document).ready(function () {
+        $('#ridetype').on('change', function () {
+            var selectedRidetypeName = $(this).find('option:selected').data('name').toLowerCase();
+            var tripOptionsHtml = '<label style="color:black"><input type="radio" name="trip_type" value="one_way" checked> Oneway</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                '<label style="color:black"><input type="radio" name="trip_type" value="round_trip"> Roundtrip</label>';
 
-        if (ridetype && source && destination && pickup_date && pickup_time) {
-            // Disable Category Dropdown and Show Loading Indicator
-            $('#category').prop('disabled', true).html('<option>Loading...</option>');
+            // Reset options and hide initially
+            $('#trip_type_buttons').html('');
+            $('#toll_type_buttons').html('');
+            $('#ride_options, #toll_options, #drop_details').hide();  // Hide drop details initially
+
+            if (selectedRidetypeName === 'airport') {
+                // Show both Oneway/Roundtrip options and Add Toll/No Toll options for Airport
+                $('#trip_type_buttons').html(tripOptionsHtml);
+                $('#ride_options').show();
+
+                var tollOptionsHtml = '<label style="color:black"><input type="radio" name="toll_option" value="add_toll"> Add Toll</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
+                    '<label style="color:black"><input type="radio" name="toll_option" value="no_toll" checked > No Toll</label>';
+                $('#toll_type_buttons').html(tollOptionsHtml);
+                $('#toll_options').show();
+            } else if (selectedRidetypeName === 'outstation') {
+                // Only show Oneway/Roundtrip options for Outstation
+                $('#trip_type_buttons').html(tripOptionsHtml);
+                $('#ride_options').show();
+            }
+        });
+
+        // Add event listener for the Trip Type (Oneway/Roundtrip)
+        $('body').on('change', 'input[name="trip_type"]', function () {
+            var tripType = $('input[name="trip_type"]:checked').val();
+            var selectedRidetypeName = $('#ridetype').find('option:selected').data('name').toLowerCase();
+
+
+            if (tripType === 'round_trip' && selectedRidetypeName === 'outstation') {
+                // Show Drop Date and Drop Time for Roundtrip
+                $('#drop_details').show();
+            } else {
+                // Hide Drop Date and Drop Time for Oneway
+                $('#drop_details').hide();
+            }
+
+            // Update ride pricing details
+            getRidePricingDetails();
+        });
+
+        // Add event listener for Drop Date selection
+        $('#drop_date, #drop_time').on('change', function () {
+            console.log('Drop date or time selected:', $(this).val());  // Log the selected drop date or time
+            getRidePricingDetails();  // Fetch ride pricing details whenever drop date or time changes
+        });
+
+        // Add event listener for Toll Option (only for airport rides)
+        $('body').on('change', 'input[name="toll_option"]', function () {
+            // Update ride pricing details when toll option changes
+            getRidePricingDetails();
+        });
+
+        function getTimeSlot(pickupTime) {
+            var time = pickupTime.split(":");
+            var hour = parseInt(time[0]);
+
+            if (hour >= 0 && hour < 6) {
+                return '12AM - 6AM';
+            } else if (hour >= 6 && hour < 12) {
+                return '6AM - 12PM';
+            } else if (hour >= 12 && hour < 18) {
+                return '12PM - 6PM';
+            } else if (hour >= 18 && hour < 24) {
+                return '6PM - 12AM';
+            } else {
+                return null;  // Invalid time
+            }
+        }
+        function getRidePricingDetails() {
+            var ridetype = $('#ridetype').val();
+            var source = $('#source').val();
+            var destination = $('#destination').val();
+            var pickup_date = $('#pickup_date').val();
+            var pickup_time = $('#pickup_time').val();
+            var time_slot = getTimeSlot(pickup_time);
+            var drop_date = $('#drop_date').val();
+            var drop_time = $('#drop_time').val();
+
+            var trip_type = $('input[name="trip_type"]:checked').val() || '';  // Ensure the value exists or fallback to empty string
+            var toll_option = $('input[name="toll_option"]:checked').val() || ''; // Same for toll_option
+
+            console.log('ridetype', ridetype);
+            console.log('drop date', drop_date);
+            console.log('drop time', drop_time);
+            console.log('trip_type before sending:', trip_type);  // Add this to confirm it's being fetched
+            console.log('toll_option', toll_option);
+
+            if (ridetype && source && destination && pickup_date && pickup_time) {
+                // Disable Category Dropdown and Show Loading Indicator
+                $('#category').prop('disabled', true).html('<option>Loading...</option>');
                 $('#total_fare').val('');
-            $.ajax({
-                url: '{% url "customerGetRidePricingDetails" %}',
-                type: 'POST',
-                headers: {
-                    'X-CSRFToken': '{{ csrf_token }}'
-                },
-                data: {
-                    ridetype: ridetype,
-                    source: source,
-                    destination: destination,
-                    pickup_date: pickup_date,
-                    pickup_time: pickup_time,
-                    time_slot: time_slot, // Replace with actual logic for time_slot
-                },
-                success: function(response) {
-                    console.log(response);  // Check if response is correct
-                    if (response.costs) {
-                        var $categorySelect = $('#category');
-                        $categorySelect.empty();  // Clear existing options
-                        $categorySelect.append('<option value="" selected disabled>Select Category</option>');
-                        
-                        $.each(response.costs, function(category, carTypes) {
-                            $.each(carTypes, function(carType, details) {
-                                $categorySelect.append(
-                                    $('<option>', {
-                                        value: category + '|' + carType,
-                                        text: category + ' - ' + carType.charAt(0).toUpperCase() + carType.slice(1) + ' - ₹' + details.cost,
-                                        'data-cost': details.cost // Add data attribute for cost
-                                    })
-                                );
+                $.ajax({
+                    url: '{% url "customerPricingDetails" %}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: {
+                        ridetype: ridetype,
+                        source: source,
+                        destination: destination,
+                        pickup_date: pickup_date,
+                        pickup_time: pickup_time,
+                        time_slot: time_slot,
+                        toll_option: toll_option,
+                        trip_type: trip_type,
+                        drop_date: drop_date,
+                        drop_time: drop_time,
+                        trip_type: trip_type
+                    },
+                    success: function (response) {
+                        console.log(response);  // Check if response is correct
+                        if (response.costs) {
+                            var $categorySelect = $('#category');
+                            $categorySelect.empty();  // Clear existing options
+                            $categorySelect.append('<option value="" selected disabled>Select Category</option>');
+
+                            $.each(response.costs, function (category, carTypes) {
+                                $.each(carTypes, function (carType, details) {
+                                    $categorySelect.append(
+                                        $('<option>', {
+                                            value: category + '|' + carType,
+                                            text: category + ' - ' + carType.charAt(0).toUpperCase() + carType.slice(1) + ' - ₹' + details.cost,
+                                            'data-cost': details.cost // Add data attribute for cost
+                                        })
+                                    );
+                                });
                             });
-                        });
-                        $categorySelect.prop('disabled', false); // Enable Category Dropdown
+                            $categorySelect.prop('disabled', false); // Enable Category Dropdown
                         } else {
-                            // If no costs returned, show message
                             $('#category').html('<option value="" selected disabled>No Categories Available</option>');
                             $('#category').prop('disabled', true);
                         }
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         console.error('AJAX Error:', error);
                         $('#category').html('<option value="" selected disabled>Error Loading Categories</option>');
                         $('#category').prop('disabled', true);
@@ -241,7 +392,7 @@
             }
         }
 
-        $('#ridetype, #source, #destination, #pickup_date, #pickup_time').on('change', function() {
+        $('#ridetype, #source, #destination, #pickup_date, #pickup_time').on('change', function () {
             // Clear Category and Total Fare when inputs change
             $('#category').empty().append('<option value="" selected disabled>Select Category</option>').prop('disabled', true);
             $('#total_fare').val('');
@@ -250,10 +401,10 @@
             // Fetch new Category options based on updated inputs
             getRidePricingDetails();
         });
-        $('#category').on('change', function() {
+        $('#category').on('change', function () {
             var selectedOption = $(this).find('option:selected');
             var cost = selectedOption.data('cost');
-            
+
             if (cost) {
                 $('#total_fare').val(cost);  // Set total fare to selected category cost
                 $('#category').removeClass('is-invalid').addClass('is-valid');
@@ -264,77 +415,182 @@
                 $('#categoryError').text('Please select a valid category.');
             }
         });
+    });
 </script>
 
 <script>
-    
-    $(document).ready(function () {
 
-        $("#save_action").click(function (event) {
-            event.preventDefault();
+    $('#confirmBookingBtn').click(function (event) {
+        event.preventDefault();
 
-            var ridetype = $('#ridetype').val();
-            var source = $('#source').val();
-            var destination = $('#destination').val();
-            var pickup_date = $('#pickup_date').val();
-            var pickup_time = $('#pickup_time').val();
-            var category = $('#category').val();
-            var total_fare = $('#total_fare').val();
-            var customer_notes = $('#customer_notes').val();
-            var ride_status = 'currentbookings';
+        var trip_type = $('input[name="trip_type"]:checked').val() || '';
+        // Collect booking details
+        var bookingDetails = {
+            ridetype: $('#ridetype').val(),
+            source: $('#source').val(),
+            destination: $('#destination').val(),
+            pickup_date: $('#pickup_date').val(),
+            pickup_time: $('#pickup_time').val(),
+            drop_date: $('#drop_date').val(),
+            drop_time: $('#drop_time').val(),
+            category: $('#category').val(),
+            total_fare: $('#total_fare').val(),
+            customer_notes: $('#customer_notes').val(),
+            trip_type: trip_type,
+            ride_status: 'currentbookings',
 
-            console.log(ridetype);
-            console.log(source);
-            console.log(destination);
-            console.log(pickup_date);
-            console.log(pickup_time);
-            console.log(category);
-            console.log(total_fare);
-            console.log(ride_status);
-            
+        };
 
-            // Validation for required fields
-            // if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !brand || !model || !total_fare || !phone_number || !customer_name || !email ) {
-            //     alert('Please fill out all required fields.');
-            //     return false;
-            // }
+        console.log('triptype', trip_type);
 
-            // Validation for total_fare
-            if (total_fare <= 0 || total_fare < 10) {
-                alert('Total Fare must be a positive value greater than 0 and not a single digit.');
-                return false;
+        // Validation for required fields
+        if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !total_fare) {
+            alert('Please fill out all required fields.');
+            return false;
+        }
+
+        // Send OTP to the customer's WhatsApp number
+        $.ajax({
+            url: '{% url "send_otp_customer" %}', // Backend endpoint to send OTP
+            type: "POST",
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            success: function (result) {
+                if (result["status"] == "Success") {
+                    // Show OTP modal
+                    $('#otpModal').modal('show');
+                } else {
+                    alert("Failed to send OTP. Please try again. " + result['message']);
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error(xhr.responseText);
             }
+        });
+        $('#otpModal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
 
 
-            submitForm();
+        $('#verifyOtpBtn').click(function () {
+            var otp = $('#otpInput').val();
 
-            function submitForm() {
-                $.ajax({
-                    url: '{% url "cusaddbooking" %}',
-                    type: "POST",
-                    headers: {
-                        'X-CSRFToken': '{{ csrf_token }}'
-                    },
-                    data: {
-                        ridetype: ridetype,
-                        source: source,
-                        destination: destination,
-                        pickup_date: pickup_date,
-                        pickup_time: pickup_time,
-                        category: category,
-                        total_fare: total_fare,
-                        customer_notes: customer_notes,
-                        ride_status: ride_status,
-                    },
-                    success: function (result) {
-                        alert("Ride Booked successfully");
-                        location.href = '{% url "current" %}';
-                    },
-                    error: function (xhr, status, error) {
-                        console.error(xhr.responseText);
+            // Disable the button to prevent multiple submissions
+            $('#verifyOtpBtn').prop('disabled', true).text('Verifying...');
+
+            // Make AJAX call for OTP verification
+            $.ajax({
+                url: '{% url "verify_otp_customer" %}', // Backend endpoint to verify OTP
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    otp: otp
+                },
+                success: function (result) {
+                    if (result["status"] === "Success") {
+                        // If OTP is correct, proceed to confirm booking
+                        confirmBooking(bookingDetails);
+                    } else {
+                        alert("Incorrect OTP. Please try again.");
+                        // Re-enable the button in case of failure
+                        $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
                     }
-                });
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Re-enable the button in case of an error
+                    $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
+                }
+            });
+        });
+    });
+
+
+    // Function to confirm booking after OTP verification
+    function confirmBooking(bookingDetails) {
+        try {
+            function formatDateToLocal(dateStr) {
+                var date = new Date(dateStr);
+                var year = date.getFullYear();
+                var month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based, so add 1
+                var day = ('0' + date.getDate()).slice(-2); // Ensure two digits for day
+                return `${year}-${month}-${day}`; // Return in 'YYYY-MM-DD' format
             }
+
+            if (bookingDetails.pickup_date) {
+                var formattedPickupDate = formatDateToLocal(bookingDetails.pickup_date);
+                bookingDetails.pickup_date = formattedPickupDate;
+            } else {
+                throw new Error("Pickup date is missing.");
+            }
+
+            // Check and convert drop_date if it exists
+            if (bookingDetails.drop_date) {
+                var formattedDropDate = formatDateToLocal(bookingDetails.drop_date);
+                bookingDetails.drop_date = formattedDropDate;
+            }
+
+            var customer_name = bookingDetails.customer_name || "Customer"; // Default to "Customer" if not found
+
+            $.ajax({
+                url: '{% url "customer_addbooking" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: bookingDetails,
+                success: function (result) {
+                    console.log("Booking result:", result); // Log the result for debugging
+
+                    if (result["status"] != "Error") {
+                        var company_format = result['company_format']; // Get company_format from the backend
+
+                        // Construct the message with company_format
+                        var message = `Hello ${customer_name},
+    
+                        Thank you for choosing Ridexpress!
+    
+                        We’re happy to confirm your booking:
+    
+                        Booking Id & Price: ${company_format} 
+                        Pickup Date & Time: ${bookingDetails.pickup_date} ${bookingDetails.pickup_time}
+                        Pickup Location: ${bookingDetails.source}
+                        Drop-off Location: ${bookingDetails.destination}
+    
+                        Cab details will be provided shortly. If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+    
+                        We look forward to serving you!
+    
+                        Best regards,
+                        Ridexpress
+                        support@ridexpress.in
+                        ridexpress.in`;
+
+                        alert("Thank you for booking with us. Information will be shared with you over WhatsApp.");
+                        setTimeout(function () {
+                            location.href = "{% url 'current' %}";
+                        }, 1000); // Delay for a second to allow the user to see the alert
+                    } else {
+                        alert("Oops, something went wrong. Please try again. " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        } catch (e) {
+            alert("Error: " + e.message);
+            console.error(e);
+        }
+    }
+
+    $(document).ready(function () {
+        $('#closeOtpModal').click(function () {
+            $('#otpModal').modal('hide'); // Hide the modal when close button is clicked
         });
     });
 
@@ -342,34 +598,33 @@
 
 <script>
     function initAutocomplete() {
-          const inputs = document.querySelectorAll('.autocomeple_g');
-    
-    
-          inputs.forEach(input => {
-          const autocomplete = new google.maps.places.Autocomplete(input);
-    
-          autocomplete.addListener('place_changed', function() {
-            const place = autocomplete.getPlace();
-            if (!place.geometry) {
-              window.alert("No details available for input: '" + place.name + "'");
-              return;
-            }
-            console.log('Place details for', input.id, ':', place);
+        const inputs = document.querySelectorAll('.autocomeple_g');
+
+        inputs.forEach(input => {
+            const autocomplete = new google.maps.places.Autocomplete(input);
+
+            autocomplete.addListener('place_changed', function () {
+                const place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    window.alert("No details available for input: '" + place.name + "'");
+                    return;
+                }
+                console.log('Place details for', input.id, ':', place);
             });
-            });
-        }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const script = document.createElement('script');
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
         });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    });
 
 
 
-      // Initialize datepicker
+    // Initialize datepicker
     $('.date-picker').datepicker({
         format: 'mm/dd/yyyy',
         autoclose: true,
@@ -378,12 +633,12 @@
     });
 
     // Datepicker change event listener
-    $('.date-picker').change(function() {
+    $('.date-picker').change(function () {
         var selectedDate = new Date($(this).val());
         var today = new Date();
 
         today.setHours(0, 0, 0, 0);
-        
+
         if (selectedDate < today) {
             $(this).val(''); // Clear invalid date
             $(this).addClass('is-invalid');
@@ -396,6 +651,103 @@
     });
 
 </script>
+
+<style>
+    /* Required Bootstrap Modal CSS */
+    .modal {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 1050;
+        display: none;
+        overflow: hidden;
+        outline: 0;
+    }
+
+    .modal-dialog {
+        position: relative;
+        width: auto;
+        margin: 0.5rem;
+        pointer-events: none;
+    }
+
+    .modal.fade .modal-dialog {
+        transition: -webkit-transform 0.3s ease-out;
+        transition: transform 0.3s ease-out;
+        transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+        -webkit-transform: translate(0, -50px);
+        transform: translate(0, -50px);
+    }
+
+    .modal.show .modal-dialog {
+        -webkit-transform: translate(0, 0);
+        transform: translate(0, 0);
+    }
+
+    .modal-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        pointer-events: auto;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 0.3rem;
+        outline: 0;
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        padding: 1rem 1rem;
+        border-bottom: 1px solid #dee2e6;
+        border-top-left-radius: 0.3rem;
+        border-top-right-radius: 0.3rem;
+    }
+
+    .modal-footer {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: flex-end;
+        padding: 0.75rem;
+        border-top: 1px solid #dee2e6;
+        border-bottom-right-radius: 0.3rem;
+        border-bottom-left-radius: 0.3rem;
+    }
+
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1040;
+    }
+
+    .modal-header .close {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #000;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        margin: -1rem -4rem -1rem auto;
+        /* Adjust position */
+    }
+
+    .modal-header .close:hover,
+    .modal-header .close:focus {
+        color: #000;
+        text-decoration: none;
+    }
+</style>
 
 
 

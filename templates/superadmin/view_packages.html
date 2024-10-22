@@ -35,12 +35,15 @@
                                 <thead>
                                     <tr style="color: black !important;">
                                     <th>Serial No</th>
+                                    <th>id</th>
                                     <th>Package Name</th>
                                     <th>Package Category Name</th>
+                                    <th>Car type</th>
                                     <th>Description</th>
                                     <th> Price</th>
-                                    <th>Duration</th>
                                     <th>Features</th>
+                                    <th>Extra km</th>
+                                    <th>Extra charges</th>
                                     <th>Created On</th>
                                     <th>Action</th>
                                 </tr>
@@ -49,12 +52,15 @@
                                 {% for i in object_list %}
                                 <tr style="color: #030000;">
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ i.name }}</td>
+                                    <td>{{ i.package_id }}</td>
+                                    <td>{{ i.package_name.package_name }}</td>
                                     <td>{{ i.package_category.category_name }}</td>
+                                    <td>{{ i.car_type}}</td>
                                     <td>{{ i.description }}</td>
                                     <td>{{ i.price }}</td>
-                                    <td>{{ i.duration }}</td>
                                     <td>{{ i.features }}</td>
+                                    <td>{{ i.extra_km }}</td>
+                                    <td>{{ i.extra_charges }}</td>
                                     <td>{{ i.created_on }}</td>
                                     <td style="display: flex; justify-content: center; align-items: center;">
                                         <a href="#" class="btn btn-primary"  onclick="EditPackages('{{i.package_id}}')"><i class="fa fa-edit"></i></a>&nbsp;

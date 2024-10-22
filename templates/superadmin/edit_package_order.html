@@ -32,7 +32,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select id="customer" name="customer" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Customer</option>
                                 {% for customer in customers %}
@@ -46,7 +46,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select id="package" name="package" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Package</option>
                                 {% for package in packages %}
@@ -62,14 +62,14 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Amount</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="number" class="form-control form-control-lg" id="total_amount" name="total_amount" value="{{ order.total_amount }}">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Location</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control autocomeple_g" id="source" name="source" value="{{ order.source }}" maxlength="1000">
                             <i class="far fa-location-dot"></i> 
                         </div>
@@ -77,21 +77,21 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Drop Location</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control autocomeple_g" id="destination" name="destination" value="{{ order.destination }}" maxlength="1000">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Date</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="date" class="form-control form-control-lg" id="pickup_date" name="pickup_date" value="{% if order.pickup_date %}{{ order.pickup_date|date:'Y-m-d' }}{% endif %}">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Pickup Time</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="time" class="form-control form-control-lg pickup-time" id="pickup_time" name="pickup_time" value="{% if order.pickup_time %}{{ order.pickup_time|time:'H:i' }}{% endif %}">
                             <div id="timeError" class="invalid-feedback"></div>
                         </div>
@@ -99,7 +99,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Payment Method</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <div class="form-check form-check-inline">
                                 <input class="form-check-input" type="radio" name="payment_method" id="upi" value="UPI" {% if order.payment_method == "UPI" %} checked {% endif %}>
                                 <label class="form-check-label" for="upi" style="color: black;">UPI</label>
@@ -117,7 +117,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <select id="status" name="status" class="form-control form-control-lg">
                                 <!-- <option value="" selected disabled>Select Status</option> -->
                                 <option value="active" {% if order.status == "active" %} selected {% endif %}>Active</option>

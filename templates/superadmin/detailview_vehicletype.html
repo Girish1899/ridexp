@@ -27,7 +27,7 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">Fuel Type Id</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" value="{{ vtlist.company_format }}" readonly>
                         </div>
                     </div>
@@ -35,31 +35,31 @@
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">Fuel Type Name</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg"  value="{{ vtlist.vehicle_type_name }}" disabled>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created On</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{% if vtlist.created_on %}{{ vtlist.created_on|date:'Y-m-d' }}{% endif %}" disabled>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated On</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{% if vtlist.updated_on %}{{ vtlist.updated_on|date:'Y-m-d' }}{% endif %}" disabled>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created By</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" value="{{ vtlist.created_by }}" disabled>
                         </div>
 
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated By</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg"  value="{{ vtlist.updated_by }}" disabled>
                         </div>
                     </div>

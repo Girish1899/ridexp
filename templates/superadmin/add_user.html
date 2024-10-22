@@ -10,10 +10,12 @@
                     <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
-            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item" ><a href="{% url 'userlist' %}" style="color: white !important;">View Admin</a></li>
-                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'userlist' %}" style="color: white !important;">View
+                            Admin</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
+                            Back</a></li>
                 </ol>
             </div>
         </div>
@@ -22,191 +24,177 @@
         <div class="col-xl-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                        style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Admin</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
-                                    
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Employee Id</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
-                                            </div>
-                                        </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Name</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="user_name" name="user_name">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
-                                            <div class="col-sm-12">
-                                                <input type="email" class="form-control form-control-lg" id="email" name="email">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Password</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="password" name="password">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
-                                            <div class="col-sm-12">                                            
-                                                <textarea class="form-control" rows="2" id="address" name="address"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select User Type</label>
-                                            <div class="col-sm-12">    
-                                            <select class="form-control form-control-lg" id="type" name="type">
-                                                <option value="" selected disabled>Select User Type</option>
-                                                <option value="admin">Admin</option>
-                                                <option value="telecaller">Telecaller</option>
-                                                <option value="quality">Quality</option>
-                                                <option value="distributer">Distributer</option>
-                                                <option value="rescue">Rescue</option>
-                                                <option value="hr">HR</option>
-                                                <option value="driver">Driver</option>
-                                            </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                                            <div class="col-sm-12">    
-                                            <select class="form-control form-control-lg" id="status" name="status">
-                                                <option value="" selected disabled>Select Status</option>
-                                                <option value="active" selected>Active</option>
-                                                <option value="inactive">Inactive</option>
-                                            </select>
-                                            </div>
-                                        </div>
-<br>
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
-                                        </div>
-                                <!-- </div> -->
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Employee Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="company_format"
+                                name="company_format" value="{{ next_company_format }}" readonly>
                         </div>
                     </div>
-                <!-- </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;"> Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="user_name" name="user_name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Phone Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="phone_number"
+                                name="phone_number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Email</label>
+                        <div class="col-sm-12">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Password</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="password" name="password">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Address</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control" rows="2" id="address" name="address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Select User Type</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-lg" id="type" name="type">
+                                <option value="" selected disabled>Select User Type</option>
+                                <option value="admin">Admin</option>
+                                <option value="telecaller">Telecaller</option>
+                                <option value="quality">Quality</option>
+                                <option value="distributer">Distributer</option>
+                                <option value="rescue">Rescue</option>
+                                <option value="hr">HR</option>
+                                <option value="driver">Driver</option>
+                                <option value="author">Author</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                    <!-- </div> -->
+                </div>
             </div>
         </div>
-        
+        <!-- </div> -->
+    </div>
+</div>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-        <script>
-            $(document).ready(function () {
-                $("#save_action").click(function (event) {
-                    event.preventDefault();  // Prevent default form submission
-        
-                    var company_format = $('#company_format').val();
-                    var user_name = $('#user_name').val();
-                    var phone_number = $('#phone_number').val();
-                    var email = $('#email').val();
-                    var password = $('#password').val();
-                    var address = $('#address').val();
-                    var type = $('#type').val();
-                    var status = $('#status').val();
-        
-                    if (!user_name || !phone_number || !email || !address || !type || !status || !password ) {
-                        alert("All fields are required.");
-                        return;
-                    }
-        
-                    // Validate phone number format
-                    var phonePattern = /^[0-9]{10}$/;
-                    if (!phonePattern.test(phone_number)) {
-                        alert("Please enter a valid 10-digit phone number.");
-                        return;
-                    }
-        
-                    // Validate email format
-                    var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-                    if (!emailPattern.test(email)) {
-                        alert("Please enter a valid email address.");
-                        return;
-                    }
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
-                    // Validate password criteria
-                    var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-                    if (!passwordPattern.test(password)) {
-                        alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
-                        return;
-                    }
-        
-                    $.ajax({
-                        url: '{% url "check_phno" %}',
-                        type: "GET",
-                        data: { phone_number: phone_number },
-                        success: function (data) {
-                            if (data.exists) {
-                                alert("Phone number already exists.");
-                            } else {
-                                $.ajax({
-                                    url: '{% url "check_useremail" %}',
-                                    type: "GET",
-                                    data: { email: email },
-                                    success: function (data) {
-                                        if (data.exists) {
-                                            alert("Email already exists.");
-                                        } else {
-                                            $.ajax({
-                                                url: '{% url "adduser" %}',
-                                                type: "POST",
-                                                headers: {
-                                                    'X-CSRFToken': '{{ csrf_token }}'
-                                                },
-                                                data: {
-                                                    user_name: user_name,
-                                                    phone_number: phone_number,
-                                                    email: email,
-                                                    address: address,
-                                                    password: password,
-                                                    type: type,
-                                                    status: status,
-                                                    company_format: company_format,
-                                                },
-                                                success: function (result) {
-                                                    alert("User added successfully");
-                                                    location.href = '{% url "userlist" %}';
-                                                },
-                                                error: function (xhr, status, error) {
-                                                    console.error(xhr.responseText);
-                                                }
-                                            });
-                                        }
-                                    },
-                                    error: function (xhr, status, error) {
-                                        console.error(xhr.responseText);
-                                    }
-                                });
-                            }
-                        },
-                        error: function (xhr, status, error) {
-                            console.error(xhr.responseText);
-                        }
-                    });
-                });
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();  // Prevent default form submission
+
+            var company_format = $('#company_format').val();
+            var user_name = $('#user_name').val();
+            var phone_number = $('#phone_number').val();
+            var email = $('#email').val();
+            var password = $('#password').val();
+            var address = $('#address').val();
+            var type = $('#type').val();
+            var status = $('#status').val();
+
+            if (!user_name || !phone_number || !email || !address || !type || !status || !password) {
+                alert("All fields are required.");
+                return;
+            }
+
+            // Validate phone number format
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone_number)) {
+                alert("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            // Validate email format
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            // Validate password criteria
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+            if (!passwordPattern.test(password)) {
+                alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                return;
+            }
+
+
+            $.ajax({
+                url: '{% url "adduser" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    user_name: user_name,
+                    phone_number: phone_number,
+                    email: email,
+                    address: address,
+                    password: password,
+                    type: type,
+                    status: status,
+                    company_format: company_format,
+                },
+                success: function (result) {
+                    alert("User added successfully");
+                    location.href = '{% url "userlist" %}';
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
             });
-        </script>
-        
+        });
+    });
+</script>
+
 
 {% endblock content %}

@@ -1,12 +1,13 @@
 # website/views.py
+from decimal import Decimal
 import random
 from django.db import IntegrityError
 from django.http import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_list_or_404, get_object_or_404, redirect, render
 from django.contrib.auth import authenticate, login as auth_login ,logout
 import requests
 from django.urls import reverse
-from superadmin.models import Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType
+from superadmin.models import Blogs, Brand, Category, Color,Enquiry, CommissionType, ContactUs, Customer, Model, PackageCategories, PackageName, PackageOrder, Packages, Pricing, Profile, RideDetails, Ridetype, Transmission, Vehicle,VehicleOwner, VehicleType, WebsitePackages
 from datetime import date, datetime, time
 from django.utils import timezone
 from django.db.models import Q
@@ -14,10 +15,13 @@ from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.response import Response
+from django.utils.text import slugify
 from django.core.cache import cache
 
 from superadmin.views import adduser
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
+
 
 
 
@@ -40,8 +44,8 @@ def get_current_time_slot():
 
 def home(request):
         
-    categories = PackageCategories.objects.all() 
-    packages = Packages.objects.all() 
+    categories = PackageCategories.objects.all()
+    packages = Packages.objects.select_related('package_category', 'package_name')
     context = {
         'categories': categories,
         'packages': packages,
@@ -53,10 +57,51 @@ def our_rides(request):
     context = None
     return render(request, 'website/our_rides.html',context)
 
-
 def packages(request):
     context = None
     return render(request, 'website/taxi.html',context)
+
+# def packages(request):
+#     packages = WebsitePackages.objects.filter(status='active').select_related('package_category')
+#     categories = PackageCategories.objects.all()  # Get all categories for filtering
+#     context = {
+#         'packages': packages,
+#         'categories': categories
+#     }
+#     return render(request, 'website/webpackage.html',context)
+
+# websitepackage
+class PackageDetailView(View):
+    def get(self, request, title):
+        package = None
+        packages = WebsitePackages.objects.all()
+        
+        for p in packages:
+            if slugify(p.title) == title or p.slug == title:
+                package = p
+                break
+
+        # Handle if the package is not found
+        if package is None:
+            return render(request, '404.html')
+
+        # If the URL slug doesn't match the slugified title, redirect to the correct slug
+        if slugify(package.title) != title and package.slug:
+            return redirect('packages_detail', title=slugify(package.title))
+
+        # Fetch related packages, excluding the current package
+        related_packages = WebsitePackages.objects.filter(status='active').exclude(slug=package.slug)[:3]
+
+        top_attractions = package.top_attraction.split(',')
+        package_highlights = package.package_highlights.split(',')
+
+        return render(request, 'website/packages/Package_detail.html', {
+            'package': package,
+            'related_packages': related_packages,
+            'top_attractions': top_attractions,
+            'package_highlights': package_highlights
+        })
+
 
 def sitemap(request):
     context = None
@@ -994,11 +1039,80 @@ def outstationcabs(request):
 def localtaxi(request):
     return render(request, 'website/localtaxi.html')
 
-
 def blog(request):
     return render(request, 'website/blog.html')
 
+# def blog(request):
+#     page_number = request.GET.get('page', 1)  # Get page number from request
+#     blogs_per_page = 12  # Number of blogs to load per page
+#     blogs = Blogs.objects.all().order_by('-created_on')  # Load blogs in descending order by date
+#     paginator = Paginator(blogs, blogs_per_page)  # Paginate the blogs
 
+#     # Check for an AJAX request by inspecting the 'X-Requested-With' header
+#     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+#         blogs_page = paginator.get_page(page_number)
+#         blogs_list = []
+#         for blog in blogs_page:
+#             blogs_list.append({
+#                 'title': blog.title,
+#                 'backlink': blog.backlink,
+#                 'image_url': blog.image.url if blog.image else blog.image_link,
+#             })
+#         return JsonResponse({
+#             'blogs': blogs_list,
+#             'has_next': blogs_page.has_next(),  # Check if more pages are available
+#         })
+
+#     blogs_page = paginator.get_page(1)  # Initial load (first page)
+#     return render(request, 'website/webblog.html', {'blogs_page': blogs_page})
+
+
+
+class BlogDetailView(View):
+    def get(self, request, title):
+        blogs = Blogs.objects.all()
+        blog = None
+
+        # Try to find a blog by matching the slug
+        for b in blogs:
+            if slugify(b.title) == title:
+                blog = b
+                break
+
+        # Handle the case where the blog isn't found
+        if blog is None:
+            return render(request, '404.html')
+
+        # If the slug doesn't match the title, redirect to the correct slugified URL
+        if slugify(blog.title) != title and blog.slug:
+            return redirect('blog_detail', title=slugify(blog.title))
+
+        description = blog.description.split(',')
+
+        return render(request, 'website/blog/blog_detail.html', {'blog': blog,'description': description})
+
+# class BlogDetailView(View):
+#     def get(self, request, title):
+#         # Print the title from the URL for debugging
+#         print(f"URL title: {title}")
+        
+#         # Filter blogs by title to see if one matches
+#         try:
+#             blog = get_object_or_404(Blogs, title=title)
+#             print(f"Blog found: {blog.title}")
+#         except Exception as e:
+#             print(f"Error: {e}")
+#             return render(request, '404.html')  # Custom 404 template
+
+#         # Check if the slugified title matches
+#         if slugify(blog.title) != title:
+#             return redirect('blog_detail', title=slugify(blog.title))
+
+#         return render(request, 'website/blog/blog_detail.html', {
+#             'blog': blog,
+#             'title_fragment': ' - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services'
+#         })
+    
 def faq(request):
     return render(request, 'website/faq.html')
 
@@ -1062,6 +1176,10 @@ def login_view(request):
                     request.session['user_type'] = profile.type
                     request.session['user_id'] = profile.profile_id
                     redirect_url = '/hr/hrindex'
+                elif profile.type == 'author':
+                    request.session['user_type'] = profile.type
+                    request.session['user_id'] = profile.profile_id
+                    redirect_url = '/author/authorindex'
                 else:
                     redirect_url = '/'
                 
@@ -1452,7 +1570,29 @@ class AddVehicle(TemplateView):
             vehicle.emission_test=emission_test
 
         vehicle.save()
-        return JsonResponse({'status': "Success"})
+        # Send WhatsApp message after submission
+        
+        payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "pre_verification_vehicle",
+            "destination": vehicle.owner.phone_number,  # Sending to user's phone number
+            "userName": "Ridexpress",
+            "templateParams": [
+                vehicle.owner.name, 
+                f"{vehicle.Vehicle_Number} - {vehicle.model.brand.category.category_name} - {vehicle.model.brand.brand_name} - {vehicle.model.model_name}"
+                ],  # Use the user's name
+            "source": "new-landing-page form",
+            "paramsFallbackValue": {
+                 "FirstName": "user"
+            }
+        }
+        gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+        response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+        if response.status_code == 200:
+            return JsonResponse({'status': "Success", 'message': "Your details have been submitted. Once the verification is done, you will get a WhatsApp message."})
+        else:
+            return JsonResponse({'status': "Error", 'message': "Vehicle added, but failed to send WhatsApp notification."})
 
 class AirportGetRidePricingDetails(APIView):
     def post(self, request):
@@ -1910,11 +2050,9 @@ class PackageBookingList(TemplateView):
         context = super().get_context_data(**kwargs)
         # Get the form data passed from the previous page
         context['package_category'] = self.request.GET.get('package_category')
-        context['package'] = self.request.GET.get('package')
-        context['duration'] = self.request.GET.get('duration')
+        context['package_name'] = self.request.GET.get('package_name')
         context['price'] = self.request.GET.get('price')
         context['description'] = self.request.GET.get('description')
-        context['features'] = self.request.GET.get('features')
         context['source'] = self.request.GET.get('source')
         context['destination'] = self.request.GET.get('destination')
         context['pickup_date'] = self.request.GET.get('pickup_date')
@@ -1948,7 +2086,7 @@ class AddPackageOrder(APIView):
             pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
             # customer_id = request.POST['customer']
             package_id = request.POST['package']
-            total_amount = request.POST['total_amount']
+            total_amount = Decimal(request.POST.get('total_amount', '0') or '0')
             payment_method = request.POST['payment_method']
             status = request.POST['status']
             source = request.POST['source']
@@ -2055,3 +2193,88 @@ class AddPackageOrder(APIView):
             print(f"Error saving ride details: {e}")
             return JsonResponse({'status': 'Error', 'message': str(e)})
 
+
+class AddBlogView(TemplateView):
+    template_name = "website/add_blog.html"
+
+    def post(self, request):
+        title = request.POST['title']
+        description = request.POST['description']
+        image = request.POST.get('image')
+        facebook = request.POST.get('facebook')
+        instagram = request.POST.get('instagram')
+        whatsapp = request.POST.get('whatsapp')
+        backlink = request.POST.get('backlink')
+        related_bloglink = request.POST.get('related_bloglink')
+        tags = request.POST.get('tags')
+        author = request.POST.get('author')
+        meta_title = request.POST.get('meta_title')
+        meta_description = request.POST.get('meta_description')
+        meta_keywords = request.POST.get('meta_keywords')
+        h1tag = request.POST.get('h1tag')
+
+        blog = Blogs(
+            title=title,
+            description=description,
+            image=image,
+            facebook=facebook,
+            instagram=instagram,
+            whatsapp=whatsapp,
+            backlink=backlink,
+            related_bloglink=related_bloglink,
+            tags=tags,
+            author=author,
+            meta_title=meta_title,
+            meta_description=meta_description,
+            meta_keywords=meta_keywords,
+            h1tag=h1tag,
+        )
+        blog.save()
+        return JsonResponse({'status': "Success"}) 
+
+# website packages
+class AddwebPackages(TemplateView):
+    template_name = "website/add_webpackages.html"
+
+    def post(self, request):
+        if request.method == "POST":
+        # Capture the form data from the POST request
+            title = request.POST.get('title')
+            category = request.POST.get('category')
+            description = request.POST.get('description')
+            top_attraction = request.POST.get('top_attraction')
+            why_visit = request.POST.get('why_visit')
+            package_highlights = request.POST.get('package_highlights')
+            facebook_link = request.POST.get('facebook_link')
+            instagram_link = request.POST.get('instagram_link')
+            whatsapp_link = request.POST.get('whatsapp_link')
+            author = request.POST.get('author')
+            
+            # Capture new meta fields
+            meta_title = request.POST.get('meta_title')
+            meta_description = request.POST.get('meta_description')
+            meta_keywords = request.POST.get('meta_keywords')
+            h1tag = request.POST.get('h1tag')
+
+        package = WebsitePackages(
+            title=title,
+            category=category,
+            description=description,
+            top_attraction=top_attraction,
+            why_visit=why_visit,
+            package_highlights=package_highlights,
+            facebook_link=facebook_link,
+            instagram_link=instagram_link,
+            whatsapp_link=whatsapp_link,
+            author=author,
+            meta_title=meta_title,
+            meta_description=meta_description,
+            meta_keywords=meta_keywords,
+            h1tag=h1tag,
+        )
+        package.save()
+        return JsonResponse({'status': "Success"})
+
+class webPackageList(ListView):
+    model = WebsitePackages
+    template_name = "website/view_webpackages.html"  

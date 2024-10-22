@@ -17,6 +17,8 @@ urlpatterns = [
     path('outstationcabs', views.outstationcabs, name='outstationcabs'),
     path('localtaxi', views.localtaxi, name='localtaxi'),
     path('blog', views.blog, name='blog'),
+    path('blog/<slug:title>/', BlogDetailView.as_view(), name='blog_detail'),
+    path('packages/<slug:title>/', PackageDetailView.as_view(), name='packages_detail'),
     path('packages', views.packages, name='packages'),
     
     path('faq', views.faq, name='faq'),
@@ -179,4 +181,10 @@ urlpatterns = [
 
     path('package_booking_list', PackageBookingList.as_view(), name='package_booking_list'),
     path('add_package_booking', AddPackageOrder.as_view(), name='add_package_booking'),
+
+    path('add_blog_website/', AddBlogView.as_view(), name='add_blog_website'),
+
+    path('add_webpackage', AddwebPackages.as_view(), name='add_webpackage'),
+    path('view_webpackage', webPackageList.as_view(), name='view_webpackage'),
+
 ]

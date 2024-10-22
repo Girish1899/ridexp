@@ -1,6 +1,7 @@
 {% extends 'adminuser/base.html' %}
 {% load static %}
-{% block content %}
+{% block content%}
+
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -12,57 +13,77 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item" ><a href="{% url 'adindex' %}" style="color: white !important;">Dashboard</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-12">
-              <div class="card my-4">
-                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                  <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
-                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Vehicle View</h6>
-                  </div>
-                </div>
-                <div class="card-body px-0 pb-2">
-                  <div class="table-responsive p-0">
-                    <table class="table align-items-center justify-content-center mb-0">
-                      <thead>
-                        <tr style="color: black !important;">
-                                        <th>Company Format</th>
-                                        <th>Vehicle Number</th>
-                                        <th>Category</th>
-                                        <th>Brand</th>
-                                        <th>Model</th>
-                                        <th>Color</th>
-                                        <th>Owner Name</th>
-                                        <th>Vehicle Type</th>
+
+        <!-- row -->
+
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Active Vehicle View</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black !important;">
+                                        <th>Serial No</th>
+                                        <th>Vehicle Id</th>
+                                        <th>Owner Name / Owner Mobile</th>
+                                        <!-- <th>Owner Mobile</th> -->
                                         <th>Commission Type</th>
-                                        <th>Document Verification Type</th>
-                                        <th>Document Link</th>
+                                        <th>Vehicle Number</th>
+                                        <th>Category/Brand/ Model</th>
+                                        <th>Download Document</th>
+                                        <th>Image</th>
                                         <th>Vehicle Status</th>
+                                        <th>Reason</th>
                                         <th>Created On</th>
-                                        <th>Updated On</th>
-                                        <th>Created by</th>
-                                        <th>Updated by</th>
+                                        <th>Verified On</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {% for i in object_list %}
                                     <tr style="color: #030000;">
-                                        <td>{{ i.company_format }}</td>
-                                        <td>{{ i.Vehicle_Number }}</td>
-                                        <td>{{ i.model.brand.category.category_name }}</td>
-                                        <td>{{ i.model.brand.brand_name }}</td>
-                                        <td>{{ i.model.model_name }}</td>
-                                        <td>{{ i.color }}</td>
-                                        <td>{{ i.owner.name }}</td>
-                                        <td>{{ i.vehicle_type.vehicle_type_name }}</td>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td><div>{{ i.company_format }}</div>
+                                            <div>
+                                                <span class="badge badge-pill bg-{% if i.verification_status == 'verified' %}gradient-success{% else %}danger{% endif %}" 
+                                                    onclick="VerifyVehicle('{{ i.vehicle_id }}', '{{ i.owner.verification_status }}')">
+                                                    {% if i.verification_status == 'verified' %}
+                                                    Verified
+                                                    {% else %}
+                                                    Not Verified
+                                                    {% endif %}
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div>{{ i.owner.name }}</div>
+                                            <div style="color: red;">{{ i.owner.phone_number }}</div>
+                                        </td>
                                         <td>{{ i.commission_type.commission_name }}</td>
-                                        <td>{{ i.document_verification_type }}</td>
-                                        <td>{{ i.document_link }}</td>
+                                        <td style="color: green;">{{ i.Vehicle_Number }}</td>
+                                        <td>
+                                            <div>{{ i.model.brand.category.category_name }}</div>
+                                            <div>{{ i.model.brand.brand_name }}</div>
+                                            <div>{{ i.model.model_name }}</div>
+                                        </td>
+                                        <td><a href="{% url 'download_vehicle_documents' i.vehicle_id %}" class="btn btn-info"><i class="fa fa-download"></i></a></td>
+                                        <td>
+                                            {% if i.model.brand.category.image %}
+                                                <img src="{{ i.model.brand.category.image.url }}" alt="Image" style="max-width: 100px;">
+                                            {% else %}
+                                                No Image
+                                            {% endif %}
+                                        </td>
                                         <td>
                                             <span class="badge {% if i.model.brand.category.category_status == 'inactive' or i.owner.status == 'inactive' %}badge-danger{% else %}{% if i.vehicle_status == 'active' %}badge-success{% else %}badge-danger{% endif %}{% endif %}">
                                                 {% if i.model.brand.category.category_status == 'inactive' or i.model.brand.status == 'inactive' or i.model.status == 'inactive' or i.owner.status == 'inactive' %}
@@ -72,15 +93,19 @@
                                                 {% endif %}
                                             </span>
                                         </td>
-                                        <td>{{ i.created_on }}</td>
-                                        <td>{{ i.updated_on }}</td>
-                                        <td>{{ i.created_by }}</td>
-                                        <td>{{ i.updated_by }}</td>
-                                        <td style="display: flex; justify-content: center; align-items: center;">
-                                            <!-- <a href="#" class="btn btn-primary" onclick="EditVehicle('{{ i.vehicle_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
-                                            <a href="#" class="btn btn-secondary" onclick="DeleteVehicle('{{ i.vehicle_id }}')"><i class="fa fa-trash"></i></a>&nbsp; -->
-                                            <a href="#" class="btn btn-warning" onclick="HistoryVehicle('{{i.vehicle_id}}')"><i class="fa fa-clock"></i></a>
+                                        <td>{{i.block_reason}}</td>
+                                        <td style="color: red;">{{ i.created_on }}</td>
+                                        <td>
+                                            {% if i.verified_on %}
+                                            {{ i.verified_on }}
+                                            {% else %}
+                                            N/A
+                                            {% endif %}
                                         </td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                           
+                                            <a href="#" class="btn btn-warning" onclick="HistoryVehicle('{{ i.vehicle_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                          </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -93,36 +118,16 @@
     </div>
 </div>
 
-<script>
-    function DeleteVehicle(vehicle_id){
-        var action = confirm("Are you sure you want to delete this vehicle?");
-        if (action != false) {
-            $.ajax({
-                url: "{% url 'DeleteVehicle' %}",
-                data: {
-                    'vehicle_id': vehicle_id,
-                },
-                dataType: 'json',
-                success: function (data) {
-                    if (data.deleted) {
-                        alert("Vehicle Deleted Successfully");
-                        window.location.href = "{% url 'vehiclelist' %}";
-                        $("#vehicle_id #i-" + vehicle_id).remove();
-                    }
-                }
-            });
-        }
-    }
 
-    function EditVehicle(vehicle_id) {
-        var action = confirm("Are you sure you want to edit this vehicle?");
-        if (action !== false) {
-            window.location.href = "EditVehicle/" + vehicle_id;
-        }
-    };
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    
 
     function HistoryVehicle(vehicle_id) {
         window.location.href = "adVehicleHistory/" + vehicle_id; // Add a slash here
     };
+
+  
 </script>
 {% endblock content %}

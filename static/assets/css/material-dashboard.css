@@ -415,6 +415,7 @@ input[type="date"],
 input[type="time"],
 input[type="file"],
 input[type="email"],
+input[type="url"],
 textarea,
 select {
     background-color: rgb(235, 234, 234);

@@ -1,13 +1,21 @@
-from datetime import date
+from datetime import date, datetime, time
+from decimal import Decimal
+import json
+from django.core.cache import cache
+import random
+from django.db import IntegrityError
 from django.views.generic.list import ListView
 from django.shortcuts import get_object_or_404, render
-from superadmin.models import Brand, BrandHistory,Category, CategoryHistory, CommissionHistory, CommissionType, CustomerHistory, DriverHistory,Model, ModelHistory, Pricing, PricingHistory, ProfileHistory, RideDetails,Profile, RidetypeHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
+from superadmin.models import Accounts, Brand, BrandHistory,Category, CategoryHistory, Color, ColorHistory, CommissionHistory, CommissionType, ContactUs, CustomerHistory, DailyVehicleComm, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, PackageName, PackageNameHistory, PackageOrder, PackageOrderHistory, Packages, PackagesHistory, Pricing, PricingHistory, ProfileHistory, RideDetails,Profile, RidetypeHistory, Transmission, TransmissionHistory,User, VehicleHistory, VehicleOwnerHistory,VehicleType,Customer,Driver,VehicleOwner,Ridetype,Vehicle, VehicleTypeHistory
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView,ListView,View,DetailView
 from django.core.serializers import serialize
 from django.db.models import Q
 from django.http import JsonResponse
+from django.db.models import Sum, Count
+import requests
+from rest_framework.views import APIView
 
 @login_required(login_url='login')
 def adminuser_index(request):
@@ -132,12 +140,38 @@ class ProfileHistoryView(TemplateView):
         context['profile'] = profile
         context['history'] = history
         return context
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UserEmpList(ListView):
+    model = Profile
+    template_name = "adminuser/view_useremp.html"    
 
 # customer###################################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class CustomerList(ListView):
     model = Customer
     template_name = "adminuser/view_customer.html"
+    def get_queryset(self):
+        # First query: Get customers with ride count
+        customers = Customer.objects.annotate(
+            ride_count=Count('ridedetails')
+        )
+
+        # Second query: Calculate total fare for completed bookings
+        completed_rides_totals = RideDetails.objects.filter(
+            ride_status='completedbookings'
+        ).values('customer').annotate(
+            total_fare=Sum('total_fare')
+        ).values('customer', 'total_fare')
+
+        # Convert to a dictionary for fast lookup
+        fare_dict = {item['customer']: item['total_fare'] for item in completed_rides_totals}
+
+        # Annotate customers with the total fare of completed bookings
+        for customer in customers:
+            customer.total_fare = fare_dict.get(customer.pk, 0.0)
+
+        return customers
 
 class CustomerHistoryView(TemplateView):
     template_name = 'adminuser/history_customer.html'
@@ -207,8 +241,233 @@ class DriverHistoryView(TemplateView):
 
 # add bookings inside superadmin##########################################
 
+class customerGetRidePricingDetails(APIView):
+    def post(self, request):
+        import googlemaps
+        from decimal import Decimal
+        from django.http import JsonResponse
+        from datetime import datetime
+        print(request.POST)
+
+        source = request.POST['source']
+        destination = request.POST['destination']
+        pickup_date = request.POST.get('pickup_date')
+        pickup_time = request.POST.get('pickup_time')
+        drop_date = request.POST.get('drop_date')
+        drop_time = request.POST.get('drop_time')
+        time_slot = request.POST['time_slot']
+        ridetype_id = request.POST['ridetype']  
+        trip_type = request.POST.get('trip_type')  
+        toll_option = request.POST.get('toll_option') 
+
+        if not source or not destination or not pickup_date or not pickup_time or not time_slot:
+            return JsonResponse({'error': 'Missing required fields'}, status=400)
+
+        api_key = 'AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo'
+        gmaps = googlemaps.Client(key=api_key)
+
+        result = gmaps.distance_matrix(
+            origins=[source],
+            destinations=[destination],
+            mode="driving",
+            departure_time=datetime.now()
+        )
+        distance = result['rows'][0]['elements'][0]['distance']['value'] / 1000  
+        print(f"Distance calculated: {distance} km")
+
+        costs = {}
+
+        # Fetch the ridetype instance
+        ride_type_instance = Ridetype.objects.filter(ridetype_id=ridetype_id).first()
+        if not ride_type_instance:
+            return JsonResponse({'error': 'Invalid ridetype'}, status=400)
+
+        print(f"Ride Type: {ride_type_instance.name}, Trip Type: {trip_type}, Toll Option: {toll_option}")
+
+        # Call appropriate calculation function based on trip_type
+        if ride_type_instance.name == 'outstation':
+            pricing_details = self.get_outstation_pricing(time_slot, ridetype_id, trip_type)
+            if trip_type == 'round_trip':
+                result = self.calculate_outstation_roundtrip(request, pricing_details, distance)
+            else:
+                result = self.calculate_outstation_oneway(pricing_details, distance)
+        elif ride_type_instance.name == 'local':
+            pricing_details = self.get_local_pricing(time_slot, ridetype_id)
+            result = self.calculate_local(pricing_details, distance)
+        elif ride_type_instance.name == 'airport':
+            pricing_details = self.get_airport_pricing(time_slot, ridetype_id,trip_type)
+            result = self.calculate_airport(pricing_details, distance, toll_option)
+        else:
+            return JsonResponse({'error': 'Invalid ridetype or trip_type'}, status=400)
+
+        return JsonResponse({'costs': result})
+
+    def get_local_pricing(self, time_slot, ridetype_id):
+        """Fetch pricing for local rides."""
+        print(f"Fetching pricing for time slot: {time_slot}, ridetype_id: {ridetype_id}")
+        return Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype_id=ridetype_id
+        )
+
+    def get_airport_pricing(self, time_slot, ridetype_id, trip_type):
+        """Fetch pricing for airport rides with or without toll."""
+        # You can modify this to include toll_option-based pricing if needed
+        return Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype_id=ridetype_id,trip_type=trip_type
+        )
+
+    def get_outstation_pricing(self, time_slot, ridetype_id, trip_type):
+        """Fetch pricing for outstation rides, considering trip type."""
+        return Pricing.objects.select_related('category').filter(
+            slots=time_slot, ridetype_id=ridetype_id, trip_type=trip_type
+        )
+
+    def calculate_local(self, pricing_details, distance):
+        """Calculate pricing for local rides."""    
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()  # 'ac' or 'non ac'
+
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            toll_price = Decimal(str(price.toll_price))
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price,toll_price)
+        
+        return pricing_dict
+
+    def calculate_airport(self, pricing_details, distance, toll_option):
+        """Calculate pricing for airport rides with toll and no toll options."""
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            toll_price = Decimal(str(price.toll_price)) if toll_option == 'add_toll' else Decimal(0)
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price, toll_price)
+
+        return pricing_dict
+
+    def calculate_outstation_oneway(self, pricing_details, distance):
+        """Calculate pricing for outstation one-way rides."""
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            toll_price = Decimal(str(price.toll_price))    
+
+            pricing_dict[category_name][car_type] = self.calculate_cost(distance, price,toll_price)
+
+        return pricing_dict
+
+    def calculate_outstation_roundtrip(self, request, pricing_details, distance):
+        """Calculate pricing for outstation roundtrip rides based on pickup and drop date."""
+        from datetime import datetime
+
+        # Parse the pickup and drop date/time from the request
+        pickup_date_str = request.POST.get('pickup_date')
+        pickup_time_str = request.POST.get('pickup_time')
+        drop_date_str = request.POST.get('drop_date')
+        drop_time_str = request.POST.get('drop_time')
+
+        # Ensure that pickup and drop date/time are provided
+        if not pickup_date_str or not pickup_time_str:
+            return {"error": "Pickup date and time must be provided."}
+        if not drop_date_str or not drop_time_str:
+            return {"error": "Drop date and time must be provided."}
+
+        # Combine pickup date and time for parsing
+        pickup_datetime_str = f"{pickup_date_str} {pickup_time_str}"
+        
+        # Combine drop date and time for parsing
+        drop_datetime_str = f"{drop_date_str} {drop_time_str}"
+
+        try:
+            # Convert to datetime objects
+            pickup_datetime = datetime.strptime(pickup_datetime_str, "%Y-%m-%d %H:%M")
+            drop_datetime = datetime.strptime(drop_datetime_str, "%Y-%m-%d %H:%M")
+        except ValueError as e:
+            # Return a meaningful error message in case of parsing issues
+            return {"error": f"Invalid date/time format: {str(e)}"}
+
+        # Calculate the number of days based on pickup and drop dates
+        num_days = self.calculate_days(pickup_datetime, drop_datetime)
+
+        # Cap the distance based on the number of days (250 km per day)
+        daily_km_cap = 250 * num_days
+        applicable_distance = max(distance, daily_km_cap)
+
+        # Calculate the pricing for each vehicle category and type
+        pricing_dict = {}
+        for price in pricing_details:
+            category_name = price.category.category_name
+            car_type = price.car_type.lower()
+            toll_price = Decimal(str(price.toll_price))
+            if category_name not in pricing_dict:
+                pricing_dict[category_name] = {}
+
+            # Calculate the cost for the applicable distance and number of days
+            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price,toll_price=toll_price, num_days=num_days)
+
+        return pricing_dict
+
+    def calculate_days(self, pickup_datetime, drop_datetime):
+        """Calculate the number of days for a round trip."""
+        if drop_datetime.date() > pickup_datetime.date():
+            num_days = 1
+            end_of_pickup_day = pickup_datetime.replace(hour=23, minute=59, second=59)
+
+            if drop_datetime > end_of_pickup_day:
+                num_days += (drop_datetime.date() - pickup_datetime.date()).days
+        else:
+            num_days = 1
+
+        print(f"Total days for the trip: {num_days}")
+
+        return num_days
+
+    def calculate_cost(self, distance, price, toll_price=Decimal(0), num_days=1):
+        """Helper method to calculate cost based on distance and pricing details."""
+        from decimal import Decimal
+
+        price_per_km_decimal = Decimal(str(price.price_per_km))
+        permit_decimal = Decimal(str(price.permit))
+        toll_price_decimal = Decimal(str(toll_price))
+
+        driver_beta_decimal = Decimal(str(price.driver_beta)) * Decimal(str(num_days))
+
+        # Calculate total cost
+
+        total_cost = (Decimal(distance) * price_per_km_decimal) + permit_decimal + toll_price_decimal + driver_beta_decimal
+        total_cost = round(total_cost, 0)
+
+        return {
+            'distance_km': distance,
+            'cost': total_cost,
+            'permit': permit_decimal,
+            'toll': toll_price_decimal,
+            'beta': driver_beta_decimal,
+            'category': price.category.category_name,
+        }
+
 class AddRide(TemplateView):
     template_name = "adminuser/add_ride.html"
+
+    def parse_date(self, date_str):
+        """Helper function to parse dates in multiple formats"""
+        for fmt in ('%Y-%m-%d', '%m/%d/%Y'):
+            try:
+                return datetime.strptime(date_str, fmt).date()
+            except ValueError:
+                continue
+        raise ValueError(f"Date {date_str} is not in a recognized format.")
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -216,8 +475,6 @@ class AddRide(TemplateView):
         context['customerlist'] = Customer.objects.all()
         context['ridetypelist'] = Ridetype.objects.all()
         context['catlist'] = Category.objects.filter(category_status='active')
-        context['blist'] = Brand.objects.filter(status='active')
-        context['modellist'] = Model.objects.filter(status='active')
         
         last_ride = RideDetails.objects.all().order_by('-ride_id').first()
         if last_ride:
@@ -234,21 +491,35 @@ class AddRide(TemplateView):
     
     def post(self, request):
         try:
+            print("Fetching POST data")
+            # Convert date and time
+            # pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
+            # pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
             company_format = request.POST['company_format']
             ride_type_id = request.POST['ridetype']
-            source = request.POST['source']
-            destination = request.POST['destination']
-            pickup_date = request.POST['pickup_date']
-            pickup_time = request.POST['pickup_time']
-            model_id = request.POST['model']
-            total_fare = request.POST['total_fare']
+            source = request.POST.get('source')
+            destination = request.POST.get('destination')
+            pickup_date = request.POST.get('pickup_date')
+            pickup_time = request.POST.get('pickup_time')
+            category = request.POST.get('category')
+            total_fare = request.POST.get('total_fare')
             customer_id = request.POST['customer']
             customer_notes = request.POST['customer_notes']
+            car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            slots = determine_time_slot(pickup_time)
             ride_status = request.POST['ride_status']
             phone_number = request.POST['phone_number']
             customer_name = request.POST['customer_name']
             email = request.POST['email']
+            password = request.POST['password']
             address = request.POST['address']
+            drop_date_str = request.POST.get('drop_date', '')
+            drop_time_str = request.POST.get('drop_time', '')
+
+            drop_date = self.parse_date(drop_date_str) if drop_date_str else None
+            drop_time = datetime.strptime(drop_time_str, '%H:%M').time() if drop_time_str else None
+
+            print(f"Parsed data: {company_format}, {ride_type_id}, {source}, {destination}, {pickup_date}, {pickup_time}")
 
             try:
                 customer = Customer.objects.get(phone_number=phone_number)
@@ -263,17 +534,53 @@ class AddRide(TemplateView):
                     customer_name=customer_name,
                     phone_number=phone_number,
                     email=email,
+                    password=password,
                     address=address,
                     status='active',
                     created_by=request.user,
                     updated_by=request.user
                 )
                 customer.save()
-                customer_id = customer.customer_id
+            print(f"Created new customer: {customer}")
 
             # Ensure objects exist in database before saving
             ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
-            model = Model.objects.get(model_id=model_id)
+            category_name = category.split('|')[0]
+            car_type_name = category.split('|')[1]
+            category_instance = Category.objects.get(category_name=category_name)
+
+            # Retrieve pricing instance
+            # trip_type = request.POST.get('trip_type', '').strip()
+            # print('trip_type from request:', trip_type)  # This should print the trip_type value
+
+            try:
+                if ridetype.name.lower() == 'local':
+                    pricing_instance = Pricing.objects.get(
+                        category=category_instance,
+                        car_type=car_type_name,
+                        ridetype=ridetype,
+                        slots=slots,
+                    )
+                    
+                else:
+                # Exclude triptype filter for local rides
+                    trip_type = request.POST.get('trip_type', '').strip()
+                    print('trip_type from request:', trip_type)  # This should print the trip_type value
+                    pricing_instance = Pricing.objects.get(
+                        category=category_instance,
+                        car_type=car_type_name,
+                        ridetype=ridetype,
+                        slots=slots,
+                        trip_type=trip_type,  
+                    )
+
+                    print('after request trip type',trip_type)
+
+            except Pricing.DoesNotExist:
+                return JsonResponse({"status": "Error", "message": "Pricing information for the selected category, car type, and ride type does not exist."})
+       
+
+            print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
             # Determine ride status based on pickup date
             today = date.today().isoformat()
@@ -281,12 +588,25 @@ class AddRide(TemplateView):
 
             # Use the next company format for the ride
             next_company_format = self.get_context_data()['next_company_format']
+
+            print(f'company_format: {next_company_format}')
+            print(f'ridetype: {ridetype}')
+            print(f'source: {source}')
+            print(f'destination: {destination}')
+            print(f'pickup_date: {pickup_date}')
+            print(f'pickup_time: {pickup_time}')
+            print(f'category: {category_instance}')
+            print(f'total_fare: {total_fare}')
+            print(f'customer: {customer}')
+            print(f'customer_notes: {customer_notes}')
+            print(f'pricing: {pricing_instance}')
             
+        
             ride_details = RideDetails(
                 company_format=next_company_format,
                 customer=customer,
                 ridetype=ridetype,
-                model=model,
+                category=category_instance,
                 source=source,
                 destination=destination,
                 pickup_date=pickup_date,
@@ -294,18 +614,137 @@ class AddRide(TemplateView):
                 total_fare=total_fare,
                 customer_notes=customer_notes,
                 ride_status=ride_status,
+                drop_date=drop_date,
+                drop_time=drop_time,
                 assigned_by=request.user,
                 cancelled_by=request.user,
                 created_by=request.user,
-                updated_by=request.user
+                updated_by=request.user,
+                pricing = pricing_instance,  # Set the Pricing instance
+
             )
             ride_details.save()
+            print("Ride details saved successfully.")
             
-            return JsonResponse({'status': "Success", 'message': 'Ride details added successfully'})
-        except Customer.DoesNotExist:
-            return JsonResponse({'status': 'Error', 'message': f'Customer with ID {customer_id} does not exist.'})
+            whatsapp = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking confirmation",
+                "destination": customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                        customer_name,
+                        company_format,
+                        pickup_date +'  ' +pickup_time,    
+                        source,
+                        destination
+                    ],
+                    "source": "new-landing-page form",
+                    "media": {},
+                    "buttons": [],
+                    "carouselCards": [],
+                    "location": {},
+                    "paramsFallbackValue": {
+                        "FirstName": "user"
+                    }
+                    }
+            
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=whatsapp)
+
+            if response.status_code == 200:
+                print("Message sent successfully")
+            else:
+                print(f"Failed to send message: {response.status_code}")
+                print(response.text)
+
+            return JsonResponse({'status': 'Success', 'message': 'Ride details added successfully'})
+
+        except IntegrityError as e:
+            print(f"IntegrityError occurred: {e}")
+            return JsonResponse({'status': 'Error', 'message': 'Data integrity error occurred.'})
+
         except Exception as e:
+            print(f"An unexpected error occurred: {e}")
             return JsonResponse({'status': 'Error', 'message': str(e)})
+
+def determine_time_slot(pickup_time):
+    # Determine the time slot based on pickup_time_str
+    pickup_time = datetime.strptime(pickup_time, '%H:%M').time()
+    if time(0, 0) <= pickup_time < time(6, 0):
+        return '12AM - 6AM'
+    elif time(6, 0) <= pickup_time < time(12, 0):
+        return '6AM - 12PM'
+    elif time(12, 0) <= pickup_time < time(18, 0):
+        return '12PM - 6PM'
+    else:
+        return '6PM - 12AM'
+
+
+###################################################        #
+
+class SendOtp(View):
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        customer_name = request.POST.get('customer_name')
+        otp = str(random.randint(100000, 999999))  # Generate a random 6-digit OTP
+
+        # Store OTP in cache with a 5-minute expiration
+        cache.set(f'otp_{phone_number}', otp, timeout=300)
+
+        # WhatsApp API payload for OTP
+        whatsapp_payload = {
+            "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+            "campaignName": "otp_verification",
+            "destination": phone_number,
+            "userName": "Ridexpress",
+            "templateParams": [str(otp)],
+            "source": "new-landing-page form",
+            "buttons": [
+                {
+                    "type": "button",
+                    "sub_type": "url",
+                    "index": 0,
+                    "parameters": [
+                        {
+                            "type": "text",
+                            "text": otp  # Send OTP in the message
+                        }
+                    ]
+                }
+            ]
+        }
+
+        try:
+            response = requests.post("https://backend.aisensy.com/campaign/t1/api/v2", json=whatsapp_payload)
+            if response.status_code == 200:
+                return JsonResponse({'status': 'Success', 'message': 'OTP sent successfully.'})
+            else:
+                return JsonResponse({'status': 'Error', 'message': 'Failed to send OTP.'})
+        except requests.RequestException as e:
+            return JsonResponse({'status': 'Error', 'message': f'Error sending OTP: {e}'})
+
+class VerifyOtp(View):
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        otp = request.POST.get('otp')
+
+        print(f"OTP verification attempt for phone number: {phone_number}, entered OTP: {otp}")
+
+        cached_otp = cache.get(f'otp_{phone_number}')
+        
+        print(f"Cached OTP for phone number {phone_number}: {cached_otp}")
+
+        if not cached_otp:
+            print(f"No OTP found in cache for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'OTP expired. Please request a new one.'})
+
+        if cached_otp == otp:
+            cache.delete(f'otp_{phone_number}')
+            print(f"OTP verified successfully for phone number: {phone_number}")
+            return JsonResponse({'status': 'Success', 'message': 'OTP verified successfully.'})
+        else:
+            print(f"Incorrect OTP entered for phone number: {phone_number}")
+            return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})
                 
         
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -390,6 +829,15 @@ class CompletedRideList(ListView):
 
     def get_queryset(self):
         return RideDetails.objects.filter(ride_status='completedbookings') 
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['services'] = Ridetype.objects.all()
+        context['bookings'] = RideDetails.objects.filter(ride_status='completedbookings')
+        context['categories'] = Category.objects.all() 
+        context['vehicles'] = Vehicle.objects.all() 
+        context['drivers'] = Driver.objects.all() 
+        return context
     
 def completed_bookings_filter(request):
     start_date = request.GET.get('start_date')
@@ -506,3 +954,605 @@ class CancelledListView(ListView):
 
     def get_queryset(self):
         return RideDetails.objects.filter(ride_status='cancelledbookings') 
+    
+
+def cancel_ride(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        comments = data.get('comments')
+        ride_id = data.get('ride_id')
+
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)
+            ride.comments = comments
+            ride.ride_status = 'cancelledbookings'
+            ride.cancelled_by = request.user
+            ride.save()
+
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We regret to inform you that your booking with Ridexpress has been cancelled:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+
+            If you didn’t request this cancellation or if you need further assistance, please contact us at +91 6366463555 or reply to this email.
+
+            We hope to serve you in the future!
+
+            Best regards,
+            Ridexpress
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_cancellation",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination)
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+                }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
+
+            return JsonResponse({'status': 'success'})
+
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Ride not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'failed'}, status=400)    
+    
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class TransmissionListView(ListView):
+    model = Transmission
+    template_name = "adminuser/view_transmission.html"    
+
+class TransmissionHistoryView(TemplateView):
+    template_name = 'adminuser/history_transmission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        transmission_id = self.kwargs['transmission_id']
+        transmission = get_object_or_404(Transmission, transmission_id=transmission_id)
+        history = TransmissionHistory.objects.filter(transmission_id=transmission_id).order_by('updated_on')
+        context['transmission'] = transmission
+        context['history'] = history
+        return context 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class colorList(ListView):
+    model = Color
+    template_name = "adminuser/view_color.html"
+
+class ColorHistoryView(TemplateView):
+    template_name = 'adminuser/history_color.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        color_id = self.kwargs['color_id']
+        color = get_object_or_404(Color, color_id=color_id)
+        history = ColorHistory.objects.filter(color_id=color_id).order_by('updated_on')
+        context['color'] = color
+        context['history'] = history
+        return context 
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class VehicleBlockList(ListView):
+    model = Vehicle
+    template_name = "adminuser/view_vehicleblock.html"
+
+    def get_queryset(self):
+        return Vehicle.objects.filter(Q(vehicle_status='inactive'))  
+
+
+class CustomerProfileHistoryView(View):
+    def get(self, request, customer_id):
+        customer = get_object_or_404(Customer, pk=customer_id)
+        rides = RideDetails.objects.filter(customer=customer)
+        current_bookings = rides.filter(ride_status='currentbookings')
+        completed_bookings = rides.filter(ride_status='completedbookings')
+        cancelled_bookings = rides.filter(ride_status='cancelledbookings')
+        advanced_bookings = rides.filter(ride_status='advancebookings')
+        assigned_bookings = rides.filter(ride_status='assignbookings')
+        ongoing_booking = rides.filter(ride_status='ongoingbookings')
+        # Add other statuses as needed
+
+        context = {
+            'customer': customer,
+            'current_bookings': current_bookings,
+            'completed_bookings': completed_bookings,
+            'cancelled_bookings': cancelled_bookings,
+            'advanced_bookings': advanced_bookings,
+            'assigned_bookings': assigned_bookings,
+            'ongoing_booking': ongoing_booking,
+            # Include other categories in the context
+        }
+        return render(request, 'adminuser/customer_bookings.html', context)
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CustomerProfileList(ListView):
+    model = Customer
+    template_name = "adminuser/cust_profile_list.html" 
+
+    def get_queryset(self):
+        # First query: Get customers with ride count
+        customers = Customer.objects.annotate(
+            ride_count=Count('ridedetails')
+        )
+
+        # Second query: Calculate total fare for completed bookings
+        completed_rides_totals = RideDetails.objects.filter(
+            ride_status='completedbookings'
+        ).values('customer').annotate(
+            total_fare=Sum('total_fare')
+        ).values('customer', 'total_fare')
+
+        # Convert to a dictionary for fast lookup
+        fare_dict = {item['customer']: item['total_fare'] for item in completed_rides_totals}
+
+        # Annotate customers with the total fare of completed bookings
+        for customer in customers:
+            customer.total_fare = fare_dict.get(customer.pk, 0.0)
+
+        return customers   
+
+class VehicleListView(ListView):
+    model = Vehicle
+    template_name = "adminuser/vehicle_list.html"
+
+    def get_queryset(self):
+        # Use select_related to fetch related driver and owner details in one query
+        return Vehicle.objects.select_related('owner').prefetch_related('driver_set').all()
+    
+class VehicleDailySummaryView(ListView):
+    model = DailyVehicleComm
+    template_name = "adminuser/vehicle_daily_summary.html"
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        # Get all unique dates with completed bookings for this vehicle
+        completed_rides_dates = RideDetails.objects.filter(
+            driver__vehicle=vehicle,
+            ride_status='completedbookings'
+        ).values_list('pickup_date', flat=True).distinct()
+
+        for date in completed_rides_dates:
+            # Filter rides by vehicle, status, and specific date
+            rides = RideDetails.objects.filter(
+                driver__vehicle=vehicle,
+                ride_status='completedbookings',
+                pickup_date=date
+            )
+
+            total_fare = Decimal(0)
+            total_driver_commission = Decimal(0)
+            total_company_commission = Decimal(0)
+
+            # Calculate totals for each date
+            for ride in rides:
+                driver_commission = self.calculate_driver_commission(ride)
+                company_commission = ride.total_fare - driver_commission
+
+                total_fare += ride.total_fare
+                total_driver_commission += driver_commission
+                total_company_commission += company_commission
+
+            # Debugging output
+            print(f"vehicle: {vehicle}, date: {date}")
+            print(f"total_fare: {total_fare}, total_driver_commission: {total_driver_commission}, total_company_commission: {total_company_commission}")
+
+            # Update or create DailyVehicleComm records for each date
+            try:
+                daily_summary, created = DailyVehicleComm.objects.update_or_create(
+                    vehicle=vehicle,
+                    date=date,
+                    defaults={
+                        'total_fare': total_fare,
+                        'total_driver_commission': total_driver_commission,
+                        'total_company_commission': total_company_commission
+                    }
+                )
+            except Exception as e:
+                import traceback
+                print(f"Error updating or creating DailyVehicleComm: {e}")
+                print(traceback.format_exc())
+
+        # Return the queryset of all DailyVehicleComm records for this vehicle, ordered by date
+        return DailyVehicleComm.objects.filter(vehicle=vehicle).order_by('-date')
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage = Decimal(str(ride.driver.vehicle.commission_type.commission_percentage))
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle_id'] = self.kwargs['vehicle_id']
+        context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
+        return context
+    
+
+class BookingDetailsView(ListView):
+    model = RideDetails
+    template_name = "adminuser/booking_details.html"
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        date = self.kwargs['date']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        # Filter rides by vehicle and date
+        rides = RideDetails.objects.filter(
+            driver__vehicle=vehicle,
+            ride_status='completedbookings',
+            pickup_date=date
+        ).order_by('pickup_time')
+
+        # Calculate driver and company commissions for each ride
+        for ride in rides:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = ride.total_fare - ride.driver_commission
+
+        return rides
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage = Decimal(str(ride.driver.vehicle.commission_type.commission_percentage))
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
+        context['date'] = self.kwargs['date']
+        return context  
+
+# accounts ##############
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AccountsListView(ListView):
+    model = Accounts
+    template_name = "adminuser/view_accounts.html"  
+
+# contact ###############################
+class ContactList(ListView):
+    model = ContactUs
+    template_name = "adminuser/view_contact.html"   
+
+
+# enquiry ###############################
+class EnquiryList(ListView):
+    model = Enquiry
+    template_name = "adminuser/view_enquiry.html"  
+
+################# packages            #  
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageCategoryList(ListView):
+    model = PackageCategories
+    template_name = "adminuser/view_package_category.html"
+
+class PackageCategoryHistoryView(TemplateView):
+    template_name = 'adminuser/history_package_category.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        package_category_id = self.kwargs['package_category_id']
+        package = get_object_or_404(PackageCategories, package_category_id=package_category_id)
+        history = PackageCategoriesHistory.objects.filter(package_category_id=package_category_id).order_by('updated_on')
+        context['package'] = package
+        context['history'] = history
+        return context    
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageNameList(ListView):
+    model = PackageName
+    template_name = "adminuser/view_package_name.html"
+
+class PackageNameHistoryView(TemplateView):
+    template_name = 'adminuser/history_package_name.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        package_name_id = self.kwargs['package_name_id']
+        package = get_object_or_404(PackageName, package_name_id=package_name_id)
+        history = PackageNameHistory.objects.filter(package_name_id=package_name_id).order_by('updated_on')
+        context['package'] = package
+        context['history'] = history
+        return context     
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageList(ListView):
+    model = Packages
+    template_name = "adminuser/view_packages.html"
+
+class PackagesHistoryView(TemplateView):
+    template_name = 'adminuser/history_packages.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        package_id = self.kwargs['package_id']
+        package = get_object_or_404(Packages, package_id=package_id)
+        history = PackagesHistory.objects.filter(package_id=package_id).order_by('updated_on')
+        context['package'] = package
+        context['history'] = history
+        return context    
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class PackageOrderList(ListView):
+    model = PackageOrder
+    template_name = "adminuser/view_package_order.html" 
+
+class PackageOrderHistoryView(TemplateView):
+    template_name = 'adminuser/history_package_order.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        order_id = self.kwargs['order_id']
+        package_order = get_object_or_404(PackageOrder, order_id=order_id)
+        history = PackageOrderHistory.objects.filter(order_id=order_id).order_by('updated_on')
+        context['package_order'] = package_order
+        context['history'] = history
+        return context   
+         
+# restore #########################
+
+def update_ride_status(request, ride_id):
+    if request.method == 'POST':
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)
+            pickup_date = request.POST.get('pickup_date')
+
+            if pickup_date:
+                today = date.today().isoformat()
+
+                if pickup_date > today:
+                    ride.ride_status = 'advancebookings'
+                else:
+                    ride.ride_status = 'currentbookings'
+
+                ride.save()
+                return JsonResponse({'success': True})
+            else:
+                return JsonResponse({'success': False, 'message': 'pickup_date not provided'})
+
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Ride not found'})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+# def update_ride_status(request, ride_id):
+#     if request.method == 'POST':
+#         try:
+#             ride = RideDetails.objects.get(ride_id=ride_id)
+#             pickup_date = request.POST.get('pickup_date')
+
+#             if pickup_date:
+#                 today = date.today().isoformat()
+
+#                 if pickup_date < today:
+#                     ride.ride_status = 'pendingbookings'
+#                 elif pickup_date == today:
+#                     ride.ride_status = 'currentbookings'
+#                 else:
+#                     ride.ride_status = 'advancebookings'
+
+#                 ride.save()
+#                 return JsonResponse({'success': True})
+#             else:
+#                 return JsonResponse({'success': False, 'message': 'pickup_date not provided'})
+
+#         except RideDetails.DoesNotExist:
+#             return JsonResponse({'success': False, 'message': 'Ride not found'})
+
+#     return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+# assign later list##################################################################################################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class AssignLaterList(ListView):
+    model = RideDetails
+    template_name = "adminuser/assign_later.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['drivers'] = Driver.objects.all()
+        context['services'] = Ridetype.objects.all()
+        context['bookings'] = RideDetails.objects.filter(ride_status='assignlaterbookings')
+        context['categories'] = Category.objects.all() 
+        context['vehicles'] = Vehicle.objects.all()  
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        return context
+
+    def get_queryset(self):
+        # Get only rides that are assigned
+        return RideDetails.objects.filter(Q(ride_status='assignlaterbookings')).select_related('driver')
+    
+# assign driver###########################################################################################################
+def assign_driver(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        driver_id = data.get('driver_id') 
+        ride_id = data.get('ride_id')
+
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)  
+            driver = Driver.objects.get(company_format=driver_id) 
+            ride.driver = driver  
+            ride.ride_status = 'assignbookings'
+            ride.assigned_by = request.user
+            ride.save()
+
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We’re happy to confirm your booking:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+            Cab Details: {ride.driver.name} - {ride.driver.vehicle.Vehicle_Number} 
+
+            If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+            We look forward to serving you!
+
+            Best regards,
+            Ridexpress
+            support@ridexpress.in
+            ridexpress.in
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_update",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination),
+                    f"{ride.driver.name} - {ride.driver.vehicle.Vehicle_Number}"  
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+            }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
+
+            return JsonResponse({'status': 'success'})
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Ride not found.'}, status=404)
+        except Driver.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Driver not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'failed'}, status=400)
+
+# advanceassign driver###########################################################################################################
+def advanceassign_driver(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        driver_id = data.get('driver_id')  # This will be company_format
+        ride_id = data.get('ride_id')
+
+        try:
+            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
+            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
+            ride.driver = driver  # Assign the driver object
+            ride.ride_status = 'assignlaterbookings'
+            ride.assigned_by=request.user
+            ride.save()
+            message = f"""
+            Hello {ride.customer.customer_name},
+
+            Thank you for choosing Ridexpress!
+
+            We’re happy to confirm your booking:
+
+            Booking ID: {ride.company_format}
+            Pickup Date & Time: {ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}
+            Pickup Location: {ride.source}
+            Drop-off Location: {ride.destination}
+            Cab Details: {ride.driver.name} - {ride.driver.vehicle.Vehicle_Number} 
+
+            If you have any changes or need further assistance, feel free to reach out to us at +91 6366463555 or reply to this message.
+
+            We look forward to serving you!
+
+            Best regards,
+            Ridexpress
+            support@ridexpress.in
+            ridexpress.in
+            """
+
+            payload = {
+                "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
+                "campaignName": "booking_update",
+                "destination": ride.customer.phone_number,
+                "userName": "Ridexpress",
+                "templateParams": [
+                    str(ride.customer.customer_name),
+                    str(ride.company_format),
+                    f"{ride.pickup_date.strftime('%Y-%m-%d')} {ride.pickup_time.strftime('%H:%M')}",
+                    str(ride.source),
+                    str(ride.destination),
+                    f"{ride.driver.name} - {ride.driver.vehicle.Vehicle_Number}"  
+                ],
+                "source": "new-landing-page form",
+                "media": {},
+                "buttons": [],
+                "carouselCards": [],
+                "location": {},
+                "paramsFallbackValue": {
+                    "FirstName": "user"
+                }
+            }
+
+            gateway_url = "https://backend.aisensy.com/campaign/t1/api/v2"
+            response = requests.post(gateway_url, json=payload, headers={'Content-Type': 'application/json'})
+
+            if response.status_code == 200:
+                print("WhatsApp message sent successfully:", response.json())
+            else:
+                print("Failed to send WhatsApp message:", response.text)
+
+            return JsonResponse({'status': 'success'})
+        except RideDetails.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Ride not found.'}, status=404)
+        except Driver.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Driver not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
+
+    return JsonResponse({'status': 'failed'}, status=400)    

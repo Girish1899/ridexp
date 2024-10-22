@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block title %}
-<title>Airport Taxi Services in Bengaluru | Starting at 16 KMS</title>
+<title>Airport Taxi Services in Bengaluru | Starting at 18/KMS</title>
 {% endblock %}
 
 {% block meta_description %}
@@ -99,7 +99,7 @@
             <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
                 <!-- <div class="container"> -->
                     <div class="row align-items-center">
-                        <h2 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp" data-delay=".25s">WELCOME TO RIDE EXPRESS!</h2>
+                        <h2 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp" data-delay=".25s">WELCOME TO RIDEXPRESS!</h2>
                             <div class="container" style="margin-top: -30px;" id="bookingpart">
                                 <div class="container" id="servicecontainer">
                                     <button class="btn tablink" onclick="openPage('Airport','defaultOpen')" id="defaultOpen">Airport</button>
@@ -211,49 +211,59 @@
                                                         <div class="form-group">
                                                             <label>Category:</label>
                                                             <select class="form-control" id="package_category" name="package_category" onchange="getpackage()">
-                                                                <option value="">Select Category</option>
+                                                                <option value="">Select </option>
                                                                 {% for category in categories %}
                                                                     <option value="{{ category.package_category_id }}">{{ category.category_name }}</option>
                                                                 {% endfor %}
                                                             </select>
                                                         </div>
                                                     </div>
-
+                                                    
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label>Package</label>
-                                                            <select class="form-control" id="package" name="package">
-                                                                <option value="">Select Package</option>
+                                                            <select class="form-control" id="package_name" name="package_name" onchange="getCarType()">
+                                                                <option value="">Select </option>
                                                             </select>
                                                         </div>
                                                     </div>
+                                                    
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label>Duration</label>
-                                                            <input type="text" class="form-control" id="duration" name="duration"  readonly>                                       
+                                                            <label>A/c or Non A/c</label>
+                                                            <select class="form-control" id="car_type" name="car_type" onchange="updatePricing()">
+                                                                <option value="">Select </option>
+                                                            </select>
                                                         </div>
                                                     </div>
+                                                    
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label>Price</label>
-                                                            <input type="text" class="form-control" id="price" name="price"  readonly>                                       
+                                                            <input type="text" class="form-control" id="price" name="price" readonly>
                                                         </div>
                                                     </div>
-                                                </div>
-
-                                                <div class="row">
+                                                    
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Extra Km</label>
+                                                            <input type="text" class="form-control" id="extra_km" name="extra_km" readonly>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label>Extra Charge</label>
+                                                            <input type="text" class="form-control" id="extra_charges" name="extra_charges" readonly>
+                                                        </div>
+                                                    </div>
+                                                    
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label>Description:</label>
                                                             <textarea class="form-control" id="description" name="description" rows="2" readonly></textarea>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label>Features:</label>
-                                                            <textarea class="form-control" id="features" name="features" rows="2" readonly></textarea>
-                                                        </div>
-                                                    </div>  
                                                 </div>
 
                                                 <div class="row">
@@ -353,7 +363,7 @@
                                                     <div class="col-lg-2 align-self-end">
                                                         <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
                                                     </div>
-                                                </div>
+                                              
                                         
                                                 <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
                                                 <div class="row drop-fields" style="display:none;">
@@ -370,6 +380,9 @@
                                                             <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time" required>
                                                         </div>
                                                     </div>
+
+                                                    
+
                                                 </div>
                                             </form>
                                         </div>
@@ -377,6 +390,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+
                         <div class="col-md-12 col-lg-9 mx-auto">
                             <div class="hero-content text-center">
                                 <h1 class="hero-title" data-animation="fadeInRight" data-delay=".50s">
@@ -396,6 +411,7 @@
                     </div>
                 </div>
             </div>
+            
     </div>
     <!-- hero slider end -->
 
@@ -1800,34 +1816,9 @@ document.getElementById("defaultOpen").click();
 // });
 
 </script>
-<script>
-    
-</script>
     
 <script>
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const oneWayRadio = document.getElementById('oneWay');
-    //     const roundTripRadio = document.getElementById('roundTrip');
-    //     const dropDateField = document.getElementById('dropDateField');
-    //     const dropTimeField = document.getElementById('dropTimeField');
-
-    //     function toggleFields() {
-    //         if (roundTripRadio.checked) {
-    //             dropDateField.style.display = 'block';
-    //             dropTimeField.style.display = 'block';
-    //         } else {
-    //             dropDateField.style.display = 'none';
-    //             dropTimeField.style.display = 'none';
-    //         }
-    //     }
-
-    //     // Add event listeners to radio buttons
-    //     oneWayRadio.addEventListener('change', toggleFields);
-    //     roundTripRadio.addEventListener('change', toggleFields);
-
-    //     // Initialize fields visibility on page load
-    //     toggleFields();
-    // });
+    
 
     document.addEventListener('DOMContentLoaded', function() {
     const oneWayRadio = document.getElementById('one_way');
@@ -1881,41 +1872,76 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     function getpackage() {
-        // Clear the package dropdown
-        $('#package')
+    $('#package_name')
         .find('option')
         .remove()
         .end()
-        .append('<option value="null" selected disabled>Select Package</option>')
-        .val('null');
-        
-        let package_category = document.getElementById('package_category').value;
-        console.log("Selected category:", package_category);
-        
-        // Loop through the packages and add options to the dropdown
-        '{% for obj in packages %}'
-            if ('{{ obj.package_category.package_category_id }}' == package_category) {
-                console.log("Match found for package:", '{{obj.name}}');
-                
-                $('#package').append('<option value="{{ obj.package_id }}" data-price="{{ obj.price }}" data-duration="{{ obj.duration }}" data-description="{{ obj.description|escapejs }}" data-features="{{ obj.features }}">{{ obj.name }}</option>');
+        .append('<option value="" selected disabled>Select Package</option>');
+
+    let package_category = document.getElementById('package_category').value;
+    console.log("Selected category:", package_category);
+
+    let uniquePackages = new Set();
+
+    '{% for obj in packages %}'
+        if ('{{ obj.package_category.package_category_id }}' == package_category) {
+            if (!uniquePackages.has('{{ obj.package_name.package_name }}')) {
+                console.log("Unique package found:", '{{ obj.package_name.package_name }}');
+                $('#package_name').append(
+                    '<option value="{{ obj.package_name_id }}" data-package-id="{{ obj.package_id }}">' +
+                    '{{ obj.package_name.package_name }}' +
+                    '</option>'
+                );
+                uniquePackages.add('{{ obj.package_name.package_name }}');
             }
-        '{% endfor %}'
-    }
+        }
+    '{% endfor %}'
 
-    document.getElementById('package').addEventListener('change', function() {
-    let selectedOption = this.options[this.selectedIndex];
+    $('#car_type').find('option').remove().end().append('<option value="" selected disabled>Select Car Type</option>');
+    document.getElementById('price').value = '';
+    document.getElementById('extra_km').value = '';
+    document.getElementById('extra_charges').value = '';
+    document.getElementById('description').value = '';
+}
 
-    // Get the custom data attributes from the selected option
+function getCarType() {
+    $('#car_type')
+        .find('option')
+        .remove()
+        .end()
+        .append('<option value="" selected disabled>Select Car Type</option>');
+
+    let selectedPackageName = document.getElementById('package_name').value;
+    console.log("Selected package:", selectedPackageName);
+
+    '{% for obj in packages %}'
+        if ('{{ obj.package_name_id }}' == selectedPackageName) {
+            console.log("Match found for car type:", '{{ obj.car_type }}');
+            $('#car_type').append(
+                '<option value="{{ obj.car_type }}" data-price="{{ obj.price }}" data-extra-km="{{ obj.extra_km }}" data-extra-charges="{{ obj.extra_charges }}" data-description="{{ obj.description|escapejs }}">{{ obj.car_type }}</option>'
+            );
+        }
+    '{% endfor %}'
+}
+
+function updatePricing() {
+    let selectedCarType = document.getElementById('car_type').value;
+    console.log("Selected car type:", selectedCarType);
+
+    let selectedOption = document.querySelector('#car_type option[value="' + selectedCarType + '"]');
+
     let price = selectedOption.getAttribute('data-price');
-    let duration = selectedOption.getAttribute('data-duration');
+    let extra_km = selectedOption.getAttribute('data-extra-km');
+    let extra_charges = selectedOption.getAttribute('data-extra-charges');
     let description = selectedOption.getAttribute('data-description');
-    let features = selectedOption.getAttribute('data-features');
 
     document.querySelector('[name="price"]').value = price;
-    document.querySelector('[name="duration"]').value = duration;
-    document.getElementById('description').value = description;  // Use ID selector for the textarea
-    document.querySelector('[name="features"]').value = features;
-});
-</script>
+    document.querySelector('[name="extra_km"]').value = extra_km;
+    document.querySelector('[name="extra_charges"]').value = extra_charges;
+    document.getElementById('description').value = description;
+}
+
+ </script>
+ 
 
     {% endblock body_content %}

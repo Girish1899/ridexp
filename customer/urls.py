@@ -10,9 +10,11 @@ urlpatterns = [
     path('', customer_profile, name='customer_profile'),
     path('previous', previous.as_view(), name='previous'),
     path('current', current.as_view(), name='current'),
-    path('cusaddbooking', Addbookings.as_view(), name='cusaddbooking'),
-    path('customerGetRidePricingDetails', customerGetRidePricingDetails.as_view(), name='customerGetRidePricingDetails'),
+    path('customer_addbooking', Addbookings.as_view(), name='customer_addbooking'),
+    path('customerPricingDetails', customerGetRidePricingDetails.as_view(), name='customerPricingDetails'),
     path('cuscancel_ride', cancel_ride, name='cuscancel_ride'),
     
+    path('send_otp_customer/', SendOtp.as_view(), name='send_otp_customer'),
+    path('verify_otp_customer/', VerifyOtp.as_view(), name='verify_otp_customer'),
 
 ]

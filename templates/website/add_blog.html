@@ -1,0 +1,253 @@
+{% extends "./index.html" %}
+{% load static %}
+{% block title %}<title>Blog</title>{% endblock %}
+{% block meta_description %}
+<meta name="description"
+    content="Need to book a cab or have a question? Contact RidexpressTaxi Services for 24/7 taxi booking and customer support. Whether you need a local, airport, or outstation ride, we're here to help. Reach out to us today!" />
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords"
+    content="contact taxi service, book a taxi, customer support taxi, 24/7 taxi assistance, taxi booking inquiries, Ridexpress contact, taxi service inquiries" />
+<meta name="keyphrase"
+    content="Outstation cabs in Bangalore, cheap outstation cabs, cab rental services in Bangalore, taxi services, car hire in Bangalore">
+<link rel="canonical" href="https://ridexpress.in/contact" />
+{% endblock %}
+{% block body_content %}
+
+<main class="main">
+
+    <div class="contact-area py-120">
+        <div class="container">
+
+            <div class="contact-wrapper">
+                <div class="row">
+
+                    <div class="col-lg-12 align-self-center">
+                        <div class="contact-form">
+                            <!-- <div class="contact-form-header">
+                                <h1>Get In Touch</h1>
+                                <p>Our dedicated customer support team is available 24/7 to assist you with bookings, inquiries, or any concerns you may have. Reach out to us today!</p>
+                            </div> -->
+                            <form method="post" action="/path/to/contact/submit" id="contact-form">
+                                {% csrf_token %}
+                                <h1>Blogs</h1><br>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="title">Blog Title</label>
+                                            <input type="text" class="form-control" id="title" name="title"
+                                                placeholder="Blog Title" required aria-label="Blog Title">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="description">Description</label>
+                                            <textarea class="form-control" id="description" name="description" rows="5" placeholder="Description" required aria-label="Description"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="image">Image URL</label>
+                                            <input type="text" class="form-control" id="image" name="image"
+                                                placeholder="Image URL" required aria-label="Image URL">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="facebook">Facebook Link</label>
+                                            <input type="text" class="form-control" id="facebook" name="facebook"
+                                                placeholder="Facebook Link" required aria-label="Facebook Link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="instagram">Instagram Link</label>
+                                            <input type="text" class="form-control" id="instagram" name="instagram"
+                                                placeholder="Instagram Link" required aria-label="Instagram Link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="whatsapp">WhatsApp Link</label>
+                                            <input type="text" class="form-control" id="whatsapp" name="whatsapp"
+                                                placeholder="WhatsApp Link" required aria-label="WhatsApp Link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="backlink">Backlink</label>
+                                            <input type="text" class="form-control" id="backlink" name="backlink"
+                                                placeholder="Backlink" required aria-label="Backlink">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="related_bloglink">Related Blog Link</label>
+                                            <input type="text" class="form-control" id="related_bloglink"
+                                                name="related_bloglink" placeholder="Related Blog Link" required
+                                                aria-label="Related Blog Link">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="tags">Tags</label>
+                                            <input type="text" class="form-control" id="tags" name="tags"
+                                                placeholder="Tags" required aria-label="Tags">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="author">Author</label>
+                                            <select class="form-control" id="author" name="author" required aria-label="Author">
+                                                <option value="" disabled selected>Select Author</option>
+                                                <option value="Shankar">Shankar</option>
+                                                <option value="Vishnu">Vishnu</option>
+                                                <option value="Deepak">Deepak</option>
+                                                <option value="Nagendra">Nagendra</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Meta Title</label>
+                                            <input type="text" class="form-control" id="meta_title" name="meta_title"
+                                                placeholder="Meta Title" required aria-label="Meta Title">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Meta Description</label>
+                                            <input type="text" class="form-control" id="meta_description" name="meta_description"
+                                                placeholder="Meta Description" required aria-label="Meta Description">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">Meta Keywords</label>
+                                            <input type="text" class="form-control" id="meta_keywords" name="meta_keywords"
+                                                placeholder="Meta Keywords" required aria-label="Meta Keywords">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label for="">H1 </label>
+                                            <input type="text" class="form-control" id="h1tag" name="h1tag"
+                                                placeholder="Enter Title Again" required aria-label="H1">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var title = $('#title').val();
+            var description = $('#description').val();
+            var image = $('#image').val();
+            var facebook = $('#facebook').val();
+            var instagram = $('#instagram').val();
+            var whatsapp = $('#whatsapp').val();
+            var backlink = $('#backlink').val();
+            var related_bloglink = $('#related_bloglink').val();
+            var tags = $('#tags').val();
+            var author = $('#author').val();
+            var meta_title = $('#meta_title').val();
+            var meta_description = $('#meta_description').val();
+            var meta_keywords = $('#meta_keywords').val();
+            var h1tag = $('#h1tag').val();
+
+
+
+
+            $.ajax({
+                url: '{% url "add_blog_website" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: {
+                    title: title,
+                    description: description,
+                    image: image,
+                    facebook: facebook,
+                    instagram: instagram,
+                    whatsapp: whatsapp,
+                    backlink: backlink,
+                    related_bloglink: related_bloglink,
+                    tags: tags,
+                    author: author,
+                    meta_title: meta_title,
+                    meta_description: meta_description,
+                    meta_keywords: meta_keywords,
+                    h1tag: h1tag,
+                },
+                success: function (result) {
+                    alert("Blog added successfully");
+                    location.href = "{% url 'add_blog_website' %}";
+                },
+
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock body_content %}

@@ -65,11 +65,12 @@ def assigned_rides_view(request):
 @login_required(login_url='login')
 @csrf_exempt
 def start_ride(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        ride_id = data.get('ride_id')
+    if request.method == 'POST':  
 
         try:
+            data = json.loads(request.body)
+            ride_id = data.get('ride_id')
+
             ride = RideDetails.objects.get(ride_id=ride_id)
             driver = ride.driver
             driver.driver_status = 'occupied'
@@ -86,10 +87,10 @@ def start_ride(request):
 @login_required(login_url='login')
 def stop_ride(request):
     if request.method == 'POST':
-        data = json.loads(request.body)
-        ride_id = data.get('ride_id')
-
+        
         try:
+            data = json.loads(request.body)
+            ride_id = data.get('ride_id')
             ride = RideDetails.objects.get(ride_id=ride_id)
             driver = ride.driver
             driver.number_of_rides += 1
@@ -114,18 +115,23 @@ def stop_ride(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
         
 
+# @login_required
+# def driver_profile_view(request):
+#     # Get the driver profile for the logged-in user
+#     profile = get_object_or_404(Profile, user=request.user, type='driver')
+    
+#     # Get the driver details associated with the logged-in user
+#     drivers = get_object_or_404(Driver, email=request.user.email)  # Assuming email is used to link User and Driver
+
+#     context = {
+#         'profile': profile,
+#         'drivers': drivers,  # Pass the single driver instance to the context
+#     }
+
+#     return render(request, 'driver/driverprofile.html', context)
+
 @login_required
 def driver_profile_view(request):
-    # Get the driver profile for the logged-in user
     profile = get_object_or_404(Profile, user=request.user, type='driver')
-    
-    # Get the driver details associated with the logged-in user
-    drivers = get_object_or_404(Driver, email=request.user.email)  # Assuming email is used to link User and Driver
-
-    context = {
-        'profile': profile,
-        'drivers': drivers,  # Pass the single driver instance to the context
-    }
-
-    return render(request, 'driver/driverprofile.html', context)
+    return render(request, 'driver/app-profile.html', {'profile': profile})
 

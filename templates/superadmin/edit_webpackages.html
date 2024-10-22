@@ -1,0 +1,283 @@
+{% extends 'superadmin/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'sup-list-author-packages' %}" style="color: white !important;">View Packages</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3">Edit Web Package</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="webpackage_id" value="{{ package.0.webpackage_id }}">
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Title</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="title" value="{{ package.0.title }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Package Category</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-lg" id="package_category">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for category in pclist %}
+                                <option value="{{ category.package_category_id }}" {% if package.0.package_category.package_category_id == category.package_category_id %} selected {% endif %}>{{ category.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Description</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="description">{{ package.0.description }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Top Attraction</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="top_attraction">{{ package.0.top_attraction }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Why Visit</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="why_visit">{{ package.0.why_visit }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Highlights</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="package_highlights">{{ package.0.package_highlights }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Image</label>
+                        <div class="col-sm-12">
+                            <input type="file" class="form-control form-control-lg" id="image">
+                            {% if package.image %}
+                            <img id="preview" src="{{ package.0.image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Image Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="image_link" value="{{ package.0.image_link }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Facebook Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="facebook_link" value="{{ package.0.facebook_link }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Instagram Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="instagram_link" value="{{ package.0.instagram_link }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">WhatsApp Link</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="whatsapp_link" value="{{ package.0.whatsapp_link }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tags</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="tags" value="{{ package.0.tags }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Meta Title</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="meta_title" value="{{ package.0.meta_title }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Meta Description</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="meta_description">{{ package.0.meta_description }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Meta Keywords</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="meta_keywords" value="{{ package.0.meta_keywords }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">H1 Tag</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="h1tag" value="{{ package.0.h1tag }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">    
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" {% if package.0.status == "active" %} selected {% endif %}>Active</option>
+                                <option value="inactive" {% if package.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-lg btn-primary" style="background-color: #F3797E; border-color: #F3797E;" id="update_package">Update Package</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+$(document).ready(function() {
+    $('#image').change(function() {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+            $('#preview').attr('src', e.target.result).show();
+        };
+        reader.readAsDataURL(this.files[0]);
+    });
+
+    $('#update_package').click(function(e) {
+        e.preventDefault();
+
+        var webpackage_id = $('#webpackage_id').val();
+        var title = $('#title').val();
+        var package_category = $('#package_category').val();
+        var description = $('#description').val();
+        var top_attraction = $('#top_attraction').val();
+        var why_visit = $('#why_visit').val();
+        var package_highlights = $('#package_highlights').val();
+        var image_link = $('#image_link').val();
+        var facebook_link = $('#facebook_link').val();
+        var instagram_link = $('#instagram_link').val();
+        var whatsapp_link = $('#whatsapp_link').val();
+        var meta_title = $('#meta_title').val();
+        var meta_description = $('#meta_description').val();
+        var meta_keywords = $('#meta_keywords').val();
+        var tags = $('#tags').val();
+        var h1tag = $('#h1tag').val();
+        var status = $('#status').val();
+
+        // Collect form data
+            var formData = new FormData();
+            formData.append('webpackage_id', webpackage_id);
+            formData.append('title', title);
+            formData.append('package_category',package_category );
+            formData.append('description', description);
+            formData.append('top_attraction',top_attraction );
+            formData.append('why_visit', why_visit);
+            formData.append('package_highlights', package_highlights);
+            formData.append('image_link', image_link);
+            formData.append('facebook_link',facebook_link );
+            formData.append('instagram_link', instagram_link);
+            formData.append('whatsapp_link', whatsapp_link);
+            formData.append('meta_title', meta_title);
+            formData.append('meta_description', meta_description);
+            formData.append('meta_keywords', meta_keywords);
+            formData.append('tags', tags);
+            formData.append('h1tag', h1tag);
+            formData.append('status', status);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+
+            console.log(webpackage_id);
+            console.log(title);
+            console.log(package_category);
+            console.log(description);
+            console.log(top_attraction);
+            console.log(why_visit);
+            console.log(package_highlights);
+            console.log(image_link);
+            console.log(facebook_link);
+            console.log(instagram_link);
+            console.log(whatsapp_link);
+            console.log(meta_title);
+            console.log(meta_description);
+            console.log(meta_keywords);
+            console.log(tags);
+            console.log(h1tag);
+
+            var image = $('#image')[0].files[0];
+            if (image) {
+                formData.append('image', image);
+            }
+
+            console.log(image);
+            // Check if required fields are empty
+            if (!$('#title').val().trim() || !$('#package_category').val() || !$('#description').val()) {
+                alert("Title, Category, and Description are required fields.");
+                return;
+            }
+
+        $.ajax({
+            url: '{% url "sup-author-Packages-update" %}',  // Replace with your update URL
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+                },
+            success: function(response) {
+                if (response.success) {
+                    alert('Package updated successfully!');
+                    window.location.href = "{% url 'sup-list-author-packages' %}"; // Redirect to package list
+                } else {
+                    alert('Error: ' + response.message);
+                }
+            },
+            error: function(xhr, status, error) {
+                alert('Error: ' + error);
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

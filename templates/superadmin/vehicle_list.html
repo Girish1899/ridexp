@@ -41,11 +41,11 @@
                                     <tr style="color: #030000;">
                                         <td>{{ forloop.counter }}</td>
                                         <td>
-                                            <div><span class="badge badge-pill badge-danger">{{ vehicle.company_format }}</span></div>
+                                            <div><span class="badge bg-gradient-danger">{{ vehicle.company_format }}</span></div>
                                             <div>{{ vehicle.Vehicle_Number }}</div>
                                         </td>
                                         <td>
-                                            <div><span class="badge badge-pill badge-warning">{{ vehicle.owner.name }}</span></div>
+                                            <div><span class="badge bg-gradient-warning">{{ vehicle.owner.name }}</span></div>
                                             <div>{{ vehicle.owner.phone_number }}</div>
                                         </td>
                                         <td>
@@ -54,7 +54,7 @@
                                             <div>{{ driver.phone_number }}</div>
                                             {% endfor %}
                                         </td>
-                                        <td><span class="badge badge-pill badge-success">{{ vehicle.commission_type.commission_name }}</span></td>
+                                        <td><span class="badge bg-gradient-success">{{ vehicle.commission_type.commission_name }}</span></td>
                                         <td>
                                             <a href="{% url 'vehicle_daily_summary' vehicle.vehicle_id %}" class="btn btn-primary">View Summary</a>
                                         </td>

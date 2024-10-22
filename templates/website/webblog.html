@@ -1,0 +1,165 @@
+{% extends "./index.html" %}
+{% load static %}
+{% block title %}
+<title> Blog - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services </title>
+{% endblock %}
+{% block meta_description %}
+<meta name="description" content=" Get the best taxi fares with RidexpressTaxi Services. Enjoy transparent pricing with no hidden costs, whether you need a local, outstation, or airport ride. Check out our competitive rates and book your cab today for affordable and reliable transportation services." />
+{% endblock %}
+{% block meta_keywords %}
+<meta name="keywords" content="taxi fares, affordable taxi pricing, transparent cab rates, competitive taxi fares, local taxi rates, outstation taxi prices, airport taxi fares, clear pricing taxi service, [City] taxi prices" />
+<link rel="canonical" href="https://ridexpress.in/blog" />
+{% endblock %}
+{% block body_content %}
+<main class="main">
+    <!-- blog area -->
+    <div class="blog-area py-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <div class="site-heading text-center">
+                        <span class="site-title-tagline"><i class="flaticon-drive"></i> Our Blog</span>
+                        <h1 class="site-title">Latest News & Blog</h1>
+                        <div class="heading-divider"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" id="blog-container">
+                <!-- Initial blogs will be loaded here -->
+                {% for blog in blogs_page %}
+                <div class="col-md-6 col-lg-4 blog-item-container">
+                    <div class="blog-item wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:'.25' }}s">
+                        <div class="blog-item-img">
+                            <img src="{% if blog.image %}{{ blog.image.url }}{% else %}{{ blog.image_link }}{% endif %}" alt="{{ blog.title|slugify }}">
+                        </div>
+                        <div class="blog-item-info">
+                            <h4 class="blog-title">
+                                <a href="/blog/{{ blog.title|slugify }}">{{ blog.title }}</a>
+                            </h4>
+                            <a class="theme-btn" href="/blog/{{ blog.title|slugify }}">Read More<i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <!-- Loading spinner -->
+            <div id="loading-spinner" class="text-center" style="display:none;">
+                <img src="{% static 'loading.gif' %}" alt="Loading..." />
+            </div>
+        </div>
+    </div>
+    <!-- blog area end -->
+</main>
+
+<style>
+    /* Same styles as before */
+</style>
+
+<!-- Infinite scroll JavaScript -->
+<script>
+    let page = 2;  // Start loading from the second page
+let hasNextPage = true;
+let loadedBlogs = new Set();  // Track blog backlinks that have been loaded
+
+window.addEventListener('scroll', () => {
+    if (hasNextPage && window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
+        loadMoreBlogs();
+    }
+});
+
+function loadMoreBlogs() {
+    const spinner = document.getElementById('loading-spinner');
+    spinner.style.display = 'block';
+
+    fetch(`/blog?page=${page}`, {
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'  // Indicate this is an AJAX request
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        spinner.style.display = 'none';
+
+        if (data.blogs.length) {
+            const blogContainer = document.getElementById('blog-container');
+            
+            data.blogs.forEach(blog => {
+                // Only insert blog if it hasn't been loaded before
+                if (!loadedBlogs.has(blog.backlink)) {
+                    loadedBlogs.add(blog.backlink);  // Mark the blog as loaded
+                    
+                    const blogItem = `
+                        <div class="col-md-6 col-lg-4 blog-item-container">
+                            <div class="blog-item wow fadeInUp">
+                                <div class="blog-item-img">
+                                    <img src="${blog.image_url}" alt="${blog.title}">
+                                </div>
+                                <div class="blog-item-info">
+                                    <h4 class="blog-title">
+                                        <a href="/blog/${blog.backlink}">${blog.title}</a>
+                                    </h4>
+                                    <a class="theme-btn" href="/blog/${blog.title}">Read More<i class="fas fa-arrow-right"></i></a>
+                                </div>
+                            </div>
+                        </div>`;
+                    
+                    blogContainer.insertAdjacentHTML('beforeend', blogItem);
+                }
+            });
+
+            hasNextPage = data.has_next;  // Update if there are more pages to load
+            page++;  // Move to the next page
+        } else {
+            hasNextPage = false;
+        }
+    })
+    .catch(error => {
+        console.error('Error loading more blogs:', error);
+    });
+}
+
+</script>
+
+<style>
+    /* Ensure the images are of a consistent size */
+    .blog-item-img img {
+        width: 100%;
+        height: 200px; /* Set a fixed height for consistency */
+        object-fit: cover; /* Ensures images are cropped to fit nicely */
+    }
+
+    /* Limit blog title to 2 lines */
+    .blog-title a {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        font-size: 1.2em; /* You can adjust the font size */
+        line-height: 1.3em; /* Ensure good line spacing */
+    }
+
+    /* Style adjustments to ensure the card layout is consistent */
+    .blog-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .blog-item-info {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Consistent button placement */
+    .theme-btn {
+        margin-top: auto;
+    }
+    .row > [class^='col'] {
+        margin-bottom: 30px; /* Adjust the bottom margin for spacing between rows */
+    }
+</style>
+
+{% endblock %}

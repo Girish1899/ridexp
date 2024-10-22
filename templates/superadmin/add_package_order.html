@@ -47,7 +47,7 @@
                             <select id="package" name="package" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Package</option>
                                 {% for package in packages %}
-                                <option value="{{ package.package_id }}">{{ package.name }}</option>
+                                <option value="{{ package.package_id }}">{{ package.package_name.package_name }}</option>
                                 {% endfor %}
                             </select>
                         </div>

@@ -29,13 +29,7 @@
 
                 <div class="card-body">
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Name</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="name" name="name">
-                                            </div>
-                                        </div>
-
+                                        
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category Name</label>
                                             <div class="col-sm-12">
@@ -44,6 +38,29 @@
                                                     {% for obj in pclist %}
                                                     <option value="{{ obj.package_category_id }}">{{ obj.category_name }}</option>
                                                     {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Name</label>
+                                            <div class="col-sm-12">
+                                                <select id="package_name" name="package_name" class="form-control form-control-lg">
+                                                    <option value="" selected disabled>Select Package Name</option>
+                                                    {% for obj in pnlist %}
+                                                    <option value="{{ obj.package_name_id }}">{{ obj.package_name }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category Name</label>
+                                            <div class="col-sm-12">
+                                                <select id="car_type" name="car_type" class="form-control form-control-lg">
+                                                    <option value="" selected disabled>Select Car Type</option>
+                                                    <option value="AC" selected>AC</option>
+                                                    <option value="NON AC">NON AC</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -63,18 +80,26 @@
                                         </div>
                                         
                                         <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Duration</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="duration" name="duration">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Features</label>
                                             <div class="col-sm-12">                                            
                                                 <textarea class="form-control" rows="2" id="features" name="features"></textarea>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Extra Km</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control form-control-lg" id="extra_km" name="extra_km">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Extra Charges</label>
+                                            <div class="col-sm-12">
+                                                <input type="text" class="form-control form-control-lg" id="extra_charges" name="extra_charges">
+                                            </div>
+                                        </div>
+                                        
 
                                         <div class="form-group row">
                                             <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
@@ -104,20 +129,22 @@
 <script>
     $(document).ready(function () {
         $("#save_action").click(function () {
-            var name = $('#name').val();
+            var package_name = $('#package_name').val();
             var package_category = $('#package_category').val();
             var description = $('#description').val();
             var price = $('#price').val();
-            var duration = $('#duration').val();
             var features = $('#features').val();
             var status = $('#status').val();
+            var extra_km = $('#extra_km').val();
+            var extra_charges = $('#extra_charges').val();
+            var car_type = $('#car_type').val();
             
-            if (!name || !package_category || !price || !duration  ) {
+            if (!package_name || !package_category || !price || !car_type ) {
                 alert("All fields are required.");
                 return;
             }
 
-            console.log('category name',name)
+            console.log('package name',package_name)
             console.log('category',package_category)
             console.log('description',description)
             console.log('status',status)
@@ -128,7 +155,7 @@
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
                 },
-                data: { name: name, package_category: package_category, description: description, price: price, duration: duration, features: features, status: status },
+                data: { package_name: package_name, package_category: package_category, description: description, price: price, features: features, status: status, extra_km:extra_km, extra_charges: extra_charges, car_type: car_type },
                 success: function (result) {
                     alert("Packages details added");
                     location.href = "{% url 'packages_list' %}";

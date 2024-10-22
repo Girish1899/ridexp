@@ -13,7 +13,7 @@
 {% endblock %}
 {% block body_content %}
 
-<!-- Book Ride -->
+<!-- book ride -->
 <div class="book-ride py-120">
     <div class="container">
         <div class="row">
@@ -22,43 +22,53 @@
                     <div class="book-ride-head">
                         <h4 class="booking-title">Make Your Booking Today</h4>
                     </div>
-                    <form action="#" method="get">
+                    <form action="#">
                         <div class="row">
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label for="source">Pick Up Location</label>
-                                    <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" disabled aria-label="Pick Up Location">
-                                    <i class="far fa-location-dot"></i>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Location</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="source" name="source" disabled>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label for="destination">Drop Off Location</label>
-                                    <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination" disabled aria-label="Drop Off Location">
-                                    <i class="far fa-location-dot"></i>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Drop Off Location</label>
+                                        <input type="text" class="form-control autocomeple_g" placeholder="Type Location" id="destination" name="destination"disabled>
+                                        <i class="far fa-location-dot"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label for="pickup_date">Pick Up Date:</label>
-                                    <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" disabled aria-label="Pick Up Date">
-                                    <div id="dateError" class="invalid-feedback"></div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Date:</label>
+                                        <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date" disabled>
+                                        <div id="dateError" class="invalid-feedback"></div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label for="pickup_time">Pick Up Time:</label>
-                                    <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled aria-label="Pick Up Time">
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Pick Up Time:</label>
+                                        <input type="time" class="form-control" id="pickup_time" name="pickup_time" disabled>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <label for="ridetype">Ride Type:</label>
-                                    <input type="text" class="form-control" id="ridetype" name="ridetype" disabled aria-label="Ride Type">
+
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label>Ride Type:</label>
+                                        <input type="text" class="form-control" id="ridetype" name="ridetype" disabled>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <button class="theme-btn" type="submit" id="save_action" disabled>Check Fares <i class="fas fa-arrow-right"></i></button>
+                
+                                <div class="col-lg-3">
+                                    <button class="theme-btn" type="button" id="check_fares">Check Fares<i class="fas fa-arrow-right"></i></button>
+                                </div>
+                                
+                                <div class="col-lg-3">
+                                    <button class="theme-btn" type="button" id="modify_action">Modify</button>
+                                </div>
+                                
                             </div>
                         </div>
                     </form>
@@ -67,12 +77,12 @@
         </div>
     </div>
 </div>
-<!-- Book Ride End -->
+<!-- book ride end -->
 
 <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <h1 class="mb-5"><span class="text-uppercase" style="color: rgb(10, 10, 63);">Select Cabs</span></h1>
+            <h1 class="mb-5"><span class="text text-uppercase" style="color: rgb(10, 10, 63);">Select Cabs</span></h1>
         </div>
 
         <!-- Cab Items -->
@@ -80,7 +90,7 @@
             {% for category, prices in pricing_dict.items %}
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="room-item shadow rounded overflow-hidden">
-                    <div class="position-relative">
+                    <div class="position-relative ">
                         {% if prices.ac %}
                             <img class="img-fluid" src="{{ prices.ac.category.image.url }}" alt="{{ category|capfirst }}">
                         {% elif prices.non_ac %}
@@ -88,15 +98,19 @@
                         {% else %}
                             <img class="img-fluid" src="{% static 'path/to/default/image.jpg' %}" alt="No Image Available">
                         {% endif %}
+
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
-                            <small class="bg-secondary text-white rounded py-1 px-3" style="flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
+                            <!-- Non AC Price Display -->
+                            <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
-                            <small class="bg-primary text-white rounded py-1 px-3" style="flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
+                            <!-- AC Price Display -->
+                            <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
                                 AC ₹ <span id="price_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                         </div>
                     </div>
+
                     <div class="p-4 mt-2">
                         <div class="d-flex justify-content-between mb-3">
                             <h5 class="mb-0">{{ category|capfirst }}</h5>
@@ -104,7 +118,10 @@
                                 <p style="font-size: 15px;"><strong>Distance (km):</strong> <span id="distance_{{ category|slugify }}">0</span></p>
                             </div>
                         </div>
+                        
                         <div class="d-flex mb-3">
+                           
+                            
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
@@ -118,7 +135,11 @@
                                     N/A
                                 {% endif %}
                             </small>
+                            <small class="border-end me-3 pe-3">
+                                <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
+                            </small>
                         </div>
+
                         <div class="d-flex justify-content-between">
                             <!-- Non A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-right: 5px;">
@@ -127,10 +148,14 @@
                                 <input type="hidden" name="pickup_date" value="{{ request.GET.pickup_date }}">
                                 <input type="hidden" name="pickup_time" value="{{ request.GET.pickup_time }}">
                                 <input type="hidden" name="category" value="{{ prices.non_ac.category.category_name }}">
-                                <input type="hidden" name="fare" value="{{ prices.non_ac.fare }}">
-                                <button type="submit" class="btn btn-secondary w-100" id="btn_non_ac_{{ category|slugify }}" {% if not prices.non_ac %}disabled{% endif %}>Non A/C Book Now</button>
+                                <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
+                                <input type="hidden" name="price" id="hidden_price_non_ac_{{ category|slugify }}" value="">
+                                <input type="hidden" name="car_type" value="non_ac"> 
+                                <button type="submit" class="btn btn-sm btn-secondary w-100 rounded py-2 px-4 button-equal" data-category="{{ category|slugify }}" data-type="non_ac" disabled>
+                                    Non A/c Not Available
+                                </button>
                             </form>
-
+                        
                             <!-- A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-left: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
@@ -138,10 +163,15 @@
                                 <input type="hidden" name="pickup_date" value="{{ request.GET.pickup_date }}">
                                 <input type="hidden" name="pickup_time" value="{{ request.GET.pickup_time }}">
                                 <input type="hidden" name="category" value="{{ prices.ac.category.category_name }}">
-                                <input type="hidden" name="fare" value="{{ prices.ac.fare }}">
-                                <button type="submit" class="btn btn-primary w-100" id="btn_ac_{{ category|slugify }}" {% if not prices.ac %}disabled{% endif %}>A/C Book Now</button>
+                                <input type="hidden" name="ridetype" value="{{ request.GET.ridetype }}">
+                                <input type="hidden" name="price" id="hidden_price_ac_{{ category|slugify }}" value="">
+                                <input type="hidden" name="car_type" value="ac"> 
+                                <button type="submit" class="btn btn-sm w-100 rounded py-2 px-4 button-equal" style="background-color: #007bff; border: none;color: white;" data-category="{{ category|slugify }}" data-type="ac" disabled>
+                                    A/c Not Available
+                                </button>
                             </form>
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -149,10 +179,7 @@
         </div>
     </div>
 </div>
-
-{% endblock %}
-              
-                
+                                    
 <script>
     // var ridetype = "local"; 
     $(document).ready(function() {
@@ -181,9 +208,24 @@
     }
     if (params.ridetype) {
         document.getElementById('ridetype').value = params.ridetype;
-        $("#save_action").click();
+        $("#check_fares").click();
     }
+
+    $('#source, #destination, #pickup_date, #pickup_time, #ridetype' ,).on('change', function() {
+        $("#check_fares").click();
+    });
 });
+
+// clears the existing price 
+function clearAllCategoryData() {
+    var categories = document.querySelectorAll("[id^='price_ac_'], [id^='price_non_ac_']");
+    categories.forEach(function(element) {
+        var categorySlug = element.id.split("_").slice(2).join("_");
+        updatePriceAndButton(categorySlug, "ac", null);
+        updatePriceAndButton(categorySlug, "non_ac", null);
+    });
+}
+
 
 // Function to update category details
 function updateCategoryDetails(category, costData) {
@@ -205,9 +247,7 @@ function updateCategoryDetails(category, costData) {
 // Function to update price details and book button for AC/Non-AC
 function updatePriceAndButton(categorySlug, carType, costDetails) {
     var priceElement = document.getElementById("price_" + carType + "_" + categorySlug);
-    // var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
     var tollElement = document.getElementById("toll_" + carType + "_" + categorySlug);
-    // var betaElement = document.getElementById("beta_" + carType + "_" + categorySlug);
     var bookButton = document.querySelector(`button[data-category="${categorySlug}"][data-type="${carType}"]`);
     var hiddenPriceInput = document.getElementById(`hidden_price_${carType}_${categorySlug}`);
 
@@ -222,7 +262,6 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
         // Update price details
         priceElement.textContent = costDetails.cost;
         tollElement.textContent = costDetails.toll || "-";
-        // betaElement.textContent = costDetails.beta || "-";
 
         hiddenPriceInput.value = costDetails.cost;
 
@@ -231,7 +270,6 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     } else {
         priceElement.textContent = "Not Available";
         tollElement.textContent = "-";
-        // betaElement.textContent = "-";
 
         bookButton.textContent = `${carType === 'ac' ? 'A/c' : 'Non A/c'} Not Available`;
         bookButton.disabled = true;
@@ -255,8 +293,22 @@ function getTimeSlot(pickupTime) {
     }
 }
 
-// AJAX request to get pricing details
-$("#save_action").click(function(event) {
+function syncHiddenFields(categorySlug) {
+    const source = $('#source').val();
+    const destination = $('#destination').val();
+    const pickup_date = $('#pickup_date').val();
+    const pickup_time = $('#pickup_time').val();
+    const ridetype = $('#ridetype').val();
+
+    // Update hidden fields for the selected category (ac/non_ac)
+    $(`input[name="source"]`).val(source);
+    $(`input[name="destination"]`).val(destination);
+    $(`input[name="pickup_date"]`).val(pickup_date);
+    $(`input[name="pickup_time"]`).val(pickup_time);
+    $(`input[name="ridetype"]`).val(ridetype);
+}
+
+$("#check_fares").click(function(event) {
     event.preventDefault();
     var ridetype = $('#ridetype').val();
     var source = $('#source').val();
@@ -264,7 +316,6 @@ $("#save_action").click(function(event) {
     var pickup_date = $('#pickup_date').val();
     var pickup_time = $('#pickup_time').val();
 
-    
     if (!source || !destination || !pickup_date) {
         alert("All fields are required.");
     } else {
@@ -287,13 +338,15 @@ $("#save_action").click(function(event) {
                 destination: destination,
                 pickup_date: pickup_date,
                 pickup_time: pickup_time,
-                time_slot: time_slot  
+                time_slot: time_slot
             },
             success: function(result) {
-                console.log("Received data: ", result); 
-                costs = result.costs;  // Store the costs data
+                console.log("Received data: ", result);
 
-                // Loop through costs and update each category
+                clearAllCategoryData();
+
+                costs = result.costs;
+
                 for (var category in costs) {
                     if (costs.hasOwnProperty(category)) {
                         updateCategoryDetails(category, costs[category]);
@@ -306,6 +359,25 @@ $("#save_action").click(function(event) {
         });
     }
 });
+
+$("#modify_action").click(function(event) {
+    event.preventDefault();
+    
+    // Enable form fields for modification
+    $('#source').prop('disabled', false);
+    $('#destination').prop('disabled', false);
+    $('#pickup_date').prop('disabled', false);
+    $('#pickup_time').prop('disabled', false);
+
+    // Change the "Check Fares" button to become active again
+    $('#check_fares').prop('disabled', false);
+});
+
+$('form').on('submit', function(event) {
+    var categorySlug = $(this).find('input[name="car_type"]').val();  // Get car type (ac/non_ac)
+    syncHiddenFields(categorySlug);  // Sync hidden fields before form submission
+});
+
 
 
 </script>

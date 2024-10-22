@@ -29,7 +29,6 @@ urlpatterns = [
 
     path('forgot_password', views.forgot_password.as_view(), name='forgot_password'),
     path('forgot-password.html', views.forgot_password.as_view(), name='forgot_password'),
-    
     path('logout/', views.logout_view, name='logout'),
     path('robots.txt', views.robots.as_view(), name='robots'),
     path('sitemap.xml', views.sitemap.as_view(), name='sitemap'),
@@ -47,9 +46,12 @@ urlpatterns = [
     path('addride', views.AddRidee.as_view(), name='addride'),
     path('driver/', include('driver.urls')),
     path('hr/', include('hr.urls')),
+    path('author/', include('author.urls')),
+    
 
-    path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
-    path('global_fetch_customer_details_by_phone/',global_fetch_customer_details_by_phone,name='global_fetch_customer_details_by_phone'),
+    # path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
+    # path('global_fetch_customer_details_by_phone/',global_fetch_customer_details_by_phone,name='global_fetch_customer_details_by_phone'),
+    path('get_customer_details/',get_customer_details,name='get_customer_details'),
 
     path('check_dphonenumber', check_dphonenumber, name='check_dphonenumber'),
     path('global_fetch_vehicle_details/', global_fetch_vehicle_details, name='global_fetch_vehicle_details'),

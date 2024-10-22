@@ -32,14 +32,14 @@
                         <input type="hidden" class="form-control" id="driver_id" name="driver_id" value="{{ driverlist.0.driver_id }}"> 
                         <input type="hidden" class="form-control" id="original_phone_number" name="original_phone_number" value="{{ driverlist.0.phone_number }}">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Id</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ driverlist.0.company_format }}" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Search Vehicle</label>
-                        <div class="col-sm-10">  
+                        <div class="col-sm-12">  
                             <select id="single-select" class="form-control form-control-lg" onchange="fetchVehicleDetails()" >
                                 <option value="" disabled selected>Select Vehicle</option>
                                 {% for vehicle in vehiclelist %}
@@ -54,64 +54,64 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" id="vehicle_number" name="vehicle_number" value="{{ driverlist.0.vehicle.Vehicle_Number }}" readonly>
                         </div>
                     
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" id="category" name="category" value="{{ driverlist.0.vehicle.model.brand.category.category_name }}" readonly>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" id="brand" name="brand" value="{{ driverlist.0.vehicle.model.brand.brand_name }}" readonly>
                         </div>
                    
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="text" class="form-control form-control-lg" id="model" name="model" value="{{ driverlist.0.vehicle.model.model_name }}" readonly>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Name</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="driver_name" name="driver_name" value="{{ driverlist.0.name }}">
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" maxlength="15" value="{{ driverlist.0.phone_number }}">
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ driverlist.0.email }}">
                         </div>
                     </div>
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
-                        <div class="col-sm-10">
+                        <div class="col-sm-12">
                             <textarea class="form-control form-control-lg" id="address" name="address">{{ driverlist.0.address }}</textarea>
                         </div>
-                    </div>
+                    </div><br>
 
                     
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="profile_image" name="profile_image" {% if driverlist.0.vehicle.drive_status == 'selfdrive' %}disabled{% endif %}>
                             {% if driverlist.0.profile_image %}
                             <img id="preview2" src="{{ driverlist.0.profile_image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -121,7 +121,7 @@
                         </div>
                     
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
-                        <div class="col-sm-4">
+                        <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof" {% if driverlist.0.vehicle.drive_status == 'selfdrive' %}disabled{% endif %}>
                             {% if driverlist.0.address_proof %}
                             <img id="preview3" src="{{ driverlist.0.address_proof.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
@@ -129,7 +129,7 @@
                             <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    </div>
+                    </div><br>
                     
 
                     <div class="form-group row">
@@ -180,7 +180,7 @@
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                        <div class="col-sm-10">    
+                        <div class="col-sm-12">    
                             <select class="form-control form-control-lg" id="status" name="status">
                                 <option value="" selected disabled>Select Status</option>
                                 <option value="active" {% if driverlist.0.status == "active" %} selected {% endif %}>Active</option>
@@ -275,22 +275,7 @@
         clearDriverDetails(); // Also clear driver details when vehicle details are cleared
     }
 
-    $(document).ready(function() {
-        $("#profile_image, #address_proof").change(function () {
-            readURL(this);
-        });
-
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $(input).next('img').attr('src', e.target.result).show();
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    });
-
+   
     $(document).ready(function () {
         $("#save_action").click(function (event) {
             event.preventDefault();

@@ -1,0 +1,124 @@
+
+{% extends "./index.html" %}
+{% load static %}
+{% block title %}<title> Blog - Affordable Taxi Fares | Transparent Pricing | RidexpressTaxi Services </title> {% endblock %}
+{% block meta_description %} <meta name="description"  content=" Get the best taxi fares with RidexpressTaxi Services. Enjoy transparent pricing with no hidden costs, whether you need a local, outstation, or airport ride. Check out our competitive rates and book your cab today for affordable and reliable transportation services." />{% endblock %}
+{% block meta_keywords %} <meta name="keywords"  content="taxi fares, affordable taxi pricing, transparent cab rates, competitive taxi fares, local taxi rates, outstation taxi prices, airport taxi fares, clear pricing taxi service, [City] taxi prices" />
+<link rel="canonical" href="https://ridexpress.in/packages" />
+{% endblock %}
+{% block body_content %}
+
+  
+
+<main class="main">
+
+    <!-- breadcrumb -->
+    <div class="site-breadcrumb" style="background: url(/static/img/taxi/explore_india.jfif)">
+        <div class="container">
+            <h2 class="breadcrumb-title">Our Packages</h2>
+            <ul class="breadcrumb-menu">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li class="active">Our Packages</li>
+            </ul>
+        </div>
+    </div>
+    <!-- breadcrumb end -->
+
+
+    <!-- taxi area -->
+    <div class="taxi-area py-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mx-auto">
+                    <div class="site-heading text-center">
+                        <span class="site-title-tagline">Our Packages</span>
+                        <h2 class="site-title">Let's Check Available Packages</h2>
+                        <div class="heading-divider"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-controls">
+                <ul class="filter-btns">
+                    <li class="active" data-filter="*">All</li>
+                    {% for category in categories %}
+                    <li data-filter=".cat{{ category.package_category_id }}">{{ category.category_name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            <div class="row">
+                {% for package in packages %}
+                <div class="col-md-6 col-lg-4 ">                        
+                    <div class="taxi-item-img">
+                        <div class="taxi-item">
+                            <img src="{% if package.image %}{{ package.image.url }}{% else %}{{ package.image_link }}{% endif %}" alt="{{ package.title|slugify }}">
+                        </div>
+                        <div class="taxi-content">
+                            <div class="taxi-head">
+                                <h4>{{ package.title }}</h4>
+                            </div>
+                            <div class="taxi-feature">
+                                <p style="text-align: justify;">
+                                    {{ package.description|truncatewords:35 }}
+                                </p>
+                            </div>
+                            <a href="/packages/{{ package.title|slugify }}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <!-- taxi area end -->
+
+</main>
+
+<style>
+    .taxi-item img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    /* Limit title to 3 lines */
+    .title {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    /* Limit description to 6 lines */
+    .description {
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-height: 7.5em; /* Approximately 6 lines depending on font size */
+        text-align: justify;
+    }
+
+    /* Ensure consistent card height */
+    .taxi-item-img {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Consistent button placement */
+    .taxi-content {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    /* Space between rows */
+    .row > [class^='col'] {
+        margin-bottom: 30px;
+    }
+</style>
+    
+    {% endblock body_content %}

@@ -14,7 +14,8 @@ class Profile(models.Model):
         ('distributer', 'Distributer'),
         ('rescue', 'Rescue'),
         ('hr', 'HR'),
-        ('driver', 'Driver')  # Added driver type
+        ('driver', 'Driver'),  # Added driver type
+        ('author','Author'),
 
     ]
 
@@ -41,8 +42,9 @@ class ProfileHistory(models.Model):
         ('telecaller', 'Telecaller'),
         ('distributer', 'Distributer'),
         ('rescue', 'Rescue'),
-         ('hr', 'HR'),
-        ('driver', 'Driver') 
+        ('hr', 'HR'),
+        ('driver', 'Driver') ,
+        ('author','Author'),
     ]
 
     STATUS_CHOICES = [
@@ -803,7 +805,20 @@ class PackageCategoriesHistory(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_by = models.CharField(max_length=100, null=True, blank=True)
-    updated_by = models.CharField(max_length=100, null=True, blank=True)        
+    updated_by = models.CharField(max_length=100, null=True, blank=True) 
+
+class PackageName(models.Model):
+    package_name_id = models.AutoField(primary_key=True)
+    package_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True) 
+
+class PackageNameHistory(models.Model):
+    package_name_id = models.IntegerField()
+    package_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)     
+           
 
 class Packages(models.Model):
     STATUS_CHOICES = [
@@ -812,11 +827,13 @@ class Packages(models.Model):
     ]
     package_id = models.AutoField(primary_key=True)
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE) 
-    name = models.CharField(max_length=255)
+    package_name = models.ForeignKey(PackageName, on_delete=models.CASCADE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.CharField(max_length=255)
     features = models.TextField()
+    extra_km = models.CharField(max_length=100)
+    extra_charges = models.CharField(max_length=100)
+    car_type = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
@@ -830,11 +847,13 @@ class PackagesHistory(models.Model):
     ]
     package_id = models.IntegerField()
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE) 
-    name = models.CharField(max_length=255)
+    package_name = models.ForeignKey(PackageName, on_delete=models.CASCADE)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.CharField(max_length=255)
     features = models.TextField()
+    extra_km = models.CharField(max_length=100)
+    extra_charges = models.CharField(max_length=100)
+    car_type = models.CharField(max_length=100)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES) 
@@ -851,8 +870,8 @@ class PackageOrder(models.Model):
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Inactive')
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    payment_method = models.CharField(max_length=50,null=True)
     source = models.CharField(max_length=1000)
     destination = models.CharField(max_length=1000)
     pickup_date = models.DateField()
@@ -870,8 +889,8 @@ class PackageOrderHistory(models.Model):
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES)
-    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_method = models.CharField(max_length=50)
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2,null=True)
+    payment_method = models.CharField(max_length=50, null=True)
     source = models.CharField(max_length=1000)
     destination = models.CharField(max_length=1000)
     pickup_date = models.DateField()
@@ -879,3 +898,60 @@ class PackageOrderHistory(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
 
+
+class Blogs(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    blogs_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=1000)
+    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True)  # Slug field without auto generation
+    description = models.TextField()
+    image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
+    image_link = models.CharField(max_length=1000, blank=True, null=True)
+    facebook = models.CharField(max_length=1000)
+    instagram = models.CharField(max_length=1000)
+    whatsapp = models.CharField(max_length=1000)
+    backlink = models.CharField(max_length=1000)
+    related_bloglink = models.CharField(max_length=1000)
+    tags = models.CharField(max_length=1000)
+    meta_title = models.CharField(max_length=1000)
+    meta_description = models.CharField(max_length=1000)
+    meta_keywords = models.CharField(max_length=1000)
+    h1tag = models.CharField(max_length=500)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_website_blogs')
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updated_website_blogs')
+
+
+class WebsitePackages(models.Model):
+    STATUS_CHOICES = [
+        ('active', 'Active'),
+        ('inactive', 'Inactive'),
+    ]
+    webpackage_id = models.AutoField(primary_key=True)
+    title = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True)  # Slug field without auto generation
+    package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE)
+    description = models.TextField(help_text="Detailed description of the package")
+    top_attraction = models.TextField(help_text="Main attractions for this package, e.g., Mysore Palace")
+    why_visit = models.TextField(help_text="Reasons to visit the destination")
+    package_highlights = models.TextField(help_text="Key highlights of the package")
+    image = models.ImageField(upload_to='packages_images/', blank=True, null=True)
+    image_link = models.CharField(max_length=1000, blank=True, null=True)
+    facebook_link = models.CharField(max_length=1000, blank=True, null=True)
+    instagram_link = models.CharField(max_length=1000, blank=True, null=True)
+    whatsapp_link = models.CharField(max_length=1000, blank=True, null=True)
+    tags = models.CharField(max_length=255)
+    meta_title = models.CharField(max_length=1000)
+    meta_description = models.CharField(max_length=1000)
+    meta_keywords = models.CharField(max_length=1000)
+    h1tag = models.CharField(max_length=500)
+    status = models.CharField(max_length=20, choices=STATUS_CHOICES)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_website_packages')
+    updated_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='updated_website_packages')

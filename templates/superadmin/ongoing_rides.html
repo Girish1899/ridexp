@@ -141,7 +141,7 @@
                             </div>
                             <table class="table align-items-center justify-content-center mb-0">
                                 <thead>
-                                    <tr>
+                                    <tr style="color: black;">
                                         <th>Serial No</th>
                                         <th>Booking Id/Pickup time/Pickup date</th>
                                         <th>Customer Name/email/address/ph No</th>
@@ -173,9 +173,9 @@
                                         <td>{{ i.source }}</td>
                                         <td>
                                             <div>{{ i.destination }}</div>
-                                            <div style="color: green;">{{ i.ridetype.name }}</div>
+                                            <div class="badge badge-pill bg-gradient-success">{{ i.ridetype.name }}</div>
                                         </td>
-                                        <td><button class="btn btn-warning text-white" disabled>
+                                        <td><button class="btn btn-warning " >
                                             {{ i.total_fare }}
                                         </button></td>
                                         <td>{{ i.customer_notes }}</td>
@@ -185,23 +185,23 @@
                                                 <button class="btn btn-info" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.company_format }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.Vehicle_Number }}</button>
+                                                <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; margin-bottom: 5px;">{{ i.driver.vehicle.Vehicle_Number }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-warning text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
+                                                <button class="btn btn-warning " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.brand_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-danger text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
+                                                <button class="btn btn-danger " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.model_name }}</button>
                                             </div>
                                             <div>
-                                                <button class="btn btn-success text-white" style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
+                                                <button class="btn btn-success " style="height: 30px; padding-top: 0; padding-bottom: 0; border-radius: 10px; margin-bottom: 5px;">{{ i.driver.vehicle.model.brand.category.category_name }}</button>
                                             </div>
                                             
                                             <div>{{ i.driver.name }}</div>
                                             <div>{{ i.driver.phone_number }}</div>
                                         </td>
                                         <td>
-                                            <div>{{ i.assigned_by }}</div>
+                                            <div><span class="badge badge-pill bg-gradient-danger ">{{ i.assigned_by }}</span></div>
                                             <div>{{ i.assigned_on }}</div>
                                         </td>
                                         <!-- <td style="color: green;">{{ i.ride_status }}</td> -->
@@ -420,156 +420,7 @@ $(document).ready(function() {
 });
 </script>
 
-<!-- <script>
-    $(document).ready(function() {
-    // Initialize Flatpickr for single date picker
-    flatpickr("#single-date-picker", {
-        dateFormat: "Y-m-d",
-        onChange: filterTable
-    });
 
-    // Initialize Flatpickr for date range picker
-    flatpickr("#date-range-picker", {
-        mode: "range",
-        dateFormat: "Y-m-d",
-        onChange: filterTable
-    });
-
-    // Initialize event listeners for time pickers
-    $('#from-time-picker, #to-time-picker').on('change', filterTable);
-
-    // Initialize DataTable
-    var table = $('#example').DataTable();
-
-    function filterTable() {
-        var singleDate = $('#single-date-picker').val();
-        var dateRange = $('#date-range-picker').val();
-        var fromTime = $('#from-time-picker').val();
-        var toTime = $('#to-time-picker').val();
-        var startDate = null;
-        var endDate = null;
-
-        if (dateRange) {
-            var dateParts = dateRange.split(" to ");
-            if (dateParts.length === 2) {
-                startDate = new Date(dateParts[0]);
-                endDate = new Date(dateParts[1]);
-                // Adjust endDate to include the entire day
-                endDate.setHours(23, 59, 59, 999);
-            }
-        }
-
-        // Custom search function to filter the table based on date and time
-        $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
-            var row = $(table.row(dataIndex).node());
-            var pickupDateText = row.find('td:nth-child(2) div:nth-child(3)').text().trim();
-            var pickupTimeText = row.find('td:nth-child(2) div:nth-child(2)').text().trim();
-
-            // Parse the pickup date and time
-            var pickupDate = parseDate(pickupDateText);
-            var pickupTime = parseTime(pickupTimeText);
-            
-            if (!pickupDate || isNaN(pickupDate) || !pickupTime) {
-                return false; // Skip rows with invalid dates or times
-            }
-
-            var showRow = true;
-
-            // Date filtering
-            if (singleDate) {
-                var selectedDate = new Date(singleDate);
-                showRow = pickupDate.toDateString() === selectedDate.toDateString();
-            } else if (startDate && endDate) {
-                showRow = pickupDate >= startDate && pickupDate <= endDate;
-            }
-
-            // Time filtering
-            if (fromTime && toTime && showRow) {
-                var fromTimeParsed = parseTime(fromTime);
-                var toTimeParsed = parseTime(toTime);
-
-                // Check if fromTime is greater than toTime (crossing midnight)
-                if (fromTimeParsed > toTimeParsed) {
-                    // Cross midnight logic
-                    showRow = !(pickupTime < fromTimeParsed && pickupTime >= toTimeParsed);
-                } else {
-                    showRow = pickupTime >= fromTimeParsed && pickupTime <= toTimeParsed;
-                }
-            }
-
-            return showRow;
-        });
-
-        table.draw(); // Redraw the table to apply the new search criteria
-
-        // Remove the custom search function after filtering
-        $.fn.dataTable.ext.search.pop();
-    }
-
-    // Function to parse date in the format "MMM. D, YYYY"
-    function parseDate(dateString) {
-        const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
-        const parts = dateString.split(' ');
-        if (parts.length !== 3) {
-            return new Date(""); // Invalid date
-        }
-        const month = months.indexOf(parts[0]);
-        const day = parseInt(parts[1].replace(',', ''), 10);
-        const year = parseInt(parts[2], 10);
-        return new Date(year, month, day);
-    }
-
-    // Function to parse time in various formats
-    function parseTime(timeString) {
-        var timeParts = timeString.match(/(\d{1,2}):(\d{2})\s*(a\.m\.|p\.m\.|AM|PM)?/i);
-        if (timeParts) {
-            var hours = parseInt(timeParts[1], 10);
-            var minutes = parseInt(timeParts[2], 10);
-            var period = timeParts[3];
-
-            if (period) {
-                period = period.toLowerCase();
-                if (period.includes('p') && hours < 12) {
-                    hours += 12;
-                } else if (period.includes('a') && hours === 12) {
-                    hours = 0;
-                }
-            }
-
-            // Use current date
-            var now = new Date();
-            return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
-        } else {
-            // Handle 24-hour format directly
-            timeParts = timeString.match(/(\d{1,2}):(\d{2})/);
-            if (timeParts) {
-                var hours = parseInt(timeParts[1], 10);
-                var minutes = parseInt(timeParts[2], 10);
-                var now = new Date();
-                return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
-            } else {
-                // Handle cases like "4 p.m." or "4 PM"
-                timeParts = timeString.match(/(\d{1,2})\s*(a\.m\.|p\.m\.|AM|PM)/i);
-                if (timeParts) {
-                    var hours = parseInt(timeParts[1], 10);
-                    var period = timeParts[2].toLowerCase();
-
-                    if (period.includes('p') && hours < 12) {
-                        hours += 12;
-                    } else if (period.includes('a') && hours === 12) {
-                        hours = 0;
-                    }
-
-                    var now = new Date();
-                    return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, 0, 0);
-                }
-            }
-        }
-        return null;
-    }
-});
-
-</script> -->
 
 <style>
 .mb-1 {

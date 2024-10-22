@@ -56,7 +56,7 @@
                                         <td>{{ forloop.counter }}</td>
                                         <td><div>{{ i.company_format }}</div>
                                             <div>
-                                                <span class="badge badge-pill badge-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" 
+                                                <span class="badge badge-pill bg-{% if i.verification_status == 'verified' %}gradient-success{% else %}danger{% endif %}" 
                                                     onclick="VerifyVehicle('{{ i.vehicle_id }}', '{{ i.owner.verification_status }}')">
                                                     {% if i.verification_status == 'verified' %}
                                                     Verified

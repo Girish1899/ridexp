@@ -26,7 +26,7 @@
                         <div class="card my-4">
                             <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                             <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
-                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Customer View</h6>
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Driver View</h6>
                             </div>
                             </div>
                             <div class="card-body px-0 pb-2">
@@ -59,16 +59,7 @@
                                         </td>
                                         <td>{{ i.created_on }}</td>
                                         <td>{{ i.block_reason }}</td>
-                                        <!-- <td>
-                                            <button class="btn btn-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" onclick="VerifyDriver('{{ i.driver_id }}', '{{ i.verification_status }}')">
-                                                {% if i.verification_status == 'verified' %}
-                                                Verified
-                                                {% else %}
-                                                Not Verified
-                                                {% endif %}
-                                            </button>
-
-                                        </td> -->
+                                       
                                         <td style="display: flex; justify-content: center; align-items: center;">
                                             <a href="#" class="btn btn-primary" onclick="EditDriver('{{ i.driver_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
                                             <a href="#" class="btn btn-danger" onclick="DeleteDriver('{{ i.driver_id }}')"><i class="fa fa-trash"></i></a>&nbsp;

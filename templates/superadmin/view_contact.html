@@ -34,6 +34,7 @@
                                 <thead>
                                     <tr style="color: black !important;">
                                     <th>Serial No</th>
+                                    <th>Contact id</th>
                                     <th>Customer Name</th>
                                     <th>Email</th>
                                     <th>Subject</th>
@@ -44,6 +45,7 @@
                                 {% for i in object_list %}
                                 <tr style="color: #030000;">
                                     <td>{{ forloop.counter }}</td>
+                                    <td>{{ i.contact_id }}</td>
                                     <td>{{ i.name }}</td>
                                     <td>{{ i.email }}</td>
                                     <td>{{ i.subject }}</td>
