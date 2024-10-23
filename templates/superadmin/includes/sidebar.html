@@ -1,472 +1,471 @@
 {% load static %}
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-light " id="sidenav-main">
-    <div class="sidenav-header">
-      <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="{% url 'index' %}">
-        <img src="{% static 'img/logo/favicon.png' %}" class="navbar-brand-img h-100" alt="main_logo">
-        <span class="ms-1 font-weight-bold text-white">RIDEXPRESS</span>
-      </a>
-    </div>
-    <hr class="horizontal light mt-0 mb-2">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
-      <ul class="navbar-nav">
-        <li class="nav-item">
-          <a class="nav-link text-white active bg-gradient-primary" href="{% url 'index' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">dashboard</i>
-            </div>
-            <span class="nav-link-text ms-1">Dashboard</span>
-          </a>
-        </li>
+<aside
+  class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 bg-gradient-light "
+  id="sidenav-main">
+  <div class="sidenav-header">
+    <i class="fas fa-times p-3 cursor-pointer text-white opacity-5 position-absolute end-0 top-0 d-none d-xl-none"
+      aria-hidden="true" id="iconSidenav"></i>
+    <a class="navbar-brand m-0" href="{% url 'index' %}">
+      <img src="{% static 'img/logo/favicon.png' %}" class="navbar-brand-img h-100" alt="main_logo">
+      <span class="ms-1 font-weight-bold text-white">RIDEXPRESS</span>
+    </a>
+  </div>
+  <hr class="horizontal light mt-0 mb-2">
+  <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+    <ul class="navbar-nav">
+      <li class="nav-item">
+        <a class="nav-link text-white active bg-gradient-primary" href="{% url 'index' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">dashboard</i>
+          </div>
+          <span class="nav-link-text ms-1">Dashboard</span>
+        </a>
+      </li>
 
-        <!-- admin -->
-        <li class="nav-item dropdown"> 
-          <a class="nav-link text-white dropdown-toggle" href="#" id="adminDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">admin_panel_settings</i>
-            </div>
-            <span class="nav-link-text ms-1">Admins</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="adminDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'useremp' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">visibility</i>
-                </div>
-                <span class="nav-link-text ms-1">View Admins</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'userlist' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">person</i>
-                </div>
-                <span class="nav-link-text ms-1">View Employees</span>
-              </a>
-            </li>
-          </ul>
-        </li>        
-        
-        <!-- bookings -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="bookingsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">book</i>
-            </div>
-            <span class="nav-link-text ms-1">Bookings</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="bookingsDropdown">
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'addbooking' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">add_circle</i>
-                </div>
-                <span class="nav-link-text ms-1">Add Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'ridelist' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">visibility</i>
-                </div>
-                <span class="nav-link-text ms-1">View Current Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'advance_bookings' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">calendar_today</i>
-                </div>
-                <span class="nav-link-text ms-1">View Advance Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'pending_bookings' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">hourglass_empty</i>
-                </div>
-                <span class="nav-link-text ms-1">View Pending Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'view_assigned_rides' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">assignment_ind</i>
-                </div>
-                <span class="nav-link-text ms-1">View Assigned Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'view_assignlater' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">schedule</i>
-                </div>
-                <span class="nav-link-text ms-1">View AssignLater Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'cancelledbookings' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">cancel</i>
-                </div>
-                <span class="nav-link-text ms-1">View Cancelled Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'ongoing_rides' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">play_arrow</i>
-                </div>
-                <span class="nav-link-text ms-1">View Ongoing Bookings</span>
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="{% url 'completed_rides' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">check_circle</i>
-                </div>
-                <span class="nav-link-text ms-1">View Completed Bookings</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="adminDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">admin_panel_settings</i>
+          </div>
+          <span class="nav-link-text ms-1">Admins</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="adminDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'useremp' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">visibility</i>
+              </div>
+              <span class="nav-link-text ms-1">View Admins</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'userlist' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">person</i>
+              </div>
+              <span class="nav-link-text ms-1">View Employees</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-       <!-- category management -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">receipt_long</i>
-            </div>
-            <span class="nav-link-text ms-1">Category Management</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="navbarDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'CategoryListView' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">table_view</i>
-                </div>
-                <span class="nav-link-text ms-1">Categories</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'BrandListView' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">receipt_long</i>
-                </div>
-                <span class="nav-link-text ms-1">Brands</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'ModelListView' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">view_in_ar</i>
-                </div>
-                <span class="nav-link-text ms-1">Models</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'ridetypeList' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
-                </div>
-                <span class="nav-link-text ms-1">Service Type</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehicletypeList' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
-                </div>
-                <span class="nav-link-text ms-1">Car Fuel Type</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'TransmissionListView' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
-                </div>
-                <span class="nav-link-text ms-1">Car Transmission</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'colorList' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
-                </div>
-                <span class="nav-link-text ms-1">Car Color</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
-        <!-- car management -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="carManagementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">directions_car</i>
-            </div>
-            <span class="nav-link-text ms-1">Car Management</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="carManagementDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehiclelist' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">view_list</i>
-                </div>
-                <span class="nav-link-text ms-1">View Active Cars</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehicleblocklist' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">block</i>
-                </div>
-                <span class="nav-link-text ms-1">View Blocked Cars</span>
-              </a>
-            </li>
-          </ul>
-        </li>        
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="bookingsDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">book</i>
+          </div>
+          <span class="nav-link-text ms-1">Bookings</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="bookingsDropdown">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'addbooking' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">add_circle</i>
+              </div>
+              <span class="nav-link-text ms-1">Add Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'ridelist' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">visibility</i>
+              </div>
+              <span class="nav-link-text ms-1">View Current Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'advance_bookings' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">calendar_today</i>
+              </div>
+              <span class="nav-link-text ms-1">View Advance Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'pending_bookings' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">hourglass_empty</i>
+              </div>
+              <span class="nav-link-text ms-1">View Pending Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'view_assigned_rides' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">assignment_ind</i>
+              </div>
+              <span class="nav-link-text ms-1">View Assigned Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'view_assignlater' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">schedule</i>
+              </div>
+              <span class="nav-link-text ms-1">View AssignLater Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'cancelledbookings' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">cancel</i>
+              </div>
+              <span class="nav-link-text ms-1">View Cancelled Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'ongoing_rides' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">play_arrow</i>
+              </div>
+              <span class="nav-link-text ms-1">View Ongoing Bookings</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="{% url 'completed_rides' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">check_circle</i>
+              </div>
+              <span class="nav-link-text ms-1">View Completed Bookings</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-        <!--Customer  -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="customerDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">people</i>
-            </div>
-            <span class="nav-link-text ms-1">Customer</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="customerDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'customerlist' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">view_list</i>
-                </div>
-                <span class="nav-link-text ms-1">View Customer</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'cust_profile_list' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">book</i>
-                </div>
-                <span class="nav-link-text ms-1">Customer Bookings</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
 
-        <!--Commission Details  -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="commissionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">account_balance_wallet</i>
-            </div>
-            <span class="nav-link-text ms-1">Commission Details</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="commissionDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'commissionlist' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">monetization_on</i>
-                </div>
-                <span class="nav-link-text ms-1">View Commission</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehicles' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">directions_car</i>
-                </div>
-                <span class="nav-link-text ms-1">View Vehicle List</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="navbarDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">receipt_long</i>
+          </div>
+          <span class="nav-link-text ms-1">Category Management</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="navbarDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'CategoryListView' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">table_view</i>
+              </div>
+              <span class="nav-link-text ms-1">Categories</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'BrandListView' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">receipt_long</i>
+              </div>
+              <span class="nav-link-text ms-1">Brands</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'ModelListView' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">view_in_ar</i>
+              </div>
+              <span class="nav-link-text ms-1">Models</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'ridetypeList' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+              </div>
+              <span class="nav-link-text ms-1">Service Type</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehicletypeList' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+              </div>
+              <span class="nav-link-text ms-1">Car Fuel Type</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'TransmissionListView' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+              </div>
+              <span class="nav-link-text ms-1">Car Transmission</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'colorList' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">format_textdirection_r_to_l</i>
+              </div>
+              <span class="nav-link-text ms-1">Car Color</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-        <!--Drivers -->
-        
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="driversDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">directions_car</i>
-            </div>
-            <span class="nav-link-text ms-1">Drivers</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="driversDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewdriver' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">person</i>
-                </div>
-                <span class="nav-link-text ms-1">View Drivers</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewdriververification' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">verified_user</i>
-                </div>
-                <span class="nav-link-text ms-1">Driver Verification</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="carManagementDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">directions_car</i>
+          </div>
+          <span class="nav-link-text ms-1">Car Management</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="carManagementDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehiclelist' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">view_list</i>
+              </div>
+              <span class="nav-link-text ms-1">View Active Cars</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehicleblocklist' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">block</i>
+              </div>
+              <span class="nav-link-text ms-1">View Blocked Cars</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-        <!--Price Details  -->
-        <li class="nav-item">
-          <a class="nav-link text-white " href="{% url 'pricinglist' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">attach_money</i>
-            </div>
-            <span class="nav-link-text ms-1">Price Details</span>
-          </a>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="customerDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">people</i>
+          </div>
+          <span class="nav-link-text ms-1">Customer</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="customerDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'customerlist' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">view_list</i>
+              </div>
+              <span class="nav-link-text ms-1">View Customer</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'cust_profile_list' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">book</i>
+              </div>
+              <span class="nav-link-text ms-1">Customer Bookings</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-        <!--Vehicle Registration  -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="vehicleRegistrationDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">directions_car</i>
-            </div>
-            <span class="nav-link-text ms-1">Vehicle Registration</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="vehicleRegistrationDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewvehicleowner' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">person_outline</i>
-                </div>
-                <span class="nav-link-text ms-1">View Vehicle Owners</span>
-              </a>
-            </li>
-            <li class="nav-item w-90">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'ownerverification' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">check_circle</i>
-                </div>
-                <span class="nav-link-text ms-1">Vehicle Owner Verification</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
 
-        <!--Packages  -->
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="packagesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">local_offer</i>
-            </div>
-            <span class="nav-link-text ms-1">Packages</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="packagesDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'package_category_list' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">category</i>
-                </div>
-                <span class="nav-link-text ms-1">View Package Category</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'package_name_list' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">category</i>
-                </div>
-                <span class="nav-link-text ms-1">View Package Name</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'packages_list' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">redeem</i>
-                </div>
-                <span class="nav-link-text ms-1">View Packages</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'package_order_list' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">shopping_cart</i>
-                </div>
-                <span class="nav-link-text ms-1">View Package Orders</span>
-              </a>
-            </li>
-          </ul>
-        </li>
-        
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="commissionDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">account_balance_wallet</i>
+          </div>
+          <span class="nav-link-text ms-1">Commission Details</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="commissionDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'commissionlist' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">monetization_on</i>
+              </div>
+              <span class="nav-link-text ms-1">View Commission</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'vehicles' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">directions_car</i>
+              </div>
+              <span class="nav-link-text ms-1">View Vehicle List</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-        <!-- Driver report -->
-        <li class="nav-item">
-          <a class="nav-link text-white " href="{% url 'driver_report' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">assignment</i>
-            </div>
-            <span class="nav-link-text ms-1">Driver Report</span>
-          </a>
-        </li>
 
-        <!-- Accounts -->
-        <li class="nav-item">
-          <a class="nav-link text-white " href="{% url 'accounts_list' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">call_to_action</i>
-            </div>
-            <span class="nav-link-text ms-1">Accounts</span>
-          </a>
-        </li>
 
-        <!-- Contact -->
-        <li class="nav-item">
-          <a class="nav-link text-white " href="{% url 'contactlist' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">contact_phone</i>
-            </div>
-            <span class="nav-link-text ms-1">Contact</span>
-          </a>
-        </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="driversDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">directions_car</i>
+          </div>
+          <span class="nav-link-text ms-1">Drivers</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="driversDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewdriver' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">person</i>
+              </div>
+              <span class="nav-link-text ms-1">View Drivers</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewdriververification' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">verified_user</i>
+              </div>
+              <span class="nav-link-text ms-1">Driver Verification</span>
+            </a>
+          </li>
+        </ul>
+      </li>
 
-        <!--Enquiry  -->
-        <li class="nav-item">
-          <a class="nav-link text-white " href="{% url 'enquirylist' %}">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">devices_other</i>
-            </div>
-            <span class="nav-link-text ms-1">Enquiry</span>
-          </a>
-        </li>
 
-        <li class="nav-item dropdown">
-          <a class="nav-link text-white dropdown-toggle" href="#" id="authorDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-              <i class="material-icons opacity-10">local_offer</i>
-            </div>
-            <span class="nav-link-text ms-1">Author Blog/Package</span>
-          </a>
-          <ul class="dropdown-menu w-100" aria-labelledby="authorDropdown">
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'sup-create-author-blogs' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">assignment</i>
-                </div>
-                <span class="nav-link-text ms-1">Add Blogs</span>
-              </a>
-            </li>
-            <li class="nav-item w-80">
-              <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'sup-list-author-packages' %}">
-                <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
-                  <i class="material-icons opacity-10">visibility</i>
-                </div>
-                <span class="nav-link-text ms-1">View Packages</span>
-              </a>
-            </li>
-          </ul>
-        </li>
+      <li class="nav-item">
+        <a class="nav-link text-white " href="{% url 'pricinglist' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">attach_money</i>
+          </div>
+          <span class="nav-link-text ms-1">Price Details</span>
+        </a>
+      </li>
 
-      </ul>
-    </div>
-  </aside>
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="vehicleRegistrationDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">directions_car</i>
+          </div>
+          <span class="nav-link-text ms-1">Vehicle Registration</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="vehicleRegistrationDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'viewvehicleowner' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">person_outline</i>
+              </div>
+              <span class="nav-link-text ms-1">View Vehicle Owners</span>
+            </a>
+          </li>
+          <li class="nav-item w-90">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'ownerverification' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">check_circle</i>
+              </div>
+              <span class="nav-link-text ms-1">Vehicle Owner Verification</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="packagesDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">local_offer</i>
+          </div>
+          <span class="nav-link-text ms-1">Packages</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="packagesDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'package_category_list' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">category</i>
+              </div>
+              <span class="nav-link-text ms-1">View Package Category</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'package_name_list' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">category</i>
+              </div>
+              <span class="nav-link-text ms-1">View Package Name</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'packages_list' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">redeem</i>
+              </div>
+              <span class="nav-link-text ms-1">View Packages</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'package_order_list' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">shopping_cart</i>
+              </div>
+              <span class="nav-link-text ms-1">View Package Orders</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+
+      <li class="nav-item">
+        <a class="nav-link text-white " href="{% url 'driver_report' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">assignment</i>
+          </div>
+          <span class="nav-link-text ms-1">Driver Report</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-white " href="{% url 'accounts_list' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">call_to_action</i>
+          </div>
+          <span class="nav-link-text ms-1">Accounts</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-white " href="{% url 'contactlist' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">contact_phone</i>
+          </div>
+          <span class="nav-link-text ms-1">Contact</span>
+        </a>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link text-white " href="{% url 'enquirylist' %}">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">devices_other</i>
+          </div>
+          <span class="nav-link-text ms-1">Enquiry</span>
+        </a>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link text-white dropdown-toggle" href="#" id="authorDropdown" role="button"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+            <i class="material-icons opacity-10">local_offer</i>
+          </div>
+          <span class="nav-link-text ms-1">Author Blog/Package</span>
+        </a>
+        <ul class="dropdown-menu w-100" aria-labelledby="authorDropdown">
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'sup-create-author-blogs' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">assignment</i>
+              </div>
+              <span class="nav-link-text ms-1">Add Blogs</span>
+            </a>
+          </li>
+          <li class="nav-item w-80">
+            <a class="nav-link text-white d-flex align-items-center w-100" href="{% url 'sup-list-author-packages' %}">
+              <div class="text-white text-center me-2 d-flex align-items-center justify-content-center">
+                <i class="material-icons opacity-10">visibility</i>
+              </div>
+              <span class="nav-link-text ms-1">View Packages</span>
+            </a>
+          </li>
+        </ul>
+      </li>
+
+    </ul>
+  </div>
+</aside>

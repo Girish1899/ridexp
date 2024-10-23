@@ -1,6 +1,7 @@
 {% extends 'distributer/base.html' %}
 {% load static %}
 {% block content%}
+
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
@@ -11,26 +12,23 @@
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item" ><a href="{% url 'indexd' %}" style="color: white !important;">Dashboard</a></li>
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-adddriver' %}" style="color: white !important;">Add Driver</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
-
-        <div class="row">
-            <div class="col-12">
-                <div class="card my-4">
-                    <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                        <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
-                            style="background-color: #F3797E;">
-                            <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Driver View
-                            </h6>
-                        </div>
-                    </div>
-                    <div class="card-body px-0 pb-2">
-                        <div class="table-responsive p-0">
-                            <table class="table align-items-center justify-content-center mb-0">
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Driver View</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
                                 <thead>
                                     <tr style="color: black !important;">
                                         <th>Serial No</th>
@@ -58,16 +56,21 @@
                                         </td>
                                         <td>{{ i.created_on }}</td>
                                         <td>{{ i.block_reason }}</td>
+                                       
                                         <td style="display: flex; justify-content: center; align-items: center;">
-                                            <a href="#" class="btn btn-primary"
-                                                onclick="EditDriver('{{i.driver_id}}')"><i
-                                                    class="fa fa-edit"></i></a>&nbsp;
-
+                                            <a href="#" class="btn btn-primary" onclick="EditDriver('{{ i.driver_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="DriverHistory('{{ i.driver_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'dispatch-driver' i.driver_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
+                                            <button class="btn {% if i.status == 'active' %}btn-success{% else %}btn-danger{% endif %}"
+                                                    onclick="toggleDriverStatus('{{ i.driver_id }}', '{{ i.status }}', '{{ i.vehicle.drive_status }}', '{{ i.vehicle.owner.owner_id }}')">
+                                                <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white"></i>
+                                            </button>
                                         </td>
+                                        
                                     </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>
+                            </table>                            
                         </div>
                     </div>
                 </div>
@@ -76,13 +79,126 @@
     </div>
 </div>
 
+<div class="modal fade" id="blockReasonModal" tabindex="-1" role="dialog" aria-labelledby="blockReasonModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="blockReasonModalLabel">Block Reason</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="blockRideId">
+                <div class="form-group">
+                    <label for="blockReason">Reason</label>
+                    <select id="blockReasonSelect" class="form-control" onchange="setBlockReasonInput()">
+                        <option value="">Select a reason...</option>
+                        <option value="Reason 1">Reason 1</option>
+                        <option value="Reason 2">Reason 2</option>
+                        <option value="Reason 3">Reason 3</option>
+                        <option value="other">Other (please specify below)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="blockReasonInput" class="form-control mt-2" placeholder="Enter block reason" disabled>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="submitBlockReason()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
+    
     function EditDriver(driver_id) {
         var action = confirm("Are you sure you want to edit this driver?");
         if (action !== false) {
-            window.location.href = "distributerEditDriver/" + driver_id; // Add a slash here
+            window.location.href = "dispatch-EditDriver/" + driver_id;
         }
     };
 
+    function DriverHistory(driver_id) {
+        window.location.href = "dispatch-DriverHistory/" + driver_id; 
+    };
+
+    function submitDriverStatusChange(driver_id, new_status, blockReason, drive_status, owner_id) {
+        $.ajax({
+            url: '{% url "dispatch-toggle_driver_status" %}',
+            type: 'POST',
+            data: {
+                'driver_id': driver_id,
+                'new_status': new_status,
+                'block_reason': blockReason,
+                'drive_status': drive_status,
+                'owner_id': owner_id,
+                'csrfmiddlewaretoken': '{{ csrf_token }}'
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.success) {
+                    alert("Driver status updated successfully.");
+                    window.location.reload();
+                } else {
+                    alert("Failed to update driver status: " + data.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("An error occurred: " + error);
+            }
+        });
+    }
+
+    function toggleDriverStatus(driver_id, current_status, drive_status, owner_id) {
+        var new_status = current_status === 'active' ? 'inactive' : 'active';
+        var confirmation = confirm("Are you sure you want to " + (current_status === 'active' ? "block" : "unblock") + " this driver?");
+        
+        if (confirmation) {
+            if (new_status === 'inactive') {
+                $('#blockReasonModal').modal('show');
+
+                $('#blockReasonModal .btn-primary').off('click').on('click', function() {
+                    var blockReason = getBlockReason();
+
+                    if (!blockReason) {
+                        alert("Please select or enter a block reason.");
+                        return;
+                    }
+
+                    submitDriverStatusChange(driver_id, new_status, blockReason, drive_status, owner_id);
+                });
+            } else {
+                submitDriverStatusChange(driver_id, new_status, '', drive_status, owner_id);
+            }
+        }
+    }
+
+    function getBlockReason() {
+        var select = document.getElementById("blockReasonSelect");
+        var input = document.getElementById("blockReasonInput");
+        return select.value === "other" ? input.value : select.value;
+    }
+
+    function setBlockReasonInput() {
+        var select = document.getElementById("blockReasonSelect");
+        var input = document.getElementById("blockReasonInput");
+
+        if (select.value === "other") {
+            input.disabled = false;
+            input.placeholder = "Please specify the reason";
+        } else {
+            input.disabled = true;
+            input.placeholder = "Enter block reason";
+            input.value = select.value || "";
+        }
+    }
 </script>
-{% endblock content%}
+{% endblock content %}
+
+

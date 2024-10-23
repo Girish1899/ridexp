@@ -16,7 +16,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -145,7 +144,6 @@
                                         <th>Booking datetime</th>
                                         <th>Vehicle Id/ Vehicle No/ Type/ Name/ ph No</th>
                                         <th>Dispatched By/ Dispatched On</th>
-                                        <!-- <th>Ride Status</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -197,7 +195,6 @@
                                             <div><span class="badge badge-pill bg-gradient-danger ">{{ i.assigned_by }}</span></div>
                                             <div>{{ i.assigned_on }}</div>
                                         </td>
-                                        <!-- <td style="color: green;">{{ i.ride_status }}</td> -->
                                     </tr>
                                     {% endfor %}
                                 </tbody>
@@ -209,7 +206,6 @@
         </div>
     </div>
 </div>
-<!-- Add the necessary scripts for export functionality -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -248,7 +244,6 @@ $('#toggleFilterReport').click(function() {
 
 
 $(document).ready(function() {
-    // Initialize Select2 and Flatpickr plugins
     $("#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame").select2();
     flatpickr("#single-date-picker", {
         dateFormat: "Y-m-d",
@@ -262,7 +257,6 @@ $(document).ready(function() {
 
     var table = $('#example').DataTable();
     
-    // Add change event listeners
     $('#from-time-picker, #to-time-picker').on('change', filterTable);
     $('#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame').on('change', filterTable);
     
@@ -278,7 +272,6 @@ $(document).ready(function() {
         var toTime = $('#to-time-picker').val();
         var timeFrame = $('#time-frame').val();
 
-        // Parse date range
         var startDate = null, endDate = null;
         if (dateRange) {
             var dates = dateRange.split(" to ");
@@ -289,7 +282,6 @@ $(document).ready(function() {
             }
         }
 
-        // Calculate time frame dates
         var today = new Date();
         var selectedStartDate = null;
         var selectedEndDate = null;
@@ -324,7 +316,6 @@ $(document).ready(function() {
             var pickupTime = parseTime(pickupTimeText);  
             var showRow = true;
 
-            // Single date filter
             if (singleDate) {
                 var selectedDate = new Date(singleDate);  
                 selectedDate.setHours(0, 0, 0, 0);  
@@ -334,21 +325,18 @@ $(document).ready(function() {
                 }
             }
 
-            // Date range filter
             if (startDate && endDate && showRow) {
                 if (pickupDate < startDate || pickupDate > endDate) {
                     showRow = false;
                 }
             }
 
-            // Time frame filter
             if (selectedStartDate && selectedEndDate && showRow) {
                 if (pickupDate < selectedStartDate || pickupDate > selectedEndDate) {
                     showRow = false;
                 }
             }
 
-            // Time filter
             if (fromTime && toTime && showRow) {
                 var fromParsed = parseTime(fromTime);
                 var toParsed = parseTime(toTime);
@@ -357,7 +345,6 @@ $(document).ready(function() {
                 }
             }
 
-            // Other filters
             if (serviceType && row.data('ridetype') != serviceType) showRow = false;
             if (bookingId && row.data('rideid') != bookingId) showRow = false;
             if (vehicleType && row.data('categoryid') != vehicleType) showRow = false;

@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +17,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -66,16 +63,6 @@
                                         </td>
                                         <td><a href="{% url 'download_driver_documents' i.driver_id %}" class="btn btn-warning"><i class="fa fa-download"></i></a></td>
                                         <td>{{ i.created_on }}</td>
-                                        <!-- <td>
-                                            <button class="btn btn-{% if i.verification_status == 'verified' %}success{% else %}danger{% endif %}" onclick="VerifyDriver('{{ i.driver_id }}', '{{ i.verification_status }}')">
-                                                {% if i.verification_status == 'verified' %}
-                                                Verified
-                                                {% else %}
-                                                Not Verified
-                                                {% endif %}
-                                            </button>
-
-                                        </td> -->
                                         <td>
                                             {% if i.verified_on %}
                                             {{ i.verified_on }}
@@ -127,12 +114,12 @@
     function EditDriver(driver_id) {
         var action = confirm("Are you sure you want to edit this driver?");
         if (action !== false) {
-            window.location.href = "EditDriver/" + driver_id; // Add a slash here
+            window.location.href = "EditDriver/" + driver_id; 
         }
     };
 
     function DriverHistory(driver_id) {
-        window.location.href = "DriverHistory/" + driver_id; // Add a slash here
+        window.location.href = "DriverHistory/" + driver_id; 
     };
 
     function VerifyDriver(driver_id, current_status) {
@@ -147,7 +134,7 @@
                 success: function (data) {
                     if (data.verified) {
                         alert("Driver Verified Successfully");
-                        location.reload(); // Reload the page to update the status
+                        location.reload(); 
                     }
                 }
             });

@@ -1,14 +1,29 @@
 {% extends 'superadmin/base.html' %}
 {% load static %}
 {% block content%}
+<style>
+    .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px; 
+    height: 36px; 
+}
+.badge-success {
+        background-color: #28a745; 
+    }
+    
+.badge-danger {
+    background-color: #dc3545; 
+}
 
+</style>
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +33,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -37,7 +50,6 @@
                                         <th>Serial No</th>
                                         <th>Vehicle Id</th>
                                         <th>Owner Name / Owner Mobile</th>
-                                        <!-- <th>Owner Mobile</th> -->
                                         <th>Commission Type</th>
                                         <th>Vehicle Number</th>
                                         <th>Category/Brand/ Model</th>
@@ -86,7 +98,7 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <span class="badge {% if i.model.brand.category.category_status == 'inactive' or i.owner.status == 'inactive' %}badge-danger{% else %}{% if i.vehicle_status == 'active' %}badge-success{% else %}badge-danger{% endif %}{% endif %}">
+                                            <span class="badge {% if i.model.brand.category.category_status == 'inactive' or i.owner.status == 'inactive' %}bg-gradient-danger{% else %}{% if i.vehicle_status == 'active' %}bg-gradient-success{% else %}badge-danger{% endif %}{% endif %}">
                                                 {% if i.model.brand.category.category_status == 'inactive' or i.model.brand.status == 'inactive' or i.model.status == 'inactive' or i.owner.status == 'inactive' %}
                                                     inactive
                                                 {% else %}
@@ -134,7 +146,6 @@
     </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="blockReasonModal" tabindex="-1" role="dialog" aria-labelledby="blockReasonModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -189,7 +200,7 @@
     };
 
     function HistoryVehicle(vehicle_id) {
-        window.location.href = "VehicleHistory/" + vehicle_id; // Add a slash here
+        window.location.href = "VehicleHistory/" + vehicle_id; 
     };
 
     function VerifyVehicle(vehicle_id, owner_verification_status) {
@@ -201,7 +212,7 @@
     var action = confirm("Have you verified this vehicle?");
     if (action != false) {
         $.ajax({
-            url: '{% url "VerifyVehicle" %}', // Ensure you have this URL correctly configured
+            url: '{% url "VerifyVehicle" %}',
             data: {
                 'vehicle_id': vehicle_id,
             },
@@ -209,7 +220,7 @@
             success: function (data) {
                 if (data.verified) {
                     alert("Vehicle Verified Successfully");
-                    location.reload(); // Reload the page to update the status
+                    location.reload(); 
                 }
             }
         });
@@ -225,7 +236,7 @@
         if (new_status === 'inactive') {
             var blockReason = prompt("Please provide a reason for blocking the vehicle:");
             if (blockReason === null) {
-                return; // User cancelled the prompt
+                return; 
             }
         } else {
             var blockReason = '';

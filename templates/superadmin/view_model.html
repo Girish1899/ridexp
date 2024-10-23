@@ -3,11 +3,11 @@
 {% block content%}
 <style>
     .badge {
-    display: inline-flex; /* or block */
+    display: inline-flex; 
     align-items: center;
     justify-content: center;
-    min-width: 60px; /* Adjust as necessary */
-    height: 41px; /* Adjust as necessary */
+    min-width: 60px; 
+    height: 41px; 
 }
 
 </style>
@@ -17,7 +17,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -27,8 +26,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -91,8 +88,8 @@
 
 
         </div>
-    </div><!-- .animated -->
-</div><!-- .content -->
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -120,11 +117,11 @@
     function EditModel(model_id) {
         var action = confirm("Are you sure you want to edit this Model?");
         if (action !== false) {
-            window.location.href = "EditModel/" + model_id; // Add a slash here
+            window.location.href = "EditModel/" + model_id; 
         }
     };
     function HistoryModel(model_id) {
-        window.location.href = "ModelHistory/" + model_id; // Add a slash here
+        window.location.href = "ModelHistory/" + model_id; 
     };
 
     function toggleModelStatus(model_id, current_status) {
@@ -132,17 +129,17 @@
     var action = confirm("Are you sure you want to change the status to " + new_status + "?");
     if (action) {
         $.ajax({
-            url: '{% url "toggle_model_status" %}',  // Update this URL to match your URL pattern for toggling status
+            url: '{% url "toggle_model_status" %}', 
             method: 'POST',
             data: {
                 'model_id': model_id,
                 'status': new_status,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'  // Ensure this matches your CSRF token template variable
+                'csrfmiddlewaretoken': '{{ csrf_token }}'  
             },
             success: function(data) {
                 if (data.success) {
                     alert("Model status updated successfully.");
-                    location.reload(); // Reload the page to reflect the changes
+                    location.reload(); 
                 } else {
                     alert("Failed to update model status.");
                 }
@@ -160,21 +157,21 @@
 
 <style>
     .badge-success {
-    background-color: #28a745; /* Green */
+    background-color: #28a745; 
     color: white;
 }
 
 .badge-danger {
-    background-color: #dc3545; /* Red */
+    background-color: #dc3545;
     color: white;
 }
 
 .text-success {
-    color: #28a745; /* Green */
+    color: #28a745; 
 }
 
 .text-danger {
-    color: #dc3545; /* Red */
+    color: #dc3545; 
 }
 
 </style>

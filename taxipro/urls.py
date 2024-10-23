@@ -23,7 +23,6 @@ from taxipro.views import *
 from superadmin import views
 
 urlpatterns = [
-    # path('', views.login_view, name='login'),
     path('', include('website.urls')),
 
 
@@ -32,10 +31,8 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('robots.txt', views.robots.as_view(), name='robots'),
     path('sitemap.xml', views.sitemap.as_view(), name='sitemap'),
-    # path('blog/about', views.about_blog.as_view(), name='about'),
 
     path('admin/', admin.site.urls),
-    # path('', TemplateView.as_view(template_name='index.html')), 
     path('superadmin/', include('superadmin.urls')),
     path('adminuser/', include('adminuser.urls')),
     path('rescue/', include('rescue.urls')),
@@ -48,9 +45,6 @@ urlpatterns = [
     path('hr/', include('hr.urls')),
     path('author/', include('author.urls')),
     
-
-    # path('global_fetch_customer_details/', global_fetch_customer_details, name='global_fetch_customer_details'),
-    # path('global_fetch_customer_details_by_phone/',global_fetch_customer_details_by_phone,name='global_fetch_customer_details_by_phone'),
     path('get_customer_details/',get_customer_details,name='get_customer_details'),
 
     path('check_dphonenumber', check_dphonenumber, name='check_dphonenumber'),

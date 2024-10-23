@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -16,8 +15,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
-
 
         <div class="row">
             <div class="col-12">
@@ -30,7 +27,6 @@
                             <table id="example" class="display" style="min-width: 845px">
                                 <thead>
                                     <tr>
-                                    <!-- <th>Driver Id </th> -->
                                     <th>Vehicle Id</th>
                                     <th>Vehicle Number</th>
                                     <th>Category/ Brand/ Model</th>
@@ -38,7 +34,6 @@
                                     <th>Phone Number</th>
                                     <th>Email</th>
                                     <th>Address</th>
-                                    <!-- <th>Document Verification Type</th> -->
                                     <th>Document image</th>
                                     <th>Status</th>
                                     <th>Created On/ Created by</th>
@@ -49,7 +44,6 @@
                             <tbody>
                                 {% for i in object_list %}
                                 <tr style="color: #030000;">
-                                    <!-- <td>{{ i.company_format }}</td> -->
                                     <td>{{ i.vehicle.company_format }}</td>
                                     <td>{{ i.vehicle.Vehicle_Number }}</td>
                                     <td>
@@ -61,7 +55,6 @@
                                     <td style="color: red;">{{ i.phone_number }}</td>
                                     <td>{{ i.email }}</td>
                                     <td>{{ i.address }}</td>
-                                    <!-- <td>{{ i.document_verification_type }}</td> -->
                                     <td>{{ i.document_link.url }}</td>
                                     <td>
                                         <span class="badge {% if i.status == 'active' %}badge-success{% else %}badge-danger{% endif %}">
@@ -96,7 +89,7 @@
     function EditDriver(driver_id) {
         var action = confirm("Are you sure you want to edit this driver?");
         if (action !== false) {
-            window.location.href = "RescueEditDriver/" + driver_id; // Add a slash here
+            window.location.href = "RescueEditDriver/" + driver_id; 
         }
     };
 

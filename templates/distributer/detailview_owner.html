@@ -1,0 +1,161 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+
+        <div class="content-body">
+            <div class="container-fluid">
+                <div class="row page-titles mx-0">
+                    <div class="col-sm-6 p-md-0">
+                        <div class="welcome-text">
+                            <h4>Hi, welcome back!</h4>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                        <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+                    </div>
+                </div>
+               
+        <div class="col-xl-12">
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="card-title">Detail Owner View</h4>
+                </div>
+                <div class="card-body">
+                        
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Owner Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" value="{{ ownerlist.company_format }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Owner Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg"  value="{{ ownerlist.name }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" value="{{ ownerlist.phone_number }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                        <div class="col-sm-12">
+                            <input type="email" class="form-control form-control-lg" value="{{ ownerlist.email }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                        <div class="col-sm-12">                                            
+                            <textarea class="form-control" rows="2" disabled>{{ ownerlist.address }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
+                        <div class="col-sm-3">
+                            {% if ownerlist.image %}
+                            <a href="{{ ownerlist.image.url }}" target="_blank">
+                            <img  src="{{ ownerlist.image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
+                        <div class="col-sm-3">
+                            {% if ownerlist.address_proof %}
+                            <a href="{{ ownerlist.address_proof.url }}" target="_blank">
+                            <img id="preview2" src="{{ ownerlist.address_proof.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
+                        <div class="col-sm-3">
+                            {% if ownerlist.identity %}
+                            <a href="{{ ownerlist.identity.url }}" target="_blank">
+                            <img id="preview3" src="{{ ownerlist.identity.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ ownerlist.get_status_display }}" disabled>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="welcome-text">
+                        <center><h4 style="color: blue;">Account Details</h4></center>
+                    </div>
+                    <hr>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Holder Name</label>
+                            <input type="text" class="form-control form-control-lg" id="holdername" name="holdername" value="{{ ownerlist.holdername }}" disabled>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">A/C Number</label>
+                            <input type="text" class="form-control form-control-lg" id="ac_number" name="ac_number" value="{{ ownerlist.ac_number }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Bank Name</label>
+                            <input type="text" class="form-control form-control-lg" id="bankname" name="bankname" value="{{ ownerlist.bankname }}" disabled>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">IFSC Code</label>
+                            <input type="text" class="form-control form-control-lg" id="ifsc_code" name="ifsc_code" value="{{ ownerlist.ifsc_code }}" disabled>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created On</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{% if ownerlist.created_on %}{{ ownerlist.created_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated On</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{% if ownerlist.updated_on %}{{ ownerlist.updated_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created By</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ ownerlist.created_by }}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated By</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg"  value="{{ ownerlist.updated_by }}" disabled>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
+{% endblock content %}

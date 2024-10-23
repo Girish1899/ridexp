@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,123 +17,118 @@
             </div>
         </div>
 
-
         <div class="col-xl-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Vehicle Owner</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
                                     
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Owner Id</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Vehicle Owner Name</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="name" name="name">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
-                                            <div class="col-sm-12">
-                                                <input type="email" class="form-control form-control-lg" id="email" name="email">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Address</label>
-                                            <div class="col-sm-12">                                            
-                                                <textarea class="form-control" rows="2" id="address" name="address"></textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
-                                            <div class="col-sm-12">
-                                                <input type="file" class="form-control form-control-lg" id="image" name="image">
-                                                <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
-                                            <div class="col-sm-12">
-                                                <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
-                                                <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
-                                            <div class="col-sm-12">
-                                                <input type="file" class="form-control form-control-lg" id="identity" name="identity">
-                                                <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                                            <div class="col-sm-12">    
-                                            <select class="form-control form-control-lg" id="status" name="status">
-                                                <option value="" selected disabled>Select Status</option>
-                                                <option value="active" selected>Active</option>
-                                                <option value="inactive">Inactive</option>
-                                            </select>
-                                            </div>
-                                        </div>
-                                        <hr>
-                                        <div class="welcome-text">
-                                           <center><h4 style="color: blue;">Account Details</h4></center>
-                                            <!-- <span class="ml-1">Element</span> -->
-                                        </div>
-                                        <hr>
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Holder Name</label>
-                                                <input type="text" class="form-control form-control-lg" id="holdername" name="holdername">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">A/C Number</label>
-                                                <input type="text" class="form-control form-control-lg" id="ac_number" name="ac_number">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Bank Name</label>
-                                                <input type="text" class="form-control form-control-lg" id="bankname" name="bankname">
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">IFSC Code</label>
-                                                <input type="text" class="form-control form-control-lg" id="ifsc_code" name="ifsc_code">
-                                            </div>
-                                        </div>
-<br>
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
-                                        </div>
-
-                                <!-- </div> -->
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Owner Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
                         </div>
                     </div>
-                <!-- </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Vehicle Owner Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                        <div class="col-sm-12">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Address</label>
+                        <div class="col-sm-12">                                            
+                            <textarea class="form-control" rows="2" id="address" name="address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
+                        <div class="col-sm-12">
+                            <input type="file" class="form-control form-control-lg" id="image" name="image">
+                            <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
+                        <div class="col-sm-12">
+                            <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
+                            <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
+                        <div class="col-sm-12">
+                            <input type="file" class="form-control form-control-lg" id="identity" name="identity">
+                            <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">    
+                        <select class="form-control form-control-lg" id="status" name="status">
+                            <option value="" selected disabled>Select Status</option>
+                            <option value="active" selected>Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="welcome-text">
+                        <center><h4 style="color: blue;">Account Details</h4></center>
+                    </div>
+                    <hr>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Holder Name</label>
+                            <input type="text" class="form-control form-control-lg" id="holdername" name="holdername">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">A/C Number</label>
+                            <input type="text" class="form-control form-control-lg" id="ac_number" name="ac_number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Bank Name</label>
+                            <input type="text" class="form-control form-control-lg" id="bankname" name="bankname">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">IFSC Code</label>
+                            <input type="text" class="form-control form-control-lg" id="ifsc_code" name="ifsc_code">
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -171,14 +165,12 @@
                 return;
             }
 
-             // Validate phone number format
              var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
                 alert("Please enter a valid 10-digit phone number.");
                 return;
             }
 
-             // Validate email format
              var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
@@ -191,14 +183,12 @@
                 return;
             }
 
-            // Validate IFSC code format (4 letters followed by 7 digits)
             var ifscPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
             if (!ifscPattern.test(ifsc_code)) {
                 alert("Please enter a valid IFSC code.");
                 return;
             }
             
-            // Check if phone number already exists
             $.ajax({
                 url: '{% url "check_ownerphonenumber" %}',
                 type: "GET",
@@ -207,7 +197,6 @@
                     if (data.exists) {
                         alert(" phone_number already exists.");
                     } else {
-                        // Proceed with the form submission
                         $.ajax({
                             url: '{% url "addvehicleowner" %}',
                             type: "POST",

@@ -6,7 +6,6 @@ urlpatterns = [
 
     path('',rescueindex,name='rescueindex'),
    
-# bookings####################################################################
     path('rescueaddbooking', AddRide.as_view(), name='rescueaddbooking'),
     path('rescueridelist/<int:ride_id>/', RideList.as_view(), name='rescueridelist'),
     path('rescueridelist', RideList.as_view(), name='rescueridelist'),
@@ -23,17 +22,14 @@ urlpatterns = [
     path('rescuecurrent-bookings', AssignDriverView.as_view(), name='rescuecurrent_bookings'),
     path('rescueinvoice/<int:ride_id>/', InvoiceView.as_view(), name='rescueinvoice_view'),
 
-        # driverss#######################
     path('rescuedriverlist', DriverListView.as_view(), name='rescuedriverlist'),
     path('RescueEditDriver/<int:id>/', EditDriverView.as_view(), name='RescueEditDriver'),
     path('rescueupdatedriver', UpdateDriverView.as_view(), name='rescueupdatedriver'),
 
-        # customer 
     path('rescuecustomerlist', CustomerList.as_view(), name='rescuecustomerlist'),
     path('RescueEditCustomer/<int:id>/', EditCustomer.as_view(), name='RescueEditCustomer'),
     path('RescueUpdateCustomer', UpdateCustomer.as_view(), name='RescueUpdateCustomer'),  
 
-     #profile
     path('update-user/', UpdateUserView.as_view(), name='rescue_update_user'),
     path('rescue_profile', rescue_profile_view, name='rescue_profile'),
 

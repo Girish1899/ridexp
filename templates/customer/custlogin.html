@@ -143,7 +143,6 @@
                                             name="phone_number" placeholder="Enter your mobile number">
                                     </div>
                                     <div class="form-group">
-                                        <!-- <label><strong>Password</strong></label> -->
                                         <input type="text" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
                                     </div>
                                     <div class="form-row d-flex justify-content-between mt-4 mb-2">
@@ -168,7 +167,6 @@
     </div>
 
 
-    <!-- Modal Structure -->
     <div class="modal fade" id="statusErrorsModal" tabindex="-1" role="dialog" data-bs-backdrop="static"
         data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
@@ -207,11 +205,6 @@
     </div>
 
 
-
-    <!--**********************************
-        Scripts
-    ***********************************-->
-    <!-- Required vendors -->
     <script src="{% static '/dashboard/vendor/global/global.min.js' %}"></script>
     <script src="{% static '/dashboard/js/quixnav-init.js' %}"></script>
     <script src="{% static '/dashboard/js/custom.min.js' %}"></script>
@@ -222,41 +215,38 @@
 <script>
     $(document).ready(function () {
     $("#login_action").click(function (event) {
-        event.preventDefault(); // Prevent default form submission
+        event.preventDefault(); 
         var phone_number = $('#phone_number').val();
-        var password = $('#password').val(); // Capture password
+        var password = $('#password').val(); 
 
-        console.log("Phone Number: " + phone_number); // Debug: log phone number
-        console.log("Password: " + password); // Debug: log password
+        console.log("Phone Number: " + phone_number); 
+        console.log("Password: " + password); 
 
         $.ajax({
             url: "{% url 'customer_login' %}",
             type: "POST",
             data: {
                 phone_number: phone_number,
-                password: password, // Send password
+                password: password, 
                 csrfmiddlewaretoken: '{{ csrf_token }}'
             },
             success: function (response) {
-                console.log("Response from server: ", response); // Debug: log server response
+                console.log("Response from server: ", response); 
 
                 if (response.success) {
-                    // Show success modal
                     var successModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
                     successModal.show();
-                    window.location.href = response.redirect_url;  // Redirect if success
+                    window.location.href = response.redirect_url;  
                 } else {
-                    // Dynamically update the error message
                     $('#statusErrorsModal .modal-body p').text(response.message || 'An error occurred.');
                     
-                    // Show error modal
                     var errorModal = new bootstrap.Modal(document.getElementById('statusErrorsModal'));
                     errorModal.show();
                 }
             },
             error: function (xhr, status, error) {
-                console.error(xhr.responseText); // Debug: log error response
-                alert("An error occurred while processing your request."); // Display a generic error message
+                console.error(xhr.responseText); 
+                alert("An error occurred while processing your request."); 
             }
         });
     });

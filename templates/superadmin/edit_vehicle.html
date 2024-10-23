@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -46,8 +45,6 @@
                                 <option value="" selected disabled>Select Owner Id</option>
                                 {% for obj in ownerlist %}
                                 <option value="{{ obj.owner_id }}" {% if obj.owner_id == vehiclelist.0.owner.owner_id %} selected {% endif %}>{{ obj.name }} - {{obj.phone_number}}</option>
-
-                                <!-- <option value="{{ obj.owner_id }}">{{ obj.name }} - {{obj.phone_number}}</option> -->
                                 {% endfor %}
                             </select>
                         </div>
@@ -61,23 +58,6 @@
                         </div>
                     </div><br>
 
-                    <!-- <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle No.*</label>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control form-control-lg" id="part1" name="part1" maxlength="2" placeholder="KA" value="{{ vehiclelist.0.part1 }}" required>
-                        </div>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control form-control-lg" id="part2" name="part2" maxlength="2" placeholder="01" value="{{ vehiclelist.0.part2 }}" required>
-                        </div>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control form-control-lg" id="part3" name="part3" maxlength="2" placeholder="AB" value="{{ vehiclelist.0.part3 }}" required>
-                        </div>
-                        <div class="col-sm-2">
-                            <input type="text" class="form-control form-control-lg" id="part4" name="part4" maxlength="4" placeholder="0000" value="{{ vehiclelist.0.part4 }}" required>
-                        </div>
-                    </div> -->
-                    
-
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
                         <div class="col-sm-3">
@@ -88,9 +68,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                  
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand *</label>
                         <div class="col-sm-3">
                             <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
@@ -112,9 +90,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                  
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
                         <div class="col-sm-3">    
                             <select class="form-control form-control-lg" id="year" name="year">
@@ -150,9 +126,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                   
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Transmission Type *</label>
                         <div class="col-sm-3">
                             <select id="transmission" name="transmission" class="form-control form-control-lg">
@@ -164,7 +138,6 @@
                         </div>
                     </div><br>
 
-
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
                         <div class="col-sm-3">
@@ -175,9 +148,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                  
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
                         <div class="col-sm-3">
                             <select class="form-control form-control-lg" id="car_type" name="car_type">
@@ -214,9 +185,7 @@
                             <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                   
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
                         <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate" >
@@ -238,9 +207,7 @@
                             <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                   
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
                         <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details" >
@@ -252,7 +219,6 @@
                         </div>
                     </div><br>
                     
-
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details *</label>
                         <div class="col-sm-3">
@@ -263,9 +229,7 @@
                             <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                             {% endif %}
                         </div>
-                    <!-- </div> -->
-
-                    <!-- <div class="form-group row"> -->
+                    
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
                         <div class="col-sm-3">
                             <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test" >
@@ -286,9 +250,7 @@
                                 <option value="inactive" {% if vehiclelist.0.vehicle_status == "inactive" %} selected {% endif %}>Inactive</option>
                             </select>
                         </div>
-
-                        
-                    </div>
+                    </div><br>
 
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
@@ -304,11 +266,8 @@
 <script>
 
     const currentYear = new Date().getFullYear();
-
-    // Get the year dropdown element
     const yearDropdown = document.getElementById('year');
 
-    // Add years from 2010 to next year
     for (let year = 2010; year <= currentYear ; year++) {
         const option = document.createElement('option');
         option.value = year;
@@ -322,7 +281,6 @@
         const commissionPercentage = selectedOption.getAttribute('data-percentage');
         document.getElementById('commission_percentage').value = commissionPercentage;
     }
-
 
     function getbrand() {
         $('#brand')
@@ -410,7 +368,7 @@
             url: "{% url 'UpdateVehicle' %}",
             type: 'POST',
             headers: {
-                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val() // CSRF token from the form
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
             },
             data: formData,
             processData: false,

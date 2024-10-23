@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +17,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -74,11 +71,9 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-    </div><!-- .animated -->
-</div><!-- .content -->
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -106,11 +101,11 @@
     function EditPackages(package_id) {
         var action = confirm("Are you sure you want to edit this package?");
         if (action !== false) {
-            window.location.href = "EditPackages/" + package_id; // Add a slash here
+            window.location.href = "EditPackages/" + package_id; 
         }
     };
     function HistoryPackages(package_id) {
-        window.location.href = "PackagesHistory/" + package_id; // Add a slash here
+        window.location.href = "PackagesHistory/" + package_id; 
     };
 
 </script>

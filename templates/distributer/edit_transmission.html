@@ -1,0 +1,114 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-TransmissionListView' %}" style="color: white !important;">View Transmission</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+ 
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Transmission</h6>
+                    </div>
+                    </div>
+
+                <div class="card-body">
+                        <div class="form-group row">
+                            <input type="hidden" class="form-control" id="transmission_id" name="transmission_id" value="{{ tlist.0.transmission_id }}">
+                            <input type="hidden" class="form-control" id="original_transmission_name" name="original_transmission_name" value="{{ tlist.0.transmission_name }}">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Transmission Name</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control form-control-lg" id="transmission_name" name="transmission_name" value="{{ tlist.0.transmission_name }}">
+                            </div>
+                        </div><br>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var transmission_name = $('#transmission_name').val().trim().toLowerCase();
+            var transmission_id = $('#transmission_id').val();
+            var original_transmission_name = $('#original_transmission_name').val();
+            console.log("transmission_id:", transmission_id);
+
+            if (transmission_name.trim() === '') {
+                alert("Please enter transmission name.");
+                return;
+            }
+
+            if (transmission_name.trim() === original_transmission_name.trim()) {
+                submitForm(transmission_name, transmission_id);
+            } else {
+                $.ajax({
+                    url: "{% url 'dispatch-check_transmission' %}",
+                    type: "GET",
+                    data: { 'transmission_name': transmission_name },
+                    success: function (data) {
+                        if (data.exists) {
+                            alert("Transmission name already exists.");
+                        } else {
+                            if (confirm("Are you sure you want to save this transmission?")) {
+                                submitForm(transmission_name, transmission_id);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+        });
+
+        function submitForm(transmission_name, transmission_id) {
+            $.ajax({
+                url: "{% url 'dispatch-UpdateTransmission' %}",
+                type: "POST",
+                data: {
+                    'transmission_name': transmission_name,
+                    'transmission_id': transmission_id,
+                },
+                headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("Transmission details edited successfully");
+                        window.location.href = "{% url 'dispatch-TransmissionListView' %}";
+                    } else {
+                        alert("Failed to edit transmission details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+</script>
+{% endblock content %}

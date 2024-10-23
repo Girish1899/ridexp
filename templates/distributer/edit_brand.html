@@ -1,0 +1,143 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+            <ol class="breadcrumb" style="background-color: #98BDFF;">
+                <li class="breadcrumb-item" ><a href="{% url 'dispatch-BrandListView' %}" style="color: white !important;">View Car Brand</a></li>
+                <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Car Brand</h6>
+                </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="brand_id" name="brand_id" value="{{ brandlist.0.brand_id }}">
+                        <input type="hidden" class="form-control" id="category_status" name="category_status" value="{{ brandlist.0.category.category_status }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Category</label>
+                        <div class="col-sm-12">
+                            <select name="category" id="category" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == brandlist.0.category.category_id %} selected {% endif %}>
+                                    {{ obj.category_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="original_brand_name" name="original_brand_name" value="{{ brandlist.0.brand_name }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Brand Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="brand_name" name="brand_name" value="{{ brandlist.0.brand_name }}">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" {% if brandlist.0.status == "active" %} selected {% endif %}>Active</option>
+                                <option value="inactive" {% if brandlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        var existingBrands = {};
+
+        '{% for brand in brands %}'
+            if (!existingBrands["{{ brand.category_id }}"]) {
+                existingBrands["{{ brand.category_id }}"] = [];
+            }
+            existingBrands["{{ brand.category_id }}"].push("{{ brand.brand_name|escapejs }}".toLowerCase());
+        '{% endfor %}'
+
+        var categoryStatus = $('#category_status').val();
+        var brandStatus = $('#status').val();
+
+        if (categoryStatus === 'inactive') {
+            $('#category').prop('disabled', true);
+            $('#brand_name').prop('disabled', true);
+            $('#status').prop('disabled', true);
+            $('#save_action').prop('disabled', true);
+            alert("Cannot edit brand details as the category is inactive.");
+        }
+
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var brand_name = $('#brand_name').val().trim().toLowerCase();
+            var original_brand_name = $('#original_brand_name').val().trim().toLowerCase();
+            var category = $('#category').val();
+            var status = $('#status').val();
+            var brand_id = $('#brand_id').val();
+
+            if (!category || !brand_name || !status) {
+                alert("All fields are required.");
+                return;
+            }
+
+            if (existingBrands[category] && existingBrands[category].includes(brand_name) && brand_name !== original_brand_name) {
+                alert("This brand already exists for the selected category.");
+                return;
+            }
+
+            if (confirm("Are you sure you want to save brand?")) {
+                $.ajax({
+                    url: "{% url 'dispatch-UpdateBrand' %}",
+                    type: "POST",
+                    data: {
+                        'brand_name': brand_name,
+                        'brand_id': brand_id,
+                        'category': category,
+                        'status': status
+                    },
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    success: function (result) {
+                        console.log("result val: ", result);
+                        if (result['success']) {
+                            alert("Brand details edited successfully");
+                            window.location.href = "{% url 'dispatch-BrandListView' %}";
+                        } else {
+                            alert("Failed to edit brand details: " + result['message']);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+        });
+    });
+</script>
+{% endblock content %}

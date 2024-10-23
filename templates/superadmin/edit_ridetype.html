@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -28,24 +27,19 @@
 
                 <div class="card-body">
                     <div class="form-group row">
-                        <input type="hidden" class="form-control" id="ridetype_id" name="ridetype_id"
-                            value="{{ rtlist.0.ridetype_id }}">
+                        <input type="hidden" class="form-control" id="ridetype_id" name="ridetype_id" value="{{ rtlist.0.ridetype_id }}">
                         <input type="hidden" class="form-control" id="original_name" name="original_name" value="{{ rtlist.0.name }}">
  
-                        <label class="col-sm-2 col-form-label col-form-label-lg"
-                            style="color: #454545; font-size: 16px;">Service Id</label>
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Service Id</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-lg" id="company_format"
-                                name="company_format"  value="{{ rtlist.0.company_format }}" readonly>
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format"  value="{{ rtlist.0.company_format }}" readonly>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg"
-                            style="color: #454545; font-size: 16px;">* Service Name</label>
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Service Name</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-lg" id="name" name="name"
-                                value="{{ rtlist.0.name }}">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ rtlist.0.name }}">
                         </div>
                     </div>
                     <div class="col-12">
@@ -73,8 +67,6 @@
                 alert("Please enter ride type name.");
                 return;
             }
-
-            // Assuming you have a variable original_name to compare with the edited name
 
             if (name === original_name) {
                 submitForm(name, ridetype_id, company_format);

@@ -1,6 +1,5 @@
 from decimal import Decimal
 from django.db import models
-# models.py
 from djongo import models
 from django.contrib.auth.models import User
 from django.utils import timezone
@@ -14,7 +13,7 @@ class Profile(models.Model):
         ('distributer', 'Distributer'),
         ('rescue', 'Rescue'),
         ('hr', 'HR'),
-        ('driver', 'Driver'),  # Added driver type
+        ('driver', 'Driver'),  
         ('author','Author'),
 
     ]
@@ -23,8 +22,8 @@ class Profile(models.Model):
         ('active', 'Active'),
         ('inactive', 'Inactive'),
     ]
-    profile_id = models.AutoField(primary_key=True)  # Added primary key field
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Changed to ForeignKey
+    profile_id = models.AutoField(primary_key=True)  
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  
     phone_number = models.CharField(max_length=10)
     address = models.TextField()
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
@@ -53,7 +52,7 @@ class ProfileHistory(models.Model):
     ]
 
     profile_id = models.IntegerField()  
-    user = models.ForeignKey(User, on_delete=models.CASCADE)  # Changed to ForeignKey
+    user = models.ForeignKey(User, on_delete=models.CASCADE)  
     phone_number = models.CharField(max_length=10)
     address = models.TextField()
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
@@ -67,7 +66,6 @@ class ProfileHistory(models.Model):
     def __str__(self):
         return f"History for profile_id {self.profile_id} on {self.updated_on}"
 
-#######################################################################################################################################
 
 class VehicleType(models.Model):
     vehicle_type_id = models.AutoField(primary_key=True)
@@ -90,7 +88,6 @@ class VehicleTypeHistory(models.Model):
     def __str__(self):
         return f"History for vehicle_type_id {self.vehicle_type_id}"
     
-#######################################################################################################################################
 
 class Ridetype(models.Model):
     ridetype_id = models.AutoField(primary_key=True)
@@ -113,7 +110,6 @@ class RidetypeHistory(models.Model):
     def __str__(self):
         return f"History for ridetype_id {self.ridetype_id} on {self.updated_on}"
     
-#######################################################################################################################################
 
 class Category(models.Model):
     STATUS_CHOICES = [
@@ -151,7 +147,7 @@ class CategoryHistory(models.Model):
         return f"History for category_id {self.category_id} on {self.updated_on}"
     
 
-#######################################################################################################################################
+
 
 class Brand(models.Model):
     STATUS_CHOICES = [
@@ -186,7 +182,7 @@ class BrandHistory(models.Model):
     def __str__(self):
         return f"History for brand_id {self.brand_id} on {self.updated_on}"
     
-#######################################################################################################################################
+
 
 class Model(models.Model):
     STATUS_CHOICES = [
@@ -197,7 +193,6 @@ class Model(models.Model):
     model_id = models.AutoField(primary_key=True)
     brand = models.ForeignKey(Brand,related_name='models', on_delete=models.CASCADE)
     model_name = models.CharField(max_length=100)
-    # price_per_kms = models.DecimalField(max_digits=10,decimal_places=2,default=0.0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True) 
@@ -214,7 +209,6 @@ class ModelHistory(models.Model):
     model_id = models.IntegerField()
     brand = models.ForeignKey(Brand, related_name='models_history', on_delete=models.CASCADE)
     model_name = models.CharField(max_length=100)
-    # price_per_kms = models.DecimalField(max_digits=10,decimal_places=2,default=0.0)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='active')
     created_on = models.DateField()
     updated_on = models.DateTimeField(auto_now_add=True)
@@ -224,7 +218,6 @@ class ModelHistory(models.Model):
     def __str__(self):
         return f"History for model_id {self.model_id} on {self.updated_on}"
     
-#  Transmission ###########################################   
 
 class Transmission(models.Model):
     transmission_id = models.AutoField(primary_key=True)
@@ -245,7 +238,6 @@ class TransmissionHistory(models.Model):
     def __str__(self):
         return f"History for transmission_id {self.transmission_id} on {self.updated_on}" 
 
-# color #####################################################################
 class Color(models.Model):
     color_id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=100)
@@ -266,7 +258,7 @@ class ColorHistory(models.Model):
         return f"History for color_id {self.color_id} on {self.updated_on}"       
 
 
-#######################################################################################################################################
+
 
 class Customer(models.Model):
     STATUS_CHOICES = [
@@ -312,7 +304,6 @@ class CustomerHistory(models.Model):
     def _str_(self):
         return f"History for customer_id {self.customer_id} on {self.updated_on}"
     
-#######################################################################################################################################
 
 class VehicleOwner(models.Model):
     STATUS_CHOICES = [
@@ -333,7 +324,7 @@ class VehicleOwner(models.Model):
     email = models.EmailField()
     image = models.ImageField(upload_to='documents',null=True)
     address_proof = models.ImageField(upload_to='documents',null=True)
-    identity = models.ImageField(upload_to='documents',null=True)  # Changed to FileField for general file types
+    identity = models.ImageField(upload_to='documents',null=True)  
     holdername = models.CharField(max_length=100)
     ac_number = models.CharField(max_length=100)
     bankname = models.CharField(max_length=100)
@@ -366,7 +357,7 @@ class VehicleOwnerHistory(models.Model):
     email = models.EmailField()
     image = models.ImageField(upload_to='documents',null=True)
     address_proof = models.ImageField(upload_to='documents',null=True)
-    identity = models.ImageField(upload_to='documents',null=True)  # Changed to FileField for general file types
+    identity = models.ImageField(upload_to='documents',null=True)  
     holdername = models.CharField(max_length=100)
     ac_number = models.CharField(max_length=100)
     bankname = models.CharField(max_length=100)
@@ -384,7 +375,6 @@ class VehicleOwnerHistory(models.Model):
         return f"History for owner_id {self.owner_id} on {self.updated_on}"
     
 
-#######################################################################################################################################
     
 class CommissionType(models.Model):
     commission_id = models.AutoField(primary_key=True)
@@ -408,7 +398,6 @@ class CommissionHistory(models.Model):
     def _str_(self):
         return f"History for commission_id {self.commission_id} on {self.updated_on}"
     
-#######################################################################################################################################
 
 
 class Vehicle(models.Model):
@@ -500,7 +489,6 @@ class VehicleHistory(models.Model):
         return f"History for vehicle_id {self.vehicle_id} on {self.updated_on}"
     
 
-#######################################################################################################################################
 
 class Driver(models.Model):
     STATUS_CHOICES = [
@@ -579,7 +567,7 @@ class DriverHistory(models.Model):
     block_reason = models.CharField(max_length=255,null=True)
     number_of_rides = models.IntegerField(null=True) 
     created_on = models.DateField()
-    updated_on = models.DateTimeField(auto_now_add=True)  # Timestamp of when the history record was created
+    updated_on = models.DateTimeField(auto_now_add=True)  
     created_by = models.CharField(max_length=100, null=True, blank=True)
     updated_by = models.CharField(max_length=100, null=True, blank=True)
     verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS_CHOICES, default='not_verified')
@@ -588,7 +576,7 @@ class DriverHistory(models.Model):
     def __str__(self):
         return f"History for driver_id {self.driver_id} on {self.updated_on}"    
     
-############################################################################################################
+
 
 class Pricing(models.Model):
     STATUS_CHOICES = [
@@ -612,14 +600,13 @@ class Pricing(models.Model):
     permit = models.DecimalField(max_digits=5, decimal_places=2)
     price_per_km = models.DecimalField(max_digits=5, decimal_places=2)
     car_type = models.CharField(max_length=10)
-    trip_type = models.CharField(max_length=10, choices=TRIP_CHOICES, null=True, blank=True)  # New field
+    trip_type = models.CharField(max_length=10, choices=TRIP_CHOICES, null=True, blank=True)  
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)
     created_by = models.ForeignKey(User, related_name='pricing_created', on_delete=models.SET_NULL, null=True, blank=True)
     updated_by = models.ForeignKey(User, related_name='pricing_updated', on_delete=models.SET_NULL, null=True, blank=True)
 
-    # class Meta:
-    #     unique_together = ('category', 'ridetype', 'car_type')
+    
 
 class PricingHistory(models.Model):
     STATUS_CHOICES = [
@@ -642,7 +629,7 @@ class PricingHistory(models.Model):
     permit = models.DecimalField(max_digits=5, decimal_places=2)
     price_per_km = models.DecimalField(max_digits=5, decimal_places=2)
     car_type = models.CharField(max_length=10)
-    trip_type = models.CharField(max_length=10, choices=TRIP_CHOICES, null=True, blank=True)  # New field
+    trip_type = models.CharField(max_length=10, choices=TRIP_CHOICES, null=True, blank=True)  
     created_on = models.DateField()
     updated_on = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=100, null=True, blank=True)
@@ -651,7 +638,7 @@ class PricingHistory(models.Model):
     def __str__(self):
         return f"History for pricing_id {self.pricing_id} on {self.updated_on}" 
     
-#######################################################################################################################################
+
 
 class RideDetails(models.Model):
     STATUS_CHOICES = [
@@ -741,7 +728,6 @@ class RideDetailsHistory(models.Model):
     def str(self):
         return f"History for ride_id {self.ride_id} on {self.updated_on}"
     
-######################### accounts #######################################    
     
 class Accounts(models.Model):
     account_id = models.AutoField(primary_key=True)
@@ -906,7 +892,7 @@ class Blogs(models.Model):
     ]
     blogs_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=1000)
-    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True)  # Slug field without auto generation
+    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True) 
     description = models.TextField()
     image = models.ImageField(upload_to='blog_images/', blank=True, null=True)
     image_link = models.CharField(max_length=1000, blank=True, null=True)
@@ -934,7 +920,7 @@ class WebsitePackages(models.Model):
     ]
     webpackage_id = models.AutoField(primary_key=True)
     title = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True)  # Slug field without auto generation
+    slug = models.SlugField(max_length=1000, unique=True, blank=True, null=True) 
     package_category = models.ForeignKey(PackageCategories, on_delete=models.CASCADE)
     description = models.TextField(help_text="Detailed description of the package")
     top_attraction = models.TextField(help_text="Main attractions for this package, e.g., Mysore Palace")

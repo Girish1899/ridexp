@@ -7,15 +7,12 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item"><a href="{% url 'userlist' %}" style="color: white !important;">View
-                            Admin</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
-                            Back</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'userlist' %}" style="color: white !important;">View Admin</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
@@ -115,21 +112,18 @@
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
-                    <!-- </div> -->
                 </div>
             </div>
         </div>
-        <!-- </div> -->
     </div>
 </div>
-
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
     $(document).ready(function () {
         $("#save_action").click(function (event) {
-            event.preventDefault();  // Prevent default form submission
+            event.preventDefault();
 
             var company_format = $('#company_format').val();
             var user_name = $('#user_name').val();
@@ -145,27 +139,23 @@
                 return;
             }
 
-            // Validate phone number format
             var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
                 alert("Please enter a valid 10-digit phone number.");
                 return;
             }
 
-            // Validate email format
             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
                 return;
             }
 
-            // Validate password criteria
             var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
             if (!passwordPattern.test(password)) {
                 alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
                 return;
             }
-
 
             $.ajax({
                 url: '{% url "adduser" %}',
@@ -195,6 +185,5 @@
         });
     });
 </script>
-
 
 {% endblock content %}

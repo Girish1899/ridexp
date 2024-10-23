@@ -1,5 +1,4 @@
 .pagination {
-  // scss-docs-start pagination-css-vars
   --#{$prefix}pagination-padding-x: #{$pagination-padding-x};
   --#{$prefix}pagination-padding-y: #{$pagination-padding-y};
   @include rfs($pagination-font-size, --#{$prefix}pagination-font-size);
@@ -20,7 +19,6 @@
   --#{$prefix}pagination-disabled-color: #{$pagination-disabled-color};
   --#{$prefix}pagination-disabled-bg: #{$pagination-disabled-bg};
   --#{$prefix}pagination-disabled-border-color: #{$pagination-disabled-border-color};
-  // scss-docs-end pagination-css-vars
 
   display: flex;
   @include list-unstyled();
@@ -88,7 +86,6 @@
       }
     }
   } @else {
-    // Add border-radius to all pageLinks in case they have left margin
     .page-link {
       @include border-radius(var(--#{$prefix}pagination-border-radius));
     }
@@ -96,9 +93,7 @@
 }
 
 
-//
-// Sizing
-//
+
 
 .pagination-lg {
   @include pagination-size($pagination-padding-y-lg, $pagination-padding-x-lg, $font-size-lg, $pagination-border-radius-lg);

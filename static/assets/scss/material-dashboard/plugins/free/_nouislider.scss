@@ -1,8 +1,4 @@
-/*! nouislider - 14.6.3 - 11/19/2020 */
-/* Functional styling;
- * These styles are required for noUiSlider to function.
- * You don't need to change these rules to apply your design.
- */
+
 .noUi-target,
 .noUi-target * {
   -webkit-touch-callout: none;
@@ -27,8 +23,7 @@
   z-index: 1;
   top: 0;
 }
-/* Wrapper for all connect elements.
- */
+
 .noUi-connects {
   z-index: 0;
   overflow: hidden;
@@ -55,15 +50,12 @@
   height: 10%;
   width: 10%;
 }
-/* Offset direction
- */
+
 .noUi-txt-dir-rtl.noUi-horizontal .noUi-origin {
   left: 0;
   right: auto;
 }
-/* Give origins 0 height/width so they don't interfere with clicking the
- * connect elements.
- */
+
 .noUi-vertical .noUi-origin {
   width: 0;
 }
@@ -87,8 +79,7 @@
 .noUi-state-drag * {
   cursor: inherit !important;
 }
-/* Slider size and handle placement;
- */
+
 .noUi-horizontal {
   height: 2px;
 }
@@ -116,9 +107,7 @@
   left: -17px;
   right: auto;
 }
-/* Styling;
- * Giving the connect element a border radius causes issues with using transform: scale
- */
+
 .noUi-target {
   background: $light;
   border-radius: .25rem;
@@ -130,8 +119,7 @@
   background: $primary;
 
 }
-/* Handles and cursors;
- */
+
 .noUi-draggable {
   cursor: ew-resize;
 }
@@ -156,8 +144,7 @@
 }
 
 
-/* Disabled state;
- */
+
 [disabled] .noUi-connect {
   background: #B8B8B8;
 }
@@ -166,9 +153,7 @@
 [disabled] .noUi-handle {
   cursor: not-allowed;
 }
-/* Base;
- *
- */
+
 .noUi-pips,
 .noUi-pips * {
   -moz-box-sizing: border-box;
@@ -178,9 +163,7 @@
   position: absolute;
   color: #999;
 }
-/* Values;
- *
- */
+
 .noUi-value {
   position: absolute;
   white-space: nowrap;
@@ -190,9 +173,7 @@
   color: #ccc;
   font-size: 10px;
 }
-/* Markings;
- *
- */
+
 .noUi-marker {
   position: absolute;
   background: #CCC;
@@ -203,9 +184,7 @@
 .noUi-marker-large {
   background: #AAA;
 }
-/* Horizontal layout;
- *
- */
+
 .noUi-pips-horizontal {
   padding: 10px 0;
   height: 80px;
@@ -232,9 +211,7 @@
 .noUi-marker-horizontal.noUi-marker-large {
   height: 15px;
 }
-/* Vertical layout;
- *
- */
+
 .noUi-pips-vertical {
   padding: 0 10px;
   height: 100%;

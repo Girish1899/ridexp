@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -27,32 +26,32 @@
     
                     <div class="card-body">
                                     
-                                        <div class="form-group row">
-                                            <input type="hidden" class="form-control" id="commission_id" name="commission_id" value="{{ clist.0.commission_id }}">
+                        <div class="form-group row">
+                            <input type="hidden" class="form-control" id="commission_id" name="commission_id" value="{{ clist.0.commission_id }}">
 
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Name</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="commission_name" name="commission_name" value="{{ clist.0.commission_name }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Percentage</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="commission_percentage" name="commission_percentage" value="{{ clist.0.commission_percentage }}">
-                                            </div>
-                                        </div>
-
-                                        
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
-                                        </div>
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Name</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control form-control-lg" id="commission_name" name="commission_name" value="{{ clist.0.commission_name }}">
                             </div>
                         </div>
+
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Percentage</label>
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control form-control-lg" id="commission_percentage" name="commission_percentage" value="{{ clist.0.commission_percentage }}">
+                            </div>
+                        </div><br>
+
+                        
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                        </div>
                     </div>
-                <!-- </div> -->
+                </div>
             </div>
         </div>
+    </div>
+</div>
         
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

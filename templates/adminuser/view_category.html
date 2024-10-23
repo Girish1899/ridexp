@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -17,8 +16,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -33,7 +30,6 @@
                                 <table class="table align-items-center justify-content-center mb-0">
                                 <thead>
                                     <tr style="color: black !important;">
-                                        <!-- <th>Category Id</th> -->
                                         <th>Serial No</th>
                                         <th>Car/Taxi Name</th>
                                         <th>No of Seats</th>
@@ -45,7 +41,6 @@
                                 <tbody>
                                     {% for i in object_list %}
                                     <tr style="color: #030000;">
-                                        <!-- <td>{{ i.category_id }}</td> -->
                                         <td>{{ forloop.counter }}</td>
                                         <td>{{ i.category_name }}</td>
                                         <td>{{ i.seats }}</td>
@@ -77,11 +72,8 @@
 <script>
 
     function HistoryCategory(category_id) {
-        window.location.href = "adCategoryHistory/" + category_id; // Add a slash here
+        window.location.href = "adCategoryHistory/" + category_id; 
     };
-
-    
-
 
 </script>
 {% endblock content%}

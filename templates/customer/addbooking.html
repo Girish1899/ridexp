@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -46,24 +45,20 @@
                         </div>
                     </div>
 
-                    <!-- Radio Button Section for Oneway/Roundtrip -->
                     <div id="ride_options" class="form-group row" style="display: none;">
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">* Trip Type</label>
                         <div class="col-sm-12">
                             <div id="trip_type_buttons">
-                                <!-- Radio buttons for Oneway, Roundtrip will be added here dynamically -->
                             </div>
                         </div>
                     </div>
 
-                    <!-- Radio Button Section for Toll Option (Only for Airport) -->
                     <div id="toll_options" class="form-group row" style="display: none;">
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">* Toll Option</label>
                         <div class="col-sm-12">
                             <div id="toll_type_buttons">
-                                <!-- Radio buttons for Add Toll, No Toll will be added here dynamically -->
                             </div>
                         </div>
                     </div>
@@ -107,7 +102,6 @@
                         </div>
                     </div>
 
-                    <!-- Hidden input fields for Drop Date and Drop Time -->
                     <div id="drop_details" class="form-group row" style="display: none;">
                         <label class="col-sm-2 col-form-label col-form-label-lg"
                             style="color: #454545; font-size: 16px;">* Drop Date</label>
@@ -152,9 +146,8 @@
                         </div>
                     </div>
 
-                    <!-- <input type="hidden" id="customer_id" name="customer_id">  -->
 
-                    <!-- Add Ride button --><br>
+<br>
                     <div class="form-group row">
                         <div class="col-12">
                             <button type="button" class="btn btn-primary" id="confirmBookingBtn">Book Ride</button>
@@ -167,7 +160,6 @@
     </div>
 </div>
 
-<!-- Add OTP Modal -->
 <center>
     <div id="otpModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -194,7 +186,6 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
-    // Timepicker validation event listener
     $('.pickup-time').change(function () {
         var selectedDate = new Date($('.date-picker').val());
         var today = new Date();
@@ -210,9 +201,8 @@
             var currentMinutes = now.getMinutes();
             var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
 
-            // Check if the selected time is earlier than the current time
             if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
-                $(this).val(''); // Clear invalid time
+                $(this).val(''); 
                 $(this).addClass('is-invalid');
                 $('#timeError').text('Please select a current or future time.');
             } else {
@@ -221,7 +211,6 @@
                 $('#timeError').text('');
             }
         } else {
-            // If the date is in the future, any time is valid
             $(this).removeClass('is-invalid');
             $(this).addClass('is-valid');
             $('#timeError').text('');
@@ -229,11 +218,10 @@
     });
 </script>
 <script>
-    // Set the minimum date to today's date
     document.addEventListener('DOMContentLoaded', function () {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
-        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); 
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
@@ -246,13 +234,11 @@
             var tripOptionsHtml = '<label style="color:black"><input type="radio" name="trip_type" value="one_way" checked> Oneway</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;' +
                 '<label style="color:black"><input type="radio" name="trip_type" value="round_trip"> Roundtrip</label>';
 
-            // Reset options and hide initially
             $('#trip_type_buttons').html('');
             $('#toll_type_buttons').html('');
-            $('#ride_options, #toll_options, #drop_details').hide();  // Hide drop details initially
+            $('#ride_options, #toll_options, #drop_details').hide();  
 
             if (selectedRidetypeName === 'airport') {
-                // Show both Oneway/Roundtrip options and Add Toll/No Toll options for Airport
                 $('#trip_type_buttons').html(tripOptionsHtml);
                 $('#ride_options').show();
 
@@ -261,39 +247,31 @@
                 $('#toll_type_buttons').html(tollOptionsHtml);
                 $('#toll_options').show();
             } else if (selectedRidetypeName === 'outstation') {
-                // Only show Oneway/Roundtrip options for Outstation
                 $('#trip_type_buttons').html(tripOptionsHtml);
                 $('#ride_options').show();
             }
         });
 
-        // Add event listener for the Trip Type (Oneway/Roundtrip)
         $('body').on('change', 'input[name="trip_type"]', function () {
             var tripType = $('input[name="trip_type"]:checked').val();
             var selectedRidetypeName = $('#ridetype').find('option:selected').data('name').toLowerCase();
 
 
             if (tripType === 'round_trip' && selectedRidetypeName === 'outstation') {
-                // Show Drop Date and Drop Time for Roundtrip
                 $('#drop_details').show();
             } else {
-                // Hide Drop Date and Drop Time for Oneway
                 $('#drop_details').hide();
             }
 
-            // Update ride pricing details
             getRidePricingDetails();
         });
 
-        // Add event listener for Drop Date selection
         $('#drop_date, #drop_time').on('change', function () {
-            console.log('Drop date or time selected:', $(this).val());  // Log the selected drop date or time
-            getRidePricingDetails();  // Fetch ride pricing details whenever drop date or time changes
+            console.log('Drop date or time selected:', $(this).val());  
+            getRidePricingDetails();  
         });
 
-        // Add event listener for Toll Option (only for airport rides)
         $('body').on('change', 'input[name="toll_option"]', function () {
-            // Update ride pricing details when toll option changes
             getRidePricingDetails();
         });
 
@@ -310,7 +288,7 @@
             } else if (hour >= 18 && hour < 24) {
                 return '6PM - 12AM';
             } else {
-                return null;  // Invalid time
+                return null;  
             }
         }
         function getRidePricingDetails() {
@@ -323,17 +301,17 @@
             var drop_date = $('#drop_date').val();
             var drop_time = $('#drop_time').val();
 
-            var trip_type = $('input[name="trip_type"]:checked').val() || '';  // Ensure the value exists or fallback to empty string
-            var toll_option = $('input[name="toll_option"]:checked').val() || ''; // Same for toll_option
+            var trip_type = $('input[name="trip_type"]:checked').val() || '';  
+            var toll_option = $('input[name="toll_option"]:checked').val() || '';
 
             console.log('ridetype', ridetype);
             console.log('drop date', drop_date);
             console.log('drop time', drop_time);
-            console.log('trip_type before sending:', trip_type);  // Add this to confirm it's being fetched
+            console.log('trip_type before sending:', trip_type);  
             console.log('toll_option', toll_option);
 
             if (ridetype && source && destination && pickup_date && pickup_time) {
-                // Disable Category Dropdown and Show Loading Indicator
+                
                 $('#category').prop('disabled', true).html('<option>Loading...</option>');
                 $('#total_fare').val('');
                 $.ajax({
@@ -356,10 +334,10 @@
                         trip_type: trip_type
                     },
                     success: function (response) {
-                        console.log(response);  // Check if response is correct
+                        console.log(response);  
                         if (response.costs) {
                             var $categorySelect = $('#category');
-                            $categorySelect.empty();  // Clear existing options
+                            $categorySelect.empty();  
                             $categorySelect.append('<option value="" selected disabled>Select Category</option>');
 
                             $.each(response.costs, function (category, carTypes) {
@@ -368,12 +346,12 @@
                                         $('<option>', {
                                             value: category + '|' + carType,
                                             text: category + ' - ' + carType.charAt(0).toUpperCase() + carType.slice(1) + ' - ₹' + details.cost,
-                                            'data-cost': details.cost // Add data attribute for cost
+                                            'data-cost': details.cost 
                                         })
                                     );
                                 });
                             });
-                            $categorySelect.prop('disabled', false); // Enable Category Dropdown
+                            $categorySelect.prop('disabled', false); 
                         } else {
                             $('#category').html('<option value="" selected disabled>No Categories Available</option>');
                             $('#category').prop('disabled', true);
@@ -386,19 +364,15 @@
                     }
                 });
             } else {
-                // If any required field is missing, reset Category and Total Fare
                 $('#category').empty().append('<option value="" selected disabled>Select Category</option>').prop('disabled', true);
                 $('#total_fare').val('');
             }
         }
 
         $('#ridetype, #source, #destination, #pickup_date, #pickup_time').on('change', function () {
-            // Clear Category and Total Fare when inputs change
             $('#category').empty().append('<option value="" selected disabled>Select Category</option>').prop('disabled', true);
             $('#total_fare').val('');
-            // Clear any previous validation messages
             $('#categoryError').text('');
-            // Fetch new Category options based on updated inputs
             getRidePricingDetails();
         });
         $('#category').on('change', function () {
@@ -406,11 +380,11 @@
             var cost = selectedOption.data('cost');
 
             if (cost) {
-                $('#total_fare').val(cost);  // Set total fare to selected category cost
+                $('#total_fare').val(cost);  
                 $('#category').removeClass('is-invalid').addClass('is-valid');
                 $('#categoryError').text('');
             } else {
-                $('#total_fare').val('');  // Clear total fare if no cost is found
+                $('#total_fare').val('');  
                 $('#category').removeClass('is-valid').addClass('is-invalid');
                 $('#categoryError').text('Please select a valid category.');
             }
@@ -424,7 +398,6 @@
         event.preventDefault();
 
         var trip_type = $('input[name="trip_type"]:checked').val() || '';
-        // Collect booking details
         var bookingDetails = {
             ridetype: $('#ridetype').val(),
             source: $('#source').val(),
@@ -443,22 +416,19 @@
 
         console.log('triptype', trip_type);
 
-        // Validation for required fields
         if (!ridetype || !source || !destination || !pickup_date || !pickup_time || !category || !total_fare) {
             alert('Please fill out all required fields.');
             return false;
         }
 
-        // Send OTP to the customer's WhatsApp number
         $.ajax({
-            url: '{% url "send_otp_customer" %}', // Backend endpoint to send OTP
+            url: '{% url "send_otp_customer" %}', 
             type: "POST",
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             },
             success: function (result) {
                 if (result["status"] == "Success") {
-                    // Show OTP modal
                     $('#otpModal').modal('show');
                 } else {
                     alert("Failed to send OTP. Please try again. " + result['message']);
@@ -477,12 +447,10 @@
         $('#verifyOtpBtn').click(function () {
             var otp = $('#otpInput').val();
 
-            // Disable the button to prevent multiple submissions
             $('#verifyOtpBtn').prop('disabled', true).text('Verifying...');
 
-            // Make AJAX call for OTP verification
             $.ajax({
-                url: '{% url "verify_otp_customer" %}', // Backend endpoint to verify OTP
+                url: '{% url "verify_otp_customer" %}', 
                 type: "POST",
                 headers: {
                     'X-CSRFToken': '{{ csrf_token }}'
@@ -492,17 +460,14 @@
                 },
                 success: function (result) {
                     if (result["status"] === "Success") {
-                        // If OTP is correct, proceed to confirm booking
                         confirmBooking(bookingDetails);
                     } else {
                         alert("Incorrect OTP. Please try again.");
-                        // Re-enable the button in case of failure
                         $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
                     }
                 },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
-                    // Re-enable the button in case of an error
                     $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
                 }
             });
@@ -510,15 +475,14 @@
     });
 
 
-    // Function to confirm booking after OTP verification
     function confirmBooking(bookingDetails) {
         try {
             function formatDateToLocal(dateStr) {
                 var date = new Date(dateStr);
                 var year = date.getFullYear();
-                var month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based, so add 1
-                var day = ('0' + date.getDate()).slice(-2); // Ensure two digits for day
-                return `${year}-${month}-${day}`; // Return in 'YYYY-MM-DD' format
+                var month = ('0' + (date.getMonth() + 1)).slice(-2); 
+                var day = ('0' + date.getDate()).slice(-2); 
+                return `${year}-${month}-${day}`; 
             }
 
             if (bookingDetails.pickup_date) {
@@ -528,13 +492,12 @@
                 throw new Error("Pickup date is missing.");
             }
 
-            // Check and convert drop_date if it exists
             if (bookingDetails.drop_date) {
                 var formattedDropDate = formatDateToLocal(bookingDetails.drop_date);
                 bookingDetails.drop_date = formattedDropDate;
             }
 
-            var customer_name = bookingDetails.customer_name || "Customer"; // Default to "Customer" if not found
+            var customer_name = bookingDetails.customer_name || "Customer"; 
 
             $.ajax({
                 url: '{% url "customer_addbooking" %}',
@@ -544,12 +507,11 @@
                 },
                 data: bookingDetails,
                 success: function (result) {
-                    console.log("Booking result:", result); // Log the result for debugging
+                    console.log("Booking result:", result); 
 
                     if (result["status"] != "Error") {
-                        var company_format = result['company_format']; // Get company_format from the backend
+                        var company_format = result['company_format']; 
 
-                        // Construct the message with company_format
                         var message = `Hello ${customer_name},
     
                         Thank you for choosing Ridexpress!
@@ -573,7 +535,7 @@
                         alert("Thank you for booking with us. Information will be shared with you over WhatsApp.");
                         setTimeout(function () {
                             location.href = "{% url 'current' %}";
-                        }, 1000); // Delay for a second to allow the user to see the alert
+                        }, 1000); 
                     } else {
                         alert("Oops, something went wrong. Please try again. " + result['message']);
                     }
@@ -590,7 +552,7 @@
 
     $(document).ready(function () {
         $('#closeOtpModal').click(function () {
-            $('#otpModal').modal('hide'); // Hide the modal when close button is clicked
+            $('#otpModal').modal('hide'); 
         });
     });
 
@@ -624,15 +586,13 @@
 
 
 
-    // Initialize datepicker
     $('.date-picker').datepicker({
         format: 'mm/dd/yyyy',
         autoclose: true,
         todayHighlight: true,
-        startDate: new Date() // Set start date to today
+        startDate: new Date() 
     });
 
-    // Datepicker change event listener
     $('.date-picker').change(function () {
         var selectedDate = new Date($(this).val());
         var today = new Date();
@@ -640,7 +600,7 @@
         today.setHours(0, 0, 0, 0);
 
         if (selectedDate < today) {
-            $(this).val(''); // Clear invalid date
+            $(this).val(''); 
             $(this).addClass('is-invalid');
             $('#dateError').text('Please select a future date.');
         } else {
@@ -653,7 +613,6 @@
 </script>
 
 <style>
-    /* Required Bootstrap Modal CSS */
     .modal {
         position: fixed;
         top: 0;
@@ -739,7 +698,7 @@
         cursor: pointer;
         padding: 0;
         margin: -1rem -4rem -1rem auto;
-        /* Adjust position */
+
     }
 
     .modal-header .close:hover,

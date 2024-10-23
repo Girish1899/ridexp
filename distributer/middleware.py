@@ -7,6 +7,6 @@ class distributerCheckMiddleware:
 
     def __call__(self, request):
         if request.path.startswith('/distributer/') and request.session.get('user_type')!="distributer":
-            return redirect(reverse('login'))  # Redirect to the home page or any other page
+            return redirect(reverse('login'))  
         response = self.get_response(request)
         return response

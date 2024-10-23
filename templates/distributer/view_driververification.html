@@ -1,0 +1,124 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-adddriver' %}" style="color: white !important;">Add Driver</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Driver View</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black !important;">
+                                        <th>Serial No</th>
+                                        <th>Vehicle Id/Owner Details</th>
+                                        <th>Driver Details/Verification Status</th>
+                                        <th>Download</th>
+                                        <th>Registered On</th>
+                                        <th>Verified On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>
+                                            <div style="color: red;">{{ i.vehicle.company_format }}</div>
+                                            <div style="color: blue;">{{ i.vehicle.owner.name }}</div>
+                                            <div style="color: green;">{{ i.vehicle.owner.phone_number }}</div>
+                                        </td>
+                                        <td>
+                                            <div style="color: red;">{{ i.name }}</div>
+                                            <div style="color: blue;">{{ i.email }}</div>
+                                            <div style="color: green;">{{ i.phone_number }}</div>
+                                            <div><span  class="badge badge-pill bg-{% if i.verification_status == 'verified' %}gradient-success{% else %}danger{% endif %}" onclick="VerifyDriver('{{ i.driver_id }}', '{{ i.verification_status }}')">
+                                                {% if i.verification_status == 'verified' %}
+                                                Verified
+                                                {% else %}
+                                                Not Verified
+                                                {% endif %}
+                                            </span></div>
+                                        </td>
+                                        <td><a href="{% url 'dispatch-download_driver_documents' i.driver_id %}" class="btn btn-warning"><i class="fa fa-download"></i></a></td>
+                                        <td>{{ i.created_on }}</td>
+                                        <td>
+                                            {% if i.verified_on %}
+                                            {{ i.verified_on }}
+                                            {% else %}
+                                            N/A
+                                            {% endif %}
+                                        </td>
+                                        <td style="display: flex; justify-content: center; align-items: center;">
+                                            <a href="#" class="btn btn-primary" onclick="EditDriver('{{ i.driver_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="DriverHistory('{{ i.driver_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'dispatch-driver' i.driver_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function EditDriver(driver_id) {
+        var action = confirm("Are you sure you want to edit this driver?");
+        if (action !== false) {
+            window.location.href = "dispatch-EditDriver/" + driver_id; 
+        }
+    };
+
+    function DriverHistory(driver_id) {
+        window.location.href = "dispatch-DriverHistory/" + driver_id; 
+    };
+
+    function VerifyDriver(driver_id, current_status) {
+        var message = current_status === 'verified' ? "This driver is already verified." : "Have you verified this driver?";
+        if (current_status !== 'verified' && confirm(message)) {
+            $.ajax({
+                url: '{% url "dispatch-VerifyDriver" %}',
+                data: {
+                    'driver_id': driver_id,
+                },
+                dataType: 'json',
+                success: function (data) {
+                    if (data.verified) {
+                        alert("Driver Verified Successfully");
+                        location.reload(); 
+                    }
+                }
+            });
+        }
+    }
+
+</script>
+{% endblock content%}
+

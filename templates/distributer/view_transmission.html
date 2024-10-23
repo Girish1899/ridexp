@@ -1,0 +1,100 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-addtransmission' %}" style="color: white !important;">Add Transmission</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Transmission View</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black !important;">
+                                        <th>Serial No</th>
+                                        <th>Car Transmission Type</th>
+                                        <th>Created On</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for i in object_list %}
+                                    <tr style="color: #030000;">
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ i.transmission_name }}</td>                                        
+                                        <td>{{ i.created_on }}</td>
+                                        <td>
+                                            <a href="#" class="btn btn-primary"  onclick="EditTransmission('{{i.transmission_id}}')"><i class="fa fa-edit"></i></a>&nbsp;
+                                            <a href="#" class="btn btn-warning" onclick="HistoryTransmission('{{i.transmission_id}}')"><i class="fa fa-clock"></i></a>&nbsp;
+                                            <a href="{% url 'dispatch-transmission' i.transmission_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
+
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    function DeleteTransmission(transmission_id){
+        var action = confirm("Are you sure you want to delete this transmission?");
+        if (action != false) {
+          $.ajax({
+              url: '{% url "dispatch-DeleteTransmission" %}',
+              data: {
+                  'transmission_id': transmission_id,
+              },
+              dataType: 'json',
+              success: function (data) {
+                  if (data.deleted) {
+                    alert("Transmission Deleted Successfully");
+                    window.location.href = "{% url 'dispatch-TransmissionListView' %}";
+                    $("#transmission_id #i-" + transmission_id).remove();
+                  }
+              }
+      
+          });
+      
+      }
+      }
+    function EditTransmission(transmission_id) {
+        var action = confirm("Are you sure you want to edit this transmission?");
+        if (action !== false) {
+            window.location.href = "dispatch-EditTransmission/" + transmission_id; 
+        }
+    };
+
+    function HistoryTransmission(transmission_id) {
+        window.location.href = "dispatch-TransmissionHistory/" + transmission_id; 
+    };
+
+</script>
+{% endblock content%}
+

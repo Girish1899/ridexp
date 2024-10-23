@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +17,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -38,8 +35,6 @@
                                         <th>Employee Id </th>
                                         <th> Name </th>
                                         <th>Phone Number</th>
-                                        <!-- <th>Email</th> -->
-                                        <!-- <th>password</th> -->
                                         <th>Address</th>
                                         <th>User Type</th>
                                         <th>Status</th>
@@ -56,8 +51,6 @@
                                     <td>{{ i.company_format }}</td>
                                     <td>{{ i.user }}</td>
                                     <td>{{ i.phone_number }}</td>
-                                    <!-- <td>{{ i.user.email }}</td> -->
-                                    <!-- <td>{{ i.user.password }}</td> -->
                                     <td>{{ i.address }}</td>
                                     <td>{{ i.type }}</td>
                                     <td><span class="badge {% if i.status == 'active' %}bg-gradient-success{% else %}bg-gradient-success{% endif %}">
@@ -114,11 +107,11 @@
     function EditUser(profile_id) {
         var action = confirm("Are you sure you want to edit this user?");
         if (action !== false) {
-            window.location.href = "EditUser/" + profile_id; // Add a slash here
+            window.location.href = "EditUser/" + profile_id;
         }
     };
     function HistoryUser(profile_id) {
-        window.location.href = "UserHistory/" + profile_id; // Add a slash here
+        window.location.href = "UserHistory/" + profile_id;
     };
 
 </script>

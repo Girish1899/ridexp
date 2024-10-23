@@ -2,7 +2,6 @@ import os
 from django.shortcuts import get_object_or_404, render
 from superadmin.models import Blogs, PackageCategories, PackageCategoriesHistory, Packages, RideDetails,Customer,Driver,Vehicle, WebsitePackages
 from django.contrib.auth.decorators import login_required
-# views.py
 from django.http import JsonResponse
 from django.utils.text import slugify
 from superadmin.models import Profile,User
@@ -13,8 +12,6 @@ from django.utils.decorators import method_decorator
 from PIL import Image
 from io import BytesIO
 from django.core.files.base import ContentFile
-
-# Create your views here.
 
 @login_required(login_url='login')
 def index(request):
@@ -36,7 +33,6 @@ def author_profile_view(request):
     profile = get_object_or_404(Profile, user=request.user, type='author')
     return render(request, 'author/app-profile.html', {'profile': profile})
 
-# package category #######################################################################
 
 @login_required(login_url='login')   
 def check_package_category(request):
@@ -98,12 +94,10 @@ class UpdatePackageCategory(APIView):
         package_category_id = request.POST['package_category_id']
         package = PackageCategories.objects.get(package_category_id=package_category_id)
 
-        # Update the ride type with new data
         package.category_name = request.POST['category_name']
         package.updated_by = request.user
         package.save()
 
-        # Create another RidetypeHistory entry after updating the ride type
         PackageCategoriesHistory.objects.create(
             package_category_id=package.package_category_id,
             category_name=package.category_name,
@@ -128,7 +122,6 @@ class PackageCategoryHistoryView(TemplateView):
         return context
     
 
-# packages ############
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addwebpackages(TemplateView):
     template_name = "author/add_webpackages.html"
@@ -141,10 +134,8 @@ class addwebpackages(TemplateView):
 
     def post(self, request):
         try:
-            # Print that the POST request is received
             print("POST request received")
 
-            # Retrieve data from POST request
             title = request.POST.get('title')
             slug = slugify(title)
             package_category_id = request.POST.get('package_category')
@@ -164,22 +155,18 @@ class addwebpackages(TemplateView):
             h1tag = request.POST.get('h1tag')
             status = request.POST.get('status')
 
-            # Print received form data
             print(f"Form data: title={title}, category_id={package_category_id}, description={description}")
 
-            # Validate required fields
             if not title or not package_category_id:
                 print("Missing required fields: title or category")
                 return JsonResponse({'status': "Failed", 'error': "Title and category are required."}, status=400)
 
-            # Fetch category object
             try:
                 package_category = PackageCategories.objects.get(package_category_id=package_category_id)
             except PackageCategories.DoesNotExist:
                 print(f"Package category not found: {package_category_id}")
                 return JsonResponse({'status': "Failed", 'error': "Invalid package category."}, status=400)
 
-            # Create package object
             webpackage = WebsitePackages(
                 title=title,
                 slug=slug,
@@ -203,13 +190,11 @@ class addwebpackages(TemplateView):
                 updated_by=request.user
             )
 
-            # Save the package
             webpackage.save()
             print("Package saved successfully")
             return JsonResponse({'status': "Success"})
 
         except Exception as e:
-            # Print the exception
             print(f"Error saving package: {e}")
             return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
         
@@ -307,7 +292,6 @@ class AddBlogView(TemplateView):
         try:
             print("POST request received")
 
-            # Retrieve data from POST request
             title = request.POST.get('title')
             slug = slugify(title)
             description = request.POST.get('description')
@@ -343,7 +327,6 @@ class AddBlogView(TemplateView):
                 updated_by=request.user
             )
 
-            # Process image if uploaded
             if image:
                 try:
                     print(f"Processing image: {image.name}")
@@ -351,7 +334,6 @@ class AddBlogView(TemplateView):
                     img = img.resize((880, 450), Image.LANCZOS)
                     file_extension = os.path.splitext(image.name)[1].lower()
 
-                    # Define format based on extension
                     format = 'JPEG' if file_extension in ['.jpg', '.jpeg'] else 'PNG' if file_extension == '.png' else 'GIF'
 
                     img_io = BytesIO()
@@ -367,7 +349,6 @@ class AddBlogView(TemplateView):
             return JsonResponse({'status': "Success"})
 
         except Exception as e:
-            # Print the exception
             print(f"Error saving blogs: {e}")
             return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
 
@@ -423,12 +404,11 @@ class UpdatewebBlogs(APIView):
         except Blogs.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Blog not found'}, status=404)
 
-        # Update fields
         blog.title = title
         blog.slug=slug
         blog.description = description
         if image:
-            blog.image = image  # Update the image if a new one is uploaded
+            blog.image = image  
         blog.image_link = image_link
         blog.facebook = facebook
         blog.instagram = instagram
@@ -440,7 +420,6 @@ class UpdatewebBlogs(APIView):
         blog.meta_keywords = meta_keywords
         blog.h1tag = h1tag
 
-        # Save the updated blog entry
         blog.save()
 
         return JsonResponse({'success': True}, status=200)    

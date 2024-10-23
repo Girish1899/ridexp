@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -17,7 +16,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -169,10 +167,6 @@
                                         <td>
                                             <div><button class="btn btn-warning" >{{ i.total_fare }}</button></div>
                                             <div style="padding-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{i.pricing.car_type}}</span></div>
-                                            <!-- <div style="padding-top: 3px;">permit<span class="badge badge-pill badge-success">{{i.pricing.permit}}</span></div>
-                                            <div style="padding-top: 3px;">beta<span class="badge badge-pill badge-success">{{i.pricing.driver_beta}}</span></div>
-                                            <div style="padding-top: 3px;">toll<span class="badge badge-pill badge-success">{{i.pricing.toll_price}}</span></div>
-                                            <div style="padding-top: 3px;">price/km<span class="badge badge-pill badge-success">{{i.pricing.price_per_km}}</span></div> -->
                                             <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{ i.category.category_name }}</span></div>
                                         </td>
                                         <td>
@@ -184,12 +178,10 @@
                                             <button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#cancelBookingModal" data-ride-id="{{ i.ride_id }}">Cancel Booking</button>
                                         </td>      
                                         <td>   
-                                            <!-- Call Button -->
                                             <button type="button" class="btn btn-success" onclick="makeCall('{{ i.ride_id }}', '{{ i.customer.phone_number }}')">
                                                 Call
                                             </button>
         
-                                            <!-- Call History Button -->
                                             <button type="button" class="btn btn-info">
                                                 <a href="{% url 'callhistory' i.ride_id %}" style="color: white !important;">View Call History</a>
                                             </button>
@@ -206,9 +198,6 @@
                   </div>
             </div>
         </div>
-
-
-<!-- Cancel Booking Modal -->
 
 <div class="modal fade" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
@@ -239,32 +228,26 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
   
-<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Popper.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
     $(document).ready(function() {
-    // Update data-comments attribute whenever textarea value changes
     $('#comments').on('input', function() {
         const comments = $(this).val();
         $('.cancel-btn').attr('data-comments', comments);
     });
 
-    // Handle cancel button click
     $(document).on('click', '.cancel-btn', function() {
         console.log("Submit button clicked!");
 
         const comments = $(this).data('comments');
         const rideId = $('#cancelBookingModal').data('ride-id');
 
-        console.log("comments: ", comments); // Debugging statement
-        console.log("Ride ID: ", rideId);     // Debugging statement
+        console.log("comments: ", comments); 
+        console.log("Ride ID: ", rideId);     
 
-        // Check if comments are provided
         if (!comments) {
             console.error("Comments are missing");
             alert("Please provide cancellation comments.");
@@ -272,10 +255,10 @@
         }
 
         $.ajax({
-            url: '{% url "telecallercancel_ride" %}', // Django URL for the cancel_ride view
+            url: '{% url "telecallercancel_ride" %}', 
             type: "POST",
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}' // Make sure you are using CSRF tokens for POST requests in Django
+                'X-CSRFToken': '{{ csrf_token }}' 
             },
             data: JSON.stringify({ comments: comments, ride_id: rideId }),
             contentType: 'application/json; charset=utf-8',
@@ -284,7 +267,7 @@
                     
                     console.log("Ride successfully cancelled!");
                     alert("Ride cancelled successfully. A WhatsApp message has been sent to the customer.");
-                    location.reload(); // Reload the page after success
+                    location.reload(); 
                 } else {
                     console.error("Cancellation failed: ", result.message);
                     alert("Failed to cancel the ride: " + result.message);
@@ -297,13 +280,12 @@
         });
     });
 
-    // Modal Show Event to store the ride ID
     $('#cancelBookingModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID
+        var button = $(event.relatedTarget); 
+        var rideId = button.data('ride-id'); 
         var modal = $(this);
-        modal.data('ride-id', rideId); // Store ride ID in modal attribute
-        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+        modal.data('ride-id', rideId); 
+        console.log("Modal shown for Ride ID: ", rideId); 
     });
 });
 </script>
@@ -320,19 +302,14 @@
         }
     }
 
-    // Function to make a call and store call history
     window.makeCall = function(rideId, phoneNumber) {
-        // Confirm before calling
         var action = confirm("Are you sure you want to call this customer?");
         if (!action) return;
 
-        // Initiate the call
         window.location.href = "tel:" + phoneNumber;
 
-        // Get the current call history from localStorage
         let callHistory = JSON.parse(localStorage.getItem('callHistory')) || {};
 
-        // If this ride ID doesn't exist in call history, initialize it
         if (!callHistory[rideId]) {
             callHistory[rideId] = {
                 phoneNumber: phoneNumber,
@@ -341,11 +318,9 @@
             };
         }
 
-        // Increment call count and store the current time
         callHistory[rideId].callCount += 1;
         callHistory[rideId].callTimes.push(new Date().toLocaleString());
 
-        // Save the updated history back to localStorage
         localStorage.setItem('callHistory', JSON.stringify(callHistory));
     };
 
@@ -362,7 +337,6 @@ $('#toggleFilterReport').click(function() {
 
 
 $(document).ready(function() {
-    // Initialize Select2 and Flatpickr plugins
     $("#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame").select2();
     flatpickr("#single-date-picker", {
         dateFormat: "Y-m-d",
@@ -376,7 +350,6 @@ $(document).ready(function() {
 
     var table = $('#example').DataTable();
     
-    // Add change event listeners
     $('#from-time-picker, #to-time-picker').on('change', filterTable);
     $('#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame').on('change', filterTable);
     
@@ -392,7 +365,6 @@ $(document).ready(function() {
         var toTime = $('#to-time-picker').val();
         var timeFrame = $('#time-frame').val();
 
-        // Parse date range
         var startDate = null, endDate = null;
         if (dateRange) {
             var dates = dateRange.split(" to ");
@@ -403,7 +375,6 @@ $(document).ready(function() {
             }
         }
 
-        // Calculate time frame dates
         var today = new Date();
         var selectedStartDate = null;
         var selectedEndDate = null;
@@ -438,7 +409,6 @@ $(document).ready(function() {
             var pickupTime = parseTime(pickupTimeText);  
             var showRow = true;
 
-            // Single date filter
             if (singleDate) {
                 var selectedDate = new Date(singleDate);  
                 selectedDate.setHours(0, 0, 0, 0);  
@@ -448,21 +418,18 @@ $(document).ready(function() {
                 }
             }
 
-            // Date range filter
             if (startDate && endDate && showRow) {
                 if (pickupDate < startDate || pickupDate > endDate) {
                     showRow = false;
                 }
             }
 
-            // Time frame filter
             if (selectedStartDate && selectedEndDate && showRow) {
                 if (pickupDate < selectedStartDate || pickupDate > selectedEndDate) {
                     showRow = false;
                 }
             }
 
-            // Time filter
             if (fromTime && toTime && showRow) {
                 var fromParsed = parseTime(fromTime);
                 var toParsed = parseTime(toTime);
@@ -471,7 +438,6 @@ $(document).ready(function() {
                 }
             }
 
-            // Other filters
             if (serviceType && row.data('ridetype') != serviceType) showRow = false;
             if (bookingId && row.data('rideid') != bookingId) showRow = false;
             if (vehicleType && row.data('categoryid') != vehicleType) showRow = false;

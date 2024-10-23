@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
 
@@ -72,7 +71,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     $(document).ready(function () {
-        // Initialize existing brands dictionary
         var existingBrands = {};
 
         '{% for brand in brands %}'
@@ -82,7 +80,6 @@
             existingBrands["{{ brand.category_id }}"].push("{{ brand.brand_name|escapejs }}".toLowerCase());
         '{% endfor %}'
 
-        // Disable form fields if the category is inactive
         var categoryStatus = $('#category_status').val();
         var brandStatus = $('#status').val();
 
@@ -108,7 +105,6 @@
                 return;
             }
 
-            // Check if the brand name exists in the selected category, but allow the original name
             if (existingBrands[category] && existingBrands[category].includes(brand_name) && brand_name !== original_brand_name) {
                 alert("This brand already exists for the selected category.");
                 return;

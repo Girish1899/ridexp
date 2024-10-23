@@ -13,7 +13,7 @@
 {% endblock %}
 
 {% block body_content %}
-<!-- book ride -->
+
 <div class="book-ride py-120">
     <div class="container">
         <div class="row">
@@ -99,7 +99,6 @@
         </div>
     </div>
 </div>
-<!-- book ride end -->
 
 <div class="container-xxl py-5">
     <div class="container">
@@ -107,7 +106,6 @@
             <h2 class="mb-5"><span class="text text-uppercase" style="color: rgb(10, 10, 63);">Select Cabs</span></h2>
         </div>
 
-        <!-- Cab Items -->
         <div class="row g-4">
             {% for category, prices in pricing_dict.items %}
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -122,12 +120,11 @@
                         {% endif %}
 
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
-                            <!-- Non AC Price Display -->
                              
                             <small class="bg-secondary text-white rounded py-1 px-3" style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px;font-size: 14px;font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
-                            <!-- AC Price Display -->
+
                             <small class="bg-primary text-white rounded py-1 px-3" style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-left: 10px; font-size: 14px; font-weight: bold;">
                                 AC ₹ <span id="price_ac_{{ category|slugify }}">Not Available</span>
                             </small>
@@ -165,7 +162,7 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <!-- Non A/C Booking Button -->
+
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-right: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
                                 <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
@@ -183,7 +180,6 @@
                                 </button>
                             </form>
                         
-                            <!-- A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-left: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
                                 <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
@@ -247,7 +243,6 @@
     });
 });
 
-// clears the existing price 
 function clearAllCategoryData() {
     var categories = document.querySelectorAll("[id^='price_ac_'], [id^='price_non_ac_']");
     categories.forEach(function(element) {
@@ -284,7 +279,6 @@ function updateCategoryDetails(category, costData) {
     updatePriceAndButton(categorySlug, "non_ac", costData.non_ac);
 }
 
-// Function to update price details and book button for AC/Non-AC
 function updatePriceAndButton(categorySlug, carType, costDetails) {
     var priceElement = document.getElementById("price_" + carType + "_" + categorySlug);
     var tollElement = document.getElementById("toll_" + carType + "_" + categorySlug);
@@ -328,7 +322,7 @@ function getTimeSlot(pickupTime) {
     } else if (hour >= 18 && hour < 24) {
         return '6PM - 12AM';
     } else {
-        return null;  // Invalid time
+        return null; 
     }
 }
 
@@ -339,7 +333,6 @@ function syncHiddenFields(categorySlug) {
     const pickup_time = $('#pickup_time').val();
     const ridetype = $('#ridetype').val();
 
-    // Update hidden fields for the selected category (ac/non_ac)
     $(`input[name="source"]`).val(source);
     $(`input[name="destination"]`).val(destination);
     $(`input[name="pickup_date"]`).val(pickup_date);
@@ -412,29 +405,25 @@ function fetchPricingDetails(tollOption) {
 
 $("#check_fares").click(function(event) {
     event.preventDefault();
-    var tollOption = $('input[name="toll_option"]:checked').val(); // Get the selected toll option
+    var tollOption = $('input[name="toll_option"]:checked').val(); 
     fetchPricingDetails(tollOption);
 });
 
 $("#modify_action").click(function(event) {
     event.preventDefault();
     
-    // Enable form fields for modification
     $('#source').prop('disabled', false);
     $('#destination').prop('disabled', false);
     $('#pickup_date').prop('disabled', false);
     $('#pickup_time').prop('disabled', false);
 
-    // Change the "Check Fares" button to become active again
     $('#check_fares').prop('disabled', false);
 });
 
 $('form').on('submit', function(event) {
-    var categorySlug = $(this).find('input[name="car_type"]').val();  // Get car type (ac/non_ac)
-    syncHiddenFields(categorySlug);  // Sync hidden fields before form submission
+    var categorySlug = $(this).find('input[name="car_type"]').val();  
+    syncHiddenFields(categorySlug);  
 });
-
-// });
 
 
 </script>

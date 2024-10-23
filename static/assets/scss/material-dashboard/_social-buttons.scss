@@ -1,5 +1,5 @@
 .btn {
-  // social buttons
+
   &.btn-facebook {
     @include social-buttons-color($facebook, $facebook-states);
   }

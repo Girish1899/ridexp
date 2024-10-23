@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -19,7 +18,6 @@
             </div>
         </div>
 
-        <!-- row -->
         <div class="row">
             <div class="col-12">
                 <div class="card my-4">
@@ -65,24 +63,21 @@
                     </div>
                 </div>
             </div>
-        </div><!-- .row -->
-    </div><!-- .container-fluid -->
-</div><!-- .content-body -->
-
+        </div>
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
 <script>
 
     document.addEventListener('DOMContentLoaded', function() {
-        // Initialize the datatable
         const table = $('#example').DataTable({
-            paging: false,       // Disable pagination (Next/Previous)
-            searching: false,    // Disable search bar
-            info: false,         // Disable the "Showing X to X of X entries"
-            lengthChange: false  // Disable the "Show [n] entries" dropdown
+            paging: false,       
+            searching: false,    
+            info: false,         
+            lengthChange: false  
         });
 
-        // Function to update button states on page load and pagination
         function updateButtonStates() {
             table.rows().every(function() {
                 const row = $(this.node());
@@ -110,7 +105,6 @@
             });
         }
 
-        // Attach event listeners for start and stop buttons
         function attachEventListeners() {
             $(document).on('click', '.start-ride-btn', function() {
                 const rideId = $(this).attr('data-ride-id');
@@ -159,11 +153,9 @@
             });
         }
 
-        // Initial load - update button states and attach event listeners
         updateButtonStates();
         attachEventListeners();
 
-        // Update button states and attach event listeners on pagination or redraw
         table.on('draw', function() {
             updateButtonStates();
             attachEventListeners();

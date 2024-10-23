@@ -17,8 +17,6 @@
             </div>
         </div>
 
-        <!-- row -->
-
                     <div class="row">
                         <div class="col-12">
                         <div class="card my-4">
@@ -33,48 +31,47 @@
                                 <thead>
                                     <tr style="color: black !important;">
                                         <th>Serial No</th>
-                                        <th>Booking Id</th>
+                                        <th>Booking Id/Pickup Date/Pickup Time</th>
                                         <th>Ride Type</th>
                                         <th>Source</th>
                                         <th>Destination</th>
-                                        <th>Pickup Date</th>
-                                        <th>Pickup Time</th>
-                                        <th>Model</th>
-                                        <th>Driver</th>
+                                        <th>Category,Ac/NonAc</th>
                                         <th>Total Fare</th>
                                         <th>Customer</th>
                                         <th>Customer Notes</th>
                                         <th>Ride Status</th>
                                         <th>Booking DateTime</th>
                                         <th>Comments</th>
-                                        <th>Created On</th>
-                                        <th>Created By</th>
-                                        <th>Updated By</th>
-                                        <th>Updated On</th>
+                                        <th>Created On/Created By</th>
+                                        <th>Updated By/Updated On</th>
                                     </tr>
                                 </thead>
                                 <tbody style="color: #030000;">
                                     {% for record in history %}
                                     <tr>
                                         <td>{{ forloop.counter }}</td>
-                                        <td>{{ record.company_format }}</td>
-                                        <td>{{ record.ride_type }}</td>
+                                        <td><div>{{ record.company_format }}</div>
+                                            <div>{{ record.pickup_date }}</div>
+                                            <div>{{ record.pickup_time }}</div>
+                                        </td>
+                                        <td>{{ record.ridetype.name }}</td>
                                         <td>{{ record.source }}</td>
                                         <td>{{ record.destination }}</td>
-                                        <td>{{ record.pickup_date }}</td> 
-                                        <td>{{ record.pickup_time }}</td>
-                                        <td>{{ record.model }}</td>
-                                        <td>{{ record.driver }}</td>
+                                        <td><div>{{ record.category.category_name }}</div>
+                                            <div>{{record.pricing.car_type}}</div>
+                                        </td>
                                         <td>{{ record.total_fare }}</td>
-                                        <td>{{ record.customer }}</td>
+                                        <td>{{ record.customer.customer_name }}</td>
                                         <td>{{ record.customer_notes }}</td>
                                         <td>{{ record.ride_status }}</td>
                                         <td>{{ record.booking_datetime }}</td>
                                         <td>{{ record.comments }}</td>
-                                        <td>{{ record.created_on }}</td>
-                                        <td>{{ record.created_by }}</td>
-                                        <td>{{ record.updated_by }}</td>
-                                        <td>{{ record.updated_on }}</td>
+                                        <td><div>{{ record.created_on }}</div>
+                                            <div>{{ record.created_by }}</div>
+                                        </td>
+                                        <td><div>{{ record.updated_by }}</div>
+                                            <div>{{ record.updated_on }}</div>
+                                        </td>
                                     </tr>
                                     {% endfor %}
                                 </tbody>

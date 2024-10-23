@@ -1,9 +1,9 @@
-// update <html> tag border
+
 html {
   border: none !important;
 }
 
-// Blur effect
+
 .blur {
   box-shadow: $blur-box-shadow;
   -webkit-backdrop-filter: $blur-backdrop-filter;
@@ -50,7 +50,7 @@ html {
   }
 }
 
-// Transition on hover
+
 * {
   &.move-on-hover {
     -webkit-transition: $move-transition;
@@ -83,7 +83,7 @@ hr {
   height: 1px;
 }
 
-// Vertical Line
+
 hr.vertical {
   position: absolute;
   background-color: $hr-bg-color;
@@ -105,7 +105,7 @@ hr.vertical {
   }
 }
 
-// Horizontal Line
+
 hr.horizontal {
   background-color: $hr-bg-color;
 
@@ -121,7 +121,7 @@ hr.horizontal {
   }
 }
 
-// lock style
+
 .lock-size {
   width: 1.7rem;
   height: 1.7rem;
@@ -180,13 +180,13 @@ hr.horizontal {
 }
 
 
-// moving waves animation
+
 .waves {
   position: $waves-position;
   width: $waves-width;
   height: $waves-height;
   margin-bottom: $waves-margin-bottom;
-  /*Fix for safari gap*/
+
   min-height: $waves-min-height;
   max-height: $waves-max-height;
 
@@ -205,7 +205,7 @@ hr.horizontal {
 .wave-rotate {
   transform: $waves-rotate;
 }
-/* Animation for the waves */
+
 .moving-waves > use {
   animation: $moving-waves-animation;
 }
@@ -248,7 +248,7 @@ hr.horizontal {
     transform: $moving-waves-keyframe-100;
   }
 }
-/*Shrinking for mobile*/
+
 @include media-breakpoint-down(md) {
   .waves {
     height: $waves-mobile-height;
@@ -276,7 +276,7 @@ hr.horizontal {
   overflow: visible !important;
 }
 
-// popover title
+
 .popover {
   .popover-header {
     font-weight: 600;
@@ -284,12 +284,12 @@ hr.horizontal {
 }
 
 
-// Background Sizes
+
 .bg-cover{
   background-size: cover;
 }
 
-// Mask Class
+
 .mask {
   position: $mask-position;
   background-size: $mask-bg-size;
@@ -302,17 +302,17 @@ hr.horizontal {
 }
 
 
-// Cursor Pointer Class
+
 .cursor-pointer {
   cursor: pointer;
 }
 
-// Translate 50% Class
+
 .transform-translate-50{
   transform: translate(0,-50%)
 }
 
-// VR Pages
+
 
 @include media-breakpoint-up(lg) {
   .virtual-reality {
@@ -327,7 +327,6 @@ hr.horizontal {
   }
 }
 
-// Selectpicker
 
 .choices {
   .choices__list {
@@ -360,7 +359,7 @@ hr.horizontal {
   }
 }
 
-// Vertical border w/ pseudo elem
+
 
 .border-right-after:after {
   content: "";
@@ -372,7 +371,7 @@ hr.horizontal {
   border-right: 1px solid $border-right-after-border-color;
 }
 
-// sidebar caret RTL
+
 .rotate-caret {
   .collapse {
     .nav-link:after {
@@ -388,7 +387,7 @@ hr.horizontal {
   }
 }
 
-// perfectScrollbar on RTL page
+
 .rtl {
   .ps__rail-y {
     right: auto !important;
@@ -403,7 +402,7 @@ hr.horizontal {
   }
 }
 
-// Side Bullets - Scroll to section
+
 
 
 .bullets {

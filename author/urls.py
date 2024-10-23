@@ -13,14 +13,12 @@ urlpatterns = [
     path('author-PackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='author-PackageCategoryHistory'),
     path('author-UpdatePackageCategory', UpdatePackageCategory.as_view(), name='author-UpdatePackageCategory'),
 
-    # packages
     path('create-author-packages', addwebpackages.as_view(), name='create-author-packages'),
     path('list-author-packages', webPackageList.as_view(), name='list-author-packages'),
     path('author-Packages-delete', DeletewebPackages.as_view(), name='author-Packages-delete'),
     path('author-Packages-edit/<int:id>/', EditwebPackages.as_view(), name='author-Packages-edit'),
     path('author-Packages-update', UpdatewebPackages.as_view(), name='author-Packages-update'),
 
-    # Blogs
     path('create-author-blogs', AddBlogView.as_view(), name='create-author-blogs'),
     path('list-author-blogs', BlogListView.as_view(), name='list-author-blogs'),
     path('author-blogs-delete', webDeleteBlogs.as_view(), name='author-blogs-delete'),

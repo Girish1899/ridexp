@@ -1,90 +1,13 @@
-/*=====================================================
-Template Name   : Taxica
-Description     : Online Taxi Service HTML5 Template
-Author          : LunarTemp
-Version         : 1.0
-=======================================================*/
 
-
-/*=====================================================
-Table of contents
-=======================================================
-
-1. Google fonts
-2. Theme variables
-3. General css
-4. Preloader
-5. Theme default css
-6. Margin & padding
-7. Site title css
-8. Theme button
-9. Container
-10. Scroll top css
-11. Header top css
-12. Navbar css
-13. Multi level dropdown menu
-14. Search area css 
-15. sidebar popup css 
-16. Main section css 
-17. Hero css 
-18. Play btn
-19. Nice select css
-20. Booking css 
-21. Date picker css 
-22. Time picker css 
-23. About css 
-24. Service css 
-25. Service single
-26. Feature css 
-27. Video css 
-28. Choose css 
-29. Testimonial css 
-30. Counter css 
-31. Cta css 
-32. Blog css 
-33. Blog single css
-34. Widget sidebar css
-35. Contact us css 
-36. Team css
-37. Team single css 
-38. Book ride css 
-39. Taxi Rate css 
-40. Taxi css 
-41. Taxi single css 
-42. Download css 
-43. Faq css 
-44. Breadcrumb css
-45. Pagination css
-46. Auth css
-47. User profile css
-48. Coming soon css 
-49. Error css 
-50. Partner css 
-51. Terms/privacy css 
-52. Footer css 
-53. Home 2
-54. Home 3
-
-=======================================================*/
-
-
-
-/*====================
-1. Google fonts
-======================*/
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Roboto:wght@100;300;400;500;700;900&display=swap');
 
 
-/*====================
-2. Theme variables
-======================*/
 
 :root {
   --body-font: 'Abril Fatface', sans-serif;
   --heading-font: 'Abril Fatface', sans-serif;
-  /* --theme-color: #FFB300; */
-  /* --theme-color: #41c325; */
+
   --theme-color: #db9710;
   
   --theme-bg-light: #F9F9F9;
@@ -106,16 +29,13 @@ Table of contents
   --border-white-color2: rgba(255, 255, 255, 0.05);
   --footer-bg: #1c2b39;
   
-  /* #111111 */
+
   --footer-bg2: #1c2b39;
   --footer-text-color: #F5FAFF;
 }
 
 
 
-/*====================
-3. General css
-======================*/
 
 *,
 *:before,
@@ -279,9 +199,6 @@ label {
   padding: 1px;
 }
 
-/*====================
-4. Preloader
-======================*/
 
 .preloader {
   position: fixed;
@@ -336,10 +253,6 @@ label {
 
 
 
-/*===================
-5. Theme default css
-======================*/
-
 .ovrflow-hidden {
   overflow: hidden;
 }
@@ -380,10 +293,6 @@ label {
 }
 
 
-
-/*====================
-6. Margin & padding
-======================*/
 
 .pb-140 {
   padding-bottom: 140px;
@@ -607,10 +516,6 @@ label {
 
 
 
-/*====================
-7. Site title css
-======================*/
-
 .site-heading {
   margin-bottom: 50px;
   position: relative;
@@ -701,9 +606,6 @@ label {
 
 
 
-/*====================
-8. Theme button
-======================*/
 
 .theme-btn {
   font-size: 14px;
@@ -769,9 +671,6 @@ label {
 
 
 
-/*====================
-9. Container
-======================*/
 
 @media (min-width: 1200px) {
   .container,
@@ -785,9 +684,6 @@ label {
 
 
 
-/*====================
-10. Scroll top css
-======================*/
 
 #scroll-top {
   position: fixed;
@@ -827,9 +723,6 @@ label {
 
 
 
-/*====================
-11. Header top css
-======================*/
 
 .header-top {
   padding: 8px 0 10px 0;
@@ -944,10 +837,6 @@ label {
 
 
 
-/*====================
-12. Navbar css
-======================*/
-
 .navbar {
   background: var(--color-white);
   padding-top: 0px;
@@ -1006,12 +895,12 @@ label {
 
 #logoheader {
     font-family: garamond;    
-    font-size: 25px;                   /* Adjust the font size as needed */
+    font-size: 25px;                   
     font-weight: bold;  
-    margin-top: 22px;               /* Make the text bold */
-    color: var(--color-dark);                   /* Change the color to your preference */
-    display: inline-block;             /* Keeps the text aligned with the image */
-    text-transform: uppercase;         /* Makes the text uppercase */
+    margin-top: 22px;             
+    color: var(--color-dark);                   
+    display: inline-block;             
+    text-transform: uppercase;         
     letter-spacing: 1px;     
 }
 
@@ -1151,7 +1040,6 @@ label {
     justify-content: flex-end;
   }
 
-  /* nav right */
   .nav-right {
     display: flex;
     align-items: center;
@@ -1192,7 +1080,7 @@ label {
 }
 
 
-/* mobile menu */
+
 .mobile-menu-right {
   display: none;
 }
@@ -1277,9 +1165,6 @@ label {
 }
 
 
-/*============================
-13. Multi level dropdown menu
-==============================*/
 
 .navbar .nav-item .dropdown-submenu {
   position: relative;
@@ -1336,9 +1221,6 @@ label {
 
 
 
-/*====================
-14. Search area css 
-======================*/
 
 .search-area {
   position: absolute;
@@ -1388,9 +1270,6 @@ label {
 
 
 
-/*====================
-15. sidebar popup css 
-======================*/
 
 .sidebar-popup {
   position: fixed;
@@ -1524,9 +1403,6 @@ label {
 
 
 
-/*====================
-16. Main section css 
-======================*/
 
 .main {
   margin-top: 0rem;
@@ -1534,9 +1410,6 @@ label {
 
 
 
-/*====================
-17. Hero css 
-======================*/
 
 .hero-section {
   position: relative;
@@ -1705,9 +1578,6 @@ label {
 
 
 
-/*===================
-18. Play btn
-=====================*/
 
 .play-btn {
   display: inline-block;
@@ -1756,9 +1626,6 @@ label {
 
 
 
-/*====================
-19. Nice select css
-======================*/
 
 .nice-select{
   width: 100%;
@@ -1799,9 +1666,6 @@ label {
 
 
 
-/* ===================
-20. Booking css 
-====================== */
 
 .booking-area{
   position: relative;
@@ -1874,10 +1738,6 @@ label {
 
 
 
-
-/* ===================
-21. Date picker css 
-====================== */
 
 .ui-datepicker .ui-datepicker-header .ui-corner-all>span,
 .ui-datepicker .ui-datepicker-header .ui-state-hover>span {
@@ -1961,10 +1821,6 @@ a.ui-button:active,
 }
 
 
-/* ===================
-22. Time picker css 
-====================== */
-
 .ui-timepicker-standard{
   border: none !important;
   background: var(--color-white);
@@ -1986,9 +1842,6 @@ a.ui-button:active,
 
 
 
-/*====================
-23. About css 
-======================*/
 
 .about-left {
   position: relative;
@@ -2071,9 +1924,6 @@ a.ui-button:active,
 
 
 
-/*====================
-24. Service css 
-======================*/
 
 .service-area {
   position: relative;
@@ -2159,9 +2009,6 @@ a.ui-button:active,
 
 
 
-/*==================
-25. Service single
-====================*/
 
 .service-single-list i {
   color: var(--theme-color);
@@ -2199,10 +2046,6 @@ a.ui-button:active,
 }
 
 
-
-/*====================
-26. Feature css 
-======================*/
 
 .feature-area {
   position: relative;
@@ -2297,9 +2140,6 @@ a.ui-button:active,
 
 
 
-/*====================
-27. Video css 
-======================*/
 
 .video-content {
   position: relative;
@@ -2361,9 +2201,6 @@ a.ui-button:active,
 
 
 
-/*====================
-28. Choose css 
-======================*/
 
 .choose-area{
   position: relative;
@@ -2435,9 +2272,6 @@ a.ui-button:active,
   font-weight: 300;
 }
 
-/* .cha-2{
-  padding-top: 350px;
-} */
 
 
 @media all and (max-width: 991px) {
@@ -2455,9 +2289,6 @@ a.ui-button:active,
 
 
 
-/*====================
-29. Testimonial css 
-======================*/
 
 .testimonial-area {
   position: relative;
@@ -2584,10 +2415,6 @@ a.ui-button:active,
 
 
 
-/*====================
-30. Counter css 
-======================*/
-
 .counter-area {
   position: relative;
   z-index: 2;
@@ -2595,7 +2422,7 @@ a.ui-button:active,
 
 .counter-wrapper{
   background: black;
-  /* background-image: url(../img/shape/shape-3.png); */
+
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -2659,9 +2486,6 @@ a.ui-button:active,
 
 
 
-/*====================
-31. Cta css 
-======================*/
 
 .cta-area{
   background: var(--theme-color);
@@ -2757,11 +2581,6 @@ a.ui-button:active,
 
 
 
-
-/*====================
-32. Blog css 
-======================*/
-
 .blog-area{
   position: relative;
 }
@@ -2842,10 +2661,6 @@ a.ui-button:active,
 
 
 
-
-/*========================
-33. Blog single css
-==========================*/
 
 .blog-thumb-img {
   margin-bottom: 20px;
@@ -3142,9 +2957,6 @@ a.ui-button:active,
 
 
 
-/*=======================
-34. Widget sidebar css
-=========================*/
 
 .widget {
   background: var(--theme-bg-light);
@@ -3301,10 +3113,6 @@ a.ui-button:active,
 
 
 
-/*===================
-35. Contact us css 
-=====================*/
-
 .contact-wrapper {
   background: var(--color-white);
   border-radius: 10px;
@@ -3445,10 +3253,6 @@ a.ui-button:active,
 
 
 
-/*===================
-36. Team css 
-=====================*/
-
 .team-area {
   position: relative;
   overflow: hidden;
@@ -3554,9 +3358,6 @@ a.ui-button:active,
 
 
 
-/* ===================
-37. Team single css 
-====================== */
 
 .team-single-img img{
   border-radius: 20px;
@@ -3633,10 +3434,6 @@ a.ui-button:active,
 
 
 
-/*===================
-38. Book ride css 
-=====================*/
-
 .book-ride .booking-form{
   padding: 40px;
 }
@@ -3672,10 +3469,6 @@ a.ui-button:active,
 
 
 
-
-/*===================
-39. Taxi Rate css 
-=====================*/
 
 .rate-item{
   padding: 30px;
@@ -3807,10 +3600,6 @@ a.ui-button:active,
 
 
 
-/*===================
-40. Taxi css 
-=====================*/
-
 .taxi-area{
   position: relative;
 }
@@ -3890,7 +3679,6 @@ a.ui-button:active,
   width: 100%;
 }
 
-/* taxi filter */
 .filter-btns{
   text-align: center;
   margin-bottom: 40px;
@@ -3915,9 +3703,6 @@ a.ui-button:active,
 }
 
 
-/*===================
-41. Taxi single css 
-=====================*/
 
 .taxi-single-img{
   display: flex;
@@ -4058,9 +3843,6 @@ a.ui-button:active,
 }
 
 
-/*====================
-42. Download css 
-======================*/
 
 .download-area{
   position: relative;
@@ -4151,11 +3933,6 @@ a.ui-button:active,
 
 
 
-
-/*====================
-43. Faq css 
-======================*/
-
 .faq-area .accordion-item {
   border: none;
   margin-bottom: 30px;
@@ -4218,10 +3995,6 @@ a.ui-button:active,
 }
 
 
-
-/*====================
-44. Breadcrumb css
-======================*/
 
 .site-breadcrumb {
   display: flex;
@@ -4312,12 +4085,6 @@ a.ui-button:active,
 
 
 
-
-
-/*====================
-45. Pagination css 
-======================*/
-
 .pagination {
   display: flex;
   justify-content: center;
@@ -4345,9 +4112,6 @@ a.ui-button:active,
 }
 
 
-/* ===================
-RTL css
-====================== */
 
 body.rtl-mode {
   direction: rtl;
@@ -4374,10 +4138,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-
-/*====================
-46. Auth css 
-======================*/
 
 .login-form {
   padding: 40px;
@@ -4551,10 +4311,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-
-/*====================
-47. User profile css 
-======================*/
 
 .nav-right-account img {
   width: 50px;
@@ -4798,7 +4554,7 @@ body.rtl-mode .price-wrapper {
 
 
 
-/* dashboard */
+
 .dashboard-widget {
   display: flex;
   align-items: center;
@@ -4904,7 +4660,6 @@ body.rtl-mode .price-wrapper {
 }
 
 
-/* profile setting */
 .profile-setting .form-check{
   margin-bottom: 10px;
 }
@@ -4938,10 +4693,6 @@ body.rtl-mode .price-wrapper {
 }
 
 
-
-/*====================
-48. Coming soon css 
-======================*/
 
 .coming-soon {
   background-repeat: no-repeat;
@@ -5055,11 +4806,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-
-/*====================
-49. Error css 
-======================*/
-
 .error-wrapper {
   text-align: center;
 }
@@ -5097,10 +4843,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-/*====================
-50. Partner css 
-====================== */
-
 .partner{
   position: relative;
 }
@@ -5121,11 +4863,6 @@ body.rtl-mode .price-wrapper {
 }
 
 
-
-
-/*====================
-51. Terms/privacy css 
-====================== */
 
 .terms-content:not(:last-child) {
   margin-bottom: 54px;
@@ -5154,10 +4891,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-
-/*====================
-52. Footer css 
-======================*/
 
 .footer-area {
   background: var(--color-dark);
@@ -5421,10 +5154,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-/*====================
-53. Home 2
-======================*/
-
 .home-2 .header-top{
   background: var(--theme-color);
 }
@@ -5476,9 +5205,6 @@ body.rtl-mode .price-wrapper {
 
 
 
-/*====================
-54. Home 3
-======================*/
 
 .home-3 .header-top{
   background: var(--theme-color);

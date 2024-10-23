@@ -1,5 +1,4 @@
 .toast {
-  // scss-docs-start toast-css-vars
   --#{$prefix}toast-zindex: #{$zindex-toast};
   --#{$prefix}toast-padding-x: #{$toast-padding-x};
   --#{$prefix}toast-padding-y: #{$toast-padding-y};
@@ -15,7 +14,6 @@
   --#{$prefix}toast-header-color: #{$toast-header-color};
   --#{$prefix}toast-header-bg: #{$toast-header-background-color};
   --#{$prefix}toast-header-border-color: #{$toast-header-border-color};
-  // scss-docs-end toast-css-vars
 
   width: var(--#{$prefix}toast-max-width);
   max-width: 100%;
@@ -62,7 +60,7 @@
   @include border-top-radius(calc(var(--#{$prefix}toast-border-radius) - var(--#{$prefix}toast-border-width)));
 
   .btn-close {
-    margin-right: calc(-.5 * var(--#{$prefix}toast-padding-x)); // stylelint-disable-line function-disallowed-list
+    margin-right: calc(-.5 * var(--#{$prefix}toast-padding-x)); 
     margin-left: var(--#{$prefix}toast-padding-x);
   }
 }

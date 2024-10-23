@@ -1,0 +1,69 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Model History for {{ model.model_name }}</h4>
+                </div>
+            </div>
+            
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-ModelListView' %}" style="color: white !important;">View Model</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                        <div class="card my-4">
+                            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                            <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                                <h6 class="text-white text-capitalize ps-3" style="color: white !important;">History Records</h6>
+                            </div>
+                            </div>
+                            <div class="card-body px-0 pb-2">
+                            <div class="table-responsive p-0">
+                                <table class="table align-items-center justify-content-center mb-0">
+                                <thead>
+                                    <tr style="color: black !important;">
+                                    <tr>
+                                        <th>Serial No</th>
+                                        <th>Category</th>
+                                        <th>Brand</th>
+                                        <th>Model Name</th>
+                                        <th>Status</th>
+                                        <th>Created On</th>
+                                        <th>Created by</th>
+                                        <th>Updated By</th>
+                                        <th>Updated On</th>
+                                    </tr>
+                                </thead>
+                                <tbody style="color: #030000;">
+                                    {% for record in history %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ record.brand.category.category_name }}</td>
+                                        <td>{{ record.brand.brand_name }}</td>
+                                        <td>{{ record.model_name }}</td>
+                                        <td>{{ record.status }}</td>
+                                        <td>{{ record.created_on }}</td>
+                                        <td>{{ record.created_by }}</td>
+                                        <td>{{ record.updated_by }}</td>
+                                        <td>{{ record.updated_on }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

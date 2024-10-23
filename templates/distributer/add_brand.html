@@ -1,0 +1,125 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+
+        <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+            <ol class="breadcrumb" style="background-color: #98BDFF;">
+                <li class="breadcrumb-item" ><a href="{% url 'dispatch-BrandListView' %}" style="color: white !important;">View Car Brand</a></li>
+                <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="col-xl-12">
+        <div class="card my-4">
+            <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Car Brand</h6>
+                </div>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Car Category</label>
+                        <div class="col-sm-12">
+                            <select id="category" name="category" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}">{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Brand Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="brand_name" name="brand_name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">    
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function normalizeName(name) {
+        return name.trim().toLowerCase().replace(/\s+/g, '');
+    }
+
+    $(document).ready(function () {
+        var existingBrands = {};
+
+        '{% for brand in brands %}'
+        if (!existingBrands["{{ brand.category_id }}"]) {
+            existingBrands["{{ brand.category_id }}"] = [];
+        }
+        existingBrands["{{ brand.category_id }}"].push(normalizeName("{{ brand.brand_name|escapejs }}".toLowerCase()));
+        '{% endfor %}'
+
+        $("#save_action").click(function (e) {
+            e.preventDefault();
+            
+            var category = $('#category').val();
+            var brand_name = $('#brand_name').val().trim();
+            var normalized_brand_name = normalizeName(brand_name);
+            var status = $('#status').val();
+
+            if (!category || !brand_name) {
+                alert("All fields are required.");
+                return;
+            }
+
+            if (existingBrands[category] && existingBrands[category].includes(normalized_brand_name)) {
+                alert("This brand already exists for the selected category.");
+                return;
+            }
+
+            $.ajax({
+                url: '{% url "dispatch-addbrand" %}',
+                type: "POST",
+                headers: {
+                    'X-CSRFToken': '{{ csrf_token }}'
+                },
+                data: { brand_name: brand_name, category: category, status: status },
+                success: function (result) {
+                    alert("Brand added");
+                    location.href = "{% url 'dispatch-BrandListView' %}";
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+    
+</script>
+{% endblock content %}

@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -40,7 +39,8 @@
                             <input type="text" class="form-control form-control-lg" id="category_name" name="category_name"
                                 value="{{ plist.0.category_name }}">
                         </div>
-                    </div>
+                    </div><br>
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_category">Submit</button>
                     </div>
@@ -66,7 +66,6 @@
                 return;
             }
 
-            // Assuming you have a variable original_name to compare with the edited name
             var original_name = "{{ plist.0.category_name }}";
 
             if (category_name.trim() === original_category_name.trim()) {

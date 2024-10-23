@@ -1,0 +1,368 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-viewdriver' %}" style="color: white !important;">View Drivers</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Driver</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <input type="hidden" id="vehicle_id" name="vehicle" value="">
+        
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ next_company_format }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" >
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Search Vehicle</label>
+                        <div class="col-sm-12">  
+                            <select id="single-select" class="form-control form-control-lg" onchange="fetchVehicleDetails()" >
+                                <option value="" disabled selected>Select Vehicle</option>
+                                {% for vehicle in vehicles %}
+                                <option value="{{ vehicle.company_format }}"
+                                    data-company-format="{{ vehicle.company_format }}"
+                                    data-vehicle-number="{{ vehicle.Vehicle_Number }}"
+                                    data-category="{{ vehicle.model.brand.category.category_name }}"
+                                    data-brand="{{ vehicle.model.brand.brand_name }}"
+                                    data-model="{{ vehicle.model.model_name }}">
+                                    {{ vehicle.company_format }} - {{ vehicle.owner.phone_number }} - {{ vehicle.owner.name }} - {{ vehicle.drive_status }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                                        
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="vehicle_number" name="vehicle_number" readonly>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="category" name="category" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="brand" name="brand" readonly>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Model</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="model" name="model" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="driver_name" name="driver_name">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" maxlength="15">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                        <div class="col-sm-12">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Password</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="password" name="password">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                        <div class="col-sm-12">
+                            <textarea class="form-control form-control-lg" id="address" name="address"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
+                        <div class="col-sm-12">
+                            <input type="file" class="form-control form-control-lg" id="profile_image" name="profile_image">
+                            <img id="profile_image_preview" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
+                        <div class="col-sm-12">
+                            <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof">
+                            <img id="address_proof_preview" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Police clearance certificate</label>
+                            <input type="file" class="form-control form-control-lg" id="police_clearance" name="police_clearance">
+                            <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+     
+                        <div class="col-sm-12">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">P From date</label>
+                            <input type="date" class="form-control form-control-lg" id="pfrom_date" name="pfrom_date">
+                        </div>
+                    
+                        <div class="col-sm-12">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">P to date</label>
+                            <input type="date" class="form-control form-control-lg" id="pto_date" name="pto_date">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-12">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driving License</label>
+                            <input type="file" class="form-control form-control-lg" id="driving_license" name="driving_license">
+                            <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                        </div>
+
+                        <div class="col-sm-12">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">D From date</label>
+                            <input type="date" class="form-control form-control-lg" id="dfrom_date" name="dfrom_date">
+                        </div>
+                    
+                        <div class="col-sm-12">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">D to date</label>
+                            <input type="date" class="form-control form-control-lg" id="dto_date" name="dto_date">
+                        </div>
+                    </div>
+                        
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-lg" id="status" name="status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" selected>Active</option>
+                                <option value="inactive">Inactive</option>
+                            </select>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    function fetchVehicleDetails() {
+        var vehicleCompanyFormat = $('#single-select').val();
+
+        if (vehicleCompanyFormat) {
+            $.ajax({
+                url: '{% url "global_fetch_vehicle_details" %}',
+                type: "GET",
+                data: {
+                    vehicle_company_format: vehicleCompanyFormat
+                },
+                success: function(response) {
+                    if (response.success) {
+                        var vehicle = response.vehicle;
+                        $('#vehicle_number').val(vehicle.Vehicle_Number);
+                        $('#category').val(vehicle.category_name);
+                        $('#brand').val(vehicle.brand_name);
+                        $('#model').val(vehicle.model_name);
+                        $('#vehicle_id').val(vehicle.id);
+
+                        if (vehicle.drive_status === 'selfdrive') {
+                            $('#driver_name').val(vehicle.owner_name);
+                            $('#phone_number').val(vehicle.owner_phone_number);
+                            $('#email').val(vehicle.owner_email);
+                            $('#address').val(vehicle.owner_address);
+
+                            if (vehicle.owner_profile_image) {
+                                $('#profile_image_preview').attr('src', vehicle.owner_profile_image).show();
+                            } else {
+                                $('#profile_image_preview').hide();
+                            }
+
+                            if (vehicle.owner_address_proof) {
+                                $('#address_proof_preview').attr('src', vehicle.owner_address_proof).show();
+                            } else {
+                                $('#address_proof_preview').hide();
+                            }
+
+                            $('#driver_name, #phone_number, #email, #address').prop('readonly', true);
+                            } else {
+                                $('#driver_name, #phone_number, #email, #address').prop('readonly', false);
+                            }
+                    } else {
+                        alert(response.message || 'Vehicle not found');
+                        clearVehicleDetails();
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        }
+    }
+
+    function clearVehicleDetails() {
+        $('#vehicle_number').val('');
+        $('#category').val('');
+        $('#brand').val('');
+        $('#model').val('');
+        $('#vehicle_id').val('');
+        $('#driver_name').val('');
+        $('#phone_number').val('');
+        $('#email').val('');
+        $('#address').val('');
+        $('#profile_image_preview').hide();
+        $('#address_proof_preview').hide();
+        $('#driver_name, #phone_number, #email, #address').prop('readonly', false);
+        $('#profile_image, #address_proof').prop('disabled', false);
+    }
+
+    $(document).ready(function() {
+        $("#profile_image, #address_proof").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+
+    $(document).ready(function() {
+        $("#save_action").click(function(event) {
+            event.preventDefault();
+            var vehicle_id = $('#vehicle_id').val();
+            var company_format = $('#company_format').val();
+            var driver_name = $('#driver_name').val();
+            var phone_number = $('#phone_number').val();
+            var email = $('#email').val();
+            var password = $('#password').val();
+            var address = $('#address').val();
+            var profile_image = $('#profile_image').prop('files')[0];
+            var address_proof = $('#address_proof').prop('files')[0];
+            var police_clearance = $('#police_clearance').prop('files')[0];
+            var pfrom_date = $('#pfrom_date').val();
+            var pto_date = $('#pto_date').val();
+            var driving_license = $('#driving_license').prop('files')[0];
+            var dfrom_date = $('#dfrom_date').val();
+            var dto_date = $('#dto_date').val();
+            var status = $('#status').val();
+
+            var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordPattern.test(password)) {
+                    alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
+                    return;
+                }
+
+                if (pfrom_date && pto_date && new Date(pfrom_date) > new Date(pto_date)) {
+                    alert("'police_clearance to date' must be after 'police_clearance from date'.");
+                    return;
+                }
+
+                if (dfrom_date && dto_date && new Date(dfrom_date) > new Date(dto_date)) {
+                    alert("'driving_license to date' must be after 'driving_license from date'.");
+                    return;
+                }    
+
+            if (!vehicle_id || !driver_name || !phone_number || !email || !address || !status) {
+                alert("All fields are required.");
+            } else {
+                var formData = new FormData();
+                formData.append('vehicle', vehicle_id); 
+                formData.append('company_format', company_format);
+                formData.append('name', driver_name);
+                formData.append('phone_number', phone_number);
+                formData.append('email', email);
+                formData.append('password', password);
+                formData.append('address', address);
+                formData.append('profile_image', profile_image);
+                formData.append('address_proof', address_proof);
+                formData.append('police_clearance', police_clearance);
+                formData.append('pfrom_date', pfrom_date);
+                formData.append('pto_date', pto_date);
+                formData.append('driving_license', driving_license);
+                formData.append('dfrom_date', dfrom_date);
+                formData.append('dto_date', dto_date);
+                formData.append('status', status);
+
+                $.ajax({
+                    url: '{% url "dispatch-adddriver" %}',
+                    type: "POST",
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function(result) {
+                        alert("Driver details added successfully.");
+                        window.location.href = '{% url "dispatch-viewdriver" %}';
+                    },
+                    error: function(xhr, status, error) {
+                        console.error(xhr.responseText);
+                    }
+                });
+            }
+        });
+
+        $("#profile_image,#address_proof,#police_clearance,#driving_license").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result).show();
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+    
+</script>
+{% endblock %}

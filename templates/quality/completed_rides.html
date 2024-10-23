@@ -15,7 +15,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -51,7 +50,6 @@
                                 <tbody>
                                     {% for i in object_list %}
                                     <tr style="color: #030000;">
-                                        <!-- <td>{{ i.company_format }}</td> -->
                                         <td>
                                             <div>{{ i.company_format }}</div>
                                             <div style="color: blue;">{{ i.pickup_time }}</div>
@@ -102,8 +100,6 @@
     </div>
 </div>
 
-<!-- Quality comment Modal -->
-
 <div class="modal fade" id="qualitycommentModal" tabindex="-1" role="dialog" aria-labelledby="qualitycommentModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -125,7 +121,6 @@
     </div>
 </div>
 
-<!-- Add the necessary scripts for export functionality -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -134,13 +129,12 @@
 
 <script>
     $(document).ready(function() {
-    // Handle submit button click
     $(document).on('click', '.comment-btn', function() {
         const quality_comments = $('#quality_comments').val();
         const rideId = $('#qualitycommentModal').data('ride-id');
 
-        console.log("Quality Comments: ", quality_comments); // Debugging statement
-        console.log("Ride ID: ", rideId); // Debugging statement
+        console.log("Quality Comments: ", quality_comments); 
+        console.log("Ride ID: ", rideId); 
 
         if (!quality_comments) {
             console.error("Comments are missing");
@@ -159,16 +153,15 @@
             success: function(result) {
                 console.log("Success: ", result);
                 alert("Submitted successfully.");
-                // Hide the "Add Comment" button and display the comment
-                $('#add-comment-' + rideId).hide(); // Hide the button
+                $('#add-comment-' + rideId).hide(); 
                 $('#quality-comment-' + rideId).html(`
                     <div>${result.quality_comments}</div>
                     <div style="color: rgb(61, 148, 219);">${result.verified_by}</div>
                     <div style="color: rgb(61, 148, 219);">${result.verified_on}</div>
-                `); // Update the comment section
-                $('#quality-comment-' + rideId).show(); // Ensure the element is displayed
+                `); 
+                $('#quality-comment-' + rideId).show(); 
 
-                $('#qualitycommentModal').modal('hide'); // Hide the modal after submission
+                $('#qualitycommentModal').modal('hide'); 
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", xhr.responseText);
@@ -177,13 +170,12 @@
         });
     });
 
-    // Modal Show Event
     $('#qualitycommentModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var button = $(event.relatedTarget); 
+        var rideId = button.data('ride-id');
         var modal = $(this);
-        modal.data('ride-id', rideId); // Store ride ID in modal attribute
-        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+        modal.data('ride-id', rideId); 
+        console.log("Modal shown for Ride ID: ", rideId);
     });
 });
 </script>

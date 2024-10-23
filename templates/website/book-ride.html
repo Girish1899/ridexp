@@ -13,21 +13,6 @@
 {% block body_content %}
     <main class="main" style="background: url('static/img/slider/sl1.jpg')">
 
-        <!-- breadcrumb -->
-        <!-- <div class="site-breadcrumb" style="background: url(assets/img/breadcrumb/01.jpg)">
-            <div class="container">
-                <h2 class="breadcrumb-title">Book A Ride</h2>
-                <ul class="breadcrumb-menu">
-                    <li><a href="index.html">Home</a></li>
-                    <li class="active">Book A Ride</li>
-                </ul>
-            </div>
-        </div> -->
-        <!-- breadcrumb end -->
-
-
-
-        <!-- book ride -->
         <div class="book-ride py-120">
             <div class="container">
                 <div class="row">
@@ -58,7 +43,6 @@
                                             <div class="form-group">
                                                 <label>Pick Up Date:</label>
                                                 <input type="text" class="form-control date-picker" placeholder="MM/DD/YY" id="pickup_date" name="pickup_date">
-                                                <!-- <i class="far fa-calendar-days"></i> -->
                                                 <div id="dateError" class="invalid-feedback"></div>
                                             </div>
                                         </div>
@@ -94,7 +78,6 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <!-- Table rows will be populated dynamically -->
                                     </tbody>
                                 </table>
                             </div>
@@ -104,10 +87,7 @@
                 </div>
             </div>
         </div>
-        <!-- book ride end -->
-
-
-        <!-- Modal for customer details -->
+     
 <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -142,7 +122,6 @@
                     </div>
 
                     
-                    <!-- Hidden inputs for category, cost, source, destination -->
                     <input type="hidden" id="bookingCategory" name="bookingCategory">
                     <input type="hidden" id="bookingCost" name="bookingCost">
                     <input type="hidden" id="bookingSource" name="bookingSource">
@@ -194,43 +173,35 @@
 
     function populateTable(costs) {
     var tableBody = $('#costs-table tbody');
-    tableBody.empty();  // Clear existing table rows
+    tableBody.empty();  
 
     $.each(costs, function(category, data) {
         var row = $('<tr>');
 
-        // Category name
         row.append($('<td>').text(data.category ));
 
-        // Category image
         var img = $('<img>').attr('src', data.image_url).attr('alt', data.category_name).css('width', '50px');
         row.append($('<td>').append(img));
 
-        // Number of seats
         row.append($('<td>').text(data.seats));
 
-        // Distance, permit, toll, beta, and cost
         row.append($('<td>').text(data.distance_km));
         row.append($('<td>').text(data.permit));
         row.append($('<td>').text(data.toll));
         row.append($('<td>').text(data.beta));
         row.append($('<td>').text(data.cost));
 
-        // Action button to show modal with input fields
         var actionBtn = $('<button>').addClass('btn btn-dark').text('Book Now').click(function() {
-            // Fill modal inputs with data
             $('#bookingCategory').val(data.category_name);
             $('#bookingCost').val(data.cost);
-            $('#bookingSource').val($('#source').val());  // Replace with actual source
-            $('#bookingDestination').val($('#destination').val());  // Replace with actual destination
+            $('#bookingSource').val($('#source').val());  
+            $('#bookingDestination').val($('#destination').val()); 
             $('#bookingModal').modal('show');
         });
 
-        // Append action button to the row
         var actionCell = $('<td>').append(actionBtn);
         row.append(actionCell);
 
-        // Append row to the table
         tableBody.append(row);
 
         $('#costs-table-container').css('display', 'block');
@@ -239,19 +210,10 @@
 
 
 
-      // Handle booking form submission
       $('#confirmBookingBtn').click(function() {
-        // Example: Perform Ajax submission of booking form data
         var formData = $('#bookingForm').serialize();
         console.log('Booking form data:', formData);
-        // Uncomment the following line to submit the form via Ajax
-        // $.post('your_booking_endpoint_url', formData, function(response) {
-        //     console.log('Booking submitted successfully:', response);
-        // }).fail(function(error) {
-        //     console.error('Error submitting booking:', error);
-        // });
-
-        // Close modal after submission
+       
         $('#bookingModal').modal('hide');
     });
 
@@ -302,8 +264,7 @@
                     alert("Oops something went wrong. Please try again. "+result['message'])
                 }
                 $('#costs-table-container').css('display', 'none');
-                // Function to populate table with JSON data
-            // populateTable(result.costs);
+               
             },
             error: function(xhr, status, error) {
                 console.error(xhr.responseText);
@@ -341,7 +302,6 @@
             },
             success: function(result) {
                 console.log("^^^^^: ", result);
-                // Function to populate table with JSON data
             populateTable(result.costs);
             check_ride();
             if(ridetype=="")
@@ -387,12 +347,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     function isValidMobileNumber(mobile) {
-        var regex = /^[6-9]\d{9}$/; // Regular expression for 10-digit Indian mobile numbers
+        var regex = /^[6-9]\d{9}$/; 
         return regex.test(mobile);
     }
 
     function isValidEmail(email) {
-        // Regular expression for basic email validation
         var regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return regex.test(email);
     }
@@ -423,12 +382,10 @@ function hideColumns(tableId, columns) {
 
 function check_ride()
 {
-      //////////////////////////
       var pickup=($("#source").val()).toString();
     pickup=pickup.toLowerCase()
     var drop=($("#destination").val()).toString();
     drop=drop.toLowerCase()
-    ///////////////////////////////
     console.log("--",( pickup.includes("bengaluru")  && !drop.includes("bengaluru") ),pickup.includes("bengaluru"),!drop.includes("bengaluru"));
     if(( pickup.includes("bengaluru")  && !drop.includes("bengaluru") )||
     ( !pickup.includes("bengaluru")  && drop.includes("bengaluru") ))
@@ -436,9 +393,6 @@ function check_ride()
         ridetype="Outstation";
 }          
 }       
-
-  
-
 
 </script>
 </main>

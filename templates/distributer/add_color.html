@@ -1,0 +1,103 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'dispatch-colorList' %}" style="color: white !important;">View Car Color</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
+                        style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Color</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg"
+                            style="color: #454545; font-size: 16px;">Car Color Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+
+            var name = $('#name').val().trim().toLowerCase();
+
+            if (name.trim() === '') {
+                alert("Please enter color name.");
+                return;
+            }
+
+            console.log("name :", name);
+
+            $.ajax({
+                url: '{% url "dispatch-check_color" %}',
+                type: "GET",
+                data: { name: name },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("Color name already exists.");
+                    } else {
+                        $.ajax({
+                            url: '{% url "dispatch-addcolor" %}',
+                            type: "POST",
+                            headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                            data: { name: name },
+                            success: function (result) {
+                                console.log("result ***: ", result);
+                                alert("Color added");
+                                location.href = "{% url 'dispatch-colorList' %}";
+                            },
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error(xhr.responseText);
+                }
+            });
+        });
+    });
+    
+</script>
+
+{% endblock content%}

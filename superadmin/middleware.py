@@ -7,6 +7,6 @@ class SuperAdminCheckMiddleware:
 
     def __call__(self, request):
         if request.path.startswith('/superadmin/') and not request.user.is_superuser and request.session.get('user_type')!="Superadmin":
-            return redirect(reverse('login'))  # Redirect to the home page or any other page
+            return redirect(reverse('login'))  
         response = self.get_response(request)
         return response

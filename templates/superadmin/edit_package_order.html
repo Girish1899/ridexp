@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -57,8 +56,6 @@
                             </select>
                         </div>
                     </div>
-
-                    
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Total Amount</label>
@@ -119,13 +116,11 @@
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
                         <div class="col-sm-12">
                             <select id="status" name="status" class="form-control form-control-lg">
-                                <!-- <option value="" selected disabled>Select Status</option> -->
                                 <option value="active" {% if order.status == "active" %} selected {% endif %}>Active</option>
                                 <option value="inactive" {% if order.status == "inactive" %} selected {% endif %}>Inactive</option>
                             </select>
                         </div>
-                    </div>
-                    
+                    </div><br>
 
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
@@ -152,12 +147,6 @@
             var total_amount = document.getElementById('total_amount').value;
             var payment_method = $('input[name="payment_method"]:checked').val(); 
             var status = document.getElementById('status').value;
-
-
-            // if (!customer || !package || !total_amount || !payment_method || !status) {
-            //     alert("All fields are required.");
-            //     return;
-            // }
 
             if (confirm("Are you sure you want to save this order?")) {
                 $.ajax({
@@ -199,7 +188,6 @@
     function initAutocomplete() {
           const inputs = document.querySelectorAll('.autocomeple_g');
     
-    
           inputs.forEach(input => {
           const autocomplete = new google.maps.places.Autocomplete(input);
     
@@ -222,17 +210,13 @@
             document.head.appendChild(script);
         });
 
-
-
-      // Initialize datepicker
     $('.date-picker').datepicker({
         format: 'mm/dd/yyyy',
         autoclose: true,
         todayHighlight: true,
-        startDate: new Date() // Set start date to today
+        startDate: new Date() 
     });
 
-    // Datepicker change event listener
     $('.date-picker').change(function() {
         var selectedDate = new Date($(this).val());
         var today = new Date();
@@ -240,7 +224,7 @@
         today.setHours(0, 0, 0, 0);
         
         if (selectedDate < today) {
-            $(this).val(''); // Clear invalid date
+            $(this).val(''); 
             $(this).addClass('is-invalid');
             $('#dateError').text('Please select a future date.');
         } else {
@@ -251,6 +235,5 @@
     });
 
 </script>
-
 
 {% endblock content %}

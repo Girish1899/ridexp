@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,14 +17,13 @@
             </div>
         </div>
 
-
         <div class="col-xl-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Package Orders</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
 
@@ -118,7 +116,8 @@
                             </select>
                         </div>
                     </div>
-<br>
+                    <br>
+
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
@@ -141,11 +140,6 @@
             var pickup_time = $('#pickup_time').val();
             var payment_method = $('input[name="payment_method"]:checked').val();
             var status = $('#status').val();
-
-            // if (!customer || !package || !total_amount || !payment_method || !status) {
-            //     alert("All fields are required.");
-            //     return;
-            // }
 
             console.log('customer',customer)
             console.log('package',package)
@@ -174,7 +168,6 @@
     function initAutocomplete() {
           const inputs = document.querySelectorAll('.autocomeple_g');
     
-    
           inputs.forEach(input => {
           const autocomplete = new google.maps.places.Autocomplete(input);
     
@@ -186,28 +179,24 @@
             }
             console.log('Place details for', input.id, ':', place);
             });
-            });
-        }
-    
-        document.addEventListener('DOMContentLoaded', function() {
-            const script = document.createElement('script');
-            script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
-            script.async = true;
-            script.defer = true;
-            document.head.appendChild(script);
         });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const script = document.createElement('script');
+        script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    });
 
-
-
-      // Initialize datepicker
     $('.date-picker').datepicker({
         format: 'mm/dd/yyyy',
         autoclose: true,
         todayHighlight: true,
-        startDate: new Date() // Set start date to today
+        startDate: new Date()
     });
 
-    // Datepicker change event listener
     $('.date-picker').change(function() {
         var selectedDate = new Date($(this).val());
         var today = new Date();
@@ -215,7 +204,7 @@
         today.setHours(0, 0, 0, 0);
         
         if (selectedDate < today) {
-            $(this).val(''); // Clear invalid date
+            $(this).val('');
             $(this).addClass('is-invalid');
             $('#dateError').text('Please select a future date.');
         } else {
@@ -226,6 +215,5 @@
     });
 
 </script>
-
 
 {% endblock content %}

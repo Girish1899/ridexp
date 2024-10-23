@@ -1,15 +1,11 @@
-// Disable animation if transitions are disabled
 
-// scss-docs-start progress-keyframes
 @if $enable-transitions {
   @keyframes progress-bar-stripes {
     0% { background-position-x: $progress-height; }
   }
 }
-// scss-docs-end progress-keyframes
 
 .progress {
-  // scss-docs-start progress-css-vars
   --#{$prefix}progress-height: #{$progress-height};
   @include rfs($progress-font-size, --#{$prefix}progress-font-size);
   --#{$prefix}progress-bg: #{$progress-bg};
@@ -18,11 +14,10 @@
   --#{$prefix}progress-bar-color: #{$progress-bar-color};
   --#{$prefix}progress-bar-bg: #{$progress-bar-bg};
   --#{$prefix}progress-bar-transition: #{$progress-bar-transition};
-  // scss-docs-end progress-css-vars
 
   display: flex;
   height: var(--#{$prefix}progress-height);
-  overflow: hidden; // force rounded corners by cropping it
+  overflow: hidden; 
   @include font-size(var(--#{$prefix}progress-font-size));
   background-color: var(--#{$prefix}progress-bg);
   @include border-radius(var(--#{$prefix}progress-border-radius));

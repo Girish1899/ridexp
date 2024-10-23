@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +17,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -112,12 +109,12 @@
     function EditPackageOrder(order_id) {
         var action = confirm("Are you sure you want to edit this package order?");
         if (action !== false) {
-            window.location.href = "EditPackageOrder/" + order_id; // Redirect to edit page
+            window.location.href = "EditPackageOrder/" + order_id; 
         }
     }
 
     function HistoryPackageOrder(order_id) {
-        window.location.href = "package_order_history/" + order_id; // Redirect to history page
+        window.location.href = "package_order_history/" + order_id; 
     }
 </script>
 {% endblock content %}

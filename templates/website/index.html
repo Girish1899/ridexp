@@ -3,22 +3,21 @@
 {% load static %}
 
 <head>
-  <!-- meta tags -->
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Meta Tags for Cab Business -->
+
   {% block title %}{% endblock %}
   {% block meta_description %}{% endblock %}
   {% block meta_keywords %}{% endblock %}
-  <!-- Open Graph Meta Tags for Social Sharing -->
+
   <meta property="og:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services" />
   <meta property="og:description"
     content="RidexpressTaxi Services offers 24/7 local, outstation, and airport taxi services with professional drivers and affordable rates. Book your ride today for a comfortable and safe journey!" />
   <meta property="og:image" content="https://ridexpress.in/static/img/logo/ridexpress.png" />
   <meta property="og:url" content="https://ridexpress.in" />
   <meta property="og:type" content="website" />
-  <!-- Twitter Card Meta Tags -->
+
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services">
   <meta name="twitter:description"
@@ -26,11 +25,8 @@
   <meta name="twitter:image" content="https://ridexpress.in/static/img/logo/ridexpress.png">
   <meta name="twitter:url" content="https://ridexpress.in">
 
-  <!-- favicon -->
   <link rel="icon" type="image/x-icon" href="{% static '/img/logo/favicon.png' %}">
 
-  
-  <!-- css -->
   <link rel="stylesheet" href="{% static '/css/bootstrap.min.css' %}">
   <link rel="stylesheet" href="{% static '/css/all-fontawesome.min.css' %}">
   <link rel="stylesheet" href="{% static '/css/animate.min.css' %}">
@@ -40,7 +36,6 @@
   <link rel="stylesheet" href="{% static '/css/jquery.timepicker.min.css' %}">
   <link rel="stylesheet" href="{% static '/css/nice-select.min.css' %}">
   <link rel="stylesheet" href="{% static '/css/style.css' %}">
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> -->
 
   <script src="{% static '/js/jquery-3.6.0.min.js' %}"></script>
   <style>
@@ -48,12 +43,10 @@
       text-decoration: none;
     }
 
-    /* Styling for the floating WhatsApp icon */
-    /* Styling for the floating WhatsApp icon */
+    
     .whatsapp-float {
       position: fixed;
       bottom: 80px;
-      /* This keeps the WhatsApp icon above the Scroll to Top button */
       right: 20px;
       width: 60px;
       height: 60px;
@@ -73,16 +66,13 @@
       transform: scale(1.1);
     }
 
-    /* Styling for the Scroll to Top button */
     #scroll-top {
       position: fixed;
       bottom: 20px;
-      /* This places the Scroll to Top button below the WhatsApp icon */
       right: 20px;
       width: 50px;
       height: 50px;
       z-index: 100;
-      /* background-color: #caa770; */
       border-radius: 50%;
       display: flex;
       justify-content: center;
@@ -96,11 +86,9 @@
     }
 
 
-    /*  Enquiry  */
     .enquiry-float {
       position: fixed;
       bottom: 150px;
-      /* Position above the WhatsApp button */
       right: 26px;
       width: 53px;
       height: 53px;
@@ -123,27 +111,20 @@
       transform: scale(1.1);
     }
 
-    /* Modal styling */
-    /* Modal styling */
+   
     .modal {
       display: none;
-      /* Hidden by default */
       position: fixed;
       z-index: 200;
-      /* Above everything else */
       left: 0;
       top: 0;
       width: 100%;
       height: 100%;
       background-color: rgba(0, 0, 0, 0.8);
-      /* Darker background for better contrast */
       justify-content: center;
       align-items: flex-start;
-      /* Align items to the top */
       transition: opacity 0.3s ease;
-      /* Fade-in effect for modal */
       padding-top: 60px;
-      /* Space for navbar */
     }
 
     .modal-content {
@@ -237,7 +218,6 @@
       color: red;
     }
 
-    /* Responsive Styles */
     @media (max-width: 600px) {
       .modal-content {
         width: 90%;
@@ -281,31 +261,24 @@
 
 <body>
 
-  <!-- preloader -->
   <div class="preloader">
     <div class="loader-ripple">
       <div></div>
       <div></div>
     </div>
   </div>
-  <!-- preloader end -->
 
 
-  <!-- header area -->
   {% include "./header.html" %}
-  <!-- header area end -->
 
   {% block body_content %}
 
   {% endblock body_content %}
 
-  <!-- footer area -->
   {% include "./footer.html" %}
-  <!-- footer area end -->
 
 
 
-  <!-- scroll-top -->
   <a href="https://wa.me/6366463555?text=Hello,%20I%20would%20like%20to%20book%20a%20taxi.%20Could%20you%20please%20help%20me%20with%20the%20details?"
     class="whatsapp-float" target="_blank">
 
@@ -315,7 +288,6 @@
   </a>
   <br>
 
-  <!-- enquiry btn -->
 
   <a href="#" class="enquiry-float" id="enquiry-btn">
     <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Quill_Paper_Icon_with_White_Background.png" alt="Enquiry Icon">
@@ -370,15 +342,12 @@
   </div>
 
   <br>
-  <!--  -->
 
   <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
 
-  <!-- scroll-top end -->
 
   {% endblock body %}
 
-  <!-- js -->
 
   <script src="{% static '/js/modernizr.min.js' %}"></script>
   <script src="{% static '/js/bootstrap.bundle.min.js' %}"></script>
@@ -396,22 +365,18 @@
   <script src="{% static '/js/main.js' %}"></script>
   <script>
 
-    // Get the modal
     var modal = document.getElementById('myModal');
 
-    // Function to open the modal and load Google Form
     function openModal() {
       var googleFormUrl = 'https://forms.gle/EUGWHRSqYExnpyzH6';
       document.getElementById('googleFormFrame').src = googleFormUrl;
       modal.style.display = "block";
     }
 
-    // Function to close the modal
     function closeModal() {
       modal.style.display = "none";
     }
 
-    // Close the modal if user clicks outside of it
     window.onclick = function (event) {
       if (event.target == modal) {
         closeModal();
@@ -419,11 +384,6 @@
     };
 
 
-
-    // function openForm() {
-    //     document.getElementById('googleFormFrame').src = 'https://forms.gle/EUGWHRSqYExnpyzH6';
-    //     document.getElementById('googleFormFrame').style.display = 'block';
-    // }
     function initAutocomplete() {
       const inputs = document.querySelectorAll('.autocomeple_g');
 
@@ -452,15 +412,13 @@
 
 
 
-    // Initialize datepicker
     $('.date-picker').datepicker({
       format: 'mm/dd/yyyy',
       autoclose: true,
       todayHighlight: true,
-      startDate: new Date() // Set start date to today
+      startDate: new Date() 
     });
 
-    // Datepicker change event listener
     $('.date-picker').change(function () {
       var selectedDate = new Date($(this).val());
       var today = new Date();
@@ -468,7 +426,7 @@
       today.setHours(0, 0, 0, 0);
 
       if (selectedDate < today) {
-        $(this).val(''); // Clear invalid date
+        $(this).val(''); 
         $(this).addClass('is-invalid');
         $('#dateError').text('Please select a future date.');
       } else {
@@ -478,7 +436,6 @@
       }
     });
 
-    // Timepicker validation event listener
     $('.pickup-time').change(function () {
       var selectedDate = new Date($('.date-picker').val());
       var today = new Date();
@@ -494,9 +451,8 @@
         var currentMinutes = now.getMinutes();
         var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
 
-        // Check if the selected time is earlier than the current time
         if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
-          $(this).val(''); // Clear invalid time
+          $(this).val('');
           $(this).addClass('is-invalid');
           $('#timeError').text('Please select a current or future time.');
         } else {
@@ -505,7 +461,6 @@
           $('#timeError').text('');
         }
       } else {
-        // If the date is in the future, any time is valid
         $(this).removeClass('is-invalid');
         $(this).addClass('is-valid');
         $('#timeError').text('');
@@ -514,7 +469,6 @@
 
   </script>
 
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16701194260"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -523,9 +477,6 @@
 
     gtag('config', 'AW-16701194260');
   </script>
-
-
-  <!-- enquiry  -->
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
@@ -613,8 +564,6 @@
     }
 }
 </style>
-
-
 </body>
 
 </html>

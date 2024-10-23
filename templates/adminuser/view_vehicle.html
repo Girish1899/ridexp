@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -17,8 +16,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -36,7 +33,6 @@
                                         <th>Serial No</th>
                                         <th>Vehicle Id</th>
                                         <th>Owner Name / Owner Mobile</th>
-                                        <!-- <th>Owner Mobile</th> -->
                                         <th>Commission Type</th>
                                         <th>Vehicle Number</th>
                                         <th>Category/Brand/ Model</th>
@@ -125,8 +121,33 @@
     
 
     function HistoryVehicle(vehicle_id) {
-        window.location.href = "adVehicleHistory/" + vehicle_id; // Add a slash here
+        window.location.href = "adVehicleHistory/" + vehicle_id; 
     };
+
+    function VerifyVehicle(vehicle_id, owner_verification_status) {
+    if (owner_verification_status !== 'verified') {
+        alert("This vehicle owner is not verified. You cannot verify this vehicle.");
+        return;
+    }
+    
+    var action = confirm("Have you verified this vehicle?");
+    if (action != false) {
+        $.ajax({
+            url: '{% url "VerifyVehicle" %}',
+            data: {
+                'vehicle_id': vehicle_id,
+            },
+            dataType: 'json',
+            success: function (data) {
+                if (data.verified) {
+                    alert("Vehicle Verified Successfully");
+                    location.reload(); 
+                }
+            }
+        });
+    }
+}
+
 
   
 </script>

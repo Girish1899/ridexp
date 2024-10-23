@@ -9,13 +9,11 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     
 <title>Add Ride - Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services</title>
-    <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="{% static './images/favicon.png' %}">
     <link rel="stylesheet" href="{% static './vendor/owl-carousel/css/owl.carousel.min.css' %}">
     <link rel="stylesheet" href="{% static './vendor/owl-carousel/css/owl.theme.default.min.css' %}">
     <link href="{% static './vendor/jqvmap/css/jqvmap.min.css' %}" rel="stylesheet">
     <link href="{% static './css/style.css' %}" rel="stylesheet">
-    <!-- Datatable -->
     <link href="{% static './vendor/datatables/css/jquery.dataTables.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 
@@ -23,9 +21,6 @@
 
 <body>
 
-    <!--*******
-        Preloader start
-    ********-->
     <div id="preloader">
         <div class="sk-three-bounce">
             <div class="sk-child sk-bounce1"></div>
@@ -42,18 +37,12 @@
                     <h4>Booking</h4>
                 </div>
             </div>
-            <!-- <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
-                    <li class="breadcrumb-item active"><a href="{% url 'ridelist' %}">View Rides</a></li>
-                </ol>
-            </div> -->
+          
         </div>
         
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header">
-                    <!-- <h4 class="card-title">Add Ride Details</h4> -->
                 </div>
                 <input type="hidden" id="customer_id" name="customer" value="">
                 <div class="card-body">
@@ -188,7 +177,6 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 <script>
-    // Set the minimum date to today's date
     document.addEventListener('DOMContentLoaded', function() {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -309,7 +297,7 @@
         var total_fare = $('#total_fare').val();
         var customer = $('#customer_id').val();
         var customer_notes = $('#customer_notes').val();
-        var ride_status = 'currentbookings';  // or get the appropriate value
+        var ride_status = 'currentbookings';  
         
         if (!ridetype || !total_fare || !model || !source || !destination || !pickup_time || !pickup_date || !customer) {
             alert("All fields are required.");
@@ -331,7 +319,7 @@
                     total_fare: total_fare,
                     customer: customer,
                     customer_notes: customer_notes,
-                    ride_status: ride_status  // Ensure ride_status is passed here
+                    ride_status: ride_status  
                 },
                 success: function(result) {
                     alert("Ride details added successfully");
@@ -359,12 +347,10 @@
     <script src="{% static './js/quixnav-init.js' %}"></script>
     <script src="{% static './js/custom.min.js' %}"></script>
 
-    <!-- Datatable -->
     <script src="{% static './vendor/datatables/js/jquery.dataTables.min.js' %}"></script>
     <script src="{% static './js/plugins-init/datatables.init.js' %}"></script>
 
 
-    <!-- Vectormap -->
     <script src="{% static './vendor/raphael/raphael.min.js' %}"></script>
     <script src="{% static './vendor/morris/morris.min.js' %}"></script>
 
@@ -374,14 +360,11 @@
 
     <script src="{% static './vendor/gaugeJS/dist/gauge.min.js' %}"></script>
 
-    <!--  flot-chart js -->
     <script src="{% static './vendor/flot/jquery.flot.js' %}"></script>
     <script src="{% static './vendor/flot/jquery.flot.resize.js' %}"></script>
 
-    <!-- Owl Carousel -->
     <script src="{% static './vendor/owl-carousel/js/owl.carousel.min.js' %}"></script>
 
-    <!-- Counter Up -->
     <script src="{% static './vendor/jqvmap/js/jquery.vmap.min.js' %}"></script>
     <script src="{% static './vendor/jqvmap/js/jquery.vmap.usa.js' %}"></script>
     <script src="{% static './vendor/jquery.counterup/jquery.counterup.min.js' %}"></script>

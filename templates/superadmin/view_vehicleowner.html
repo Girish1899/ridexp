@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +17,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -136,12 +133,12 @@
     function EditVehicleowner(owner_id) {
         var action = confirm("Are you sure you want to edit this owner?");
         if (action !== false) {
-            window.location.href = "EditVehicleowner/" + owner_id; // Add a slash here
+            window.location.href = "EditVehicleowner/" + owner_id; 
         }
     }
 
     function HistoryVehicleowner(owner_id) {
-        window.location.href = "VehicleownerHistory/" + owner_id; // Add a slash here
+        window.location.href = "VehicleownerHistory/" + owner_id; 
     }
 
     function toggleStatus(owner_id, current_status) {
@@ -152,7 +149,7 @@
         if (new_status === 'inactive') {
             blockReason = prompt("Please provide a reason for blocking the vehicle owner:");
             if (blockReason === null) {
-                return; // User cancelled the prompt
+                return; 
             }
         }
 
@@ -169,7 +166,6 @@
             success: function (data) {
                 if (data.success) {
                     alert("Owner status updated successfully.");
-                    // Reload the page to reflect the status change
                     window.location.reload();
                 } else {
                     alert("Failed to update owner status: " + data.message);

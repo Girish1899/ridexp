@@ -1,15 +1,8 @@
 {% extends 'rescue/base.html' %}
 {% load static %}
 {% block content%}
-    <!--**********************************
-        Main wrapper start
-    ***********************************-->
 
-        <!--**********************************
-            Content body start
-        ***********************************-->
         <div class="content-body">
-            <!-- row -->
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-lg-3 col-sm-6">
@@ -63,9 +56,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /# card -->
                     </div>
-                    <!-- /# column -->
                 </div>
                 
                 <div class="form-group" style="width: 20%;">
@@ -325,7 +316,6 @@
     };
 
     const getData = (duration) => {
-        // Sample data for demonstration, replace with actual data
         const weeklyData = {
             labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
             bar1: [12, 19, 3, 5, 2, 3, 7],
@@ -367,15 +357,11 @@
         drawCharts(selectedDuration);
     });
 
-    // Initial load
     drawCharts('weekly');
 });
 
 
     </script>
     
-    <!--**********************************
-        Main wrapper end
-    ***********************************-->
     {% endblock content%}
    

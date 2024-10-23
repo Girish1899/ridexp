@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -19,7 +18,6 @@
             </div>
         </div>
 
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -36,12 +34,6 @@
                                     <tr style="color: black !important;">
                                     <th>Serial No</th>
                                     <th>Title</th>
-                                    <!-- <th>Description</th> -->
-                                    <!-- <th>Image</th>
-                                    <th>Image Link</th> -->
-                                    <!-- <th>facebook Link</th>
-                                    <th>Whatsapp Link</th>
-                                    <th>Instagram Link</th> -->
                                     <th>Backlink</th>
                                     <th>Related Bloglink</th>
                                     <th>Meta Title</th>
@@ -57,43 +49,7 @@
                                 {% for i in object_list %}
                                 <tr style="color: #030000;">
                                     <td>{{ forloop.counter }}</td>
-                                    <td>{{ i.title }}</td>
-                                    <!-- <td>{{ i.description }}</td> -->
-                                    <!-- <td>
-                                        {% if i.image %}
-                                            <img src="{{ i.image.url }}" alt="Package Image" width="100" height="100">
-                                        {% else %}
-                                            No Image
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if i.image_link %}
-                                            <a href="{{ i.image_link }}" target="_blank">{{ i.image_link }}</a>
-                                        {% else %}
-                                            No Image Link
-                                        {% endif %}
-                                    </td> -->
-                                    <!-- <td>
-                                        {% if i.facebook_link %}
-                                            <a href="{{ i.facebook_link }}" target="_blank">Facebook</a>
-                                        {% else %}
-                                            No Facebook Link
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if i.instagram_link %}
-                                            <a href="{{ i.instagram_link }}" target="_blank">Instagram</a>
-                                        {% else %}
-                                            No Instagram Link
-                                        {% endif %}
-                                    </td>
-                                    <td>
-                                        {% if i.whatsapp_link %}
-                                            <a href="{{ i.whatsapp_link }}" target="_blank">WhatsApp</a>
-                                        {% else %}
-                                            No WhatsApp Link
-                                        {% endif %}
-                                    </td> -->
+                                    <td>{{ i.title }}</td>  
                                     <td>{{ i.backlink }}</td>
                                     <td>{{ i.related_bloglink }}</td>
                                     <td>{{ i.meta_title }}</td>
@@ -116,8 +72,8 @@
 
 
         </div>
-    </div><!-- .animated -->
-</div><!-- .content -->
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function DeleteBlogs(blogs_id){
@@ -144,7 +100,7 @@
     function EditBlogs(blogs_id) {
         var action = confirm("Are you sure you want to edit this Blogs?");
         if (action !== false) {
-            window.location.href = "dispatch-author-blogs-edit/" + blogs_id; // Add a slash here
+            window.location.href = "dispatch-author-blogs-edit/" + blogs_id; 
         }
     };
     

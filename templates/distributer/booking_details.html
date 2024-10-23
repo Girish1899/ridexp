@@ -1,0 +1,68 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Bookings for Vehicle {{ vehicle.company_format }} - {{ vehicle.Vehicle_Number }}</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                    <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Bookings on {{ date }}</h6>
+                    </div>
+                </div>
+                <div class="card-body px-0 pb-2">
+                    <div class="table-responsive p-0">
+                        <table class="table align-items-center justify-content-center mb-0">
+                        <thead>
+                            <tr style="color: black !important;">
+                                        <th>Serial No</th>
+                                        <th>Pickup Time</th>
+                                        <th>Pickup Location</th>
+                                        <th>Drop Location</th>
+                                        <th>Total Fare</th>
+                                        <th>Driver Commission</th>
+                                        <th>Company Commission</th>
+                                    </tr>
+                            </thead>
+                            <tbody>
+                                {% for ride in object_list %}
+                                <tr style="color: black;">
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ ride.pickup_time }}</td>
+                                    <td>{{ ride.source}}</td>
+                                    <td>{{ ride.destination}}</td>
+                                    <td>{{ ride.total_fare|floatformat:2 }}</td>
+                                    <td>{{ ride.driver_commission|floatformat:2 }}</td>
+                                    <td>{{ ride.company_commission|floatformat:2 }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4">No bookings found for this date.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content%}
+
+

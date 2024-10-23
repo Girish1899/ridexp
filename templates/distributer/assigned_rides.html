@@ -19,7 +19,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -225,7 +224,6 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
 <script>
-    // Toggle Filter Report visibility
     $('#toggleFilterReport').click(function() {
         var filterReport = $('.filter_report');
         if (filterReport.is(':visible')) {
@@ -238,13 +236,10 @@
     });
     
     $(document).ready(function() {
-    // Initialize Select2 for all select elements
     $("#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame").select2();
 
-    // Event listener for all select elements
     $('#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame').on('change', filterTable);
 
-    // Initialize DataTable
     var table = $('#example').DataTable();
 
     function filterTable() {
@@ -257,7 +252,6 @@
 
         console.log('Filter values:', serviceType, bookingId, vehicleType, vehicleId, driverId, timeFrame);
 
-        // Custom search function to filter the table based on various criteria
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             var row = $(table.row(dataIndex).node());
             var rowServiceType = row.data('ridetype');
@@ -270,7 +264,6 @@
 
             console.log('Row values:', rowServiceType, rowBookingId, rowVehicleType, rowVehicleId, rowDriverId, pickupDate);
 
-            // Define date ranges
             var today = new Date();
             var startOfToday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
@@ -292,7 +285,6 @@
 
             var showRow = true;
 
-            // Apply time frame filters
             if (timeFrame === 'today') {
                 showRow = pickupDate >= startOfToday && pickupDate < startOfToday.setDate(startOfToday.getDate() + 1);
             } else if (timeFrame === 'yesterday') {
@@ -307,7 +299,6 @@
                 showRow = pickupDate >= startOfLastYear && pickupDate <= endOfLastYear;
             }
 
-            // Apply other filters
             if (serviceType && rowServiceType != serviceType) {
                 showRow = false;
             }
@@ -327,18 +318,16 @@
             return showRow;
         });
 
-        table.draw(); // Redraw the table to apply the filters
+        table.draw(); 
 
-        // Remove the custom search function after filtering
         $.fn.dataTable.ext.search.pop();
     }
 
-    // Function to parse date in the format "MMM. D, YYYY"
     function parseDate(dateString) {
         const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
         const parts = dateString.split(' ');
         if (parts.length !== 3) {
-            return new Date(""); // Invalid date
+            return new Date(""); 
         }
         const month = months.indexOf(parts[0]);
         const day = parseInt(parts[1].replace(',', ''), 10);
@@ -351,23 +340,19 @@
 
 <script>
     $(document).ready(function() {
-    // Initialize Flatpickr for single date picker
     flatpickr("#single-date-picker", {
         dateFormat: "Y-m-d",
         onChange: filterTable
     });
 
-    // Initialize Flatpickr for date range picker
     flatpickr("#date-range-picker", {
         mode: "range",
         dateFormat: "Y-m-d",
         onChange: filterTable
     });
 
-    // Initialize event listeners for time pickers
     $('#from-time-picker, #to-time-picker').on('change', filterTable);
 
-    // Initialize DataTable
     var table = $('#example').DataTable();
 
     function filterTable() {
@@ -383,28 +368,24 @@
             if (dateParts.length === 2) {
                 startDate = new Date(dateParts[0]);
                 endDate = new Date(dateParts[1]);
-                // Adjust endDate to include the entire day
                 endDate.setHours(23, 59, 59, 999);
             }
         }
 
-        // Custom search function to filter the table based on date and time
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             var row = $(table.row(dataIndex).node());
             var pickupDateText = row.find('td:nth-child(2) div:nth-child(3)').text().trim();
             var pickupTimeText = row.find('td:nth-child(2) div:nth-child(2)').text().trim();
 
-            // Parse the pickup date and time
             var pickupDate = parseDate(pickupDateText);
             var pickupTime = parseTime(pickupTimeText);
             
             if (!pickupDate || isNaN(pickupDate) || !pickupTime) {
-                return false; // Skip rows with invalid dates or times
+                return false; 
             }
 
             var showRow = true;
 
-            // Date filtering
             if (singleDate) {
                 var selectedDate = new Date(singleDate);
                 showRow = pickupDate.toDateString() === selectedDate.toDateString();
@@ -412,14 +393,11 @@
                 showRow = pickupDate >= startDate && pickupDate <= endDate;
             }
 
-            // Time filtering
             if (fromTime && toTime && showRow) {
                 var fromTimeParsed = parseTime(fromTime);
                 var toTimeParsed = parseTime(toTime);
 
-                // Check if fromTime is greater than toTime (crossing midnight)
                 if (fromTimeParsed > toTimeParsed) {
-                    // Cross midnight logic
                     showRow = !(pickupTime < fromTimeParsed && pickupTime >= toTimeParsed);
                 } else {
                     showRow = pickupTime >= fromTimeParsed && pickupTime <= toTimeParsed;
@@ -429,18 +407,16 @@
             return showRow;
         });
 
-        table.draw(); // Redraw the table to apply the new search criteria
+        table.draw(); 
 
-        // Remove the custom search function after filtering
         $.fn.dataTable.ext.search.pop();
     }
 
-    // Function to parse date in the format "MMM. D, YYYY"
     function parseDate(dateString) {
         const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
         const parts = dateString.split(' ');
         if (parts.length !== 3) {
-            return new Date(""); // Invalid date
+            return new Date("");
         }
         const month = months.indexOf(parts[0]);
         const day = parseInt(parts[1].replace(',', ''), 10);
@@ -448,7 +424,6 @@
         return new Date(year, month, day);
     }
 
-    // Function to parse time in various formats
     function parseTime(timeString) {
         var timeParts = timeString.match(/(\d{1,2}):(\d{2})\s*(a\.m\.|p\.m\.|AM|PM)?/i);
         if (timeParts) {
@@ -465,11 +440,9 @@
                 }
             }
 
-            // Use current date
             var now = new Date();
             return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
         } else {
-            // Handle 24-hour format directly
             timeParts = timeString.match(/(\d{1,2}):(\d{2})/);
             if (timeParts) {
                 var hours = parseInt(timeParts[1], 10);
@@ -477,7 +450,6 @@
                 var now = new Date();
                 return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
             } else {
-                // Handle cases like "4 p.m." or "4 PM"
                 timeParts = timeString.match(/(\d{1,2})\s*(a\.m\.|p\.m\.|AM|PM)/i);
                 if (timeParts) {
                     var hours = parseInt(timeParts[1], 10);

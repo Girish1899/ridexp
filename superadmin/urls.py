@@ -5,11 +5,7 @@ urlpatterns = [
 
     path('index',index,name='index'),
 
-    # path('report', report, name='report'),
-      
-    # Brand #####################
     path('addbrand',addbrand.as_view(),name='addbrand'),
-    # path('check-brand/', check_brand, name='check_brand'),
     path('BrandListView',BrandListView.as_view(),name='BrandListView'),
     path('DeleteBrand',DeleteBrand.as_view(),name='DeleteBrand'),  
     path('EditBrand/<int:id>/',EditBrand.as_view(),name="EditBrand"),
@@ -19,7 +15,6 @@ urlpatterns = [
     path('toggle_brand_status/', toggle_brand_status, name='toggle_brand_status'),
     path('brand/<int:brand_id>/view/', ViewBrand.as_view(), name='ViewBrand'),
 
-    # category##################
     path('addcategory',addcategory.as_view(),name='addcategory'),
     path('check-category/', check_category, name='check_category'),
     path('CategoryListView',CategoryListView.as_view(),name='CategoryListView'),
@@ -32,8 +27,6 @@ urlpatterns = [
     path('category/<int:category_id>/view/', ViewCategory.as_view(), name='ViewCategory'),
 
 
-
-    # Model ############################
     path('addmodel',addmodel.as_view(),name='addmodel'),
     path('ModelListView',ModelListView.as_view(),name='ModelListView'),
     path('DeleteModel',DeleteModel.as_view(),name='DeleteModel'),  
@@ -45,8 +38,6 @@ urlpatterns = [
     path('model/<int:model_id>/view/', ViewModel.as_view(), name='ViewModel'),
 
 
-
-    #vehicletype################  
     path('addvehicletype', addvehicletype.as_view(), name='addvehicletype'),
     path('check_vehicletype/', check_vehicletype, name='check_vehicletype'),
     path('vehicletypeList', vehicletypeList.as_view(), name='vehicletypeList'),
@@ -57,7 +48,6 @@ urlpatterns = [
     path('vehicletype/<int:vehicle_type_id>/view/', ViewVehicletype.as_view(), name='vehicletype'),
 
 
-    #ridetype################  
     path('addridetype', addridetype.as_view(), name='addridetype'),
     path('check_ridetype/', check_ridetype, name='check_ridetype'),
     path('ridetypeList', ridetypeList.as_view(), name='ridetypeList'),
@@ -69,9 +59,6 @@ urlpatterns = [
     path('ridetype/<int:ridetype_id>/view/', ViewRidetype.as_view(), name='ridetype'),
 
 
-    # User 
-    # path('check_phno',check_phno,name='check_phno'),
-    # path('check_useremail',check_useremail,name='check_useremail'),
     path('adduser', adduser.as_view(), name='adduser'),
     path('userlist', UserList.as_view(), name='userlist'),
     path('useremp', UserEmpList.as_view(), name='useremp'),
@@ -79,11 +66,10 @@ urlpatterns = [
     path('EditUser/<int:id>/', EditUser.as_view(), name='EditUser'),
     path('UserHistory/<int:profile_id>/', ProfileHistoryView.as_view(), name='User_history'),
     path('UpdateUser', UpdateUser.as_view(), name='UpdateUser'),
-    #profile
+
     path('profile', profile.as_view(), name='profile'),
     path('update-user/', UpdateUserView.as_view(), name='update_user'),
 
-    # customer 
     path('addcustomer', addcustomer.as_view(), name='addcustomer'),
     path('check_phonenumber', check_phonenumber, name='check_phonenumber'),
     path('customerlist', CustomerList.as_view(), name='customerlist'),
@@ -95,7 +81,6 @@ urlpatterns = [
     path('customer_profile/<int:customer_id>/', CustomerProfileHistoryView.as_view(), name='customer_profile'),
     path('cust_profile_list', CustomerProfileList.as_view(), name='cust_profile_list'),
 
-    # vehicle owner##############################
     path('addvehicleowner', AddOwnerView.as_view(), name='addvehicleowner'),
     path('check_ownerphonenumber', check_ownerphonenumber, name='check_ownerphonenumber'),
     path('viewvehicleowner', OwnerListView.as_view(), name='viewvehicleowner'),
@@ -110,9 +95,7 @@ urlpatterns = [
     path('VerifyOwner/', verify_owner, name='VerifyOwner'),
     path('toggle-owner-status/', toggle_owner_status, name='toggle_owner_status'),
     
-    
 
-    # driverss#######################
     path('adddriver', AddDriverView.as_view(), name='adddriver'),
     path('check_dphonenumber', check_dphonenumber, name='check_dphonenumber'),
     path('viewdriver', DriverListView.as_view(), name='viewdriver'),
@@ -131,10 +114,6 @@ urlpatterns = [
     path('driver_report', DriverReport.as_view(), name='driver_report'),
 
 
-
-
-
-    # vehicle ##############################
     path('addvehicle', AddVehicle.as_view(), name='addvehicle'),
     path('check_vehicleno/',check_vehicleno,name='check_vehicleno'),
     path('vehiclelist', VehicleList.as_view(), name='vehiclelist'),
@@ -149,27 +128,21 @@ urlpatterns = [
     path('VerifyVehicle/', verify_vehicle, name='VerifyVehicle'),
     path('vehicleupdate_status/',vehicleupdate_status,name='vehicleupdate_status'),
 
-#contact #########################
     path('contactlist', ContactList.as_view(), name='contactlist'),
 
-#  enquiry ################################
     path('enquirylist', EnquiryList.as_view(), name='enquirylist'),    
 
-    # ride details ###########################
 
     path('fetch_customer_details/', fetch_customer_details, name='fetch_customer_details'),
     path('ridelist', RideList.as_view(), name='ridelist'),
     path('DeleteRide', DeleteRide.as_view(), name='DeleteRide'),
     path('EditRide/<int:id>/', EditRide.as_view(), name='EditRide'),
     path('UpdateRide', UpdateRide.as_view(), name='UpdateRide'),
-    # path('completed_rides',completed_rides,name='completed_rides'),
 
-# bookings####################################################################
     path('addbooking', AddRide.as_view(), name='addbooking'),
     path('ridelist/<int:ride_id>/', RideList.as_view(), name='ridelist'),
     path('assign_driver', assign_driver, name='assign_driver'),
     path('advanceassign_driver', advanceassign_driver, name='advanceassign_driver'),
-    # path('RideHistory/<int:ride_id>/', RideDetailsHistoryView.as_view(), name='RideHistory'),
     path('advance_bookings', AdvanceBookingsList.as_view(), name='advance_bookings'),
     path('pending_bookings', PendingBookingsList.as_view(), name='pending_bookings'),
     path('view_assigned_rides', AssignedRideList.as_view(), name='view_assigned_rides'),
@@ -180,12 +153,12 @@ urlpatterns = [
     path('update_ride_status/<int:ride_id>/',update_ride_status, name='update_ride_status'),
     path('cancel_ride', cancel_ride, name='cancel_ride'),
     path('global_customerGetRidePricingDetails', customerGetRidePricingDetails.as_view(), name='global_customerGetRidePricingDetails'),
+    path('RideHistory/<int:ride_id>/', RideDetailsHistoryView.as_view(), name='RideHistory'),
 
 
     path('current-bookings', AssignDriverView.as_view(), name='current_bookings'),
     path('invoice/<int:ride_id>/', InvoiceView.as_view(), name='invoice_view'),
 
-################## price details ###########################
     path('addpricing', addprice.as_view(), name='addpricing'),
     path('pricinglist', PriceList.as_view(), name='pricinglist'),
     path('DeletePrice', DeletePrice.as_view(), name='DeletePrice'),
@@ -193,10 +166,8 @@ urlpatterns = [
     path('UpdatePricing', UpdatePricing.as_view(), name='UpdatePricing'),
     path('pricing_history/<int:pricing_id>/', PricingHistoryView.as_view(), name='pricing_history'),
 
-# fetch customer
     path('update-status/', update_status, name='update_status'),
 
-    # commission #############################
     path('addcommission', addcommission.as_view(), name='addcommission'),
     path('commissionlist', CommissionList.as_view(), name='commissionlist'),
     path('DeleteCommission', DeleteCommission.as_view(), name='DeleteCommission'),
@@ -204,7 +175,6 @@ urlpatterns = [
     path('updatecommission', UpdateCommission.as_view(), name='updatecommission'),
     path('commission_history/<int:commission_id>/', CommissionHistoryView.as_view(), name='commission_history'),
 
-# accounts #######################3
     path('add_accounts', AddAccountsView.as_view(), name='add_accounts'),
     path('accounts_list', AccountsListView.as_view(), name='accounts_list'),
     path('DeleteAccounts', DeleteAccounts.as_view(), name='DeleteAccounts'),
@@ -212,7 +182,6 @@ urlpatterns = [
     path('UpdateAccounts', UpdateAccounts.as_view(), name='UpdateAccounts'),
 
 
-    # Transmission##################
     path('addtransmission',addtransmission.as_view(),name='addtransmission'),
     path('check-transmission/', check_transmission, name='check_transmission'),
     path('TransmissionListView',TransmissionListView.as_view(),name='TransmissionListView'),
@@ -223,7 +192,6 @@ urlpatterns = [
     path('transmission/<int:transmission_id>/view/', ViewTransmission.as_view(), name='transmission'),
 
 
-    #color################  
     path('addcolor', addcolor.as_view(), name='addcolor'),
     path('check_color/', check_color, name='check_color'),
     path('colorList', colorList.as_view(), name='colorList'),
@@ -233,8 +201,6 @@ urlpatterns = [
     path('Updatecolor', Updatecolor.as_view(), name='Updatecolor'),
     path('color/<int:color_id>/view/', ViewColor.as_view(), name='color'),
 
-    # Commission details ##################################
-
     path('CommVehicleListView',CommVehicleListView.as_view(),name="CommVehicleListView"),
     path('vehicle/<int:vehicle_id>/', VehicleDetailView.as_view(), name='vehicle_detail'),
     
@@ -242,7 +208,6 @@ urlpatterns = [
     path('vehicles/<str:vehicle_id>/daily-summary/', VehicleDailySummaryView.as_view(), name='vehicle_daily_summary'),
     path('vehicle/<int:vehicle_id>/details/<str:date>/', BookingDetailsView.as_view(), name='booking_details'),
 
-    #package_category################  
     path('add_package_category', addpackagecategory.as_view(), name='add_package_category'),
     path('check_package_category/', check_package_category, name='check_package_category'),
     path('package_category_list', PackageCategoryList.as_view(), name='package_category_list'),
@@ -250,10 +215,8 @@ urlpatterns = [
     path('EditPackageCategory/<int:id>/', EditPackageCategory.as_view(), name='EditPackageCategory'),
     path('PackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='PackageCategoryHistory'),
     path('UpdatePackageCategory', UpdatePackageCategory.as_view(), name='UpdatePackageCategory'),
-    # path('color/<int:color_id>/view/', ViewColor.as_view(), name='color'),
 
 
-    #package_name################  
     path('add_package_name', addpackagename.as_view(), name='add_package_name'),
     path('check_package_name/', check_package_name, name='check_package_name'),
     path('package_name_list', PackageNameList.as_view(), name='package_name_list'),
@@ -262,7 +225,6 @@ urlpatterns = [
     path('PackageNameHistory/<int:package_name_id>/', PackageNameHistoryView.as_view(), name='PackageNameHistory'),
     path('UpdatePackageName', UpdatePackageName.as_view(), name='UpdatePackageName'),
 
-    #package################  
     path('add_packages', addpackages.as_view(), name='add_packages'),
     path('packages_list', PackageList.as_view(), name='packages_list'),
     path('DeletePackages', DeletePackages.as_view(), name='DeletePackages'),
@@ -270,7 +232,6 @@ urlpatterns = [
     path('PackagesHistory/<int:package_id>/', PackagesHistoryView.as_view(), name='PackagesHistory'),
     path('UpdatePackages', UpdatePackages.as_view(), name='UpdatePackages'),
 
-    #package order################  
     path('add_package_order', AddPackageOrderView.as_view(), name='add_package_order'),
     path('package_order_list', PackageOrderList.as_view(), name='package_order_list'),
     path('DeletePackageOrder', DeletePackageOrder.as_view(), name='DeletePackageOrder'),
@@ -280,21 +241,19 @@ urlpatterns = [
 
      path('add_blog/', AddBlogView.as_view(), name='add_blog'),
 
-    # URL for listing all blogs
     path('blog_list/', BlogListView.as_view(), name='blog_list'),
 
     path('send_otp_admin/', SendOtp.as_view(), name='send_otp_admin'),
     path('verify_otp_admin/', VerifyOtp.as_view(), name='verify_otp_admin'),
 
-    # author
-    # packages
+
     path('sup-create-author-packages', addwebpackages.as_view(), name='sup-create-author-packages'),
     path('sup-list-author-packages', webPackageList.as_view(), name='sup-list-author-packages'),
     path('sup-author-Packages-delete', DeletewebPackages.as_view(), name='sup-author-Packages-delete'),
     path('sup-author-Packages-edit/<int:id>/', EditwebPackages.as_view(), name='sup-author-Packages-edit'),
     path('sup-author-Packages-update', UpdatewebPackages.as_view(), name='sup-author-Packages-update'),
 
-    # Blogs
+
     path('sup-create-author-blogs', AddBlogView.as_view(), name='sup-create-author-blogs'),
     path('sup-list-author-blogs', BlogListView.as_view(), name='sup-list-author-blogs'),
     path('sup-author-blogs-delete', webDeleteBlogs.as_view(), name='sup-author-blogs-delete'),
