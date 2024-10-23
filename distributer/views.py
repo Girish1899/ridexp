@@ -2720,6 +2720,7 @@ class customerGetRidePricingDetails(APIView):
     def calculate_outstation_roundtrip(self, request, pricing_details, distance):
         """Calculate pricing for outstation roundtrip rides based on pickup and drop date."""
         from datetime import datetime
+        from decimal import Decimal
 
         pickup_date_str = request.POST.get('pickup_date')
         pickup_time_str = request.POST.get('pickup_time')
@@ -2732,7 +2733,6 @@ class customerGetRidePricingDetails(APIView):
             return {"error": "Drop date and time must be provided."}
 
         pickup_datetime_str = f"{pickup_date_str} {pickup_time_str}"
-        
         drop_datetime_str = f"{drop_date_str} {drop_time_str}"
 
         try:
@@ -2743,18 +2743,29 @@ class customerGetRidePricingDetails(APIView):
 
         num_days = self.calculate_days(pickup_datetime, drop_datetime)
 
-        daily_km_cap = 250 * num_days
-        applicable_distance = max(distance, daily_km_cap)
-
         pricing_dict = {}
+
         for price in pricing_details:
             category_name = price.category.category_name
             car_type = price.car_type.lower()
             toll_price = Decimal(str(price.toll_price))
+
+            if 'mini' in category_name.lower() or 'sedan' in category_name.lower():
+                daily_km_cap = 250 * num_days
+            else:
+                daily_km_cap = 300 * num_days
+
+            print(f"Total allowed km for {num_days} day(s) for {category_name}: {daily_km_cap} km")
+
+            applicable_distance = max(distance, daily_km_cap)
+            print(f"Applicable distance for {category_name} based on days: {applicable_distance} km")
+
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price,toll_price=toll_price, num_days=num_days)
+            pricing_dict[category_name][car_type] = self.calculate_cost(
+                applicable_distance, price, toll_price=toll_price, num_days=num_days
+            )
 
         return pricing_dict
 
