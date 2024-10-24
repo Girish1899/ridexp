@@ -1888,46 +1888,6 @@ def verify_owner(request):
         return JsonResponse({'verified': True})
     return JsonResponse({'verified': False})   
 
-# @require_POST
-# def toggle_owner_status(request):
-#     owner_id = request.POST.get('owner_id')
-#     new_status = request.POST.get('new_status')
-#     block_reason = request.POST.get('block_reason', '')
-  
-#     try:
-#         owner = VehicleOwner.objects.get(pk=owner_id)
-#         owner.status = new_status
-#         if new_status == 'inactive':
-#                 owner.block_reason = block_reason
-#         else:
-#             owner.block_reason = ''
-#         owner.save()
-#         VehicleOwnerHistory.objects.create(
-#             owner_id=owner.owner_id,
-#             company_format=owner.company_format,
-#             name=owner.name,
-#             phone_number=owner.phone_number,
-#             address=owner.address,
-#             email=owner.email,
-#             image=owner.image.url if owner.image else None,
-#             address_proof=owner.address_proof.url if owner.address_proof else None,
-#             identity=owner.identity.url if owner.identity else None,
-#             status=owner.status,
-#             block_reason=block_reason,
-#             holdername=owner.holdername,
-#             ac_number=owner.ac_number,
-#             bankname=owner.bankname,
-#             ifsc_code=owner.ifsc_code,
-#             created_on=owner.created_on,
-#             updated_on=owner.updated_on,
-#             created_by=owner.created_by.username if owner.created_by else None,
-#             updated_by=request.user.username
-#         )
-#         return JsonResponse({'success': True})
-#     except Category.DoesNotExist:
-#         return JsonResponse({'success': False, 'message': 'Owner not found'})
-#     except Exception as e:
-#         return JsonResponse({'success': False, 'message': str(e)})  
 
 @login_required(login_url='login')
 def check_vehicleno(request):
@@ -2167,15 +2127,13 @@ def vehicleupdate_status(request):
                 vehicle.block_reason = ''  
             vehicle.save()
 
-            # Update driver status
             driver = Driver.objects.get(vehicle=vehicle)
             if new_status == 'inactive':
-                driver.status = 'inactive'  # Or 'blocked', depending on your logic
+                driver.status = 'inactive'  
             else:
                 driver.status = 'active'
             driver.save()
 
-            # Record history of the vehicle status change
             VehicleHistory.objects.create(
                 vehicle_id=vehicle.vehicle_id,
                 company_format=vehicle.company_format,
@@ -3236,7 +3194,7 @@ class AssignDriverView(ListView):
     context_object_name = 'drivers'
 
     def get_queryset(self):
-        return Vehicle.objects.filter(status='active')
+        return Vehicle.objects.filter(vehicle_status='active')
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -3345,15 +3303,6 @@ class UpdateRide(APIView):
                 ride.ridetype = ridetype
             except (ValueError, Ridetype.DoesNotExist):
                 return JsonResponse({'success': False, 'error': 'Invalid ridetype_id'}, status=400)
-
-        # category_id = request.POST.get('category')
-        # if category_id:
-        #     try:
-        #         category_id = int(category_id)
-        #         category = Category.objects.get(category_id=category_id)
-        #         ride.category = category
-        #     except (ValueError, Model.DoesNotExist):
-        #         return JsonResponse({'success': False, 'error': 'Invalid category_id'}, status=400)
 
         driver_id = request.POST.get('driver')
         if driver_id:

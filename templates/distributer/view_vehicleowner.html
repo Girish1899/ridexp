@@ -37,7 +37,7 @@
                                         <th>Phone Number/Email</th>
                                         <th>Address</th>
                                         <th>Registered On</th>
-                                        <th>Reason</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -56,18 +56,13 @@
                                         </td>
                                         <td>{{ i.address }}</td>
                                         <td>{{ i.created_on }}</td>
-                                        <td>{{i.block_reason}}</td>
+                                        <td><span class="badge {% if i.status == 'active' %}bg-gradient-success{% else %}bg-gradient-danger{% endif %}">{{ i.status }}</span></td>
                                         <td>
                                             {% if i.status == 'active' %}
                                             <a href="#" class="btn btn-primary" onclick="EditVehicleowner('{{ i.owner_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
                                             {% endif %}
                                             <a href="#" class="btn btn-warning" onclick="HistoryVehicleowner('{{ i.owner_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
                                             <a href="{% url 'dispatch-owner' i.owner_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
-                                            <button class="btn {% if i.status == 'active' %}btn-success{% else %}btn-danger{% endif %}"
-                                                    onclick="toggleStatus('{{ i.owner_id }}', '{{ i.status }}')">
-                                                <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white"></i>
-                                            </button>
-
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -81,31 +76,6 @@
     </div>
 </div>
 </div>
-
-<div class="modal fade" id="blockReasonModal" tabindex="-1" role="dialog" aria-labelledby="blockReasonModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="blockReasonModalLabel">Block Reason</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <input type="hidden" id="blockRideId">
-                <div class="form-group">
-                    <label for="blockReason">Reason</label>
-                    <textarea id="blockReason" class="form-control" rows="3" placeholder="Enter block reason" required></textarea>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="submitBlockReason()">Submit</button>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -140,42 +110,8 @@
         window.location.href = "dispatch-VehicleownerHistory/" + owner_id; 
     }
 
-    function toggleStatus(owner_id, current_status) {
-    var new_status = current_status === 'active' ? 'inactive' : 'active';
-    var confirmation = confirm("Are you sure you want to " + (current_status === 'active' ? "deactivate" : "activate") + " this owner?");
-    if (confirmation) {
-        var blockReason = '';
-        if (new_status === 'inactive') {
-            blockReason = prompt("Please provide a reason for blocking the vehicle owner:");
-            if (blockReason === null) {
-                return; 
-            }
-        }
+    
 
-        $.ajax({
-            url: '{% url "dispatch-toggle_owner_status" %}',
-            type: 'POST',
-            data: {
-                'owner_id': owner_id,
-                'new_status': new_status,
-                'block_reason': blockReason,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.success) {
-                    alert("Owner status updated successfully.");
-                    window.location.reload();
-                } else {
-                    alert("Failed to update owner status: " + data.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                alert("An error occurred: " + error);
-            }
-        });
-    }
-}
 
 
 </script>

@@ -28,10 +28,6 @@
                 <div class="card-body">
                     <div class="form-group row">
                         <input type="hidden" class="form-control" id="vehicle_id" name="vehicle_id" value="{{ vehiclelist.0.vehicle_id }}">
-                        <input type="hidden" class="form-control" id="category_status" name="category_status" value="{{ vehiclelist.0.model.brand.category.category_status }}">
-                        <input type="hidden" class="form-control" id="brand_status" name="brand_status" value="{{ vehiclelist.0.model.brand.status }}">
-                        <input type="hidden" class="form-control" id="model_status" name="model_status" value="{{ vehiclelist.0.model.status }}">
-                        <input type="hidden" class="form-control" id="owner_status" name="owner_status" value="{{ vehiclelist.0.owner.status }}">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
                         <div class="col-sm-12">
                             <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ vehiclelist.0.company_format }}" readonly>
@@ -313,19 +309,6 @@
     }
 
     $(document).ready(function () {
-        var categoryStatus = $('#category_status').val();
-        var brandStatus = $('#brand_status').val();
-        var modelStatus = $('#model_status').val();
-        var ownerStatus = $('#owner_status').val();
-
-        if (categoryStatus === 'inactive' || ownerStatus === 'inactive') {
-            $('#vehicle_status').val('inactive');
-        }
-
-        if (categoryStatus === 'inactive' || brandStatus === 'inactive' || modelStatus === 'inactive' || ownerStatus === 'inactive') {
-            $('#category, #brand, #model, #Vehicle_Number, #owner, #color, #vehicle_type, #commission_type, #vehicle_status, #save_action, #document_verification_type, #document_link').prop('disabled', true);
-            alert("Cannot edit vehicle details as the category or brand or model or owner is inactive.");
-        }
 
         $('#save_action').click(function () {
         var formData = new FormData();

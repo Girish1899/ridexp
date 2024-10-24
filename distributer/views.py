@@ -158,12 +158,6 @@ class UpdateBrand(APIView):
                     model.status = brand.status
                     model.save()
 
-                    vehicles = model.vehicles.all() 
-                    for vehicle in vehicles:
-                        if vehicle.vehicle_status != brand.status:
-                            vehicle.vehicle_status = brand.status
-                            vehicle.save()
-
         return JsonResponse({'success': True}, status=200)
 
 class BrandHistoryView(TemplateView):
@@ -351,12 +345,6 @@ class UpdateCategory(APIView):
                             model.status = category.category_status
                             model.save()
 
-                            vehicles = model.vehicles.all() 
-                            for vehicle in vehicles:
-                                if vehicle.vehicle_status != category.category_status:
-                                    vehicle.vehicle_status = category.category_status
-                                    vehicle.save()
-
         return JsonResponse({'success': True}, status=200)
 
 class CategoryHistoryView(TemplateView):
@@ -501,13 +489,6 @@ class UpdateModel(APIView):
             created_by=model.created_by.username if model.created_by else None,
             updated_by=request.user.username
         )
-
-        if original_model_status != model.status:
-            vehicles = model.vehicles.all()  
-            for vehicle in vehicles:
-                if vehicle.vehicle_status != model.status:
-                    vehicle.vehicle_status = model.status
-                    vehicle.save()
 
         return JsonResponse({'success': True}, status=200)
 
@@ -1611,13 +1592,6 @@ class UpdateOwnerView(APIView):
             updated_by=request.user.username
         )
 
-        if original_owner_status != owner.status:
-            vehicles = owner.vehicle_set.all()  
-            for vehicle in vehicles:
-                if vehicle.vehicle_status != owner.status:
-                    vehicle.vehicle_status = owner.status
-                    vehicle.save()
-
         return JsonResponse({'success': True}, status=200)
 
 class VehicleOwnerHistoryView(TemplateView):
@@ -1682,46 +1656,6 @@ def verify_owner(request):
         return JsonResponse({'verified': True})
     return JsonResponse({'verified': False})   
 
-@require_POST
-def toggle_owner_status(request):
-    owner_id = request.POST.get('owner_id')
-    new_status = request.POST.get('new_status')
-    block_reason = request.POST.get('block_reason', '')
-  
-    try:
-        owner = VehicleOwner.objects.get(pk=owner_id)
-        owner.status = new_status
-        if new_status == 'inactive':
-                owner.block_reason = block_reason
-        else:
-            owner.block_reason = ''
-        owner.save()
-        VehicleOwnerHistory.objects.create(
-            owner_id=owner.owner_id,
-            company_format=owner.company_format,
-            name=owner.name,
-            phone_number=owner.phone_number,
-            address=owner.address,
-            email=owner.email,
-            image=owner.image.url if owner.image else None,
-            address_proof=owner.address_proof.url if owner.address_proof else None,
-            identity=owner.identity.url if owner.identity else None,
-            status=owner.status,
-            block_reason=block_reason,
-            holdername=owner.holdername,
-            ac_number=owner.ac_number,
-            bankname=owner.bankname,
-            ifsc_code=owner.ifsc_code,
-            created_on=owner.created_on,
-            updated_on=owner.updated_on,
-            created_by=owner.created_by.username if owner.created_by else None,
-            updated_by=request.user.username
-        )
-        return JsonResponse({'success': True})
-    except Category.DoesNotExist:
-        return JsonResponse({'success': False, 'message': 'Owner not found'})
-    except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)})  
 
 @login_required(login_url='login')
 def check_vehicleno(request):
@@ -1961,36 +1895,45 @@ def vehicleupdate_status(request):
                 vehicle.block_reason = ''  
             vehicle.save()
 
+            driver = Driver.objects.get(vehicle=vehicle)
+            if new_status == 'inactive':
+                driver.status = 'inactive'  
+            else:
+                driver.status = 'active'
+            driver.save()
+
             VehicleHistory.objects.create(
-            vehicle_id=vehicle.vehicle_id,
-            company_format=vehicle.company_format,
-            Vehicle_Number=vehicle.Vehicle_Number,
-            model=vehicle.model,
-            year=vehicle.year,
-            insurance_expiry=vehicle.insurance_expiry,
-            car_type=vehicle.car_type,
-            registration_certificate=vehicle.registration_certificate,
-            fc_certificate=vehicle.fc_certificate,
-            insurance_policy=vehicle.insurance_policy,
-            tax_details=vehicle.tax_details,
-            permit_details=vehicle.permit_details,
-            emission_test=vehicle.emission_test,
-            color=vehicle.color,
-            transmission=vehicle.transmission,
-            owner=vehicle.owner,
-            vehicle_type=vehicle.vehicle_type,
-            commission_type=vehicle.commission_type,
-            vehicle_status=vehicle.vehicle_status,
-            block_reason=vehicle.block_reason,
-            created_on=vehicle.created_on,
-            updated_on=vehicle.updated_on,
-            created_by=vehicle.created_by.username if vehicle.created_by else None,
-            updated_by=request.user.username
-        )
+                vehicle_id=vehicle.vehicle_id,
+                company_format=vehicle.company_format,
+                Vehicle_Number=vehicle.Vehicle_Number,
+                model=vehicle.model,
+                year=vehicle.year,
+                insurance_expiry=vehicle.insurance_expiry,
+                car_type=vehicle.car_type,
+                registration_certificate=vehicle.registration_certificate,
+                fc_certificate=vehicle.fc_certificate,
+                insurance_policy=vehicle.insurance_policy,
+                tax_details=vehicle.tax_details,
+                permit_details=vehicle.permit_details,
+                emission_test=vehicle.emission_test,
+                color=vehicle.color,
+                transmission=vehicle.transmission,
+                owner=vehicle.owner,
+                vehicle_type=vehicle.vehicle_type,
+                commission_type=vehicle.commission_type,
+                vehicle_status=vehicle.vehicle_status,
+                block_reason=vehicle.block_reason,
+                created_on=vehicle.created_on,
+                updated_on=vehicle.updated_on,
+                created_by=vehicle.created_by.username if vehicle.created_by else None,
+                updated_by=request.user.username
+            )
 
             return JsonResponse({'success': True})
-        except Customer.DoesNotExist:
+        except Vehicle.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Vehicle not found'})
+        except Driver.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Driver not found'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
     
@@ -2205,52 +2148,8 @@ class AddDriverView(TemplateView):
             driver.save()
 
             print("Driver saved successfully.")
-
-            if vehicle.drive_status == 'selfdrive':
-                last_profile = Profile.objects.order_by('-profile_id').first()
-                if last_profile and last_profile.company_format:
-                    last_profile_format = int(last_profile.company_format.replace('USR', ''))
-                    next_profile_format = f'USR{last_profile_format + 1:02}'
-                else:
-                    next_profile_format = 'USR01'
-
-                user = User.objects.create_user(username=driver_name, email=email, password=password)
-                profile = Profile.objects.create(
-                    user=user,
-                    phone_number=phone_number,
-                    address=address,
-                    type="driver",
-                    status=status,
-                    company_format=next_profile_format,
-                    created_by=request.user,
-                    updated_by=request.user
-                )
-
-                print("Profile created successfully for selfdrive.")
-                
-            elif vehicle.drive_status == 'otherdrive':
-                last_profile = Profile.objects.order_by('-profile_id').first()
-                if last_profile and last_profile.company_format:
-                    last_profile_format = int(last_profile.company_format.replace('USR', ''))
-                    next_profile_format = f'USR{last_profile_format + 1:02}'
-                else:
-                    next_profile_format = 'USR01'
-
-                user = User.objects.create_user(username=driver_name, email=email, password=password)
-                profile = Profile.objects.create(
-                    user=user,
-                    phone_number=phone_number,
-                    address=address,
-                    type="driver",
-                    status=status,
-                    company_format=next_profile_format,
-                    created_by=request.user,
-                    updated_by=request.user
-                )
-
-                print("Profile created successfully for otherdrive.")
             
-            return JsonResponse({'status': 'Success', 'message': 'Driver and Profile details added successfully'})
+            return JsonResponse({'status': 'Success', 'message': 'Driver details added successfully'})
         
         except KeyError as e:
             return JsonResponse({'status': 'Error', 'message': f'Missing required parameter: {e}'}, status=400)
@@ -2345,24 +2244,7 @@ class UpdateDriverView(APIView):
             new_address = request.POST.get('address', driver.address)
             new_status = request.POST.get('status', driver.status)         
 
-            try:
-                profile = Profile.objects.get(user__email=driver.email)
-                profile.phone_number = new_phone_number
-                profile.address = new_address
-                profile.status = new_status
-                profile.updated_by = request.user
-                profile.save()
-            except Profile.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'Profile not found for the driver'}, status=404)
-
-            try:
-                user = User.objects.get(email=driver.email)
-                user.username = request.POST.get('name', driver.name)
-                user.email = new_email 
-                user.save()
-            except User.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'User not found for the driver'}, status=404)
-
+            
             driver.name = request.POST.get('name', driver.name)
             driver.phone_number = new_phone_number
             driver.email = new_email  
@@ -2383,23 +2265,9 @@ class UpdateDriverView(APIView):
             if 'driving_license' in request.FILES:
                 driver.driving_license = request.FILES['driving_license']
 
+           
             driver.updated_by = request.user
             driver.save() 
-            if driver.vehicle:
-                if driver.vehicle.drive_status == 'selfdrive':
-                    driver.vehicle.vehicle_status = driver.status
-                    driver.vehicle.save()
-
-                    owner = driver.vehicle.owner
-                    owner.status = driver.status
-                    owner.save()
-                elif driver.vehicle.drive_status == 'otherdrive':
-                    if new_status == 'active' and driver.status == 'inactive':
-                        driver.vehicle.vehicle_status = 'active'
-                        driver.vehicle.save()
-                    elif new_status == 'inactive' and driver.status == 'active':
-                        driver.vehicle.vehicle_status = 'active'
-                        driver.vehicle.save()
 
             DriverHistory.objects.create(
                 driver_id=driver.driver_id,
@@ -2495,66 +2363,6 @@ def verify_driver(request):
         return JsonResponse({'verified': True})
     return JsonResponse({'verified': False})
 
-@csrf_exempt
-def toggle_driver_status(request):
-    if request.method == 'POST':
-        driver_id = request.POST.get('driver_id')
-        new_status = request.POST.get('new_status')
-        block_reason = request.POST.get('block_reason', '')
-        drive_status = request.POST.get('drive_status')
-        owner_id = request.POST.get('owner_id')
-        
-        try:
-            driver = Driver.objects.get(driver_id=driver_id)
-            driver.status = new_status
-            if new_status == 'inactive':
-                driver.block_reason = block_reason
-            
-                if drive_status == 'selfdrive':
-                    vehicle = driver.vehicle
-                    vehicle.vehicle_status = new_status
-                    vehicle.save()
-
-                    owner = vehicle.owner
-                    owner.status = new_status
-                    owner.save()
-                elif drive_status == 'otherdrive' and new_status == 'inactive':
-                    driver.vehicle = None
-                    driver.save()
-            else:
-                driver.block_reason = ''
-
-            driver.save()
-            DriverHistory.objects.create(
-                driver_id=driver.driver_id,
-                vehicle=driver.vehicle,
-                name=driver.name,
-                phone_number=driver.phone_number,
-                email=driver.email,
-                address=driver.address,
-                status=driver.status,
-                block_reason=driver.block_reason,
-                company_format=driver.company_format,
-                pfrom_date=driver.pfrom_date,
-                pto_date=driver.pto_date,
-                dfrom_date=driver.dfrom_date,
-                dto_date=driver.dto_date,
-                profile_image=driver.profile_image.url if driver.profile_image else None,
-                address_proof=driver.address_proof.url if driver.address_proof else None,
-                police_clearance=driver.police_clearance.url if driver.police_clearance else None,
-                driving_license=driver.driving_license.url if driver.driving_license else None,
-                created_on=driver.created_on,
-                updated_by=request.user.username,
-                created_by=driver.created_by.username if driver.created_by else None
-            )
-
-            return JsonResponse({'success': True}, status=200)
-        except Driver.DoesNotExist:
-            return JsonResponse({'success': False, 'message': 'Driver not found'}, status=404)
-        except Exception as e:
-            return JsonResponse({'success': False, 'message': str(e)}, status=500)
-    else:
-        return JsonResponse({'success': False, 'message': 'Invalid request method'}, status=405)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DriverReport(ListView):
@@ -3162,12 +2970,12 @@ class InvoiceView(DetailView):
         return get_object_or_404(RideDetails, ride_id=ride_id)    
 
 class AssignDriverView(ListView):
-    model = Driver
+    model = Vehicle
     template_name = 'distributer/view_ride.html'
     context_object_name = 'drivers'
 
     def get_queryset(self):
-        return Driver.objects.filter(status='active')
+        return Vehicle.objects.filter(vehicle_status='active')
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')

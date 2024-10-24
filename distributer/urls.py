@@ -103,7 +103,6 @@ urlpatterns = [
     path('dispatch-download-owner-documents/<int:owner_id>/',download_owner_documents, name='dispatch-download-owner-documents'),
     path('dispatch-ownerverification', OwnerVerification.as_view(), name='dispatch-ownerverification'),
     path('dispatch-VerifyOwner/', verify_owner, name='dispatch-VerifyOwner'),
-    path('dispatch-toggle-owner-status/', toggle_owner_status, name='dispatch-toggle_owner_status'),
 
 
     path('dispatch-addcommission', addcommission.as_view(), name='dispatch-addcommission'),
@@ -139,7 +138,6 @@ urlpatterns = [
     path('dispatch-EditDriver/<int:id>/', EditDriverView.as_view(), name='dispatch-EditDriver'),
     path('dispatch-DriverHistory/<int:driver_id>/', DriverHistoryView.as_view(), name='dispatch-driver_history'),
     path('dispatch-updatedriver', UpdateDriverView.as_view(), name='dispatch-updatedriver'),
-    path('dispatch-toggle_driver_status/', toggle_driver_status, name='dispatch-toggle_driver_status'),
 
     path('dispatch-fetch_vehicle_details/', fetch_vehicle_details, name='dispatch-fetch_vehicle_details'),
     path('dispatch-driver/<int:driver_id>/view/', ViewDriver.as_view(), name='dispatch-driver'),
