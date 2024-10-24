@@ -13,7 +13,6 @@ class Profile(models.Model):
         ('distributer', 'Distributer'),
         ('rescue', 'Rescue'),
         ('hr', 'HR'),
-        ('driver', 'Driver'),  
         ('author','Author'),
 
     ]
@@ -42,7 +41,6 @@ class ProfileHistory(models.Model):
         ('distributer', 'Distributer'),
         ('rescue', 'Rescue'),
         ('hr', 'HR'),
-        ('driver', 'Driver') ,
         ('author','Author'),
     ]
 

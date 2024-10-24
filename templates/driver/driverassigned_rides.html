@@ -53,7 +53,7 @@
                                         <td>{{ ride.driver.name }}</td>
                                         <td>
                                             <button class="btn btn-success start-ride-btn" data-ride-id="{{ ride.ride_id }}" data-ride-status="{{ ride.ride_status }}">Start</button>
-                                            <button class="btn btn-warning stop-ride-btn" data-ride-id="{{ ride.ride_id }}" data-ride-status="{{ ride.ride_status }}" style="display: none;">Complete</button>
+                                            <button class="btn btn-warning stop-ride-btn" data-ride-id="{{ ride.ride_id }}" data-ride-status="{{ ride.ride_status }}" style="display: none;">Stop</button>
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -90,7 +90,7 @@
                         stopButton.hide();
                     } else if (rideStatus === 'ongoingbookings') {
                         startButton.hide();
-                        stopButton.show().text('Completed').css('backgroundColor', '');
+                        stopButton.show().text('Stop').css('backgroundColor', '');
                     } else if (rideStatus === 'completedbookings') {
                         startButton.hide();
                         stopButton.show().text('Successfully Completed').css({
@@ -121,7 +121,7 @@
                         const row = $(this).closest('tr');
                         $(this).hide();
                         const stopButton = row.find('.stop-ride-btn');
-                        stopButton.show().text('Completed').css('backgroundColor', '');
+                        stopButton.show().text('Stop').css('backgroundColor', '');
                         alert('Ride started successfully.');
                     } else {
                         alert('Error: ' + data.message);

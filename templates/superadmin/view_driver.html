@@ -63,10 +63,7 @@
                                             <a href="#" class="btn btn-danger" onclick="DeleteDriver('{{ i.driver_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
                                             <a href="#" class="btn btn-warning" onclick="DriverHistory('{{ i.driver_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
                                             <a href="{% url 'driver' i.driver_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
-                                            <!-- <button class="btn {% if i.status == 'active' %}btn-success{% else %}btn-danger{% endif %}"
-                                                    onclick="toggleDriverStatus('{{ i.driver_id }}', '{{ i.status }}', '{{ i.vehicle.drive_status }}', '{{ i.vehicle.owner.owner_id }}')">
-                                                <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white"></i>
-                                            </button> -->
+
                                         </td>
                                         
                                     </tr>

@@ -8,6 +8,8 @@ urlpatterns = [
     path('start_ride/', start_ride, name='start_ride'),
     path('stop_ride/', stop_ride, name='stop_ride'),
     path('driver_profile/', driver_profile_view, name='driver_profile'),
+    path('driver_login',driverlogin.as_view(),name='driver_login'),
+    path('driver_logout', driverlogout_view, name='driver_logout'),
 
     
 ]

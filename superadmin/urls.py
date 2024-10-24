@@ -93,7 +93,6 @@ urlpatterns = [
     path('download-owner-documents/<int:owner_id>/',download_owner_documents, name='download_owner_documents'),
     path('ownerverification', OwnerVerification.as_view(), name='ownerverification'),
     path('VerifyOwner/', verify_owner, name='VerifyOwner'),
-    # path('toggle-owner-status/', toggle_owner_status, name='toggle_owner_status'),
     
 
     path('adddriver', AddDriverView.as_view(), name='adddriver'),
@@ -104,7 +103,6 @@ urlpatterns = [
     path('EditDriver/<int:id>/', EditDriverView.as_view(), name='EditDriver'),
     path('DriverHistory/<int:driver_id>/', DriverHistoryView.as_view(), name='driver_history'),
     path('updatedriver', UpdateDriverView.as_view(), name='updatedriver'),
-    # path('toggle_driver_status/', toggle_driver_status, name='toggle_driver_status'),
 
     path('fetch_vehicle_details/', fetch_vehicle_details, name='fetch_vehicle_details'),
     path('driver/<int:driver_id>/view/', ViewDriver.as_view(), name='driver'),

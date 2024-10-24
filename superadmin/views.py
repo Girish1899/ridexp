@@ -238,10 +238,6 @@ def login_view(request):
                     request.session['user_type'] = profile.type
                     request.session['user_id'] = profile.profile_id
                     redirect_url = '/rescue/'
-                elif profile.type == 'driver':
-                    request.session['user_type'] = profile.type
-                    request.session['user_id'] = profile.profile_id
-                    redirect_url = '/driver/driverindex'
                 elif profile.type == 'hr':
                     request.session['user_type'] = profile.type
                     request.session['user_id'] = profile.profile_id
@@ -1085,52 +1081,8 @@ class AddDriverView(TemplateView):
             driver.save()
 
             print("Driver saved successfully.")
-
-            if vehicle.drive_status == 'selfdrive':
-                last_profile = Profile.objects.order_by('-profile_id').first()
-                if last_profile and last_profile.company_format:
-                    last_profile_format = int(last_profile.company_format.replace('USR', ''))
-                    next_profile_format = f'USR{last_profile_format + 1:02}'
-                else:
-                    next_profile_format = 'USR01'
-
-                user = User.objects.create_user(username=driver_name, email=email, password=password)
-                profile = Profile.objects.create(
-                    user=user,
-                    phone_number=phone_number,
-                    address=address,
-                    type="driver",
-                    status=status,
-                    company_format=next_profile_format,
-                    created_by=request.user,
-                    updated_by=request.user
-                )
-
-                print("Profile created successfully for selfdrive.")
-                
-            elif vehicle.drive_status == 'otherdrive':
-                last_profile = Profile.objects.order_by('-profile_id').first()
-                if last_profile and last_profile.company_format:
-                    last_profile_format = int(last_profile.company_format.replace('USR', ''))
-                    next_profile_format = f'USR{last_profile_format + 1:02}'
-                else:
-                    next_profile_format = 'USR01'
-
-                user = User.objects.create_user(username=driver_name, email=email, password=password)
-                profile = Profile.objects.create(
-                    user=user,
-                    phone_number=phone_number,
-                    address=address,
-                    type="driver",
-                    status=status,
-                    company_format=next_profile_format,
-                    created_by=request.user,
-                    updated_by=request.user
-                )
-
-                print("Profile created successfully for otherdrive.")
             
-            return JsonResponse({'status': 'Success', 'message': 'Driver and Profile details added successfully'})
+            return JsonResponse({'status': 'Success', 'message': 'Driver details added successfully'})
         
         except KeyError as e:
             return JsonResponse({'status': 'Error', 'message': f'Missing required parameter: {e}'}, status=400)
@@ -1224,24 +1176,6 @@ class UpdateDriverView(APIView):
             new_phone_number = request.POST.get('phone_number', driver.phone_number)
             new_address = request.POST.get('address', driver.address)
             new_status = request.POST.get('status', driver.status)         
-
-            # try:
-            #     profile = Profile.objects.get(user__email=driver.email)
-            #     profile.phone_number = new_phone_number
-            #     profile.address = new_address
-            #     profile.status = new_status
-            #     profile.updated_by = request.user
-            #     profile.save()
-            # except Profile.DoesNotExist:
-            #     return JsonResponse({'success': False, 'error': 'Profile not found for the driver'}, status=404)
-
-            # try:
-            #     user = User.objects.get(email=driver.email)
-            #     user.username = request.POST.get('name', driver.name)
-            #     user.email = new_email 
-            #     user.save()
-            # except User.DoesNotExist:
-            #     return JsonResponse({'success': False, 'error': 'User not found for the driver'}, status=404)
 
             driver.name = request.POST.get('name', driver.name)
             driver.phone_number = new_phone_number
