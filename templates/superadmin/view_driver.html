@@ -32,10 +32,10 @@
                                 <thead>
                                     <tr style="color: black !important;">
                                         <th>Serial No</th>
-                                        <th>Vehicle Id/Owner Details</th>
+                                        <th>Vehicle Id/vehicle no/Owner Details</th>
                                         <th>Driver Details</th>
                                         <th>Registered On</th>
-                                        <th>Reason</th>
+                                        <th>Status</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -45,6 +45,7 @@
                                         <td>{{ forloop.counter }}</td>
                                         <td>
                                             <div style="color: red;">{{ i.vehicle.company_format }}</div>
+                                            <div>{{ i.vehicle.Vehicle_Number }}</div>
                                             <div style="color: blue;">{{ i.vehicle.owner.name }}</div>
                                             <div style="color: green;">{{ i.vehicle.owner.phone_number }}</div>
                                         </td>
@@ -55,17 +56,17 @@
                                             <div>{{i.verification_status }}</div>
                                         </td>
                                         <td>{{ i.created_on }}</td>
-                                        <td>{{ i.block_reason }}</td>
+                                        <td><span class="badge {% if i.status == 'active' %}bg-gradient-success{% else %}bg-gradient-danger{% endif %}">{{ i.status }}</span></td>
                                        
                                         <td style="display: flex; justify-content: center; align-items: center;">
                                             <a href="#" class="btn btn-primary" onclick="EditDriver('{{ i.driver_id }}')"><i class="fa fa-edit"></i></a>&nbsp;
                                             <a href="#" class="btn btn-danger" onclick="DeleteDriver('{{ i.driver_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
                                             <a href="#" class="btn btn-warning" onclick="DriverHistory('{{ i.driver_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
                                             <a href="{% url 'driver' i.driver_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
-                                            <button class="btn {% if i.status == 'active' %}btn-success{% else %}btn-danger{% endif %}"
+                                            <!-- <button class="btn {% if i.status == 'active' %}btn-success{% else %}btn-danger{% endif %}"
                                                     onclick="toggleDriverStatus('{{ i.driver_id }}', '{{ i.status }}', '{{ i.vehicle.drive_status }}', '{{ i.vehicle.owner.owner_id }}')">
                                                 <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white"></i>
-                                            </button>
+                                            </button> -->
                                         </td>
                                         
                                     </tr>
@@ -149,76 +150,8 @@
         window.location.href = "DriverHistory/" + driver_id; 
     };
 
-    function submitDriverStatusChange(driver_id, new_status, blockReason, drive_status, owner_id) {
-        $.ajax({
-            url: '{% url "toggle_driver_status" %}',
-            type: 'POST',
-            data: {
-                'driver_id': driver_id,
-                'new_status': new_status,
-                'block_reason': blockReason,
-                'drive_status': drive_status,
-                'owner_id': owner_id,
-                'csrfmiddlewaretoken': '{{ csrf_token }}'
-            },
-            dataType: 'json',
-            success: function (data) {
-                if (data.success) {
-                    alert("Driver status updated successfully.");
-                    window.location.reload();
-                } else {
-                    alert("Failed to update driver status: " + data.message);
-                }
-            },
-            error: function (xhr, status, error) {
-                alert("An error occurred: " + error);
-            }
-        });
-    }
+    
 
-    function toggleDriverStatus(driver_id, current_status, drive_status, owner_id) {
-        var new_status = current_status === 'active' ? 'inactive' : 'active';
-        var confirmation = confirm("Are you sure you want to " + (current_status === 'active' ? "block" : "unblock") + " this driver?");
-        
-        if (confirmation) {
-            if (new_status === 'inactive') {
-                $('#blockReasonModal').modal('show');
-
-                $('#blockReasonModal .btn-primary').off('click').on('click', function() {
-                    var blockReason = getBlockReason();
-
-                    if (!blockReason) {
-                        alert("Please select or enter a block reason.");
-                        return;
-                    }
-
-                    submitDriverStatusChange(driver_id, new_status, blockReason, drive_status, owner_id);
-                });
-            } else {
-                submitDriverStatusChange(driver_id, new_status, '', drive_status, owner_id);
-            }
-        }
-    }
-
-    function getBlockReason() {
-        var select = document.getElementById("blockReasonSelect");
-        var input = document.getElementById("blockReasonInput");
-        return select.value === "other" ? input.value : select.value;
-    }
-
-    function setBlockReasonInput() {
-        var select = document.getElementById("blockReasonSelect");
-        var input = document.getElementById("blockReasonInput");
-
-        if (select.value === "other") {
-            input.disabled = false;
-            input.placeholder = "Please specify the reason";
-        } else {
-            input.disabled = true;
-            input.placeholder = "Enter block reason";
-            input.value = select.value || "";
-        }
-    }
 </script>
 {% endblock content %}
 
