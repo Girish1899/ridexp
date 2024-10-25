@@ -64,7 +64,7 @@
                                 <option value="inactive" {% if catlist.0.category_status == "inactive" %} selected {% endif %}>Inactive</option>
                             </select>
                             </div>
-                        </div>
+                        </div><br>
 
                         <div class="col-12">
                             <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
@@ -89,10 +89,10 @@
         var seats = $('#seats').val();
         var image = $('#image')[0].files[0];
         
-        if (category_name === '' || seats === '' ) {
-            alert("All fields are required");
-            return;
-        }
+        if (!category_name || !seats) {
+                alert("All fields are required.");
+                return;
+            }
 
         if (category_name.trim() === original_category_name.trim().toLowerCase()) {
             submitForm(category_name, category_id, category_status);

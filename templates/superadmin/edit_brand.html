@@ -58,7 +58,7 @@
                                 <option value="inactive" {% if brandlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
                             </select>
                         </div>
-                    </div>
+                    </div><br>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
@@ -100,7 +100,7 @@
             var status = $('#status').val();
             var brand_id = $('#brand_id').val();
 
-            if (!category || !brand_name || !status) {
+            if (!category || !brand_name ) {
                 alert("All fields are required.");
                 return;
             }

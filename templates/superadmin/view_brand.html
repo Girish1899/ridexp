@@ -71,13 +71,13 @@
                                         {% if i.category.category_status != 'inactive' %}
                                         <button class="btn btn-link p-0" onclick="toggleBrandStatus('{{ i.brand_id }}', '{{ i.status }}')" title="Change Status (block/unblock)">
                                             <span class="badge {% if i.status == 'active' %}badge-success{% else %} badge-danger {% endif %}">
-                                                <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white fa-2x"></i> <!-- Adjust icon size here -->
+                                                <i class="fa {% if i.status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} fa-2x"></i>
                                             </span>
                                         </button>
                                         {% else %}
                                         <button class="btn btn-link p-0 disabled" title="Cannot Change Status">
                                             <span class="badge badge-danger">
-                                                <i class="fa fa-thumbs-down text-white fa-2x"></i> 
+                                                <i class="fa fa-thumbs-down  fa-2x"></i> 
                                             </span>
                                         </button>
                                         {% endif %}

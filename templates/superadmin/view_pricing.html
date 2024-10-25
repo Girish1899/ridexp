@@ -33,14 +33,14 @@
                                     <tr style="color: black !important;">
                                     <th>Serial No</th>
                                     <th>Ride Type </th>
+                                    <th>Trip Type</th>
                                     <th>Category </th>
+                                    <th>car type</th>
                                     <th>Slot</th>
                                     <th>Price per KMs</th>
                                     <th>Beta</th>
                                     <th>Toll Price</th>
                                     <th>Permit</th>
-                                    <th>car type</th>
-                                    <th>Trip Type</th>
                                     <th>Created On</th>
                                     
                                     <th>Action</th>
@@ -51,14 +51,14 @@
                                 <tr style="color: #030000;">
                                     <td>{{ forloop.counter }}</td>
                                     <td>{{ i.ridetype.name }}</td>
+                                    <td>{{i.trip_type}}</td>
                                     <td>{{ i.category.category_name }}</td>
+                                    <td>{{i.car_type}}</td>
                                     <td>{{ i.slots }}</td>
                                     <td>{{i.price_per_km }}</td>
                                     <td>{{ i.driver_beta }}</td>
                                     <td>{{ i.toll_price }}</td>
                                     <td>{{ i.permit }}</td>
-                                    <td>{{i.car_type}}</td>
-                                    <td>{{i.trip_type}}</td>
                                     <td>{{ i.created_on }}</td>
                                    
                                     <td style="display: flex; justify-content: center; align-items: center;">

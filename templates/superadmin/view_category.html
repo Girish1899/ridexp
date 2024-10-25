@@ -60,7 +60,7 @@
                                             <a href="{% url 'ViewCategory' i.category_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
                                             <button class="btn {% if i.category_status == 'active' %}btn-success{% else %}btn-danger{% endif %}"
                                                     onclick="toggleStatus('{{ i.category_id }}', '{{ i.category_status }}')">
-                                                    <i class="fa {% if i.category_status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white"></i>
+                                                    <i class="fa {% if i.category_status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %}"></i>
                                             </button>
                                         </td>
                                         

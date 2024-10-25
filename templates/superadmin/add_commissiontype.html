@@ -61,8 +61,8 @@
         var commission_name = $('#commission_name').val();
         var commission_percentage = $('#commission_percentage').val();
 
-        if (commission_percentage.trim() === '' || isNaN(commission_percentage)) {
-            alert("Please enter a valid commission percentage.");
+        if (commission_name.trim() === '' || commission_percentage.trim() === '') {
+            alert("All fields are required");
             return;
         }
 

@@ -160,6 +160,7 @@
 
             var title = $('#title').val();
             var description = $('#description').val();
+            
             var image_link = $('#image_link').val();
             var facebook_link = $('#facebook_link').val();
             var instagram_link = $('#instagram_link').val();
@@ -194,40 +195,55 @@
             }
 
             console.log(image);
-            if (!$('#title').val().trim() || !$('#description').val()) {
-                alert("Title, and Description are required fields.");
+            if (!title || !description || !facebook_link || !instagram_link || !whatsapp_link || !meta_title || !meta_description || !meta_keywords || !h1tag) {
+                alert("All fields are required.");
                 return;
             }
-            $.ajax({
-                url: '{% url "create-author-blogs" %}',
-                type: "POST",
-                data: formData,
-                processData: false,  
-                contentType: false, 
-                success: function (result) {
-                    alert("Blog added successfully");
-                    location.href = "{% url 'create-author-blogs' %}";
-                },
 
+            $.ajax({
+                url: '{% url "check-blogtitle" %}',
+                type: "GET",
+                data: { title: title },
+                success: function (data) {
+                    if (data.exists) {
+                        alert("Title  already exists.");
+                    } else {
+                        $.ajax({
+                            url: '{% url "create-author-blogs" %}',
+                            type: "POST",
+                            data: formData,
+                            processData: false,  
+                            contentType: false, 
+                            success: function (result) {
+                                alert("Blog added successfully");
+                                location.href = "{% url 'create-author-blogs' %}";
+                            },
+
+                            error: function (xhr, status, error) {
+                                console.error(xhr.responseText);
+                            }
+                        });
+                    }
+                },
                 error: function (xhr, status, error) {
                     console.error(xhr.responseText);
                 }
             });
-            $("#image").change(function () {
-            readURL(this);
         });
+        $("#image").change(function () {
+        readURL(this);
+    });
 
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $(input).next('img').attr('src', e.target.result).show();  
-                }
-                reader.readAsDataURL(input.files[0]);
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(input).next('img').attr('src', e.target.result).show();  
             }
+            reader.readAsDataURL(input.files[0]);
         }
-        
-        });
+    }
+    
     });
 </script>
 {% endblock content %}

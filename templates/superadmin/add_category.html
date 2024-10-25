@@ -88,8 +88,8 @@
                 formData.append('image', image);
             }
 
-            if (category_name.trim() === '', seats.trim() === '', !image) {
-                alert("All fields are required");
+            if (!category_name || !seats || !image) {
+                alert("All fields are required.");
                 return;
             }
 
