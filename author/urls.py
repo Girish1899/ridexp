@@ -13,6 +13,7 @@ urlpatterns = [
     path('author-PackageCategoryHistory/<int:package_category_id>/', PackageCategoryHistoryView.as_view(), name='author-PackageCategoryHistory'),
     path('author-UpdatePackageCategory', UpdatePackageCategory.as_view(), name='author-UpdatePackageCategory'),
 
+    path('check-blogtitle/', check_blogtitle, name='check-blogtitle'),
     path('create-author-packages', addwebpackages.as_view(), name='create-author-packages'),
     path('list-author-packages', webPackageList.as_view(), name='list-author-packages'),
     path('author-Packages-delete', DeletewebPackages.as_view(), name='author-Packages-delete'),

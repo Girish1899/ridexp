@@ -3617,6 +3617,10 @@ class addwebpackages(TemplateView):
 class webPackageList(ListView):
     model = WebsitePackages
     template_name = "distributer/view_webpackages.html"
+    context_object_name = 'webpackages'
+    
+    def get_queryset(self):
+        return WebsitePackages.objects.filter(created_by=self.request.user)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeletewebPackages(View):
@@ -3771,6 +3775,10 @@ class AddBlogView(TemplateView):
 class BlogListView(ListView):
     model = Blogs
     template_name = "distributer/view_blog.html"
+    context_object_name = 'blogs'
+    
+    def get_queryset(self):
+        return Blogs.objects.filter(created_by=self.request.user)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class webDeleteBlogs(View):
