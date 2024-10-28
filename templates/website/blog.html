@@ -25,16 +25,16 @@
                 </div>
             </div>
             <div class="row" id="blog-container">
-                <!-- Initial blogs will be loaded here -->
                 {% for blog in blogs_page %}
                 <div class="col-md-6 col-lg-4 blog-item-container">
                     <div class="blog-item wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:'.25' }}s">
+                        <div class="serial-number">{{ forloop.counter }}</div> <!-- Display serial number -->
                         <div class="blog-item-img">
                             <img src="{% if blog.image %}{{ blog.image.url }}{% else %}{{ blog.image_link }}{% endif %}" alt="{{ blog.title|slugify }}">
                         </div>
                         <div class="blog-item-info">
                             <h4 class="blog-title">
-                                <a href="/blog/{{ blog.backlink }}">{{ blog.title }}</a>
+                                <a href="/blog/{{ blog.title }}">{{ blog.title }}</a>
                             </h4>
                             <a class="theme-btn" href="/blog/{{ blog.title|slugify }}">Read More<i class="fas fa-arrow-right"></i></a>
                         </div>
@@ -42,24 +42,20 @@
                 </div>
                 {% endfor %}
             </div>
-            <!-- Loading spinner -->
+
             <div id="loading-spinner" class="text-center" style="display:none;">
                 <img src="{% static 'loading.gif' %}" alt="Loading..." />
             </div>
         </div>
     </div>
-    <!-- blog area end -->
 </main>
 
-<style>
-    /* Same styles as before */
-</style>
-
-<!-- Infinite scroll JavaScript -->
 <script>
-    let page = 2;  // Start loading from the second page
+    let page = 2;
 let hasNextPage = true;
-let loadedBlogs = new Set();  // Track blog backlinks that have been loaded
+let loadedBlogs = new Set();
+const blogsPerPage = 12;
+let serialNumber = blogsPerPage + 1;
 
 window.addEventListener('scroll', () => {
     if (hasNextPage && window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
@@ -73,7 +69,7 @@ function loadMoreBlogs() {
 
     fetch(`/blog?page=${page}`, {
         headers: {
-            'X-Requested-With': 'XMLHttpRequest'  // Indicate this is an AJAX request
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
     .then(response => response.json())
@@ -84,13 +80,13 @@ function loadMoreBlogs() {
             const blogContainer = document.getElementById('blog-container');
             
             data.blogs.forEach(blog => {
-                // Only insert blog if it hasn't been loaded before
                 if (!loadedBlogs.has(blog.backlink)) {
-                    loadedBlogs.add(blog.backlink);  // Mark the blog as loaded
+                    loadedBlogs.add(blog.backlink);
                     
                     const blogItem = `
                         <div class="col-md-6 col-lg-4 blog-item-container">
                             <div class="blog-item wow fadeInUp">
+                                <div class="serial-number">${serialNumber}</div>
                                 <div class="blog-item-img">
                                     <img src="${blog.image_url}" alt="${blog.title}">
                                 </div>
@@ -104,11 +100,12 @@ function loadMoreBlogs() {
                         </div>`;
                     
                     blogContainer.insertAdjacentHTML('beforeend', blogItem);
+                    serialNumber++;
                 }
             });
 
-            hasNextPage = data.has_next;  // Update if there are more pages to load
-            page++;  // Move to the next page
+            hasNextPage = data.has_next;
+            page++;
         } else {
             hasNextPage = false;
         }
@@ -117,6 +114,8 @@ function loadMoreBlogs() {
         console.error('Error loading more blogs:', error);
     });
 }
+
+
 
 </script>
 
@@ -153,12 +152,11 @@ function loadMoreBlogs() {
         justify-content: space-between;
     }
 
-    /* Consistent button placement */
     .theme-btn {
         margin-top: auto;
     }
     .row > [class^='col'] {
-        margin-bottom: 30px; /* Adjust the bottom margin for spacing between rows */
+        margin-bottom: 30px; 
     }
 </style>
 
