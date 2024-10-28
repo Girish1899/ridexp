@@ -24,100 +24,27 @@
                     </div>
                 </div>
             </div>
-            <div class="row" id="blog-container">
-                {% for blog in blogs_page %}
-                <div class="col-md-6 col-lg-4 blog-item-container">
+            <div class="row"> 
+                {% for blog in blogs %}
+                <div class="col-md-6 col-lg-4">
                     <div class="blog-item wow fadeInUp" data-wow-delay="{{ forloop.counter0|add:'.25' }}s">
-                        <div class="serial-number">{{ forloop.counter }}</div> <!-- Display serial number -->
                         <div class="blog-item-img">
                             <img src="{% if blog.image %}{{ blog.image.url }}{% else %}{{ blog.image_link }}{% endif %}" alt="{{ blog.title|slugify }}">
                         </div>
                         <div class="blog-item-info">
                             <h4 class="blog-title">
-                                <a href="/blog/{{ blog.title }}">{{ blog.title }}</a>
+                                <a href="/blog/{{ blog.title|slugify }}">{{ blog.title }}</a>
                             </h4>
-                            <a class="theme-btn" href="/blog/{{ blog.title|slugify }}">Read More<i class="fas fa-arrow-right"></i></a>
+                            <a class="theme-btn" href="/blog/{{ blog.title|slugify }}">Read More {{ forloop.counter }}<i class="fas fa-arrow-right"></i></a>
                         </div>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-
-            <div id="loading-spinner" class="text-center" style="display:none;">
-                <img src="{% static 'loading.gif' %}" alt="Loading..." />
-            </div>
         </div>
     </div>
+    <!-- blog area end -->
 </main>
-
-<script>
-    let page = 2;
-let hasNextPage = true;
-let loadedBlogs = new Set();
-const blogsPerPage = 12;
-let serialNumber = blogsPerPage + 1;
-
-window.addEventListener('scroll', () => {
-    if (hasNextPage && window.innerHeight + window.scrollY >= document.body.offsetHeight - 500) {
-        loadMoreBlogs();
-    }
-});
-
-function loadMoreBlogs() {
-    const spinner = document.getElementById('loading-spinner');
-    spinner.style.display = 'block';
-
-    fetch(`/blog?page=${page}`, {
-        headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-        }
-    })
-    .then(response => response.json())
-    .then(data => {
-        spinner.style.display = 'none';
-
-        if (data.blogs.length) {
-            const blogContainer = document.getElementById('blog-container');
-            
-            data.blogs.forEach(blog => {
-                if (!loadedBlogs.has(blog.backlink)) {
-                    loadedBlogs.add(blog.backlink);
-                    
-                    const blogItem = `
-                        <div class="col-md-6 col-lg-4 blog-item-container">
-                            <div class="blog-item wow fadeInUp">
-                                <div class="serial-number">${serialNumber}</div>
-                                <div class="blog-item-img">
-                                    <img src="${blog.image_url}" alt="${blog.title}">
-                                </div>
-                                <div class="blog-item-info">
-                                    <h4 class="blog-title">
-                                        <a href="/blog/${blog.backlink}">${blog.title}</a>
-                                    </h4>
-                                    <a class="theme-btn" href="/blog/${blog.title}">Read More<i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>`;
-                    
-                    blogContainer.insertAdjacentHTML('beforeend', blogItem);
-                    serialNumber++;
-                }
-            });
-
-            hasNextPage = data.has_next;
-            page++;
-        } else {
-            hasNextPage = false;
-        }
-    })
-    .catch(error => {
-        console.error('Error loading more blogs:', error);
-    });
-}
-
-
-
-</script>
 
 <style>
     /* Ensure the images are of a consistent size */
