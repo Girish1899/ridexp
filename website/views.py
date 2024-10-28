@@ -55,9 +55,13 @@ def our_rides(request):
     return render(request, 'website/our_rides.html',context)
 
 def packages(request):
-    context = None
-    return render(request, 'website/taxi.html',context)
-
+    packages = WebsitePackages.objects.filter(status='active').select_related('package_category')
+    categories = PackageCategories.objects.all()  # Get all categories for filtering
+    context = {
+        'packages': packages,
+        'categories': categories
+    }
+    return render(request, 'website/webpackage.html',context)
 
 class PackageDetailView(View):
     def get(self, request, title):
@@ -972,7 +976,28 @@ def localtaxi(request):
     return render(request, 'website/localtaxi.html')
 
 def blog(request):
-    return render(request, 'website/blog.html')
+    page_number = request.GET.get('page', 1) 
+    blogs_per_page = 12  
+    blogs = Blogs.objects.all().order_by('-created_on') 
+    paginator = Paginator(blogs, blogs_per_page) 
+
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        blogs_page = paginator.get_page(page_number)
+        blogs_list = []
+        for blog in blogs_page:
+            blogs_list.append({
+                'title': blog.title,
+                'backlink': blog.backlink,
+                'image_url': blog.image.url if blog.image else blog.image_link,
+            })
+        return JsonResponse({
+            'blogs': blogs_list,
+            'has_next': blogs_page.has_next(),  
+        })
+
+    blogs_page = paginator.get_page(1)  
+    return render(request, 'website/blog.html', {'blogs_page': blogs_page})
+
 
 
 
