@@ -1,0 +1,392 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-vehiclelist' %}" style="color: white !important;">View Car</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Car</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="vehicle_id" name="vehicle_id" value="{{ vehiclelist.0.vehicle_id }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ vehiclelist.0.company_format }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Vehicle Owner</label>
+                        <div class="col-sm-12">  
+                            <select id="single-select"  name="owner" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Owner Id</option>
+                                {% for obj in ownerlist %}
+                                <option value="{{ obj.owner_id }}" {% if obj.owner_id == vehiclelist.0.owner.owner_id %} selected {% endif %}>{{ obj.name }} - {{obj.phone_number}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="original_Vehicle_Number" name="original_Vehicle_Number" value="{{ vehiclelist.0.Vehicle_Number }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number *</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="Vehicle_Number" name="Vehicle_Number" value="{{ vehiclelist.0.Vehicle_Number }}" maxlength="10">
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
+                        <div class="col-sm-3">
+                            <select id="category" name="category" class="form-control form-control-lg" onchange="getbrand()">
+                                <option value="" selected disabled>Select Car Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{ obj.category_id }}" {% if obj.category_id == vehiclelist.0.model.brand.category.category_id %} selected {% endif %}>{{ obj.category_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                  
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Brand *</label>
+                        <div class="col-sm-3">
+                            <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
+                                <option value="" selected disabled>Select Car Brand</option>
+                                {% for obj in blist %}
+                                <option value="{{ obj.brand_id }}" {% if obj.brand_id == vehiclelist.0.model.brand.brand_id %} selected {% endif %}>{{ obj.brand_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Model *</label>
+                        <div class="col-sm-3">
+                            <select id="model" name="model" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Model</option>
+                                {% for obj in modellist %}
+                                <option value="{{ obj.model_id }}" {% if obj.model_id == vehiclelist.0.model.model_id %} selected {% endif %}>{{ obj.model_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                  
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
+                        <div class="col-sm-3">    
+                            <select class="form-control form-control-lg" id="year" name="year">
+                                <option value="" selected disabled>{{ vehiclelist.0.year }}</option>
+                            </select>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Type *</label>
+                        <div class="col-sm-3">
+                            <select id="commission_type" name="commission_type" class="form-control form-control-lg" onchange="updateCommissionPercentage()">
+                                <option value="" selected disabled>Select Commission Type</option>
+                                {% for obj in ctypelist %}
+                                <option value="{{ obj.commission_id }}" {% if obj.commission_id == vehiclelist.0.commission_type.commission_id %} selected {% endif %}>{{ obj.commission_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Commission Percentage *</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" id="commission_percentage" name="commission_percentage" value="{{ vehiclelist.0.commission_type.commission_percentage }}" disabled>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car body color *</label>
+                        <div class="col-sm-3">
+                            <select id="color" name="color" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Body Color</option>
+                                {% for obj in colorlist %}
+                                <option value="{{ obj.color_id }}" {% if obj.color_id == vehiclelist.0.color.color_id %}selected{% endif %}>{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Transmission Type *</label>
+                        <div class="col-sm-3">
+                            <select id="transmission" name="transmission" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Car Transmission Type</option>
+                                {% for obj in tlist %}
+                                <option value="{{ obj.transmission_id }}" {% if obj.transmission_id == vehiclelist.0.transmission.transmission_id %}selected{% endif %}>{{ obj.transmission_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
+                        <div class="col-sm-3">
+                            <select id="vehicle_type" name="vehicle_type" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Fuel Type</option>
+                                {% for obj in vtypelist %}
+                                <option value="{{ obj.vehicle_type_id }}" {% if obj.vehicle_type_id == vehiclelist.0.vehicle_type.vehicle_type_id %} selected {% endif %}>{{ obj.vehicle_type_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                  
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
+                        <div class="col-sm-3">
+                            <select class="form-control form-control-lg" id="car_type" name="car_type">
+                                <option value="" selected disabled>Select Car Type</option>
+                                <option {% if vehiclelist.0.car_type == 'AC' %}selected{% endif %}>AC</option>
+                                <option {% if vehiclelist.0.car_type == 'NON AC' %}selected{% endif %}>NON AC</option>
+                            </select>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry *</label>
+                        <div class="col-sm-3">
+                            <input type="date" class="form-control form-control-lg" id="insurance_expiry" name="insurance_expiry" value="{% if vehiclelist.0.insurance_expiry %}{{ vehiclelist.0.insurance_expiry|date:'Y-m-d' }}{% endif %}">
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Drive Type *</label>
+                        <div class="col-sm-2">
+                            <select class="form-control form-control-lg" id="drive_status" name="drive_status">
+                                <option value="" selected disabled>Select Drive Status</option>
+                                <option value="selfdrive" {% if vehiclelist.0.drive_status == "selfdrive" %} selected {% endif %}>Self Drive</option>
+                                <option value="otherdrive" {% if vehiclelist.0.drive_status == "otherdrive" %} selected {% endif %}>Other Drive</option>
+                            </select>
+                        </div>
+                    </div><hr><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Registration Certificate *</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate" >
+                            {% if vehiclelist.0.registration_certificate %}
+                            <img id="preview2" src="{{ vehiclelist.0.registration_certificate.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate" >
+                            {% if vehiclelist.0.fc_certificate %}
+                            <img id="preview3" src="{{ vehiclelist.0.fc_certificate.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Policy *</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy" >
+                            {% if vehiclelist.0.insurance_policy %}
+                            <img id="preview4" src="{{ vehiclelist.0.insurance_policy.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                   
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details" >
+                            {% if vehiclelist.0.tax_details %}
+                            <img id="preview5" src="{{ vehiclelist.0.tax_details.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview5" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    </div><br>
+                    
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit Details *</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details" >
+                            {% if vehiclelist.0.permit_details %}
+                            <img id="preview6" src="{{ vehiclelist.0.permit_details.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test" >
+                            {% if vehiclelist.0.emission_test %}
+                            <img id="preview7" src="{{ vehiclelist.0.emission_test.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-3">
+                            <select class="form-control form-control-lg" id="vehicle_status" name="vehicle_status">
+                                <option value="" selected disabled>Select Status</option>
+                                <option value="active" {% if vehiclelist.0.vehicle_status == "active" %} selected {% endif %}>Active</option>
+                                <option value="inactive" {% if vehiclelist.0.vehicle_status == "inactive" %} selected {% endif %}>Inactive</option>
+                            </select>
+                        </div>
+                    </div><br>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+
+    const currentYear = new Date().getFullYear();
+    const yearDropdown = document.getElementById('year');
+
+    for (let year = 2010; year <= currentYear ; year++) {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearDropdown.appendChild(option);
+    }
+
+    function updateCommissionPercentage() {
+        const commissionTypeDropdown = document.getElementById('commission_type');
+        const selectedOption = commissionTypeDropdown.options[commissionTypeDropdown.selectedIndex];
+        const commissionPercentage = selectedOption.getAttribute('data-percentage');
+        document.getElementById('commission_percentage').value = commissionPercentage;
+    }
+
+    function getbrand() {
+        $('#brand')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Brand</option>');
+
+        const category = $('#category').val();
+        '{% for obj in blist %}'
+        if ('{{ obj.category.category_id }}' == category) {
+            $('#brand').append('<option value="{{ obj.brand_id }}">{{ obj.brand_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    function getmodel() {
+        $('#model')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="" selected disabled>Select Model</option>');
+
+        const brand = $('#brand').val();
+        '{% for obj in modellist %}'
+        if ('{{ obj.brand.brand_id }}' == brand) {
+            $('#model').append('<option value="{{ obj.model_id }}">{{ obj.model_name }}</option>');
+        }
+        '{% endfor %}'
+    }
+
+    $(document).ready(function () {
+
+        $('#save_action').click(function () {
+        var formData = new FormData();
+        formData.append('vehicle_id', $('#vehicle_id').val());
+        formData.append('Vehicle_Number', $('#Vehicle_Number').val().toUpperCase());
+        formData.append('model', $('#model').val());
+        formData.append('year', $('#year').val());
+        formData.append('insurance_expiry', $('#insurance_expiry').val());
+        formData.append('car_type', $('#car_type').val());
+        formData.append('transmission', $('#transmission').val());
+        formData.append('drive_status', $('#drive_status').val());
+        formData.append('color', $('#color').val());
+        formData.append('owner', $('#single-select').val());
+        formData.append('vehicle_type', $('#vehicle_type').val());
+        formData.append('commission_type', $('#commission_type').val());
+        if ($('#registration_certificate')[0].files[0]) {
+            formData.append('registration_certificate', $('#registration_certificate')[0].files[0]);
+        }
+        if ($('#fc_certificate')[0].files[0]) {
+            formData.append('fc_certificate', $('#fc_certificate')[0].files[0]);
+        }
+        if ($('#insurance_policy')[0].files[0]) {
+            formData.append('insurance_policy', $('#insurance_policy')[0].files[0]);
+        }
+        if ($('#tax_details')[0].files[0]) {
+            formData.append('tax_details', $('#tax_details')[0].files[0]);
+        }
+        if ($('#permit_details')[0].files[0]) {
+            formData.append('permit_details', $('#permit_details')[0].files[0]);
+        }
+        if ($('#emission_test')[0].files[0]) {
+            formData.append('emission_test', $('#emission_test')[0].files[0]);
+        }
+        formData.append('vehicle_status', $('#vehicle_status').val());
+        formData.append('company_format', $('#company_format').val());
+        formData.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val());
+
+
+        $.ajax({
+            url: "{% url 'dispatch-UpdateVehicle' %}",
+            type: 'POST',
+            headers: {
+                'X-CSRFToken': $('input[name="csrfmiddlewaretoken"]').val()
+            },
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.success) {
+                    alert(response.message);
+                    window.location.href = "{% url 'dispatch-vehiclelist' %}";
+                } else {
+                    alert(response.message);
+                }
+            },
+            error: function (xhr, status, error) {
+                alert("An error occurred: " + xhr.status + " " + xhr.statusText);
+                console.error(xhr.responseText);
+            }
+        });
+    });
+
+    $("#registration_certificate, #fc_certificate, #insurance_policy, #tax_details,  #permit_details, #emission_test").change(function () {
+            readURL(this);
+        });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result).show();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    });
+</script>
+
+{% endblock %}

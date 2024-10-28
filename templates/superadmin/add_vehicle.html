@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -19,14 +18,13 @@
             </div>
         </div>
 
-
         <div class="col-xl-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Car</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
 
@@ -37,7 +35,6 @@
                         </div>
                     </div>
                     
-
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Vehicle Owner</label>
                         <div class="col-sm-12" >  
@@ -49,7 +46,8 @@
                             </select>
                         </div>
                     </div>
-<br>
+                    <br>
+
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle No.*</label>
                         <div class="col-sm-2">
@@ -65,7 +63,6 @@
                             <input type="text" class="form-control form-control-lg" id="part4" name="part4" maxlength="4" placeholder="0000" required>
                         </div>
                     </div>
-                    
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Category *</label>
@@ -77,14 +74,11 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Brand *</label>
                         <div class="col-sm-12">
                             <select id="brand" name="brand" class="form-control form-control-lg" onchange="getmodel()">
                                 <option value="" selected disabled>Select Car Brand</option>
-                                <!-- Options will be dynamically added here -->
                             </select>
                         </div>
                     </div>
@@ -94,12 +88,9 @@
                         <div class="col-sm-12">
                             <select id="model" name="model" class="form-control form-control-lg">
                                 <option value="" selected disabled>Select Car Model</option>
-                                <!-- Options will be dynamically added here -->
                             </select>
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select a Year *</label>
                         <div class="col-sm-12">    
                             <select class="form-control form-control-lg" id="year" name="year">
@@ -125,7 +116,6 @@
                         </div>
                     </div>
 
-
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car body color *</label>
                         <div class="col-sm-12">
@@ -136,9 +126,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;"> Transmission Type *</label>
                         <div class="col-sm-12">
                             <select id="transmission" name="transmission" class="form-control form-control-lg" >
@@ -150,13 +138,6 @@
                         </div>
                     </div>
 
-                    <!-- <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Color</label>
-                        <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-lg" id="color" name="color">
-                        </div>
-                    </div> -->
-
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Fuel Type *</label>
                         <div class="col-sm-12">
@@ -167,9 +148,7 @@
                                 {% endfor %}
                             </select>
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type *</label>
                         <div class="col-sm-12">
                             <select class="form-control form-control-lg" id="car_type" name="car_type">
@@ -180,7 +159,6 @@
                         </div>
                     </div>
 
-                   
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Insurance Expiry *</label>
                         <div class="col-sm-12">
@@ -203,9 +181,7 @@
                             <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate">
                             <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">FC Certificate *</label>
                         <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate">
@@ -219,9 +195,7 @@
                             <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy">
                             <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Tax Details *</label>
                         <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details">
@@ -235,16 +209,13 @@
                             <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details">
                             <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
-                    <!-- </div> -->
 
-                    <!-- <div class="form-group row"> -->
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Emission Test *</label>
                         <div class="col-sm-12">
                             <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test">
                             <img id="preview7" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                         </div>
                     </div>
-
 
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
@@ -254,11 +225,9 @@
                                 <option value="active" selected>Active</option>
                                 <option value="inactive">Inactive</option>
                             </select>
-                        </div>
-                    
-                        
+                        </div>   
                     </div>
-<br>
+                    <br>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
@@ -274,10 +243,8 @@
 
     const currentYear = new Date().getFullYear();
 
-    // Get the year dropdown element
     const yearDropdown = document.getElementById('year');
 
-    // Add years from 2010 to next year
     for (let year = 2010; year <= currentYear ; year++) {
         const option = document.createElement('option');
         option.value = year;
@@ -345,7 +312,6 @@
         });
     }
 
-    // Call the function to enforce input restrictions
     enforceInputRestrictions();
 
     $(document).ready(function() {
@@ -357,9 +323,7 @@
             var part3 = $('#part3').val();
             var part4 = $('#part4').val();
         
-        // Concatenate the vehicle number
             var Vehicle_Number = part1 + part2 + part3 + part4;
-            // var Vehicle_Number = $('#Vehicle_Number').val();
             var model = $('#model').val();
             var year = $('#year').val();
             var insurance_expiry = $('#insurance_expiry').val();

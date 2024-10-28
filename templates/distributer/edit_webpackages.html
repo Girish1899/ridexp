@@ -204,7 +204,6 @@ $(document).ready(function() {
         var h1tag = $('#h1tag').val();
         var status = $('#status').val();
 
-        // Collect form data
             var formData = new FormData();
             formData.append('webpackage_id', webpackage_id);
             formData.append('title', title);
@@ -249,14 +248,13 @@ $(document).ready(function() {
             }
 
             console.log(image);
-            // Check if required fields are empty
             if (!$('#title').val().trim() || !$('#package_category').val() || !$('#description').val()) {
                 alert("Title, Category, and Description are required fields.");
                 return;
             }
 
         $.ajax({
-            url: '{% url "dispatch-author-Packages-update" %}',  // Replace with your update URL
+            url: '{% url "dispatch-author-Packages-update" %}',  
             type: 'POST',
             data: formData,
             processData: false,
@@ -267,7 +265,7 @@ $(document).ready(function() {
             success: function(response) {
                 if (response.success) {
                     alert('Package updated successfully!');
-                    window.location.href = "{% url 'dispatch-list-author-packages' %}"; // Redirect to package list
+                    window.location.href = "{% url 'dispatch-list-author-packages' %}"; 
                 } else {
                     alert('Error: ' + response.message);
                 }

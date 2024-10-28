@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -17,7 +16,6 @@
                 </ol>
             </div>
         </div>
-
 
         <div class="col-xl-12">
             <div class="card my-4">
@@ -29,105 +27,102 @@
 
                 <div class="card-body">
                                     
-                                        <div class="form-group row">
-                                            <input type="hidden" class="form-control" id="package_id" name="package_id" value="{{ plist.0.package_id }}"> 
-                                            
-                                        </div>
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="package_id" name="package_id" value="{{ plist.0.package_id }}"> 
+                        
+                    </div>
 
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Name</label>
-                                            <div class="col-sm-12">
-                                                <select id="package_name" name="package_name" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Package Name</option>
-                                                    {% for obj in pnlist %}
-                                                    <option value="{{ obj.package_name_id }}" {% if obj.package_name_id == plist.0.package_name.package_name_id %} selected {% endif %}>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category Name</label>
-                                            <div class="col-sm-12">
-                                                <select id="package_category" name="package_category" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Package Category</option>
-                                                    {% for obj in pclist %}
-                                                    <option value="{{ obj.package_category_id }}" {% if obj.package_category_id == plist.0.package_category.package_category_id %} selected {% endif %}>
-                                                        {{ obj.category_name }}
-                                                    </option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Car Type</label>
-                                            <div class="col-sm-12">    
-                                            <select class="form-control form-control-lg" id="car_type" name="car_type">
-                                                <option value="" selected disabled>Select Car Type</option>
-                                                <option value="AC" {% if plist.0.car_type == "AC" %} selected {% endif %}>AC</option>
-                                                <option value="NON AC" {% if plist.0.car_type == "NON AC" %} selected {% endif %}>NON AC</option>
-                                            </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Description</label>
-                                            <div class="col-sm-12">                                            
-                                                <textarea class="form-control" rows="2" id="description" name="description">{{ plist.0.description }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price</label>
-                                            <div class="col-sm-12">
-                                                <input type="number" class="form-control form-control-lg" id="price" name="price" value="{{ plist.0.price }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Features</label>
-                                            <div class="col-sm-12">                                            
-                                                <textarea class="form-control" rows="2" id="features" name="features">{{ plist.0.features }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Extra Km</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="extra_km" name="extra_km" value="{{ plist.0.extra_km }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Extra Charges</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="extra_charges" name="extra_charges" value="{{ plist.0.extra_charges }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                                            <div class="col-sm-12">    
-                                            <select class="form-control form-control-lg" id="status" name="status">
-                                                <option value="" selected disabled>Select Status</option>
-                                                <option value="active" {% if plist.0.status == "active" %} selected {% endif %}>Active</option>
-                                                <option value="inactive" {% if plist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
-                                            </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
-                                        </div>
-
-                                <!-- </div> -->
-                            </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Package Name</label>
+                        <div class="col-sm-12">
+                            <select id="package_name" name="package_name" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Package Name</option>
+                                {% for obj in pnlist %}
+                                <option value="{{ obj.package_name_id }}" {% if obj.package_name_id == plist.0.package_name.package_name_id %} selected {% endif %}>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                <!-- </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category Name</label>
+                        <div class="col-sm-12">
+                            <select id="package_category" name="package_category" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Package Category</option>
+                                {% for obj in pclist %}
+                                <option value="{{ obj.package_category_id }}" {% if obj.package_category_id == plist.0.package_category.package_category_id %} selected {% endif %}>
+                                    {{ obj.category_name }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Car Type</label>
+                        <div class="col-sm-12">    
+                        <select class="form-control form-control-lg" id="car_type" name="car_type">
+                            <option value="" selected disabled>Select Car Type</option>
+                            <option value="AC" {% if plist.0.car_type == "AC" %} selected {% endif %}>AC</option>
+                            <option value="NON AC" {% if plist.0.car_type == "NON AC" %} selected {% endif %}>NON AC</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Description</label>
+                        <div class="col-sm-12">                                            
+                            <textarea class="form-control" rows="2" id="description" name="description">{{ plist.0.description }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price</label>
+                        <div class="col-sm-12">
+                            <input type="number" class="form-control form-control-lg" id="price" name="price" value="{{ plist.0.price }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Features</label>
+                        <div class="col-sm-12">                                            
+                            <textarea class="form-control" rows="2" id="features" name="features">{{ plist.0.features }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Extra Km</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="extra_km" name="extra_km" value="{{ plist.0.extra_km }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Extra Charges</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="extra_charges" name="extra_charges" value="{{ plist.0.extra_charges }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">    
+                        <select class="form-control form-control-lg" id="status" name="status">
+                            <option value="" selected disabled>Select Status</option>
+                            <option value="active" {% if plist.0.status == "active" %} selected {% endif %}>Active</option>
+                            <option value="inactive" {% if plist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 

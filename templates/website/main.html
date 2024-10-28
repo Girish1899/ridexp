@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block meta_keywords %}
-<meta name="keywords" content="local taxi service, outstation taxi, airport taxi, cab service, taxi booking, affordable cab, reliable taxi service, 24/7 taxi, city commute, outstation cab, long-distance taxi, one-way taxi, airport transfer, taxi near me, cab for airport, Airport Taxi, Airport taxi Bangalore, taxi service in Bangalore, airport pickup Bangalore, Cab services in Bangalore, cab for airport pickup, cab for airport drop, outstation cabs in Bangalore, taxi for airport Bangalore, Bangalore airport Cabs, cheapest airport taxi, airport cab bangalore, Cab for airport, cab services bangalore, Bengaluru taxi service, safe taxi service, Ridexpress" />
+<meta name="keywords" content="local taxi service, outstation taxi, airport taxi, cab service, taxi booking, affordable cab, reliable taxi service, 24/7 taxi, city commute, long-distance taxi, one-way taxi, airport transfer, taxi near me, cab for airport, taxi service in Bangalore, airport pickup Bangalore, cab for airport pickup, cab for airport drop, outstation cabs in Bangalore, Bangalore airport Cabs, cheapest airport taxi, airport cab Bangalore, Bengaluru taxi service, safe taxi service, Ridexpress, international service, couples trips, car rental, corporate travel, group travel, day trips, family trips, excursion booking, tours, travel insurance, all inclusives, honeymoons, airport transfers, booking assistance, business transport, cabs on call, corporate car rentals, drop service, employee transportation, internet cab booking, pick up and drop service, premium cars, rent car, self-driving car, tow service, transport solutions, airport taxis, SUV taxi, corporate taxis, truck taxi, minibus taxi, minivan taxi, luxury vehicles, limousines, van taxi, sedans, cab facility near me, IT companies cab facility, Innova booking near me, package trip, car booking near, car rental agency, online service, airport special, airport taxi service, book cabs, cab local, cab rental services, corporate bookings, drop location, efficient taxi, first aid, local taxi, luxurious services, outstation cab, outstation taxi service, outstation tours, outstation trips, premier taxi service, river rafting, taxi drivers, Adventure Activities, Airport Cabs, Airport Pickup, Airport Round Trip, Airport Taxi Booking, Airport Taxi Drop, Airport Transfer Out Station, Book Taxi Online, Cabs Available, Call Taxi, Contact Taxi Services, Day Package, Day Visit, Made Tour, Ola Cab Booking, Outstation Cabs, Pickup Drop, Popular Tour, Religious Tour, Round Trip Taxi, Sedan Cab, Tour Packages, Tour Plans, Airport Pickup And Drop, Airport Transportation, Business Cab, Cab Bookings, Cab/Taxi Services, Car Hire Services, Car Rental Services, City Trip, Family Vacation, Flight Bookings, One Way Taxi, Oneway Cab, Outstation Taxi Booking, Tour Package Book, Travel Guidance, Vehicles Services" />
 {% endblock %}
 
 {% block meta_keyphrase %}
@@ -18,10 +18,8 @@
 {% endblock %}
 
 <link rel="canonical" href="https://ridexpress.in/" />
-<!-- Google tag (gtag.js) event - delayed navigation helper -->
 <script>
-  // Helper function to delay opening a URL until a gtag event is sent.
-  // Call it in response to an action that should navigate to a URL.
+  
   function gtagSendEvent(url) {
     var callback = function () {
       if (typeof url === 'string') {
@@ -31,14 +29,12 @@
     gtag('event', 'ads_conversion_Contact_Us_1', {
       'event_callback': callback,
       'event_timeout': 2000,
-      // <event_parameters>
     });
     return false;
   }
 </script>
 
 {% block body_content %}
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 <style>
     html {
   scroll-behavior: smooth;
@@ -51,24 +47,23 @@
             border: none;
         }
 
-        /* CSS for modal */
         .modal {
-            display: none; /* Hidden by default */
-            position: fixed; /* Stay in place */
-            z-index: 1000; /* Sit on top */
+            display: none; 
+            position: fixed; 
+            z-index: 1000;
             left: 0;
             top: 0;
-            width: 100%; /* Full width */
-            height: 100%; /* Full height */
-            overflow: auto; /* Enable scroll if needed */
-            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.4); 
         }
         .modal-content {
             background-color: #fefefe;
-            margin: 15% auto; /* 15% from the top and centered */
+            margin: 15% auto; 
             padding: 20px;
             border: 1px solid #888;
-            width: 80%; /* Could be more or less, depending on screen size */
+            width: 80%; 
         }
         .close {
             color: #aaaaaa;
@@ -84,20 +79,17 @@
         }
         iframe {
             width: 100%;
-            height: 600px; /* Adjust height as needed */
-            border: none; /* Remove border */
+            height: 600px; 
+            border: none;
         }
 
         
 </style>
 
 <main class="main" id="bookride">
-    <!-- hero slider -->
-    <!-- booking area end -->
+   
     <div class="hero-section" > 
-        <!-- <div class="hero-slider owl-carousel owl-theme"> -->
             <div class="hero-single" style="background: url('static/img/slider/sl1.jpg')">
-                <!-- <div class="container"> -->
                     <div class="row align-items-center">
                         <h2 class="hero-content text-center hero-sub-title" id="rideheader" data-animation="fadeInUp" data-delay=".25s">WELCOME TO RIDEXPRESS!</h2>
                             <div class="container" style="margin-top: -30px;" id="bookingpart">
@@ -111,7 +103,6 @@
                                         <div id="Airport" class="tabcontent">
                                             <form action="{% url 'search_url' %}" id="airportForm">
                                                 <input type="hidden" name="ridetype" value="airport">
-                                                <!-- Radio Buttons for Trip Type -->
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
@@ -128,7 +119,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- Other Fields -->
                                                 <div class="row">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -305,7 +295,6 @@
                                           <div id="Outstation" class="tabcontent">
                                             <form action="{% url 'search_url' %}" id="outstationForm">
                                                 <input type="hidden" name="ridetype" value="outstation">
-                                                <!-- Radio Buttons for Trip Type (Single Row) -->
                                                 <div class="row">
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
@@ -322,9 +311,7 @@
                                                     </div>
                                                 </div>
                                         
-                                                <!-- Other Fields -->
                                                 <div class="row">
-                                                    <!-- Pick Up Location -->
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label>Pick Up Location:</label>
@@ -333,7 +320,6 @@
                                                         </div>
                                                     </div>
                                         
-                                                    <!-- Drop Off Location -->
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label>Drop Off Location:</label>
@@ -342,7 +328,6 @@
                                                         </div>
                                                     </div>
                                         
-                                                    <!-- Pick Up Date -->
                                                     <div class="col-lg-2">
                                                         <div class="form-group">
                                                             <label>Pick Up Date:</label>
@@ -351,7 +336,6 @@
                                                         </div>
                                                     </div>
                                         
-                                                    <!-- Pick Up Time -->
                                                     <div class="col-lg-2">
                                                         <div class="form-group">
                                                             <label>Pick Up Time:</label>
@@ -359,13 +343,10 @@
                                                         </div>
                                                     </div>
                                         
-                                                    <!-- Submit Button -->
                                                     <div class="col-lg-2 align-self-end">
                                                         <button class="theme-btn" type="submit" id="save_action">Book Taxi<i class="fas fa-arrow-right"></i></button>
                                                     </div>
                                               
-                                        
-                                                <!-- Hidden fields for Drop Date and Drop Time (New Row) -->
                                                 <div class="row drop-fields" style="display:none;">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -379,10 +360,7 @@
                                                             <label>Drop Time:</label>
                                                             <input type="time" class="form-control" id="Outstation_drop_time" name="drop_time" required>
                                                         </div>
-                                                    </div>
-
-                                                    
-
+                                                    </div>  
                                                 </div>
                                             </form>
                                         </div>
@@ -413,21 +391,15 @@
             </div>
             
     </div>
-    <!-- hero slider end -->
-
-    <!-- booking area -->
-
-<!-- The Modal -->
+  
 <div id="myModal" class="modal">
-<!-- Modal content -->
-<div class="modal-content">
-    <span class="close" onclick="closeModal()">&times;</span> <!-- Close button -->
-    <!-- Google Form iframe -->
+
+    <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span> 
     <iframe id="googleFormFrame" src="" frameborder="0"></iframe>
 </div>
 </div>
     
-    <!-- about area -->
     <div class="about-area py-120">
         <div class="container">
             <div class="row align-items-center">
@@ -478,12 +450,8 @@
             </div>
         </div>
     </div>
-    <!-- about area end -->
 
-        
-
-        <!-- service area -->
-        <div class="service-area bg py-120" >
+                <div class="service-area bg py-120" >
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 mx-auto">
@@ -625,10 +593,7 @@
                 </div>
             </div>
         </div>
-        <!-- service area end-->
-
-
-        <!-- taxi area -->
+       
         <div class="taxi-area py-120">
             <div class="container">
                 <div class="row">
@@ -667,7 +632,6 @@
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
                                 <a href="/our_rides" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
@@ -691,7 +655,6 @@
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
                                 <a href="/our_rides" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
@@ -715,7 +678,6 @@
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
                                 <a href="/our_rides" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
@@ -739,7 +701,6 @@
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
                                 <a href="/our_rides" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
@@ -763,7 +724,6 @@
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
                                 <a href="/our_rides" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
@@ -787,7 +747,6 @@
                                         <li><i class="far fa-heat"></i> Air Condition: <span>Yes</span></li>
                                         <li><i class="far fa-map-location-dot"></i> GPS Navigation: <span>Yes</span>
                                         </li>
-                                        <!-- <li><i class="far fa-user-pilot"></i> Driver Choosing: <span>Yes</span></li> -->
                                     </ul>
                                 </div>
                                 <a href="/our_rides" class="theme-btn">Book Taxi Now<i class="fas fa-arrow-right"></i></a>
@@ -797,9 +756,7 @@
                 </div>
             </div>
         </div>
-        <!-- taxi area end -->
-
-        <!-- counter area -->
+       
         <div class="counter-area">
             <div class="container">
                 <div class="counter-wrapper">
@@ -852,10 +809,7 @@
                 </div>
             </div>
         </div>
-        <!-- counter area end -->
-
-
-        <!-- feature area -->
+       
         <div class="feature-area feature-bg py-120">
             <div class="container mt-150">
                 <div class="row">
@@ -921,16 +875,12 @@
                 </div>
             </div>
         </div>
-        <!-- feature area end -->
-
-
-        <!-- taxi rate -->
+      
         <div class="taxi-rate py-120">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 mx-auto">
                         <div class="site-heading text-center">
-                            <!-- <span class="site-title-tagline">Our Unique Propositions</span> -->
                             <h2 class="site-title">Our Unique Propositions</h2>
                             <div class="heading-divider"></div>
                         </div>
@@ -1051,203 +1001,11 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- <div class="col-md-6 col-lg-4">
-                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="rate-header-content">
-                                <h4>Billing</h4>
-                            </div>
-                            <div class="rate-content">
-                                <div class="rate-icon">
-                                    <i class="fa-light fa-money-bill" style="color: #000000;"></i>
-                                </div>
-                                <div class="rate-feature">
-                                    <ul>
-                                        <li><i class="far fa-check-double"></i>Cost Centre Breakup Automated Billing Vendor Access Tamper Proof</span></li>
-                                    </ul>
-                                    <a href="{% url 'outstationcabs' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-lg-4">
-                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="rate-header-content">
-                                <h4>Reporting</h4>
-                            </div>
-                            <div class="rate-content">
-                                <div class="rate-icon">
-                                    <i class="fa-light fa-square-check" style="color: #000000;"></i>                              
-                                </div>
-                                <div class="rate-feature">
-                                    <ul>
-                                        <li><i class="far fa-check-double"></i>Security Alert Reports OTA/OTD Reports No Show Reports Seat Utilization</li>                                    
-                                    </ul>
-                                    <a href="{% url 'airporttaxi' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="rate-item wow fadeInDown" data-wow-delay=".25s">
-                            
-                            <div class="rate-header-content">
-                                <h4>Compliance</h4>
-                            </div>
-                            <div class="rate-content">
-                                <div class="rate-icon">
-                                    <i class="fa-light fa-crosshairs" style="color: #000000;"></i>                                
-                                </div>
-                                <div class="rate-feature">
-                                    <ul>
-                                        <li><i class="far fa-check-double"></i>Blacklisting Of Drivers Non-Compliant Alerts Vehicle Compliance Driver Compliance</li>
-                                    </ul>
-                                    <a href="{% url 'localtaxi' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <div class="rate-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="rate-header-content">
-                                <h4>Mobile App</h4>
-                            </div>
-                            <div class="rate-content">
-                                <div class="rate-icon">
-                                    <i class="fa-light fa-mobile" style="color: #000000;"></i>
-                                </div>
-                                <div class="rate-feature">
-                                    <ul>
-                                        <li><i class="far fa-check-double"></i>Safe Reach Confirmation Trip Feedback, Scheduling Scheduling, Scheduling SOS Alarm, Tracking.</span></li>
-                                    </ul>
-                                    <a href="{% url 'outstationcabs' %}" class="theme-btn">Know More<i class="fas fa-arrow-right"></i></a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
-
                 </div>
             </div>
         </div>
-        <!-- taxi rate end -->
+       
 
-
-        <!-- team-area -->
-        <!-- <div class="team-area pb-120">
-            <div class="container">
-                <div class="row">
-                    <div class="col-lg-6 mx-auto">
-                        <div class="site-heading text-center">
-                            <span class="site-title-tagline">Drivers</span>
-                            <h2 class="site-title">Our Expert Drivers</h2>
-                            <div class="heading-divider"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="team-img">
-                                <img src="{% static '/img/team/01.jpg' %}" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Alma Mcelroy</a></h5>
-                                    <span>Expert Driver</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInDown" data-wow-delay=".25s">
-                            <div class="team-img">
-                                <img src="{% static '/img/team/02.jpg' %}" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Marie Hooks</a></h5>
-                                    <span>Expert Driver</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInUp" data-wow-delay=".25s">
-                            <div class="team-img">
-                                <img src="{% static '/img/team/03.jpg' %}" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Daniel Nesmith</a></h5>
-                                    <span>Expert Driver</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-lg-3">
-                        <div class="team-item wow fadeInDown" data-wow-delay=".25s">
-                            <div class="team-img">
-                                <img src="{% static '/img/team/04.jpg' %}" alt="thumb">
-                            </div>
-                            <div class="team-content">
-                                <div class="team-bio">
-                                    <h5><a href="#">Gertrude Barrow</a></h5>
-                                    <span>Expert Driver</span>
-                                </div>
-                            </div>
-                            <div class="team-social">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <!-- team-area end -->
-
-
-        <!-- video area -->
-        <!-- <div class="video-area vda-2">
-            <div class="container">
-                <div class="video-content" style="background-image: url(assets/img/video/01.jpg);">
-                    <div class="row align-items-center">
-                        <div class="col-lg-12">
-                            <div class="video-wrapper">
-                                <a class="play-btn popup-youtube" href="https://www.youtube.com/watch?v=ckHzmP1evNU">
-                                    <i class="fas fa-play"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <!-- video area end -->
-
-
-        <!-- choose area -->
         <div class="choose-area cha-2 py-120">
             <div class="container">
                 <div class="row align-items-center">
@@ -1304,10 +1062,7 @@
                 </div>
             </div>
         </div>
-        <!-- choose area end -->
-
-
-        <!-- faq area -->
+       
         <div class="faq-area py-120">
             <div class="container">
                 <div class="row">
@@ -1403,10 +1158,7 @@
                 </div>
             </div>
         </div>
-        <!-- faq area end -->
-
-
-        <!-- testimonial area -->
+      
         <div class="testimonial-area py-120">
             <div class="container">
                 <div class="row">
@@ -1421,9 +1173,7 @@
                 <div class="testimonial-slider owl-carousel owl-theme">
                     <div class="testimonial-single">
                         <div class="testimonial-content">
-                            <!-- <div class="testimonial-author-img">
-                                <img src="{% static '/img/testimonial/01.jpg' %}" alt="">
-                            </div> -->
+                           
                             <div class="testimonial-author-info">
                                 <h4>Anup Patra</h4>
                                <p style="text-align:justify;">Customer</p>
@@ -1440,14 +1190,11 @@
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
                             <i class="fas fa-star"></i>
-                            <!-- <i class="fas fa-star"></i> -->
                         </div>
                     </div>
                     <div class="testimonial-single">
                         <div class="testimonial-content">
-                            <!-- <div class="testimonial-author-img">
-                                <img src="{% static '/img/testimonial/02.jpg' %}" alt="">
-                            </div> -->
+                          
                             <div class="testimonial-author-info">
                                 <h4>Brajendu Patnaik</h4>
                                <p style="text-align:justify;">Customer</p>
@@ -1469,9 +1216,7 @@
                     </div>
                     <div class="testimonial-single">
                         <div class="testimonial-content">
-                            <!-- <div class="testimonial-author-img">
-                                <img src="{% static '/img/testimonial/03.jpg' %}" alt="">
-                            </div> -->
+                          
                             <div class="testimonial-author-info">
                                 <h4>Vinay G</h4>
                                <p style="text-align:justify;">Customer</p>
@@ -1493,9 +1238,7 @@
                     </div>
                     <div class="testimonial-single">
                         <div class="testimonial-content">
-                            <!-- <div class="testimonial-author-img">
-                                <img src="{% static '/img/testimonial/04.jpg' %}" alt="">
-                            </div> -->
+                          
                             <div class="testimonial-author-info">
                                 <h4>Ummehani</h4>
                                <p style="text-align:justify;">Customer</p>
@@ -1517,9 +1260,7 @@
                     </div>
                     <div class="testimonial-single">
                         <div class="testimonial-content">
-                            <!-- <div class="testimonial-author-img">
-                                <img src="{% static '/img/testimonial/05.jpg' %}" alt="">
-                            </div> -->
+                           
                             <div class="testimonial-author-info">
                                 <h4>Rajiv Warrier</h4>
                                <p style="text-align:justify;">Customer</p>
@@ -1542,10 +1283,7 @@
                 </div>
             </div>
         </div>
-        <!-- testimonial area end -->
-
-
-        <!-- cta-area -->
+       
         <div class="cta-area">
             <div class="container">
                 <div class="row align-items-center">
@@ -1570,10 +1308,7 @@
                 </div>
             </div>
         </div>
-        <!-- cta-area end -->
-
-
-        <!-- blog area -->
+       
         <div class="blog-area pt-120">
             <div class="container">
                 <div class="row">
@@ -1630,50 +1365,8 @@
                 </div>
             </div>
         </div>
-        <!-- blog area end -->
 
 
-        <!-- partner -->
-        <!-- <div class="partner pt-80 pb-80">
-            <div class="container">
-                <div class="partner-slider owl-carousel owl-theme">
-                    <div class="partner-item">
-                        <div class="partner-img">
-                            <img src="{% static '/img/partner/01.png' %}" alt="">
-                        </div>
-                    </div>
-                    <div class="partner-item">
-                        <div class="partner-img">
-                            <img src="{% static '/img/partner/02.png' %}" alt="">
-                        </div>
-                    </div>
-                    <div class="partner-item">
-                        <div class="partner-img">
-                            <img src="{% static '/img/partner/03.png' %}" alt="">
-                        </div>
-                    </div>
-                    <div class="partner-item">
-                        <div class="partner-img">
-                            <img src="{% static '/img/partner/01.png' %}" alt="">
-                        </div>
-                    </div>
-                    <div class="partner-item">
-                        <div class="partner-img">
-                            <img src="{% static '/img/partner/02.png' %}" alt="">
-                        </div>
-                    </div>
-                    <div class="partner-item">
-                        <div class="partner-img">
-                            <img src="{% static '/img/partner/03.png' %}" alt="">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
-        <!-- partner end-->
-
-
-        <!-- download area -->
         <div class="download-area mb-120">
             <div class="container">
                 <div class="download-wrapper">
@@ -1696,13 +1389,7 @@
                                             <strong>Google Play</strong>
                                         </div>
                                     </a>
-                                    <!-- <a href="#">
-                                        <i class="fab fa-app-store"></i>
-                                        <div class="download-btn-content">
-                                            <span>Get It On</span>
-                                            <strong>App Store</strong>
-                                        </div>
-                                    </a> -->
+                                   
                                 </div>
                             </div>
                         </div>
@@ -1713,16 +1400,12 @@
                 </div>
             </div>
         </div>
-        <!-- download area end -->
 
     </main>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-// var page = "Airport"; // Default page
 
-// Function to open the selected tab and set the page variable
-// Function to open the selected tab and highlight the active button
 function openPage(pageName, btn_id) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -1740,80 +1423,8 @@ function openPage(pageName, btn_id) {
     $("#" + btn_id).css('color', 'white');
 }
 
-// Automatically click the default tab on page load
 document.getElementById("defaultOpen").click();
 
-// Save action click event handler
-// $("#save_action").click(function(event) {
-//     event.preventDefault();
-
-//     var source = "";
-//     var destination = "";
-//     var pickup_date = "";
-//     var pickup_time = "";
-//     var ridetype = "";
-//     var searchUrl = ""; // Initialize the base URL
-
-//     // Determine which tab is visible and use the corresponding form fields
-//     if ($('#Airport').is(':visible')) {
-//         source = $('#Airport_source').val();
-//         destination = $('#Airport_destination').val();
-//         pickup_date = $('#Airport_pickup_date').val();
-//         pickup_time = $('#Airport_pickup_time').val();
-//         searchUrl = `airportcabs_list`;
-//         ridetype = 'airport';
-//     } else if ($('#LocalDrop').is(':visible')) {
-//         source = $('#LocalDrop_source').val();
-//         destination = $('#LocalDrop_destination').val();
-//         pickup_date = $('#LocalDrop_pickup_date').val();
-//         pickup_time = $('#LocalDrop_pickup_time').val();
-//         searchUrl = `localcabs_list`;
-//         ridetype = 'local';
-//     } else if ($('#LocalPackage').is(':visible')) {
-//         source = $('#LocalPackage_source').val();
-//         destination = $('#LocalPackage_destination').val();
-//         pickup_date = $('#LocalPackage_pickup_date').val();
-//         pickup_time = $('#LocalPackage_pickup_time').val();
-//         searchUrl = `cabs_list`;
-//     } else if ($('#Outstation').is(':visible')) {
-//         source = $('#Outstation_source').val();
-//         destination = $('#Outstation_destination').val();
-//         pickup_date = $('#Outstation_pickup_date').val();
-//         pickup_time = $('#Outstation_pickup_time').val();
-//         searchUrl = `outstationcabs_list`;
-//     }
-
-//     if (!source || !destination || !pickup_date) {
-//         alert("All fields are required.");
-//     } else {
-//         searchUrl += `?location1=${encodeURIComponent(source)}&location2=${encodeURIComponent(destination)}&pickup_date=${encodeURIComponent(pickup_date)}&pickup_time=${encodeURIComponent(pickup_time)}&ridetype=${encodeURIComponent(ridetype)}`;
-//         window.location.href = searchUrl;
-//     }
-// });
-
-    
-        // window.redirect
-        // $.ajax({
-        //     url: '{% url "addride" %}',
-        //     type: "POST",
-        //     headers: {
-        //         'X-CSRFToken': '{{ csrf_token }}'
-        //     },
-        //     data: {
-        //         source: source,
-        //         destination: destination,
-        //         pickup_date: pickup_date,
-        //     },
-        //     success: function(result) {
-        //         alert("Ride details added successfully");
-        //         location.href = '{% url "home" %}';
-        //     },
-        //     error: function(xhr, status, error) {
-        //         console.error(xhr.responseText);
-        //     }
-        // });
-//     }
-// });
 
 </script>
     
@@ -1827,23 +1438,20 @@ document.getElementById("defaultOpen").click();
     const dropTime = document.getElementById('Outstation_drop_time');
     const dropFields = document.querySelector('.drop-fields');
     
-    // Function to toggle required attribute
     function toggleDropFields() {
         if (oneWayRadio.checked) {
-            dropFields.style.display = 'none';  // Hide drop fields
+            dropFields.style.display = 'none'; 
             dropDate.removeAttribute('required');
             dropTime.removeAttribute('required');
         } else if (roundTripRadio.checked) {
-            dropFields.style.display = 'flex';  // Show drop fields
+            dropFields.style.display = 'flex'; 
             dropDate.setAttribute('required', 'required');
             dropTime.setAttribute('required', 'required');
         }
     }
 
-    // Initial state
     toggleDropFields();
 
-    // Add event listeners for radio buttons
     oneWayRadio.addEventListener('change', toggleDropFields);
     roundTripRadio.addEventListener('change', toggleDropFields);
 });
@@ -1852,7 +1460,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const airportOneWayRadio = document.getElementById('airport_one_way');
     const airportRoundTripRadio = document.getElementById('airport_round_trip');
 
-    // Function to handle trip type change, if needed for future logic
     function handleAirportTripType() {
         if (airportOneWayRadio.checked) {
             console.log("One Way trip selected for Airport");
@@ -1861,10 +1468,8 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // Initial state
     handleAirportTripType();
 
-    // Add event listeners for radio buttons
     airportOneWayRadio.addEventListener('change', handleAirportTripType);
     airportRoundTripRadio.addEventListener('change', handleAirportTripType);
 });
@@ -1942,6 +1547,5 @@ function updatePricing() {
 }
 
  </script>
- 
 
     {% endblock body_content %}

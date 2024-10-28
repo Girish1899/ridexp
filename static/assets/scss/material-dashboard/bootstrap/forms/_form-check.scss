@@ -1,6 +1,4 @@
-//
-// Check/radio
-//
+
 
 .form-check {
   display: block;
@@ -29,7 +27,7 @@
 .form-check-input {
   width: $form-check-input-width;
   height: $form-check-input-width;
-  margin-top: ($line-height-base - $form-check-input-width) * .5; // line-height minus check height
+  margin-top: ($line-height-base - $form-check-input-width) * .5; 
   vertical-align: top;
   background-color: $form-check-input-bg;
   background-repeat: no-repeat;
@@ -37,7 +35,7 @@
   background-size: contain;
   border: $form-check-input-border;
   appearance: none;
-  print-color-adjust: exact; // Keep themed appearance for print
+  print-color-adjust: exact;
   @include transition($form-check-transition);
 
   &[type="checkbox"] {
@@ -45,7 +43,6 @@
   }
 
   &[type="radio"] {
-    // stylelint-disable-next-line property-disallowed-list
     border-radius: $form-check-radio-border-radius;
   }
 
@@ -97,8 +94,7 @@
     opacity: $form-check-input-disabled-opacity;
   }
 
-  // Use disabled attribute in addition of :disabled pseudo-class
-  // See: https://github.com/twbs/bootstrap/issues/28247
+
   &[disabled],
   &:disabled {
     ~ .form-check-label {
@@ -113,9 +109,7 @@
   cursor: $form-check-label-cursor;
 }
 
-//
-// Switch
-//
+
 
 .form-switch {
   padding-left: $form-switch-padding-start;

@@ -20,7 +20,6 @@
 
 {% block body_content %}
 
- <!-- book ride -->
  <div class="book-ride py-120">
     <div class="container">
         <div class="row">
@@ -107,7 +106,6 @@
         </div>
     </div>
 </div>
-<!-- book ride end -->
 
 <div class="container-xxl py-5">
     <div class="container">
@@ -115,7 +113,6 @@
             <h1 class="mb-5"><span class="text text-uppercase" style="color: rgb(10, 10, 63);">Select Cabs</span></h1>
         </div>
 
-        <!-- Cab Items -->
         <div class="row g-4">
             {% for category, prices in pricing_dict.items %}
             <div class="col-lg-4 col-md-6 wow fadeInUp" data-wow-delay="0.1s">
@@ -130,13 +127,12 @@
                         {% endif %}
 
                         <div class="position-relative" style="width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
-                            <!-- Non AC Price Display -->
+
                             <small class="bg-secondary text-white rounded py-1 px-3 pricebtn" 
                                    style="background-color: #6c757d; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-right: 10px; font-size: 14px; font-weight: bold;">
                                 NON AC ₹ <span id="price_non_ac_{{ category|slugify }}">Not Available</span>
                             </small>
                             
-                            <!-- AC Price Display -->
                             <small class="bg-primary text-white rounded py-1 px-3 pricebtn" 
                                    style="background-color: #007bff; color: white; border-radius: 0.25rem; padding: 10px; flex-grow: 1; text-align: center; margin-left: 10px; font-size: 14px; font-weight: bold;">
                                 AC ₹ <span id="price_ac_{{ category|slugify }}">Not Available</span>
@@ -158,7 +154,6 @@
                         <div class="d-flex mb-3">
                             
                             <small class="border-end me-3 pe-3">
-                                <!-- <p><strong>Toll:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p> -->
                                 <p><strong>Toll Non A/C:</strong> ₹<span id="toll_non_ac_{{ category|slugify }}">0</span></p>
                             </small>
                             <small class="border-end me-3 pe-3">
@@ -173,13 +168,10 @@
                             </small>
                             <small class="border-end me-3 pe-3">
                                 <p><strong>Toll A/C:</strong> ₹<span id="toll_ac_{{ category|slugify }}">0</span></p>
-                                <!-- <p><strong>Driver Beta:</strong> ₹<span id="beta_ac_{{ category|slugify }}">0</span></p>
-                                <p><strong>Driver Beta Non A/C:</strong> ₹<span id="beta_non_ac_{{ category|slugify }}">0</span></p> -->
                             </small>
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <!-- Non A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-right: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
                                 <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
@@ -196,7 +188,6 @@
                                 </button>
                             </form>
                         
-                            <!-- A/C Booking Button -->
                             <form action="{% url 'booking_list' %}" method="get" class="d-inline" style="flex: 1; margin-left: 5px;">
                                 <input type="hidden" name="source" value="{{ request.GET.location1 }}">
                                 <input type="hidden" name="destination" value="{{ request.GET.location2 }}">
@@ -260,7 +251,6 @@
     });
 });
 
-// clears the existing price 
 function clearAllCategoryData() {
     var categories = document.querySelectorAll("[id^='price_ac_'], [id^='price_non_ac_']");
     categories.forEach(function(element) {
@@ -270,15 +260,12 @@ function clearAllCategoryData() {
     });
 }
 
-// Function to update category details
 function updateCategoryDetails(category, costData) {
     var categorySlug = category.toLowerCase();
 
-    // Calculate the time slot based on pickup time
     var pickup_time = document.getElementById('pickup_time').value;
     var time_slot = getTimeSlot(pickup_time);
 
-    // Update hidden time slot fields for both AC and Non AC
     var timeSlotAcElement = document.getElementById("time_slot_ac_" + categorySlug);
     var timeSlotNonAcElement = document.getElementById("time_slot_non_ac_" + categorySlug);
 
@@ -291,23 +278,18 @@ function updateCategoryDetails(category, costData) {
 
     console.log("Updating details for category:", category, costData);
 
-    // Update distance (same for both AC and Non AC)
     var distanceElement = document.getElementById("distance_" + categorySlug);
     if (distanceElement) {
         distanceElement.textContent = costData.ac ? costData.ac.distance_km : (costData.non_ac ? costData.non_ac.distance_km : "-");
     }
 
-    // Update AC and Non AC prices and button status
     updatePriceAndButton(categorySlug, "ac", costData.ac);
     updatePriceAndButton(categorySlug, "non_ac", costData.non_ac);
 }
 
-// Function to update price details and book button for AC/Non-AC
 function updatePriceAndButton(categorySlug, carType, costDetails) {
     var priceElement = document.getElementById("price_" + carType + "_" + categorySlug);
-    // var permitElement = document.getElementById("permit_" + carType + "_" + categorySlug);
     var tollElement = document.getElementById("toll_" + carType + "_" + categorySlug);
-    // var betaElement = document.getElementById("beta_" + carType + "_" + categorySlug);
     var bookButton = document.querySelector(`button[data-category="${categorySlug}"][data-type="${carType}"]`);
     var hiddenPriceInput = document.getElementById(`hidden_price_${carType}_${categorySlug}`);
 
@@ -319,25 +301,17 @@ function updatePriceAndButton(categorySlug, carType, costDetails) {
     console.log("Updating price and button for:", carType, costDetails);
 
     if (costDetails && costDetails.cost) {
-        // Update price details
         priceElement.textContent = costDetails.cost;
-        // permitElement.textContent = costDetails.permit || "-";
         tollElement.textContent = costDetails.toll || "-";
-        // betaElement.textContent = costDetails.beta || "-";
 
         hiddenPriceInput.value = costDetails.cost;
 
-        // Enable book button if price is available
         bookButton.textContent = `Book ${carType === 'ac' ? 'A/c' : 'Non A/c'}`;
         bookButton.disabled = false;
     } else {
-        // If price details are not available
         priceElement.textContent = "Not Available";
-        // permitElement.textContent = "-";
         tollElement.textContent = "-";
-        // betaElement.textContent = "-";
 
-        // Disable book button and change text
         bookButton.textContent = `${carType === 'ac' ? 'A/c' : 'Non A/c'} Not Available`;
         bookButton.disabled = true;
     }
@@ -356,7 +330,7 @@ function getTimeSlot(pickupTime) {
     } else if (hour >= 18 && hour < 24) {
         return '6PM - 12AM';
     } else {
-        return null;  // Invalid time
+        return null;  
     }
 }
 
@@ -367,7 +341,6 @@ function syncHiddenFields(categorySlug) {
     const pickup_time = $('#pickup_time').val();
     const ridetype = $('#ridetype').val();
 
-    // Update hidden fields for the selected category (ac/non_ac)
     $(`input[name="source"]`).val(source);
     $(`input[name="destination"]`).val(destination);
     $(`input[name="pickup_date"]`).val(pickup_date);
@@ -375,14 +348,11 @@ function syncHiddenFields(categorySlug) {
     $(`input[name="ridetype"]`).val(ridetype);
 }
 
-// Capture the change event for the toll option radio buttons
 $('input[name="toll_option"]').change(function() {
     var tollOption = $('input[name="toll_option"]:checked').val();
     console.log("Toll option changed to: ", tollOption); 
-    fetchPricingDetails(tollOption);  // Trigger a new calculation with the updated toll option
+    fetchPricingDetails(tollOption); 
 });
-
-// Function to handle the AJAX request for fetching pricing details
 
 function fetchPricingDetails(tollOption) {
     var trip_type = $('#trip_type').val();
@@ -427,9 +397,8 @@ function fetchPricingDetails(tollOption) {
 
             clearAllCategoryData();
 
-            costs = result.costs;  // Store the costs data
+            costs = result.costs;  
 
-            // Loop through costs and update each category
             for (var category in costs) {
                 if (costs.hasOwnProperty(category)) {
                     updateCategoryDetails(category, costs[category]);
@@ -442,33 +411,27 @@ function fetchPricingDetails(tollOption) {
     });
 }
 
-// Trigger the fetchPricingDetails function on button click as well
 $("#check_fares").click(function(event) {
     event.preventDefault();
-    var tollOption = $('input[name="toll_option"]:checked').val(); // Get the selected toll option
+    var tollOption = $('input[name="toll_option"]:checked').val(); 
     fetchPricingDetails(tollOption);
 });
 
 $("#modify_action").click(function(event) {
     event.preventDefault();
     
-    // Enable form fields for modification
     $('#source').prop('disabled', false);
     $('#destination').prop('disabled', false);
     $('#pickup_date').prop('disabled', false);
     $('#pickup_time').prop('disabled', false);
 
-    // Change the "Check Fares" button to become active again
     $('#check_fares').prop('disabled', false);
 });
 
 $('form').on('submit', function(event) {
-    var categorySlug = $(this).find('input[name="car_type"]').val();  // Get car type (ac/non_ac)
-    syncHiddenFields(categorySlug);  // Sync hidden fields before form submission
+    var categorySlug = $(this).find('input[name="car_type"]').val(); 
+    syncHiddenFields(categorySlug);  
 });
-
-// });
-
 
 </script>
 

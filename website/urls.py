@@ -1,4 +1,3 @@
-# website/urls.py
 from django.urls import path
 from . import views
 from website import views
@@ -11,9 +10,9 @@ urlpatterns = [
     path('save-enquiry/', save_enquiry, name='save_enquiry'),
     path('bookride', views.bookride, name='bookride'),
     path('contact', AddContact.as_view(), name='contact'),
-    path('taxi_services', views.services, name='services'),
+    path('taxi_services', views.services, name='taxi_services'),
     path('sitemap.xml', views.sitemap, name='sitemap'),
-    path('airport-taxi', views.airporttaxi, name='airporttaxi'),
+    path('airport-taxi', views.airporttaxi, name='airport-taxi'),
     path('outstationcabs', views.outstationcabs, name='outstationcabs'),
     path('localtaxi', views.localtaxi, name='localtaxi'),
     path('blog', views.blog, name='blog'),
@@ -28,7 +27,6 @@ urlpatterns = [
     path('get_owner_details/', get_owner_details, name='get_owner_details'),
     path('check_vehicleno/',check_vehicleno,name='check_vehicleno'),
     path('login_view', views.login_view, name='login_view'),
-    # path('cabs_list', views.cabs_list, name='cabs_list'),
     path('search_url', search_url, name='search_url'),
     path('airportcabs_list', views.airportcabs_list, name='airportcabs_list'),
     path('airport_ride_pricing_details', AirportGetRidePricingDetails.as_view(), name='airport_ride_pricing_details'),
@@ -67,7 +65,6 @@ urlpatterns = [
     path('blog/taxi_companies', views.taxi_companies, name="taxi_companies"),
 
 
-    # airport blog ##############################################
 
     path('blog/reliable_rideshares', views.airport1, name="reliable_rideshares"),
     path('blog/airport_needs', views.airport2, name="airport_needs"),
@@ -95,7 +92,6 @@ urlpatterns = [
     path('blog/cashless_payments', views.airport24, name="cashless_payments"),
     path('blog/safety_during_pandemic', views.airport25, name="safety_during_pandemic"),
 
-#local_blogs #################################
     path('blog/local_future', views.local_future, name="local_future"),
     path('blog/better_environment', views.better_environment, name="better_environment"),
     path('blog/city_travel', views.city_travel, name="city_travel"),
@@ -124,7 +120,6 @@ urlpatterns = [
     path('blog/localcabs_best_for_airport', views.localcabs_best_for_airport, name="localcabs_best_for_airport"),
 
 
-    # outstation
 
     path('blog/guide_to_outstation', views.guide_to_outstation, name="guide_to_outstation"),
     path('blog/reasons_to_choose_oustationcabs', views.reasons_to_choose_oustationcabs, name="reasons_to_choose_oustationcabs"),

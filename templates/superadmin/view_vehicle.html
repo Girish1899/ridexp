@@ -1,14 +1,29 @@
 {% extends 'superadmin/base.html' %}
 {% load static %}
 {% block content%}
+<style>
+    .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 58px; 
+    height: 36px; 
+}
+.badge-success {
+        background-color: #28a745; 
+    }
+    
+.badge-danger {
+    background-color: #dc3545; 
+}
 
+</style>
 <div class="content-body">
     <div class="container-fluid">
         <div class="row page-titles mx-0">
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +33,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -37,7 +50,6 @@
                                         <th>Serial No</th>
                                         <th>Vehicle Id</th>
                                         <th>Owner Name / Owner Mobile</th>
-                                        <!-- <th>Owner Mobile</th> -->
                                         <th>Commission Type</th>
                                         <th>Vehicle Number</th>
                                         <th>Category/Brand/ Model</th>
@@ -85,15 +97,8 @@
                                                 No Image
                                             {% endif %}
                                         </td>
-                                        <td>
-                                            <span class="badge {% if i.model.brand.category.category_status == 'inactive' or i.owner.status == 'inactive' %}badge-danger{% else %}{% if i.vehicle_status == 'active' %}badge-success{% else %}badge-danger{% endif %}{% endif %}">
-                                                {% if i.model.brand.category.category_status == 'inactive' or i.model.brand.status == 'inactive' or i.model.status == 'inactive' or i.owner.status == 'inactive' %}
-                                                    inactive
-                                                {% else %}
-                                                    {{ i.vehicle_status }}
-                                                {% endif %}
-                                            </span>
-                                        </td>
+                                        <td><span class="badge {% if i.vehicle_status == 'active' %}bg-gradient-success{% else %}bg-gradient-danger{% endif %}">{{ i.vehicle_status }}</span></td>
+
                                         <td>{{i.block_reason}}</td>
                                         <td style="color: red;">{{ i.created_on }}</td>
                                         <td>
@@ -110,17 +115,9 @@
                                             <a href="#" class="btn btn-secondary" onclick="DeleteVehicle('{{ i.vehicle_id }}')"><i class="fa fa-trash"></i></a>&nbsp;
                                             <a href="#" class="btn btn-warning" onclick="HistoryVehicle('{{ i.vehicle_id }}')"><i class="fa fa-clock"></i></a>&nbsp;
                                             <a href="{% url 'vehicle' i.vehicle_id %}" class="btn btn-info"><i class="fa fa-eye"></i></a>&nbsp;
-                                            {% if i.model.brand.category.category_status != 'inactive' and i.model.brand.status != 'inactive' and i.model.status != 'inactive' and i.owner.status != 'inactive' %}
-                                            <button class="btn {% if i.vehicle_status == 'active' %}btn-success{% else %}btn-danger{% endif %}" onclick="toggleVehicleStatus('{{ i.vehicle_id }}', '{{ i.vehicle_status }}')" {% if i.owner.status != 'active' %}disabled{% endif %} >
+                                            <button class="btn {% if i.vehicle_status == 'active' %}btn-success{% else %}btn-danger{% endif %}" onclick="toggleVehicleStatus('{{ i.vehicle_id }}', '{{ i.vehicle_status }}')">
                                                 <i class="fa {% if i.vehicle_status == 'active' %}fa-thumbs-up{% else %}fa-thumbs-down{% endif %} text-white"></i>
                                             </button>
-                                            {% else %}
-                                            <button class="btn btn-link p-0 disabled" title="Cannot Change Status" style="border: none; background: none;">
-                                                <span class="badge badge-danger">
-                                                    <i class="fa fa-thumbs-down text-white fa-2x"></i> 
-                                                </span>
-                                            </button>
-                                            {% endif %}
                                         </td>
                                     </tr>
                                     {% endfor %}
@@ -134,30 +131,41 @@
     </div>
 </div>
 
-<!-- Modal -->
 <div class="modal fade" id="blockReasonModal" tabindex="-1" role="dialog" aria-labelledby="blockReasonModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="blockReasonModalLabel">Block Reason</h5>
+                <h5 class="modal-title" id="blockReasonModalLabel">Block Vehicle</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <input type="hidden" id="blockRideId">
-                <div class="form-group">
-                    <label for="blockReason">Reason</label>
-                    <textarea id="blockReason" class="form-control" rows="3" placeholder="Enter block reason" required></textarea>
-                </div>
+                <form id="blockReasonForm">
+                    <label for="blockReason">Select a reason:</label>
+                    <select id="blockReason" class="form-control">
+                        <option value="Driver_Misbehaviour">Driver Misbehaviour</option>
+                        <option value="Demanding_extra_charges">Demanding extra charges</option>
+                        <option value="Commission_not_paid">Commission not paid</option>
+                        <option value="Repeatedly_canceling_bookings">Repeatedly canceling bookings</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                    <div id="otherReasonField" style="display:none; margin-top: 10px;">
+                        <label for="otherReason">Enter reason:</label>
+                        <input type="text" id="otherReason" class="form-control" placeholder="Enter reason for blocking">
+                    </div>
+                </form>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="button" class="btn btn-primary" onclick="submitBlockReason()">Submit</button>
             </div>
         </div>
     </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
@@ -189,7 +197,7 @@
     };
 
     function HistoryVehicle(vehicle_id) {
-        window.location.href = "VehicleHistory/" + vehicle_id; // Add a slash here
+        window.location.href = "VehicleHistory/" + vehicle_id; 
     };
 
     function VerifyVehicle(vehicle_id, owner_verification_status) {
@@ -201,7 +209,7 @@
     var action = confirm("Have you verified this vehicle?");
     if (action != false) {
         $.ajax({
-            url: '{% url "VerifyVehicle" %}', // Ensure you have this URL correctly configured
+            url: '{% url "VerifyVehicle" %}',
             data: {
                 'vehicle_id': vehicle_id,
             },
@@ -209,7 +217,7 @@
             success: function (data) {
                 if (data.verified) {
                     alert("Vehicle Verified Successfully");
-                    location.reload(); // Reload the page to update the status
+                    location.reload(); 
                 }
             }
         });
@@ -217,25 +225,54 @@
 }
 
 </script>
+
+
 <script>
-    function toggleVehicleStatus(vehicle_id, current_status) {
-    var new_status = current_status === 'active' ? 'inactive' : 'active';
-    var confirmation = confirm("Are you sure you want to " + (current_status === 'active' ? "deactivate" : "activate") + " this vehicle?");
-    if (confirmation) {
-        if (new_status === 'inactive') {
-            var blockReason = prompt("Please provide a reason for blocking the vehicle:");
-            if (blockReason === null) {
-                return; // User cancelled the prompt
+    var selectedVehicleId = '';
+    var currentStatus = '';
+
+    function toggleVehicleStatus(vehicle_id, status) {
+        selectedVehicleId = vehicle_id;
+        currentStatus = status;
+
+        if (status === 'active') {
+            if (confirm("Are you sure you want to deactivate this vehicle?")) {
+                $('#blockReasonModal').modal('show');
             }
         } else {
-            var blockReason = '';
+            if (confirm("Are you sure you want to activate this vehicle?")) {
+                updateVehicleStatus('active', '');
+            }
         }
+    }
 
+    $('#blockReason').on('change', function() {
+        if ($(this).val() === 'other') {
+            $('#otherReasonField').show();
+        } else {
+            $('#otherReasonField').hide();
+        }
+    });
+
+    function submitBlockReason() {
+        var blockReason = $('#blockReason').val();
+        if (blockReason === 'other') {
+            blockReason = $('#otherReason').val();
+            if (!blockReason) {
+                alert('Please enter a reason');
+                return;
+            }
+        }
+        $('#blockReasonModal').modal('hide');
+        updateVehicleStatus('inactive', blockReason);
+    }
+
+    function updateVehicleStatus(new_status, blockReason) {
         $.ajax({
             url: '{% url "vehicleupdate_status" %}',
             type: 'POST',
             data: {
-                'vehicle_id': vehicle_id,
+                'vehicle_id': selectedVehicleId,
                 'new_status': new_status,
                 'block_reason': blockReason,
                 'csrfmiddlewaretoken': '{{ csrf_token }}'
@@ -246,7 +283,7 @@
                     alert("Vehicle status updated successfully.");
                     window.location.reload();
                 } else {
-                    alert("Failed to update Vehicle status: " + data.message);
+                    alert("Failed to update vehicle status: " + data.message);
                 }
             },
             error: function (xhr, status, error) {
@@ -254,6 +291,6 @@
             }
         });
     }
-}
 </script>
+
 {% endblock content %}

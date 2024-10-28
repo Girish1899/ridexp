@@ -7,15 +7,12 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
                 <ol class="breadcrumb" style="background-color: #98BDFF;">
-                    <li class="breadcrumb-item"><a href="{% url 'colorList' %}" style="color: white !important;">View
-                            Car Color</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
-                            Back</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'colorList' %}" style="color: white !important;">View Car Color</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
@@ -23,27 +20,24 @@
         <div class="col-xl-12">
             <div class="card my-4">
                 <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
-                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3"
-                        style="background-color: #F3797E;">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Color</h6>
                     </div>
                 </div>
 
                 <div class="card-body">
                     <div class="form-group row">
-                        <input type="hidden" class="form-control" id="color_id" name="color_id"
-                            value="{{ clist.0.color_id }}">
+                        <input type="hidden" class="form-control" id="color_id" name="color_id" value="{{ clist.0.color_id }}">
                             <input type="hidden" class="form-control" id="original_color_name" name="original_color_name" value="{{ clist.0.name }}">
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-2 col-form-label col-form-label-lg"
-                            style="color: #454545; font-size: 16px;">Car Color Name</label>
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Color Name</label>
                         <div class="col-sm-12">
-                            <input type="text" class="form-control form-control-lg" id="name" name="name"
-                                value="{{ clist.0.name }}">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ clist.0.name }}">
                         </div>
-                    </div>
+                    </div><br>
+                    
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
@@ -69,7 +63,6 @@
                 return;
             }
 
-            // Assuming you have a variable original_name to compare with the edited name
             var original_name = "{{ clist.0.name }}";
 
             if (name.trim() === original_color_name.trim()) {

@@ -21,7 +21,7 @@
     <header>
         <h1>Attach Your Vehicle with Ridexpress</h1>
     </header>
-    <!-- book ride -->
+
     <div class="book-ride py-120">
         <div class="container">
             <div class="row">
@@ -30,8 +30,8 @@
                         <div class="book-ride-head">
                             <h2 class="booking-title" style="color: #DB9710;"><span class="text-uppercase">Register Your Vehicle</span></h2>
                         </div>
-                        <!-- <form action="#"> -->
-                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
                                 <li class="nav-item" role="presentation">
                                   <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">OWNER DETAILS</button>
                                 </li>
@@ -108,7 +108,6 @@
                                 <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">                                    <br>
                                     <div class="welcome-text">
                                         <center><h4 style="color: #DB9710;">Owner Account Details</h4></center>
-                                        <!-- <span class="ml-1">Element</span> -->
                                     </div>
                                     <br>
                                 
@@ -171,14 +170,11 @@
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                       
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car Brand *</label>
                                         <div class="col-sm-4">
                                             <select id="brand" name="brand" class="form-control form-control-lg" style="height: 52px;" onchange="getmodel()">
                                                 <option value="" selected disabled>Select Car Brand</option>
-                                                <!-- Options will be dynamically added here -->
                                             </select>
                                         </div>
                                     </div>
@@ -188,12 +184,9 @@
                                         <div class="col-sm-4">
                                             <select id="model" name="model" class="form-control form-control-lg" style="height: 52px;">
                                                 <option value="" selected disabled>Select Car Model</option>
-                                                <!-- Options will be dynamically added here -->
                                             </select>
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                        
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Select a Year *</label>
                                         <div class="col-sm-4">
                                             <select class="form-control form-control-lg" id="year" name="year" style="height: 52px;">
@@ -212,9 +205,7 @@
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                        
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;"> Transmission Type *</label>
                                         <div class="col-sm-4">
                                             <select id="transmission" name="transmission" class="form-control form-control-lg" style="height: 52px;">
@@ -236,9 +227,7 @@
                                                 {% endfor %}
                                             </select>
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                        
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Car Type *</label>
                                         <div class="col-sm-4">
                                             <select class="form-control form-control-lg" id="car_type" name="car_type" style="height: 52px;">
@@ -277,9 +266,7 @@
                                             <input type="file" class="form-control form-control-lg" id="registration_certificate" name="registration_certificate" >
                                             <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                       
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">FC Certificate *</label>
                                         <div class="col-sm-4">
                                             <input type="file" class="form-control form-control-lg" id="fc_certificate" name="fc_certificate">
@@ -293,9 +280,7 @@
                                             <input type="file" class="form-control form-control-lg" id="insurance_policy" name="insurance_policy">
                                             <img id="preview4" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                       
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style="font-size: 16px;">Tax Details *</label>
                                         <div class="col-sm-4">
                                             <input type="file" class="form-control form-control-lg" id="tax_details" name="tax_details">
@@ -309,9 +294,7 @@
                                             <input type="file" class="form-control form-control-lg" id="permit_details" name="permit_details">
                                             <img id="preview6" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
                                         </div>
-                                        <!-- </div> -->
-
-                                        <!-- <div class="form-group row"> -->
+                                        
                                         <label class="col-sm-2 col-form-label col-form-label-lg" style=" font-size: 16px;">Emission Test *</label>
                                         <div class="col-sm-4">
                                             <input type="file" class="form-control form-control-lg" id="emission_test" name="emission_test">
@@ -323,7 +306,6 @@
                                     </div></center>
                                 </div>
                             </div>
-                        <!-- </form> -->
                     </div>      
                 </div>
             </div>
@@ -343,13 +325,10 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script>
     function nextTab() {
-        // Find the active tab
         let activeTab = document.querySelector('.nav-tabs .nav-link.active');
         
-        // Find the next tab in the list
         let nextTab = activeTab.closest('li').nextElementSibling;
 
-        // If there is a next tab, click it
         if (nextTab && nextTab.querySelector('button')) {
             nextTab.querySelector('button').click();
         }
@@ -360,10 +339,8 @@
 
     const currentYear = new Date().getFullYear();
 
-    // Get the year dropdown element
     const yearDropdown = document.getElementById('year');
 
-    // Add years from 2010 to next year
     for (let year = 2010; year <= currentYear; year++) {
         const option = document.createElement('option');
         option.value = year;
@@ -424,7 +401,6 @@
         });
     }
 
-    // Call the function to enforce input restrictions
     enforceInputRestrictions();
 
     $(document).ready(function () {
@@ -445,9 +421,9 @@
                     $('#ac_number').val(data.ac_number).prop('readonly', true);
                     $('#bankname').val(data.bankname).prop('readonly', true);
                     $('#ifsc_code').val(data.ifsc_code).prop('readonly', true);
-                    $('#image').attr('src', data.image); // Set image source
-                    $('#address_proof').attr('src', data.address_proof); // Set address proof source
-                    $('#identity').attr('src', data.identity); // Set address proof source
+                    $('#image').attr('src', data.image); 
+                    $('#address_proof').attr('src', data.address_proof); 
+                    $('#identity').attr('src', data.identity);
                 },
                 error: function(xhr, status, error) {
                     if(xhr.status === 404) {
@@ -474,7 +450,6 @@
             var part3 = $('#part3').val();
             var part4 = $('#part4').val();
 
-            // Concatenate the vehicle number
             var name = $('#name').val();
             var phone_number = $('#phone_number').val();
             var email = $('#email').val();
@@ -486,7 +461,6 @@
 
             var owner = $('owner_id').val();
             var Vehicle_Number = part1 + part2 + part3 + part4;
-            // var Vehicle_Number = $('#Vehicle_Number').val();
             var model = $('#model').val();
             var year = $('#year').val();
             var insurance_expiry = $('#insurance_expiry').val();
@@ -572,7 +546,6 @@
                 return;
             }
 
-             // Validate email format
              var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
@@ -585,7 +558,6 @@
                 return;
             }
 
-            // Validate IFSC code format (4 letters followed by 7 digits)
             var ifscPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
             if (!ifscPattern.test(ifsc_code)) {
                 alert("Please enter a valid IFSC code.");
@@ -611,10 +583,10 @@
                             contentType: false,
                             success: function (result) {
                                 if (result.status === "Success") {
-                                    alert(result.message);  // Display the message from the server
+                                    alert(result.message);  
                                     location.href = '{% url "home" %}';
                                 } else {
-                                    alert("Error: " + result.message);  // Display error message if status is not success
+                                    alert("Error: " + result.message); 
                                 }
                             },
                             error: function (xhr, status, error) {

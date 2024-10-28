@@ -28,7 +28,6 @@ from datetime import date, timedelta
 from django.utils import timezone
 
 
-# Create your views here.
 @login_required(login_url='login')
 def index(request):
     cust_count = Customer.objects.count()
@@ -47,20 +46,17 @@ def index(request):
 
 def call_history_view(request, ride_id):
     try:
-        ride = RideDetails.objects.get(ride_id=ride_id)  # Assuming ride_id is the field in the model
+        ride = RideDetails.objects.get(ride_id=ride_id) 
     except RideDetails.DoesNotExist:
-        # Handle the case where the ride does not exist
         ride = None
 
-    # Pass the ride object to the template along with the ride_id
     context = {
         'ride_id': ride_id,
-        'ride': ride,  # Pass the specific ride details
+        'ride': ride,  
     }
     return render(request, 'telecaller/callhistory.html', context)
 
 
-# customer###################################
 
 def check_phonenumber(request):
     phone_number = request.GET.get('phone_number', None)
@@ -159,7 +155,6 @@ class UpdateCustomer(APIView):
 
         return JsonResponse({'success': True}, status=200)
 
-# ride details ##########################################
 
 class customerGetRidePricingDetails(APIView):
     def post(self, request):
@@ -197,14 +192,12 @@ class customerGetRidePricingDetails(APIView):
 
         costs = {}
 
-        # Fetch the ridetype instance
         ride_type_instance = Ridetype.objects.filter(ridetype_id=ridetype_id).first()
         if not ride_type_instance:
             return JsonResponse({'error': 'Invalid ridetype'}, status=400)
 
         print(f"Ride Type: {ride_type_instance.name}, Trip Type: {trip_type}, Toll Option: {toll_option}")
 
-        # Call appropriate calculation function based on trip_type
         if ride_type_instance.name == 'outstation':
             pricing_details = self.get_outstation_pricing(time_slot, ridetype_id, trip_type)
             if trip_type == 'round_trip':
@@ -231,7 +224,6 @@ class customerGetRidePricingDetails(APIView):
 
     def get_airport_pricing(self, time_slot, ridetype_id, trip_type):
         """Fetch pricing for airport rides with or without toll."""
-        # You can modify this to include toll_option-based pricing if needed
         return Pricing.objects.select_related('category').filter(
             slots=time_slot, ridetype_id=ridetype_id,trip_type=trip_type
         )
@@ -247,7 +239,7 @@ class customerGetRidePricingDetails(APIView):
         pricing_dict = {}
         for price in pricing_details:
             category_name = price.category.category_name
-            car_type = price.car_type.lower()  # 'ac' or 'non ac'
+            car_type = price.car_type.lower() 
 
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
@@ -290,51 +282,52 @@ class customerGetRidePricingDetails(APIView):
     def calculate_outstation_roundtrip(self, request, pricing_details, distance):
         """Calculate pricing for outstation roundtrip rides based on pickup and drop date."""
         from datetime import datetime
+        from decimal import Decimal
 
-        # Parse the pickup and drop date/time from the request
         pickup_date_str = request.POST.get('pickup_date')
         pickup_time_str = request.POST.get('pickup_time')
         drop_date_str = request.POST.get('drop_date')
         drop_time_str = request.POST.get('drop_time')
 
-        # Ensure that pickup and drop date/time are provided
         if not pickup_date_str or not pickup_time_str:
             return {"error": "Pickup date and time must be provided."}
         if not drop_date_str or not drop_time_str:
             return {"error": "Drop date and time must be provided."}
 
-        # Combine pickup date and time for parsing
         pickup_datetime_str = f"{pickup_date_str} {pickup_time_str}"
-        
-        # Combine drop date and time for parsing
         drop_datetime_str = f"{drop_date_str} {drop_time_str}"
 
         try:
-            # Convert to datetime objects
             pickup_datetime = datetime.strptime(pickup_datetime_str, "%Y-%m-%d %H:%M")
             drop_datetime = datetime.strptime(drop_datetime_str, "%Y-%m-%d %H:%M")
         except ValueError as e:
-            # Return a meaningful error message in case of parsing issues
             return {"error": f"Invalid date/time format: {str(e)}"}
 
-        # Calculate the number of days based on pickup and drop dates
         num_days = self.calculate_days(pickup_datetime, drop_datetime)
 
-        # Cap the distance based on the number of days (250 km per day)
-        daily_km_cap = 250 * num_days
-        applicable_distance = max(distance, daily_km_cap)
-
-        # Calculate the pricing for each vehicle category and type
         pricing_dict = {}
+
         for price in pricing_details:
             category_name = price.category.category_name
             car_type = price.car_type.lower()
             toll_price = Decimal(str(price.toll_price))
+
+            if 'mini' in category_name.lower() or 'sedan' in category_name.lower():
+                daily_km_cap = 250 * num_days
+            else:
+                daily_km_cap = 300 * num_days
+
+            print(f"Total allowed km for {num_days} day(s) for {category_name}: {daily_km_cap} km")
+
+            applicable_distance = max(distance, daily_km_cap)
+            print(f"Applicable distance for {category_name} based on days: {applicable_distance} km")
+
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            # Calculate the cost for the applicable distance and number of days
-            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price,toll_price=toll_price, num_days=num_days)
+            pricing_dict[category_name][car_type] = self.calculate_cost(
+                applicable_distance, price, toll_price=toll_price, num_days=num_days
+            )
 
         return pricing_dict
 
@@ -363,7 +356,6 @@ class customerGetRidePricingDetails(APIView):
 
         driver_beta_decimal = Decimal(str(price.driver_beta)) * Decimal(str(num_days))
 
-        # Calculate total cost
 
         total_cost = (Decimal(distance) * price_per_km_decimal) + permit_decimal + toll_price_decimal + driver_beta_decimal
         total_cost = round(total_cost, 0)
@@ -377,7 +369,6 @@ class customerGetRidePricingDetails(APIView):
             'category': price.category.category_name,
         }
 
-# @method_decorator(login_required(login_url='login'), name='dispatch')
 class AddRide(TemplateView):
     template_name = "telecaller/add_ride.html"
     
@@ -404,9 +395,6 @@ class AddRide(TemplateView):
     def post(self, request):
         try:
             print("Fetching POST data")
-            # Convert date and time
-            # pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
-            # pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
             company_format = request.POST['company_format']
             ride_type_id = request.POST['ridetype']
             source = request.POST.get('source')
@@ -417,7 +405,7 @@ class AddRide(TemplateView):
             total_fare = request.POST.get('total_fare')
             customer_id = request.POST['customer']
             customer_notes = request.POST['customer_notes']
-            car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            car_type = request.POST.get('car_type', '').strip()  
             slots = determine_time_slot(pickup_time)
             ride_status = request.POST['ride_status']
             phone_number = request.POST['phone_number']
@@ -431,7 +419,6 @@ class AddRide(TemplateView):
             try:
                 customer = Customer.objects.get(phone_number=phone_number)
             except Customer.DoesNotExist:
-                # Create new customer
                 last_customer = Customer.objects.all().order_by('-customer_id').first()
                 new_customer_id = last_customer.customer_id + 1 if last_customer else 1
                 customer_company_format = f'CUST{new_customer_id:02}'
@@ -450,15 +437,10 @@ class AddRide(TemplateView):
                 customer.save()
             print(f"Created new customer: {customer}")
 
-            # Ensure objects exist in database before saving
             ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
             category_name = category.split('|')[0]
             car_type_name = category.split('|')[1]
             category_instance = Category.objects.get(category_name=category_name)
-
-            # Retrieve pricing instance
-            # trip_type = request.POST.get('trip_type', '').strip()
-            # print('trip_type from request:', trip_type)  # This should print the trip_type value
 
             try:
                 if ridetype.name.lower() == 'local':
@@ -470,9 +452,8 @@ class AddRide(TemplateView):
                     )
                     
                 else:
-                # Exclude triptype filter for local rides
                     trip_type = request.POST.get('trip_type', '').strip()
-                    print('trip_type from request:', trip_type)  # This should print the trip_type value
+                    print('trip_type from request:', trip_type)  
                     pricing_instance = Pricing.objects.get(
                         category=category_instance,
                         car_type=car_type_name,
@@ -491,11 +472,9 @@ class AddRide(TemplateView):
 
             print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
-            # Determine ride status based on pickup date
             today = date.today().isoformat()
             ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
 
-            # Use the next company format for the ride
             next_company_format = self.get_context_data()['next_company_format']
 
             print(f'company_format: {next_company_format}')
@@ -527,7 +506,7 @@ class AddRide(TemplateView):
                 cancelled_by=request.user,
                 created_by=request.user,
                 updated_by=request.user,
-                pricing = pricing_instance,  # Set the Pricing instance
+                pricing = pricing_instance,  
 
             )
             ride_details.save()
@@ -575,7 +554,6 @@ class AddRide(TemplateView):
             return JsonResponse({'status': 'Error', 'message': str(e)})
 
 def determine_time_slot(pickup_time):
-    # Determine the time slot based on pickup_time_str
     pickup_time = datetime.strptime(pickup_time, '%H:%M').time()
     if time(0, 0) <= pickup_time < time(6, 0):
         return '12AM - 6AM'
@@ -600,18 +578,16 @@ class RideList(ListView):
         context['bookings'] = RideDetails.objects.filter(ride_status='currentbookings')
         context['categories'] = Category.objects.all() 
         context['vehicles'] = Vehicle.objects.all()  
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         
         return context
 
     def get_queryset(self):
         today = date.today()
-        # Update ride status for rides with a past pickup date
         past_rides = RideDetails.objects.filter(pickup_date__lt=today, ride_status='currentbookings')
         past_rides.update(ride_status='pendingbookings')
     
         
-        # Fetch rides with a pickup date of today and status as current bookings
         current_rides = RideDetails.objects.filter(ride_status='currentbookings', pickup_date=today)
 
         print(f"Current rides count: {current_rides.count()}")
@@ -621,32 +597,28 @@ class RideList(ListView):
             current_rides = current_rides.filter(ridetype_id=service_type)
         return current_rides
 
-#################################### advance bookings ###########################################
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AdvanceBookingsList(ListView):
     model = RideDetails
-    template_name = "telecaller/advance_bookings.html"  # Ensure you create this template
+    template_name = "telecaller/advance_bookings.html"  
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
         today = date.today()
         
-        # Update ride status for rides where the pickup date is today
         today_rides = RideDetails.objects.filter(pickup_date=today, ride_status='advancebookings')
         today_rides.update(ride_status='currentbookings')
         
-        # Fetch rides with a pickup date greater than today and status as advance bookings
         advance_rides = RideDetails.objects.filter(ride_status='advancebookings', pickup_date__gt=today)
         
         return advance_rides
     
-# cancel status update
 
 def update_ride_status(request, ride_id):
     if request.method == 'POST':
@@ -672,17 +644,15 @@ def update_ride_status(request, ride_id):
 
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
 
-# assigned ride list##################################################################################################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AssignedRideList(ListView):
     model = RideDetails
     template_name = "telecaller/assigned_rides.html"
 
     def get_queryset(self):
-        # Get only rides that are assigned
         return RideDetails.objects.filter(Q(ride_status='assignbookings')).select_related('driver')
 
-# ongoing rides########################################################################################################
+
 class OngoingRideList(ListView):
     model = RideDetails
     template_name = "telecaller/ongoing_rides.html"
@@ -690,7 +660,6 @@ class OngoingRideList(ListView):
     def get_queryset(self):
         return RideDetails.objects.filter(ride_status='ongoingbookings') 
     
-# completed rides########################################################################################################
 class CompletedRideList(ListView):
     model = RideDetails
     template_name = "telecaller/completed_rides.html"
@@ -699,17 +668,16 @@ class CompletedRideList(ListView):
         return RideDetails.objects.filter(ride_status='completedbookings') 
 
 
-# assign driver###########################################################################################################
 def assign_driver(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        driver_id = data.get('driver_id')  # This will be company_format
+        driver_id = data.get('driver_id') 
         ride_id = data.get('ride_id')
 
         try:
-            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
-            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
-            ride.driver = driver  # Assign the driver object
+            ride = RideDetails.objects.get(ride_id=ride_id)  
+            driver = Driver.objects.get(company_format=driver_id)  
+            ride.driver = driver  
             ride.ride_status = 'assignbookings'
             
             ride.save()
@@ -777,7 +745,6 @@ class UpdateRide(APIView):
     @csrf_exempt
     def post(self, request):
         
-            # Retrieve and validate ride_id from request
             ride_id = request.POST.get('ride_id')
             if not ride_id:
                 return JsonResponse({'success': False, 'error': 'Missing ride_id'}, status=400)
@@ -787,13 +754,11 @@ class UpdateRide(APIView):
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid ride_id'}, status=400)
             
-            # Retrieve the ride object
             try:
                 ride = RideDetails.objects.get(ride_id=ride_id)
             except RideDetails.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Ride not found'}, status=404)
             
-            # Update customer if provided
             customer_id = request.POST.get('customer', None)
             if customer_id:
                 try:
@@ -803,7 +768,6 @@ class UpdateRide(APIView):
                 except (ValueError, Customer.DoesNotExist):
                     return JsonResponse({'success': False, 'error': 'Invalid customer_id'}, status=400)
             
-            # Update the ride with new data
             ride.source = request.POST.get('source', ride.source)
             ride.destination = request.POST.get('destination', ride.destination)
             ride.pickup_date = request.POST.get('pickup_date', ride.pickup_date)
@@ -813,7 +777,6 @@ class UpdateRide(APIView):
             ride.updated_by = request.user
             ride.save()
 
-            # Create a RideDetailsHistory entry after updating the ride
             RideDetailsHistory.objects.create(
                 ride_id=ride.ride_id,
                 company_format=ride.company_format,
@@ -872,19 +835,17 @@ def telecaller_profile_view(request):
     profile = get_object_or_404(Profile, user=request.user, type='telecaller')
     return render(request, 'telecaller/app-profile.html', {'profile': profile})
     
-# @method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdateUserView(View):
     def post(self, request, *args, **kwargs):
         username = request.POST.get('username')
         password = request.POST.get('password')
 
         if request.user:
-            user = request.user            # Simple validation
+            user = request.user            
             if username and password:
                 user.username = username
                 user.set_password(password)
                 user.save()
-                #user = authenticate(username=user.username, password=password)
                 if user is not None:
                     return JsonResponse({'status': 'success'}, status=200)
                 return JsonResponse({'status': 'error', 'message': 'Authentication failed'}, status=400)
@@ -912,12 +873,10 @@ class SendOtp(View):
     def post(self, request):
         phone_number = request.POST.get('phone_number')
         customer_name = request.POST.get('customer_name')
-        otp = str(random.randint(100000, 999999))  # Generate a random 6-digit OTP
+        otp = str(random.randint(100000, 999999))  
 
-        # Store OTP in cache with a 5-minute expiration
         cache.set(f'otp_{phone_number}', otp, timeout=300)
 
-        # WhatsApp API payload for OTP
         whatsapp_payload = {
             "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
             "campaignName": "otp_verification",
@@ -933,7 +892,7 @@ class SendOtp(View):
                     "parameters": [
                         {
                             "type": "text",
-                            "text": otp  # Send OTP in the message
+                            "text": otp  
                         }
                     ]
                 }
@@ -973,7 +932,6 @@ class VerifyOtp(View):
             return JsonResponse({'status': 'Error', 'message': 'Incorrect OTP.'})
 
 
-##################    cancel booking    #################################################################### 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class CancelledListView(ListView):
     model = RideDetails
@@ -982,8 +940,7 @@ class CancelledListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        # Pass a sample ride_id or adjust based on your logic
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
@@ -1062,19 +1019,16 @@ def cancel_ride(request):
     return JsonResponse({'status': 'failed'}, status=400)
 
         
-# driver view
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DriverListView(ListView):
     model = Driver
     template_name = "telecaller/view_driver.html"
         
 
-# enquiry ###############################
 class EnquiryList(ListView):
     model = Enquiry
     template_name = "telecaller/view_enquiry.html"     
         
-# package category #######################################################################
 
 @login_required(login_url='login')   
 def check_package_category(request):
@@ -1136,12 +1090,10 @@ class UpdatePackageCategory(APIView):
         package_category_id = request.POST['package_category_id']
         package = PackageCategories.objects.get(package_category_id=package_category_id)
 
-        # Update the ride type with new data
         package.category_name = request.POST['category_name']
         package.updated_by = request.user
         package.save()
 
-        # Create another RidetypeHistory entry after updating the ride type
         PackageCategoriesHistory.objects.create(
             package_category_id=package.package_category_id,
             category_name=package.category_name,
@@ -1165,7 +1117,6 @@ class PackageCategoryHistoryView(TemplateView):
         context['history'] = history
         return context
     
-# packages ############
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addwebpackages(TemplateView):
     template_name = "telecaller/add_webpackages.html"
@@ -1178,10 +1129,8 @@ class addwebpackages(TemplateView):
 
     def post(self, request):
         try:
-            # Print that the POST request is received
             print("POST request received")
 
-            # Retrieve data from POST request
             title = request.POST.get('title')
             slug = slugify(title)
             package_category_id = request.POST.get('package_category')
@@ -1201,22 +1150,18 @@ class addwebpackages(TemplateView):
             h1tag = request.POST.get('h1tag')
             status = request.POST.get('status')
 
-            # Print received form data
             print(f"Form data: title={title}, category_id={package_category_id}, description={description}")
 
-            # Validate required fields
             if not title or not package_category_id:
                 print("Missing required fields: title or category")
                 return JsonResponse({'status': "Failed", 'error': "Title and category are required."}, status=400)
 
-            # Fetch category object
             try:
                 package_category = PackageCategories.objects.get(package_category_id=package_category_id)
             except PackageCategories.DoesNotExist:
                 print(f"Package category not found: {package_category_id}")
                 return JsonResponse({'status': "Failed", 'error': "Invalid package category."}, status=400)
 
-            # Create package object
             webpackage = WebsitePackages(
                 title=title,
                 slug=slug,
@@ -1240,13 +1185,11 @@ class addwebpackages(TemplateView):
                 updated_by=request.user
             )
 
-            # Save the package
             webpackage.save()
             print("Package saved successfully")
             return JsonResponse({'status': "Success"})
 
         except Exception as e:
-            # Print the exception
             print(f"Error saving package: {e}")
             return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
     
@@ -1255,6 +1198,10 @@ class addwebpackages(TemplateView):
 class webPackageList(ListView):
     model = WebsitePackages
     template_name = "telecaller/view_webpackages.html"
+    context_object_name = 'webpackages'
+    
+    def get_queryset(self):
+        return WebsitePackages.objects.filter(created_by=self.request.user)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeletewebPackages(View):
@@ -1345,7 +1292,6 @@ class AddBlogView(TemplateView):
         try:
             print("POST request received")
 
-            # Retrieve data from POST request
             title = request.POST.get('title')
             slug = slugify(title)
             description = request.POST.get('description')
@@ -1381,7 +1327,6 @@ class AddBlogView(TemplateView):
                 updated_by=request.user
             )
 
-            # Process image if uploaded
             if image:
                 try:
                     print(f"Processing image: {image.name}")
@@ -1389,7 +1334,6 @@ class AddBlogView(TemplateView):
                     img = img.resize((880, 450), Image.LANCZOS)
                     file_extension = os.path.splitext(image.name)[1].lower()
 
-                    # Define format based on extension
                     format = 'JPEG' if file_extension in ['.jpg', '.jpeg'] else 'PNG' if file_extension == '.png' else 'GIF'
 
                     img_io = BytesIO()
@@ -1405,7 +1349,6 @@ class AddBlogView(TemplateView):
             return JsonResponse({'status': "Success"})
 
         except Exception as e:
-            # Print the exception
             print(f"Error saving blogs: {e}")
             return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
 
@@ -1413,6 +1356,10 @@ class AddBlogView(TemplateView):
 class BlogListView(ListView):
     model = Blogs
     template_name = "telecaller/view_blog.html"
+    context_object_name = 'blogs'
+    
+    def get_queryset(self):
+        return Blogs.objects.filter(created_by=self.request.user)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class webDeleteBlogs(View):
@@ -1461,12 +1408,11 @@ class UpdatewebBlogs(APIView):
         except Blogs.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Blog not found'}, status=404)
 
-        # Update fields
         blog.title = title
         blog.slug=slug
         blog.description = description
         if image:
-            blog.image = image  # Update the image if a new one is uploaded
+            blog.image = image  
         blog.image_link = image_link
         blog.facebook = facebook
         blog.instagram = instagram
@@ -1478,7 +1424,6 @@ class UpdatewebBlogs(APIView):
         blog.meta_keywords = meta_keywords
         blog.h1tag = h1tag
 
-        # Save the updated blog entry
         blog.save()
 
         return JsonResponse({'success': True}, status=200)    

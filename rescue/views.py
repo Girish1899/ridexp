@@ -11,7 +11,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
 
 
-# Create your views here.
 @login_required(login_url='login')
 def rescueindex(request):
     cust_count = Customer.objects.count()
@@ -27,7 +26,6 @@ def rescueindex(request):
     }
     return render(request,'rescue/rescueindex.html',context)
 
-# customer##############################
 
 def check_phonenumber(request):
     phone_number = request.GET.get('phone_number', None)
@@ -63,7 +61,6 @@ class UpdateCustomer(APIView):
         customer_id = request.POST['customer_id']
         customer = Customer.objects.get(customer_id=customer_id)
 
-        # Update the customer with new data
         customer.company_format = request.POST['company_format']
         customer.customer_name = request.POST['customer_name']
         customer.phone_number = request.POST['phone_number']
@@ -73,7 +70,6 @@ class UpdateCustomer(APIView):
         customer.updated_by = request.user
         customer.save()
 
-        # Create another CustomerHistory entry after updating the customer
         CustomerHistory.objects.create(
             customer_id=customer.customer_id,
             company_format=customer.company_format,
@@ -90,7 +86,6 @@ class UpdateCustomer(APIView):
 
         return JsonResponse({'success': True}, status=200)
 
-# add bookings inside superadmin##########################################
 
 class AddRide(TemplateView):
     template_name = "rescue/add_ride.html"
@@ -138,7 +133,6 @@ class AddRide(TemplateView):
             try:
                 customer = Customer.objects.get(phone_number=phone_number)
             except Customer.DoesNotExist:
-                # Create new customer
                 last_customer = Customer.objects.all().order_by('-customer_id').first()
                 new_customer_id = last_customer.customer_id + 1 if last_customer else 1
                 customer_company_format = f'CUST{new_customer_id:02}'
@@ -156,15 +150,12 @@ class AddRide(TemplateView):
                 customer.save()
                 customer_id = customer.customer_id
 
-            # Ensure objects exist in database before saving
             ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
             model = Model.objects.get(model_id=model_id)
 
-            # Determine ride status based on pickup date
             today = date.today().isoformat()
             ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
 
-            # Use the next company format for the ride
             next_company_format = self.get_context_data()['next_company_format']
             
             ride_details = RideDetails(
@@ -201,66 +192,57 @@ class RideList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
         today = date.today()
-        # Update ride status for rides with a past pickup date
         past_rides = RideDetails.objects.filter(pickup_date__lt=today, ride_status='currentbookings')
         past_rides.update(ride_status='pendingbookings')
         
-        # Fetch rides with a pickup date of today and status as current bookings
         current_rides = RideDetails.objects.filter(ride_status='currentbookings', pickup_date=today)
         
         return current_rides
 
-#################################### advance bookings ###########################################
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AdvanceBookingsList(ListView):
     model = RideDetails
-    template_name = "rescue/advance_bookings.html"  # Ensure you create this template
+    template_name = "rescue/advance_bookings.html"  
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
         today = date.today()
         
-        # Update ride status for rides where the pickup date is today
         today_rides = RideDetails.objects.filter(pickup_date=today, ride_status='advancebookings')
         today_rides.update(ride_status='currentbookings')
         
-        # Fetch rides with a pickup date greater than today and status as advance bookings
         advance_rides = RideDetails.objects.filter(ride_status='advancebookings', pickup_date__gt=today)
         
         return advance_rides
     
-##############################################################################################################   
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class PendingBookingsList(ListView):
     model = RideDetails
-    template_name = "rescue/pending_bookings.html"  # Ensure you create this template
+    template_name = "rescue/pending_bookings.html"  
 
     def get_queryset(self):
         today = date.today()
         return RideDetails.objects.filter(ride_status='pendingbookings', pickup_date__lt=today)
     
-# assigned ride list##################################################################################################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AssignedRideList(ListView):
     model = RideDetails
     template_name = "rescue/assigned_rides.html"
 
     def get_queryset(self):
-        # Get only rides that are assigned
         return RideDetails.objects.filter(Q(ride_status='assignbookings')).select_related('driver')
 
-# ongoing rides########################################################################################################
 class OngoingRideList(ListView):
     model = RideDetails
     template_name = "rescue/ongoing_rides.html"
@@ -268,7 +250,6 @@ class OngoingRideList(ListView):
     def get_queryset(self):
         return RideDetails.objects.filter(ride_status='ongoingbookings') 
     
-# completed rides########################################################################################################
 class CompletedRideList(ListView):
     model = RideDetails
     template_name = "rescue/completed_rides.html"
@@ -276,7 +257,6 @@ class CompletedRideList(ListView):
     def get_queryset(self):
         return RideDetails.objects.filter(ride_status='completedbookings') 
     
-# invoice rides########################################################################################################
 
 class InvoiceView(DetailView):
     model = RideDetails
@@ -288,17 +268,16 @@ class InvoiceView(DetailView):
         return get_object_or_404(RideDetails, ride_id=ride_id)
 
 
-# assign driver###########################################################################################################
 def assign_driver(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        driver_id = data.get('driver_id')  # This will be company_format
+        driver_id = data.get('driver_id')  
         ride_id = data.get('ride_id')
 
         try:
-            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
-            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
-            ride.driver = driver  # Assign the driver object
+            ride = RideDetails.objects.get(ride_id=ride_id)  
+            driver = Driver.objects.get(company_format=driver_id)  
+            ride.driver = driver  
             ride.ride_status = 'assignbookings'
             ride.assigned_by=request.user
             ride.save()
@@ -366,7 +345,6 @@ class UpdateRide(APIView):
     @csrf_exempt
     def post(self, request):
         
-            # Retrieve and validate ride_id from request
             ride_id = request.POST.get('ride_id')
             if not ride_id:
                 return JsonResponse({'success': False, 'error': 'Missing ride_id'}, status=400)
@@ -376,13 +354,11 @@ class UpdateRide(APIView):
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid ride_id'}, status=400)
             
-            # Retrieve the ride object
             try:
                 ride = RideDetails.objects.get(ride_id=ride_id)
             except RideDetails.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Ride not found'}, status=404)
             
-            # Update customer if provided
             customer_id = request.POST.get('customer', None)
             if customer_id:
                 try:
@@ -392,7 +368,6 @@ class UpdateRide(APIView):
                 except (ValueError, Customer.DoesNotExist):
                     return JsonResponse({'success': False, 'error': 'Invalid customer_id'}, status=400)
             
-            # Update the ride with new data
             ride.source = request.POST.get('source', ride.source)
             ride.destination = request.POST.get('destination', ride.destination)
             ride.pickup_date = request.POST.get('pickup_date', ride.pickup_date)
@@ -402,7 +377,6 @@ class UpdateRide(APIView):
             ride.updated_by = request.user
             ride.save()
 
-            # Create a RideDetailsHistory entry after updating the ride
             RideDetailsHistory.objects.create(
                 ride_id=ride.ride_id,
                 company_format=ride.company_format,
@@ -441,10 +415,6 @@ class RideDetailsHistoryView(TemplateView):
         context['history'] = history
         return context
 
-
-
-
-# driver#######################################################
 
 def fetch_vehicle_details(request):
     if request.method == "GET":
@@ -506,7 +476,6 @@ class UpdateDriverView(APIView):
     @csrf_exempt
     def post(self, request):
         try:
-            # Fetch and validate inputs
             driver_id = request.POST.get('driver_id')
             vehicle_id = request.POST.get('vehicle_id', None)
 
@@ -518,13 +487,11 @@ class UpdateDriverView(APIView):
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid driver_id format'}, status=400)
             
-            # Fetch the driver instance
             try:
                 driver = Driver.objects.get(driver_id=driver_id)
             except Driver.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Driver not found'}, status=404)
 
-            # Fetch the vehicle instance if vehicle_id is provided
             if vehicle_id:
                 try:
                     vehicle_id = int(vehicle_id)
@@ -533,7 +500,6 @@ class UpdateDriverView(APIView):
                 except (ValueError, Vehicle.DoesNotExist):
                     return JsonResponse({'success': False, 'error': 'Vehicle not found'}, status=404)
 
-            # Update the driver with new data
             driver.name = request.POST.get('name', driver.name)
             driver.phone_number = request.POST.get('phone_number', driver.phone_number)
             driver.email = request.POST.get('email', driver.email)
@@ -548,7 +514,6 @@ class UpdateDriverView(APIView):
             driver.updated_by = request.user
             driver.save()
 
-            # Create another DriverHistory entry after updating the driver
             DriverHistory.objects.create(
                 driver_id=driver.driver_id,
                 vehicle=driver.vehicle,
@@ -588,19 +553,17 @@ class UpdateUserView(View):
         password = request.POST.get('password')
 
         if request.user:
-            user = request.user            # Simple validation
+            user = request.user            
             if username and password:
                 user.username = username
                 user.set_password(password)
                 user.save()
-                #user = authenticate(username=user.username, password=password)
                 if user is not None:
                     return JsonResponse({'status': 'success'}, status=200)
                 return JsonResponse({'status': 'error', 'message': 'Authentication failed'}, status=400)
             return JsonResponse({'status': 'error', 'message': 'Invalid data'}, status=400)
         return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
     
-##################    cancel booking    #################################################################### 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class CancelledListView(ListView):
     model = RideDetails
@@ -609,8 +572,7 @@ class CancelledListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        # Pass a sample ride_id or adjust based on your logic
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):

@@ -1,0 +1,188 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Detail Driver View</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <button onclick="history.back()" class="btn btn-danger ml-2">Go Back</button>
+            </div>
+        </div>
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg"  value="{{ driverlist.vehicle.company_format }} - {{ driverlist.vehicle.owner.phone_number }} - {{ driverlist.vehicle.owner.name }}" disabled>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Name</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.name }}" disabled>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.phone_number }}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                        <div class="col-sm-3">
+                            <input type="email" class="form-control form-control-lg" value="{{ driverlist.email }}" disabled>
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                        <div class="col-sm-3">                                            
+                            <textarea class="form-control" rows="2" disabled>{{ driverlist.address }}</textarea>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Owner Name</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.vehicle.owner.name }}" readonly>
+                        </div>
+
+                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Type</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.vehicle.model.brand.category.category_name }}" readonly>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" id="vehicle_number" name="vehicle_number" value="{{ driverlist.vehicle.Vehicle_Number }}" readonly>
+                        </div>
+        
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Brand</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.vehicle.model.brand.brand_name }}" readonly>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
+                        <div class="col-sm-3">
+                            {% if driverlist.profile_image %}
+                            <a href="{{ driverlist.profile_image.url }}" target="_blank">
+                            <img id="preview2" src="{{ driverlist.profile_image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
+                        <div class="col-sm-3">
+                            {% if driverlist.address_proof %}
+                            <a href="{{ driverlist.address_proof.url }}" target="_blank">
+                            <img id="preview3" src="{{ driverlist.address_proof.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Police clearance certificate</label>
+                            {% if driverlist.police_clearance %}
+                            <a href="{{ driverlist.police_clearance.url }}" target="_blank">
+                            <img id="preview4" src="{{ driverlist.police_clearance.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+
+                        </div>
+                    
+                        <div class="col-sm-4">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">P From date</label>
+                            <input type="text" class="form-control form-control-lg"  value="{% if driverlist.pfrom_date %}{{ driverlist.pfrom_date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    
+                        <div class="col-sm-4">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">P to date</label>
+                            <input type="text" class="form-control form-control-lg" value="{% if driverlist.pto_date %}{{ driverlist.pto_date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-4">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driving License</label>
+                            {% if driverlist.driving_license %}
+                            <a href="{{ driverlist.driving_license.url }}" target="_blank">
+                            <img id="preview5" src="{{ driverlist.driving_license.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            </a>
+                            {% else %}
+                            No Image
+                            {% endif %}
+
+                        </div>
+                    
+                        <div class="col-sm-4">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">D From date</label>
+                            <input type="text" class="form-control form-control-lg" value="{% if driverlist.dfrom_date %}{{ driverlist.dfrom_date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    
+                        <div class="col-sm-4">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">D to date</label>
+                            <input type="text" class="form-control form-control-lg"  value="{% if driverlist.dto_date %}{{ driverlist.dto_date|date:'Y-m-d' }}{% endif %}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Status</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.get_status_display }}" disabled>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created On</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{% if driverlist.created_on %}{{ driverlist.created_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated On</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{% if driverlist.updated_on %}{{ driverlist.updated_on|date:'Y-m-d' }}{% endif %}" disabled>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Created By</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg" value="{{ driverlist.created_by }}" disabled>
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Updated By</label>
+                        <div class="col-sm-3">
+                            <input type="text" class="form-control form-control-lg"  value="{{ driverlist.updated_by }}" disabled>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

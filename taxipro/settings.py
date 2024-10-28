@@ -12,30 +12,20 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 import os
 from pathlib import Path
-# import dj_database_url
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-h=grwu1iy%6zs0qiib_t&4pgbe$i^*^koad_)4ec7s4-!g2yoq'
 
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['*']
 ALLOWED_HOSTS = ['ridexpress.in', 'www.ridexpress.in', 'localhost', '127.0.0.1']
 
-# ALLOWED_HOSTS = ['ridexpress.in', 'www.ridexpress.in', ]
 
 CSRF_TRUSTED_ORIGINS = ['https://ridexpress.in', 'https://www.ridexpress.in']
 
 
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -69,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'superadmin.middleware.LoginRequiredMiddleware',
     'superadmin.middleware.SuperAdminCheckMiddleware',
     'rescue.middleware.SuperAdminCheckMiddleware',
     'quality.middleware.SuperAdminCheckMiddleware',
@@ -102,21 +91,6 @@ WSGI_APPLICATION = 'taxipro.wsgi.application'
 LOGIN_URL = '/login/'
 
 
-
-# Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'djongo',
-#         'NAME': 'RidexpressTaxi',  # Replace with your MongoDB database name
-#         'CLIENT': {
-#             'host': 'localhost',  # Replace with your MongoDB host
-#             'port': 27017,        # Replace with your MongoDB port
-#         }
-#     }
-# }
-
 DATABASES = {
        'default': {
            'ENGINE': 'djongo',
@@ -128,13 +102,6 @@ DATABASES = {
        }
    }
 
-# DATABASES['default'] = dj_database_url.config(
-#     default='djongo://localhost:27017/Ridexpress',
-#     engine='djongo'
-# )
-
-# Password validation
-# https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -152,8 +119,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 
-# Internationalization
-# https://docs.djangoproject.com/en/4.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
@@ -164,8 +129,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
@@ -173,8 +136,6 @@ STATICFILES_DIRS= [
     os.path.join(BASE_DIR, 'static'),
 ]
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

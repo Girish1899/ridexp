@@ -11,14 +11,11 @@
             </div>
 
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
-                <ol class="breadcrumb" style="background-color: #98BDFF;">
-                            Booking</a></li>
-                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go
-                            Back</a></li>
+                <ol class="breadcrumb" style="background-color: #98BDFF;"> Booking</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -59,7 +56,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                
 
                                 <div class="col-md-3">
                                     <div class="form-group">
@@ -171,10 +167,6 @@
                                         <td>
                                             <div><button class="btn btn-warning" >{{ i.total_fare }}</button></div>
                                             <div><span class="badge badge-pill bg-gradient-danger">{{i.pricing.car_type}}</span></div>
-                                            <!-- <div style="padding-top: 3px;">permit<span class="badge badge-pill badge-success">{{i.pricing.permit}}</span></div>
-                                            <div style="padding-top: 3px;">beta<span class="badge badge-pill badge-success">{{i.pricing.driver_beta}}</span></div>
-                                            <div style="padding-top: 3px;">toll<span class="badge badge-pill badge-success">{{i.pricing.toll_price}}</span></div>
-                                            <div style="padding-top: 3px;">price/km<span class="badge badge-pill badge-success">{{i.pricing.price_per_km}}</span></div> -->
                                             <div style="margin-top: 3px;"><span class="badge badge-pill bg-gradient-danger">{{ i.category.category_name }}</span></div>
                                         </td>
                                         <td>
@@ -199,7 +191,6 @@
     </div>
 </div>
 
-<!-- Assign Driver Modal -->
 <div class="modal fade" id="assignDriverModal" tabindex="-1" role="dialog" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -255,8 +246,6 @@
     </div>
 </div>
 
-<!-- Cancel Booking Modal -->
-
 <div class="modal fade" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -283,33 +272,28 @@
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<!-- jQuery -->
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<!-- Popper.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-<!-- Bootstrap JS -->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     
 <script>
     $(document).ready(function() {
-    // Update data-comments attribute whenever textarea value changes
     $('#comments').on('input', function() {
         const comments = $(this).val();
         $('.cancel-btn').attr('data-comments', comments);
     });
 
-    // Handle cancel button click
     $(document).on('click', '.cancel-btn', function() {
         console.log("Submit button clicked!");
 
         const comments = $(this).data('comments');
         const rideId = $('#cancelBookingModal').data('ride-id');
 
-        console.log("comments: ", comments); // Debugging statement
-        console.log("Ride ID: ", rideId);     // Debugging statement
+        console.log("comments: ", comments);
+        console.log("Ride ID: ", rideId);     
 
-        // Check if comments are provided
         if (!comments) {
             console.error("Comments are missing");
             alert("Please provide cancellation comments.");
@@ -317,10 +301,10 @@
         }
 
         $.ajax({
-            url: '{% url "adcancel_ride" %}', // Django URL for the cancel_ride view
+            url: '{% url "adcancel_ride" %}', 
             type: "POST",
             headers: {
-                'X-CSRFToken': '{{ csrf_token }}' // Make sure you are using CSRF tokens for POST requests in Django
+                'X-CSRFToken': '{{ csrf_token }}' 
             },
             data: JSON.stringify({ comments: comments, ride_id: rideId }),
             contentType: 'application/json; charset=utf-8',
@@ -328,7 +312,7 @@
                 if (result.status === 'success') {
                     console.log("Ride successfully cancelled!");
                     alert("Ride cancelled successfully. A WhatsApp message has been sent to the customer.");
-                    location.reload(); // Reload the page after success
+                    location.reload(); 
                 } else {
                     console.error("Cancellation failed: ", result.message);
                     alert("Failed to cancel the ride: " + result.message);
@@ -341,13 +325,12 @@
         });
     });
 
-    // Modal Show Event to store the ride ID
     $('#cancelBookingModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID
+        var button = $(event.relatedTarget); 
+        var rideId = button.data('ride-id'); 
         var modal = $(this);
-        modal.data('ride-id', rideId); // Store ride ID in modal attribute
-        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+        modal.data('ride-id', rideId); 
+        console.log("Modal shown for Ride ID: ", rideId); 
     });
 });
 
@@ -358,17 +341,15 @@
     $(document).ready(function() {
     console.log("Document is ready!");
 
-    // Assign Driver Button Click Event
     $(document).on('click', '.assign-driver-btn', function() {
         console.log("Assign driver button clicked!");
 
         const driverId = $(this).data('driver-id');
         const rideId = $('#assignDriverModal').data('ride-id');
 
-        console.log("Driver ID: ", driverId); // Debugging statement
-        console.log("Ride ID: ", rideId);     // Debugging statement
+        console.log("Driver ID: ", driverId); 
+        console.log("Ride ID: ", rideId);     
 
-        // Check if driverId is correctly retrieved
         if (!driverId) {
             console.error("Driver ID is missing");
             alert("Driver ID is missing.");
@@ -392,7 +373,7 @@
                     alert("Failed to assign driver: " + (result.message || "Unknown error."));
                 }
                 
-                location.reload(); // Reload page after handling the message
+                location.reload(); 
             },
             error: function(xhr, status, error) {
                 console.error("Error: ", xhr.responseText);
@@ -401,14 +382,13 @@
         });
     });
 
-    // Modal Show Event
     $('#assignDriverModal').on('show.bs.modal', function(event) {
-        var button = $(event.relatedTarget); // Button that triggered the modal
-        var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+        var button = $(event.relatedTarget); 
+        var rideId = button.data('ride-id'); 
         var modal = $(this);
-        modal.data('ride-id', rideId); // Store ride ID in modal attribute
+        modal.data('ride-id', rideId); 
 
-        console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+        console.log("Modal shown for Ride ID: ", rideId);
     });
 });
 
@@ -420,7 +400,7 @@
     }
 
     function HistoryRide(ride_id) {
-        window.location.href = "RideHistory/" + ride_id; // Add a slash here
+        window.location.href = "RideHistory/" + ride_id; 
     };
 }; 
 
@@ -435,7 +415,6 @@ $('#toggleFilterReport').click(function() {
 });
 
 $(document).ready(function() {
-    // Initialize Select2 and Flatpickr plugins
     $("#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame").select2();
     flatpickr("#single-date-picker", {
         dateFormat: "Y-m-d",
@@ -449,7 +428,6 @@ $(document).ready(function() {
 
     var table = $('#example').DataTable();
     
-    // Add change event listeners
     $('#from-time-picker, #to-time-picker').on('change', filterTable);
     $('#single-select, #single-select1, #vehicle-type, #vehicle-id, #driver-id, #time-frame').on('change', filterTable);
     
@@ -465,7 +443,6 @@ $(document).ready(function() {
         var toTime = $('#to-time-picker').val();
         var timeFrame = $('#time-frame').val();
 
-        // Parse date range
         var startDate = null, endDate = null;
         if (dateRange) {
             var dates = dateRange.split(" to ");
@@ -476,7 +453,6 @@ $(document).ready(function() {
             }
         }
 
-        // Calculate time frame dates
         var today = new Date();
         var selectedStartDate = null;
         var selectedEndDate = null;
@@ -510,7 +486,6 @@ $(document).ready(function() {
             var pickupTime = parseTime(pickupTimeText);  
             var showRow = true;
 
-            // Single date filter
             if (singleDate) {
                 var selectedDate = new Date(singleDate);  
                 selectedDate.setHours(0, 0, 0, 0);  
@@ -520,35 +495,29 @@ $(document).ready(function() {
                 }
             }
 
-            // Date range filter
             if (startDate && endDate && showRow) {
                 if (pickupDate < startDate || pickupDate > endDate) {
                     showRow = false;
                 }
             }
 
-            // Time frame filter
             if (selectedStartDate && selectedEndDate && showRow) {
                 if (pickupDate < selectedStartDate || pickupDate > selectedEndDate) {
                     showRow = false;
                 }
             }
 
-             // Time filtering
              if (fromTime && toTime && showRow) {
                 var fromTimeParsed = parseTime(fromTime);
                 var toTimeParsed = parseTime(toTime);
 
-                // Check if fromTime is greater than toTime (crossing midnight)
                 if (fromTimeParsed > toTimeParsed) {
-                    // Cross midnight logic
                     showRow = !(pickupTime < fromTimeParsed && pickupTime >= toTimeParsed);
                 } else {
                     showRow = pickupTime >= fromTimeParsed && pickupTime <= toTimeParsed;
                 }
             }
 
-            // Other filters
             if (serviceType && row.data('ridetype') != serviceType) showRow = false;
             if (bookingId && row.data('rideid') != bookingId) showRow = false;
             if (vehicleType && row.data('categoryid') != vehicleType) showRow = false;
@@ -562,7 +531,6 @@ $(document).ready(function() {
         $.fn.dataTable.ext.search.pop();
     }
 
-    // Function to parse time in various formats
     function parseTime(timeString) {
         var timeParts = timeString.match(/(\d{1,2}):(\d{2})\s*(a\.m\.|p\.m\.|AM|PM)?/i);
         if (timeParts) {
@@ -579,11 +547,9 @@ $(document).ready(function() {
                 }
             }
 
-            // Use current date
             var now = new Date();
             return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
         } else {
-            // Handle 24-hour format directly
             timeParts = timeString.match(/(\d{1,2}):(\d{2})/);
             if (timeParts) {
                 var hours = parseInt(timeParts[1], 10);
@@ -591,7 +557,6 @@ $(document).ready(function() {
                 var now = new Date();
                 return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, minutes, 0, 0);
             } else {
-                // Handle cases like "4 p.m." or "4 PM"
                 timeParts = timeString.match(/(\d{1,2})\s*(a\.m\.|p\.m\.|AM|PM)/i);
                 if (timeParts) {
                     var hours = parseInt(timeParts[1], 10);
@@ -602,7 +567,6 @@ $(document).ready(function() {
                     } else if (period.includes('a') && hours === 12) {
                         hours = 0;
                     }
-
                     var now = new Date();
                     return new Date(now.getFullYear(), now.getMonth(), now.getDate(), hours, 0, 0);
                 }
@@ -611,8 +575,6 @@ $(document).ready(function() {
         return null;
     }
 });
-
-
 </script>
 
 <style>
@@ -634,7 +596,5 @@ $(document).ready(function() {
         background-color: #0056b3;
         border-color: #0056b3;
     }
-
-
 </style>
 {% endblock content %}

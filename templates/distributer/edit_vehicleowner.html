@@ -1,0 +1,288 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content %}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item" ><a href="{% url 'dispatch-viewvehicleowner' %}" style="color: white !important;">View Vehicle Owner</a></li>
+                    <li class="breadcrumb-item" ><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Vehicle Owner</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                                    
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="owner_id" name="owner_id" value="{{ ownerlist.0.owner_id }}"> 
+                        <input type="hidden" class="form-control" id="original_phone_number" name="original_phone_number" value="{{ ownerlist.0.phone_number }}">
+                            <input type="hidden" class="form-control" id="original_email" name="original_email" value="{{ ownerlist.0.email }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Owner Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ ownerlist.0.company_format }}" readonly>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Owner Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ ownerlist.0.name }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Phone Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ ownerlist.0.phone_number }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Email</label>
+                        <div class="col-sm-12">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ ownerlist.0.email }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                        <div class="col-sm-12">                                            
+                            <textarea class="form-control" rows="2" id="address" name="address">{{ ownerlist.0.address }}</textarea>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Profile Image</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="image" name="image" >
+                            {% if ownerlist.0.image %}
+                            <img id="preview1" src="{{ ownerlist.0.image.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview1" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address Proof</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="address_proof" name="address_proof" >
+                            {% if ownerlist.0.address_proof %}
+                            <img id="preview2" src="{{ ownerlist.0.address_proof.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview2" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Identity Proof</label>
+                        <div class="col-sm-3">
+                            <input type="file" class="form-control form-control-lg" id="identity" name="identity" >
+                            {% if ownerlist.0.identity %}
+                            <img id="preview3" src="{{ ownerlist.0.identity.url }}" alt="Image Preview" style="display: block; max-width: 100px; margin-top: 10px;">
+                            {% else %}
+                            <img id="preview3" src="#" alt="Image Preview" style="display: none; max-width: 100px; margin-top: 10px;">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">    
+                        <select class="form-control form-control-lg" id="status" name="status">
+                            <option value="" selected disabled>Select Status</option>
+                            <option value="active" {% if ownerlist.0.status == "active" %} selected {% endif %}>Active</option>
+                            <option value="inactive" {% if ownerlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                        </select>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <div class="welcome-text">
+                        <center><h4 style="color: blue;">Account Details</h4></center>
+                    </div>
+                    <hr>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Holder Name</label>
+                            <input type="text" class="form-control form-control-lg" id="holdername" name="holdername" value="{{ ownerlist.0.holdername }}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">A/C Number</label>
+                            <input type="text" class="form-control form-control-lg" id="ac_number" name="ac_number" value="{{ ownerlist.0.ac_number }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Bank Name</label>
+                            <input type="text" class="form-control form-control-lg" id="bankname" name="bankname" value="{{ ownerlist.0.bankname }}">
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">IFSC Code</label>
+                            <input type="text" class="form-control form-control-lg" id="ifsc_code" name="ifsc_code" value="{{ ownerlist.0.ifsc_code }}">
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function (event) {
+            event.preventDefault();
+            var owner_id = document.getElementById('owner_id').value;
+            var company_format = document.getElementById('company_format').value;
+            var name = document.getElementById('name').value;
+            var phone_number = document.getElementById('phone_number').value;
+            var email = document.getElementById('email').value;
+            var address = document.getElementById('address').value;
+            var holdername = document.getElementById('holdername').value;
+            var ac_number = document.getElementById('ac_number').value;
+            var bankname = document.getElementById('bankname').value;
+            var ifsc_code = document.getElementById('ifsc_code').value;
+            var status = document.getElementById('status').value;
+            var original_phone_number = $('#original_phone_number').val();
+            var original_email = $('#original_email').val();
+            var formData = new FormData();
+            formData.append('owner_id', owner_id);
+            formData.append('name', name);
+            formData.append('phone_number', phone_number);
+            formData.append('email', email);
+            formData.append('address', address);
+            formData.append('holdername',holdername);
+            formData.append('ac_number',ac_number);
+            formData.append('bankname',bankname);
+            formData.append('ifsc_code',ifsc_code);
+            formData.append('status', status);
+            formData.append('company_format', company_format);
+            formData.append('original_phone_number', original_phone_number);
+            formData.append('original_email', original_email);
+            formData.append('image', $('#image')[0].files[0]);
+            if ($('#image')[0].files[0]) {
+                formData.append('image', $('#image')[0].files[0]);
+            }
+            formData.append('address_proof', $('#address_proof')[0].files[0]);
+            if ($('#address_proof')[0].files[0]) {
+                formData.append('address_proof', $('#address_proof')[0].files[0]);
+            }
+            formData.append('identity', $('#identity')[0].files[0]);
+            if ($('#identity')[0].files[0]) {
+                formData.append('identity', $('#identity')[0].files[0]);
+            }
+
+            if (!name || !phone_number || !email || !address || !address_proof || !identity || !status) {
+                alert("All fields are required.");
+                return;
+            }
+
+            var phonePattern = /^[0-9]{10}$/;
+            if (!phonePattern.test(phone_number)) {
+                alert("Please enter a valid 10-digit phone number.");
+                return;
+            }
+
+            var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                alert("Please enter a valid email address.");
+                return;
+            }
+
+            var acNumberPattern = /^[0-9]{9,18}$/;
+            if (!acNumberPattern.test(ac_number)) {
+                alert("Please enter a valid account number (9-18 digits).");
+                return;
+            }
+
+            var ifscPattern = /^[A-Z]{4}0[A-Z0-9]{6}$/;
+            if (!ifscPattern.test(ifsc_code)) {
+                alert("Please enter a valid IFSC code.");
+                return;
+            }
+
+            $.ajax({
+                url: "{% url 'dispatch-check_ownerphonenumber' %}",
+                type: "GET",
+                data: { 'phone_number': phone_number },
+                success: function (response) {
+                    if (phone_number.trim() !== original_phone_number.trim() && response.exists) {
+                        alert("Phone number already exists.");
+                    } else {
+                        if (confirm("Are you sure you want to save this owner?")) {
+                            submitForm(owner_id, name, company_format, phone_number, address, email, status,image, address_proof, identity,ifsc_code,bankname,ac_number,holdername,formData);
+                        }
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        });
+       
+        function submitForm(owner_id, name, company_format, phone_number, address, email, status,image, identity, address_proof,ifsc_code,bankname,ac_number,holdername,formData) {
+                $.ajax({
+                    url: "{% url 'dispatch-updatevehicleowner' %}",
+                    type: "POST",
+                    headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                    data: formData,
+                    processData: false,
+                    contentType: false,        
+                    success: function (result) {
+                        console.log("result val: ", result);
+                        if (result['success']) {
+                            alert("owner details edited successfully");
+                            window.location.href = "{% url 'dispatch-viewvehicleowner' %}";
+                        } else {
+                            alert("Failed to edit owner details: " + result['message']);
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+
+        $("#image,#address_proof,#identity").change(function () {
+            readURL(this);
+        });
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $(input).next('img').attr('src', e.target.result).show();
+                }
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+    });
+</script>
+
+{% endblock content %}

@@ -17,7 +17,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -118,7 +117,6 @@
     </div>
 </div>
 
-<!-- Add the necessary scripts for export functionality -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
@@ -149,7 +147,6 @@ document.getElementById('download-pdf').addEventListener('click', function() {
     doc.save('completed_bookings.pdf');
 });
 
-// Toggle Filter Report visibility
 $('#toggleFilterReport').click(function() {
     var filterReport = $('.filter_report');
     if (filterReport.is(':visible')) {
@@ -162,10 +159,8 @@ $('#toggleFilterReport').click(function() {
 });
 
 $(document).ready(function() {
-    // Initialize Select2 for select elements
     $("#vehicle-id, #driver-id").select2();
 
-    // Initialize Flatpickr for date pickers
     flatpickr("#single-date-picker", {
         dateFormat: "Y-m-d",
         onChange: filterTable
@@ -177,10 +172,8 @@ $(document).ready(function() {
         onChange: filterTable
     });
 
-    // Initialize DataTable
     var table = $('#example').DataTable();
 
-    // Event listener for Select2 elements
     $('#vehicle-id, #driver-id').on('change', filterTable);
 
     function filterTable() {
@@ -196,27 +189,23 @@ $(document).ready(function() {
             if (dateParts.length === 2) {
                 startDate = new Date(dateParts[0]);
                 endDate = new Date(dateParts[1]);
-                // Adjust endDate to include the entire day
                 endDate.setHours(23, 59, 59, 999);
             }
         }
 
-        // Custom search function for filtering based on selected criteria
         $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
             var row = $(table.row(dataIndex).node());
             var rowVehicleId = row.data('vehicleid');
             var rowDriverId = row.data('driverid');
             var pickupDateText = row.find('td:nth-child(6)').text().trim();
 
-            // Parse the pickup date
             var pickupDate = parseDate(pickupDateText);
             if (!pickupDate || isNaN(pickupDate)) {
-                return false; // Skip rows with invalid dates
+                return false; 
             }
 
             var showRow = true;
 
-            // Date filtering
             if (singleDate) {
                 var selectedDate = new Date(singleDate);
                 showRow = (pickupDate.toDateString() === selectedDate.toDateString());
@@ -224,7 +213,6 @@ $(document).ready(function() {
                 showRow = (pickupDate >= startDate && pickupDate <= endDate);
             }
 
-            // Vehicle ID and Driver ID filtering
             if (vehicleId && rowVehicleId != vehicleId) {
                 showRow = false;
             }
@@ -235,24 +223,22 @@ $(document).ready(function() {
             return showRow;
         });
 
-        table.draw(); // Redraw the table to apply the new search criteria
+        table.draw(); 
 
-        // Remove the custom search function after filtering
         $.fn.dataTable.ext.search.pop();
     }
 
-    // Function to parse date in the format "MMM. D, YYYY"
     function parseDate(dateString) {
         const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
         const parts = dateString.split(' ');
         if (parts.length !== 3) {
-            return new Date(""); // Invalid date
+            return new Date(""); 
         }
         const month = months.indexOf(parts[0]);
         const day = parseInt(parts[1].replace(',', ''), 10);
         const year = parseInt(parts[2], 10);
         if (month === -1 || isNaN(day) || isNaN(year)) {
-            return new Date(""); // Invalid date
+            return new Date(""); 
         }
         return new Date(year, month, day);
     }

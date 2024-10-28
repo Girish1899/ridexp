@@ -1,17 +1,14 @@
 import json
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-
+from django.contrib.auth import login as logout
 from superadmin.models import Customer,Vehicle,Driver,RideDetails,Profile
 from django.contrib.auth.decorators import login_required
 from django.views.generic import TemplateView,ListView
 from django.db.models import F
 from django.views.decorators.csrf import csrf_exempt
 
-# Create your views here.
-# @login_required(login_url='login')
 
-@login_required(login_url='login')
 def driverindex(request):
     cust_count = Customer.objects.count()
     driver_count = Driver.objects.count()
@@ -26,25 +23,44 @@ def driverindex(request):
     }
     return render(request,'driver/index.html',context)
 
+class driverlogin(TemplateView):
+    template_name = "driver/driver-login.html"
+
+    def post(self, request):
+        phone_number = request.POST.get('phone_number')
+        password = request.POST.get('password')
+
+        print("Received phone number:", phone_number) 
+        print("Received password:", password)
 
 
-@login_required(login_url='login')
+        try:
+            driver = Driver.objects.get(phone_number=phone_number)
+            request.session['driver_id'] = driver.driver_id
+
+            if driver.password == password:  
+                return JsonResponse({'success': True, 'redirect_url': 'driverindex '})
+            else:
+                return JsonResponse({'success': False, 'message': 'Invalid password.'})
+
+        except Driver.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Phone number not found. Please register.'})
+
+def driverlogout_view(request):
+    logout(request)
+    request.session.flush()
+    return redirect('driver_login')
+
+
 def assigned_rides_view(request):
-    try:
-        # Get the profile associated with the logged-in user
-        profile = Profile.objects.get(user=request.user)
         
-        if profile.type == 'driver':
-            # Get the driver that matches the profile's phone number, email, etc.
-            driver = Driver.objects.get(phone_number=profile.phone_number, email=request.user.email)
-            
-            # Filter rides assigned to this driver
-            statuses = ['assignbookings', 'assignlaterbookings', 'ongoingbookings', 'completedbookings']
-            assigned_rides = RideDetails.objects.filter(ride_status__in=statuses, driver=driver)
-        else:
-            assigned_rides = RideDetails.objects.none()
-    except (Profile.DoesNotExist, Driver.DoesNotExist):
-        # If the profile or driver doesn't exist, return no rides
+    driver_id = request.session.get('driver_id')
+
+    if driver_id:
+        driver = Driver.objects.get(driver_id=driver_id)
+        statuses = ['assignbookings', 'assignlaterbookings', 'ongoingbookings', 'completedbookings']
+        assigned_rides = RideDetails.objects.filter(ride_status__in=statuses, driver=driver)
+    else:
         assigned_rides = RideDetails.objects.none()
 
     context = {
@@ -53,16 +69,7 @@ def assigned_rides_view(request):
     return render(request, 'driver/driverassigned_rides.html', context)
 
 
-# class assigned_rides_view(ListView):
-#     model = RideDetails
-#     template_name = "driver/driverassigned_rides.html"
 
-#     def get_queryset(self):
-#         # Get only rides that are assigned
-#         return RideDetails.objects.filter(ride_status='assignbookings').select_related('driver')
-# 
-#  
-@login_required(login_url='login')
 @csrf_exempt
 def start_ride(request):
     if request.method == 'POST':  
@@ -84,7 +91,7 @@ def start_ride(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
         
 
-@login_required(login_url='login')
+
 def stop_ride(request):
     if request.method == 'POST':
         
@@ -97,7 +104,7 @@ def stop_ride(request):
             driver.driver_status = 'free'
             driver.save()
             customer = ride.customer
-            if customer:  # Ensure customer exists
+            if customer:  
                 customer.total_rides += 1
                 customer.save()
             else:
@@ -105,7 +112,6 @@ def stop_ride(request):
 
             ride.ride_status = 'completedbookings'
             ride.save()
-            # driver.save(update_fields=['number_of_rides', 'driver_status'])
             ride.ride_status = 'completedbookings'
             ride.save()
             return JsonResponse({'status': 'success'})
@@ -115,23 +121,12 @@ def stop_ride(request):
             return JsonResponse({'status': 'error', 'message': str(e)}, status=500)
         
 
-# @login_required
-# def driver_profile_view(request):
-#     # Get the driver profile for the logged-in user
-#     profile = get_object_or_404(Profile, user=request.user, type='driver')
-    
-#     # Get the driver details associated with the logged-in user
-#     drivers = get_object_or_404(Driver, email=request.user.email)  # Assuming email is used to link User and Driver
 
-#     context = {
-#         'profile': profile,
-#         'drivers': drivers,  # Pass the single driver instance to the context
-#     }
-
-#     return render(request, 'driver/driverprofile.html', context)
-
-@login_required
 def driver_profile_view(request):
-    profile = get_object_or_404(Profile, user=request.user, type='driver')
-    return render(request, 'driver/app-profile.html', {'profile': profile})
+    driver_id = request.session.get('driver_id')
+    if not driver_id:
+        return redirect('driver_login')  
+
+    driver = get_object_or_404(Driver, driver_id=driver_id)
+    return render(request, 'driver/app-profile.html', {'driver': driver})
 

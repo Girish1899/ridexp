@@ -12,7 +12,7 @@ from rest_framework.views import APIView
 from django.views.generic import TemplateView,ListView,View,DetailView
 from rest_framework.response import Response
 from rest_framework import status
-from superadmin.models import Blogs, Brand, BrandHistory,Category, CategoryHistory, Color, ColorHistory, CommissionType, CustomerHistory, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, Pricing, Profile, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User,Customer,Driver,Ridetype,Vehicle, VehicleHistory, VehicleOwner, VehicleOwnerHistory, VehicleType, VehicleTypeHistory, WebsitePackages
+from superadmin.models import Blogs, Brand, BrandHistory,Category, CategoryHistory, Color, ColorHistory, CommissionHistory, CommissionType, CustomerHistory, DailyVehicleComm, DriverHistory, Enquiry,Model, ModelHistory, PackageCategories, PackageCategoriesHistory, Pricing, Profile, RideDetails, RideDetailsHistory, RidetypeHistory, Transmission, TransmissionHistory,User,Customer,Driver,Ridetype,Vehicle, VehicleHistory, VehicleOwner, VehicleOwnerHistory, VehicleType, VehicleTypeHistory, WebsitePackages
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -23,17 +23,18 @@ import zipfile
 from django.http import HttpResponse
 from django.core.cache import cache
 import requests
+from django.db.models import  Max
 from docxtpl import DocxTemplate
 from docx2pdf import convert
 from django.utils.text import slugify
 from django.views.decorators.http import require_POST
 from PIL import Image
 from io import BytesIO
+from django.core.exceptions import ObjectDoesNotExist
 import os
 from django.core.files.base import ContentFile
+from django.contrib import messages
 
-
-# Create your views here.
 @login_required(login_url='login')
 def index(request):
     cust_count = Customer.objects.count()
@@ -49,7 +50,6 @@ def index(request):
     }
     return render(request,'distributer/index.html',context)
 
-# brand ########################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addbrand(TemplateView):
     template_name = "distributer/add_brand.html"
@@ -111,7 +111,7 @@ class EditBrand(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        catlist = Category.objects.filter(category_status='active')  # Filter only active categories
+        catlist = Category.objects.filter(category_status='active') 
         try:
             context['brand_id'] = self.kwargs['id']
             brandlist = Brand.objects.filter(brand_id=context['brand_id'])
@@ -134,14 +134,12 @@ class UpdateBrand(APIView):
         brand = get_object_or_404(Brand, brand_id=brand_id)
         original_brand_status = brand.status
 
-        # Update the brand with new data
         brand.brand_name = request.POST['brand_name']
         brand.category = Category.objects.get(category_id=request.POST.get('category'))
         brand.status = request.POST['status']
         brand.updated_by = request.user
         brand.save()
 
-        # Create a BrandHistory entry after updating the brand
         BrandHistory.objects.create(
             brand_id=brand.brand_id,
             category=brand.category,
@@ -159,12 +157,6 @@ class UpdateBrand(APIView):
                 if model.status != brand.status:
                     model.status = brand.status
                     model.save()
-
-                    vehicles = model.vehicles.all() 
-                    for vehicle in vehicles:
-                        if vehicle.vehicle_status != brand.status:
-                            vehicle.vehicle_status = brand.status
-                            vehicle.save()
 
         return JsonResponse({'success': True}, status=200)
 
@@ -211,7 +203,6 @@ class ViewBrand(View):
         brandlist = get_object_or_404(Brand, pk=brand_id)
         return render(request, self.template_name, {'brandlist': brandlist})  
     
-# category#################################################
 @login_required(login_url='login')
 def check_category(request):
     category_name = request.GET.get('category_name', None)
@@ -238,13 +229,10 @@ class addcategory(TemplateView):
             updated_by=request.user
         )
         if image:
-            # Open the uploaded image
             img = Image.open(image)
             
-            # Resize image to 880x350 pixels
             img = img.resize((880, 450), Image.LANCZOS)
 
-            # Get the file extension and set the appropriate format
             file_extension = os.path.splitext(image.name)[1].lower()
             if file_extension in ['.jpg', '.jpeg']:
                 format = 'JPEG'
@@ -253,14 +241,12 @@ class addcategory(TemplateView):
             elif file_extension == '.gif':
                 format = 'GIF'
             else:
-                format = 'JPEG'  # Default format if none of the above match
+                format = 'JPEG'  
 
-            # Save the image to an in-memory file
             img_io = BytesIO()
             img.save(img_io, format=format)
             img_content = ContentFile(img_io.getvalue(), image.name)
 
-            # Assign the resized image to the category object
             cat.image.save(image.name, img_content, save=False)
 
         cat.save()
@@ -302,18 +288,19 @@ class UpdateCategory(APIView):
         category = get_object_or_404(Category, category_id=category_id)
         original_category_status = category.category_status
 
-        # Update the category with new data
         category.category_name = request.POST['category_name']
         category.seats = request.POST['seats']
+        category.category_status = request.POST['category_status']
+        category.updated_by = request.user 
+
+        print('post datas', category.category_name)
+
         if 'image' in request.FILES:
-            # Handle image resizing before saving
             image = request.FILES['image']
             img = Image.open(image)
             
-            # Resize image to 880x350 pixels
             img = img.resize((880, 450), Image.LANCZOS)
 
-            # Get the file extension and set the appropriate format
             file_extension = os.path.splitext(image.name)[1].lower()
             if file_extension in ['.jpg', '.jpeg']:
                 format = 'JPEG'
@@ -322,20 +309,17 @@ class UpdateCategory(APIView):
             elif file_extension == '.gif':
                 format = 'GIF'
             else:
-                format = 'JPEG'  # Default format if none of the above match
+                format = 'JPEG'  
 
-            # Save the image to an in-memory file
             img_io = BytesIO()
             img.save(img_io, format=format)
             img_content = ContentFile(img_io.getvalue(), image.name)
 
-            # Assign the resized image to the category object
             category.image.save(image.name, img_content, save=False)
-        category.category_status = request.POST['category_status']
-        category.updated_by = request.user
-        category.save()
 
-        # Create a CategoryHistory entry after updating the category
+        category.save()
+        print('after saving datas', category.category_name)
+
         CategoryHistory.objects.create(
             category_id=category.category_id,
             category_name=category.category_name,
@@ -360,12 +344,6 @@ class UpdateCategory(APIView):
                         if model.status != category.category_status:
                             model.status = category.category_status
                             model.save()
-
-                            vehicles = model.vehicles.all() 
-                            for vehicle in vehicles:
-                                if vehicle.vehicle_status != category.category_status:
-                                    vehicle.vehicle_status = category.category_status
-                                    vehicle.save()
 
         return JsonResponse({'success': True}, status=200)
 
@@ -407,7 +385,6 @@ def toggle_category_status(request):
     except Exception as e:
         return JsonResponse({'success': False, 'message': str(e)})  
 
-    # detail view category 
 class ViewCategory(View):
     template_name = 'distributer/detailview_category.html'
 
@@ -417,7 +394,6 @@ class ViewCategory(View):
 
         
 
-# model ########################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addmodel(TemplateView):
     template_name = "distributer/add_model.html"
@@ -482,8 +458,6 @@ class EditModel(TemplateView):
             'models': models
         })
         return context    
-        # context = {'blist':list(blist),'catlist':list(catlist),'mlist':list(mlist)}
-        # return context
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class UpdateModel(APIView):
@@ -493,21 +467,18 @@ class UpdateModel(APIView):
         brand_id = request.POST['brand']
         status = request.POST['status']
 
-        # Check if a model with the same name exists for the selected brand, excluding the current model
         if Model.objects.filter(brand_id=brand_id, model_name=model_name).exclude(model_id=model_id).exists():
             return JsonResponse({'success': False, 'message': "Model already exists for the selected brand."}, status=400)
 
         model = get_object_or_404(Model, model_id=model_id)
         original_model_status = model.status
 
-        # Update the model with new data
         model.model_name = model_name
         model.brand_id = brand_id
         model.status = status
         model.updated_by = request.user
         model.save()
 
-        # Create a ModelHistory entry after updating the model
         ModelHistory.objects.create(
             model_id=model.model_id,
             brand=model.brand,
@@ -518,14 +489,6 @@ class UpdateModel(APIView):
             created_by=model.created_by.username if model.created_by else None,
             updated_by=request.user.username
         )
-
-        # Update corresponding vehicles if the status has changed
-        if original_model_status != model.status:
-            vehicles = model.vehicles.all()  # Assuming vehicles is the related name for Vehicle in Model
-            for vehicle in vehicles:
-                if vehicle.vehicle_status != model.status:
-                    vehicle.vehicle_status = model.status
-                    vehicle.save()
 
         return JsonResponse({'success': True}, status=200)
 
@@ -551,7 +514,6 @@ def toggle_model_status(request):
         if new_status not in dict(Model.STATUS_CHOICES).keys():
             return JsonResponse({'success': False, 'message': 'Invalid status'}, status=400)
 
-        # Update the model status
         model.status = new_status
         model.save()
         ModelHistory.objects.create(
@@ -576,7 +538,6 @@ class ViewModel(View):
         mlist = get_object_or_404(Model, pk=model_id)
         return render(request, self.template_name, {'mlist': mlist})         
     
-# vehicletype ############################
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addvehicletype(TemplateView):
@@ -643,13 +604,11 @@ class Updatevehicletype(APIView):
         vehicle_type_id = request.POST['vehicle_type_id']
         vehicle_type = VehicleType.objects.get(vehicle_type_id=vehicle_type_id)
 
-        # Update the vehicle type with new data
         vehicle_type.company_format = request.POST['company_format']
         vehicle_type.vehicle_type_name = request.POST['vehicle_type_name']
         vehicle_type.updated_by = request.user
         vehicle_type.save()
 
-        # Create another VehicleTypeHistory entry after updating the vehicle type
         VehicleTypeHistory.objects.create(
             vehicle_type_id=vehicle_type.vehicle_type_id,
             company_format=vehicle_type.company_format,
@@ -691,7 +650,6 @@ class ViewVehicletype(View):
         vtlist = get_object_or_404(VehicleType, pk=vehicle_type_id)
         return render(request, self.template_name, {'vtlist': vtlist})  
     
-# ridetype #########################################
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addridetype(TemplateView):
@@ -758,13 +716,11 @@ class Updateridetype(APIView):
         ridetype_id = request.POST['ridetype_id']
         ridetype = Ridetype.objects.get(ridetype_id=ridetype_id)
 
-        # Update the ride type with new data
         ridetype.company_format = request.POST['company_format']
         ridetype.name = request.POST['name']
         ridetype.updated_by = request.user
         ridetype.save()
 
-        # Create another RidetypeHistory entry after updating the ride type
         RidetypeHistory.objects.create(
             ridetype_id=ridetype.ridetype_id,
             company_format=ridetype.company_format,
@@ -805,7 +761,6 @@ class ViewRidetype(View):
         rtlist = get_object_or_404(Ridetype, pk=ridetype_id)
         return render(request, self.template_name, {'rtlist': rtlist})  
     
-# transmission #################################################
 @login_required(login_url='login')
 def check_transmission(request):
     transmission_name = request.GET.get('transmission_name', None)
@@ -864,12 +819,10 @@ class UpdateTransmission(APIView):
         transmission_id = request.POST['transmission_id']
         transmission = get_object_or_404(Transmission, transmission_id=transmission_id)
 
-        # Update the category with new data
         transmission.transmission_name = request.POST['transmission_name']
         transmission.updated_by = request.user
         transmission.save()
 
-        # Create a CategoryHistory entry after updating the category
         TransmissionHistory.objects.create(
             transmission_id=transmission.transmission_id,
             transmission_name=transmission.transmission_name,
@@ -901,7 +854,6 @@ class ViewTransmission(View):
         return render(request, self.template_name, {'tlist': tlist})          
 
 
-# color #######################################################################
 
 @login_required(login_url='login')   
 def check_color(request):
@@ -963,12 +915,10 @@ class Updatecolor(APIView):
         color_id = request.POST['color_id']
         color = Color.objects.get(color_id=color_id)
 
-        # Update the ride type with new data
         color.name = request.POST['name']
         color.updated_by = request.user
         color.save()
 
-        # Create another RidetypeHistory entry after updating the ride type
         ColorHistory.objects.create(
             color_id=color.color_id,
             name=color.name,
@@ -1000,10 +950,6 @@ class ViewColor(View):
         clist = get_object_or_404(Color, pk=color_id)
         return render(request, self.template_name, {'clist': clist})  
 
-
-    
-# customer###################################
-
 def check_phonenumber(request):
     phone_number = request.GET.get('phone_number', None)
     ph = Customer.objects.filter(phone_number=phone_number)
@@ -1025,10 +971,9 @@ def update_status(request):
             if new_status == 'inactive':
                 customer.block_reason = block_reason
             else:
-                customer.block_reason = ''  # Clear block reason if reactivating
+                customer.block_reason = ''  
             customer.save()
 
-            # Optionally, create a CustomerHistory entry here as well
             CustomerHistory.objects.create(
                 customer_id=customer.customer_id,
                 company_format=customer.company_format,
@@ -1094,22 +1039,18 @@ class CustomerList(ListView):
     model = Customer
     template_name = "distributer/view_customer.html"
     def get_queryset(self):
-        # First query: Get customers with ride count
         customers = Customer.objects.annotate(
             ride_count=Count('ridedetails')
         )
 
-        # Second query: Calculate total fare for completed bookings
         completed_rides_totals = RideDetails.objects.filter(
             ride_status='completedbookings'
         ).values('customer').annotate(
             total_fare=Sum('total_fare')
         ).values('customer', 'total_fare')
 
-        # Convert to a dictionary for fast lookup
         fare_dict = {item['customer']: item['total_fare'] for item in completed_rides_totals}
 
-        # Annotate customers with the total fare of completed bookings
         for customer in customers:
             customer.total_fare = fare_dict.get(customer.pk, 0.0)
 
@@ -1146,7 +1087,6 @@ class UpdateCustomer(APIView):
         customer_id = request.POST['customer_id']
         customer = Customer.objects.get(customer_id=customer_id)
 
-        # Update the customer with new data
         customer.company_format = request.POST['company_format']
         customer.customer_name = request.POST['customer_name']
         customer.phone_number = request.POST['phone_number']
@@ -1157,7 +1097,6 @@ class UpdateCustomer(APIView):
         customer.updated_by = request.user
         customer.save()
 
-        # Create another CustomerHistory entry after updating the customer
         CustomerHistory.objects.create(
             customer_id=customer.customer_id,
             company_format=customer.company_format,
@@ -1204,7 +1143,6 @@ class CustomerProfileHistoryView(View):
         advanced_bookings = rides.filter(ride_status='advancebookings')
         assigned_bookings = rides.filter(ride_status='assignbookings')
         ongoing_booking = rides.filter(ride_status='ongoingbookings')
-        # Add other statuses as needed
 
         context = {
             'customer': customer,
@@ -1214,7 +1152,6 @@ class CustomerProfileHistoryView(View):
             'advanced_bookings': advanced_bookings,
             'assigned_bookings': assigned_bookings,
             'ongoing_booking': ongoing_booking,
-            # Include other categories in the context
         }
         return render(request, 'distributer/customer_bookings.html', context)
 
@@ -1224,28 +1161,301 @@ class CustomerProfileList(ListView):
     template_name = "distributer/cust_profile_list.html" 
 
     def get_queryset(self):
-        # First query: Get customers with ride count
         customers = Customer.objects.annotate(
             ride_count=Count('ridedetails')
         )
 
-        # Second query: Calculate total fare for completed bookings
         completed_rides_totals = RideDetails.objects.filter(
             ride_status='completedbookings'
         ).values('customer').annotate(
             total_fare=Sum('total_fare')
         ).values('customer', 'total_fare')
 
-        # Convert to a dictionary for fast lookup
         fare_dict = {item['customer']: item['total_fare'] for item in completed_rides_totals}
 
-        # Annotate customers with the total fare of completed bookings
         for customer in customers:
             customer.total_fare = fare_dict.get(customer.pk, 0.0)
 
         return customers
     
-# owner ###########################################################################################
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class addcommission(TemplateView):
+    template_name = "distributer/add_commissiontype.html"
+
+    def post(self, request):
+        commission_name = request.POST['commission_name']
+        commission_percentage = request.POST['commission_percentage']
+
+        br = CommissionType(
+            commission_name=commission_name,
+            commission_percentage=commission_percentage,
+            created_by=request.user,
+            updated_by=request.user
+        )
+        br.save()
+        return JsonResponse({'status':"Success"})
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CommissionList(ListView):
+    model = CommissionType
+    template_name = "distributer/view_commissiontype.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteCommission(View):
+    def get(self, request):
+        commission_id = request.GET.get('commission_id', None)
+        CommissionType.objects.get(commission_id=commission_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class EditCommission(TemplateView):
+    template_name = 'distributer/edit_commissiontype.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        clist = Category.objects.all()
+        try:
+            context['commission_id'] = self.kwargs['id']
+            clist = CommissionType.objects.filter(commission_id=context['commission_id'])
+        except:
+            clist = CommissionType.objects.filter(commission_id=context['commission_id'])
+            
+        context = {'clist':list(clist)}
+        return context
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class UpdateCommission(APIView):
+    def post(self, request):
+        commission_id = request.POST['commission_id']
+        commission = CommissionType.objects.get(commission_id=commission_id)
+
+        commission.commission_name = request.POST['commission_name']
+        commission.commission_percentage = request.POST['commission_percentage']
+        commission.updated_by = request.user
+        commission.save()
+
+        CommissionHistory.objects.create(
+            commission_id=commission.commission_id,
+            commission_name=commission.commission_name,
+            commission_percentage=commission.commission_percentage,
+            created_on=commission.created_on,
+            updated_on=commission.updated_on,
+            created_by=commission.created_by.username if commission.created_by else None,
+            updated_by=request.user.username
+        )
+
+        return JsonResponse({'success': True}, status=200)
+    
+class CommissionHistoryView(TemplateView):
+    template_name = 'distributer/history_commission.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        commission_id = self.kwargs['commission_id']
+        commission = get_object_or_404(CommissionType, commission_id=commission_id)
+        history = CommissionHistory.objects.filter(commission_id=commission_id).order_by('updated_on')
+        context['commission'] = commission
+        context['history'] = history
+        return context
+    
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class CommVehicleListView(ListView):
+    model = RideDetails
+    template_name = "distributer/comm_vehiclelist.html"
+    
+    def get_queryset(self):
+        latest_bookings = RideDetails.objects.filter(
+            ride_status='completedbookings'
+        ).values('driver').annotate(
+            latest_pickup_date=Max('pickup_date')
+        )
+
+        queryset = RideDetails.objects.filter(
+            driver__in=[booking['driver'] for booking in latest_bookings],
+            pickup_date__in=[booking['latest_pickup_date'] for booking in latest_bookings],
+            ride_status='completedbookings'
+        ).select_related('driver', 'driver__vehicle', 'driver__vehicle__owner')
+
+        for ride in queryset:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = self.calculate_company_commission(ride)
+
+        return queryset
+
+    def calculate_driver_commission(self, ride):
+        """
+        Calculate the driver's commission based on the total fare and the vehicle's commission percentage.
+        """
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage_str = str(ride.driver.vehicle.commission_type.commission_percentage)
+            vehicle_commission_percentage = Decimal(vehicle_commission_percentage_str)
+
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def calculate_company_commission(self, ride):
+        """
+        Calculate the company's commission based on the total fare and the calculated driver commission.
+        """
+        driver_commission = self.calculate_driver_commission(ride)
+        return ride.total_fare - driver_commission
+
+
+class VehicleDetailView(ListView):
+    model = RideDetails
+    template_name = "distributer/vehicle_commission_detail.html"
+    
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        queryset = RideDetails.objects.filter(
+            driver__vehicle__vehicle_id=vehicle_id,
+            ride_status='completedbookings'
+        ).select_related('driver', 'driver__vehicle')
+
+        for ride in queryset:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = self.calculate_company_commission(ride)
+
+        return queryset
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage_str = str(ride.driver.vehicle.commission_type.commission_percentage)
+            vehicle_commission_percentage = Decimal(vehicle_commission_percentage_str)
+
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def calculate_company_commission(self, ride):
+        driver_commission = self.calculate_driver_commission(ride)
+        return ride.total_fare - driver_commission
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+        context['company_format'] = vehicle.company_format  
+        return context
+
+
+class VehicleListView(ListView):
+    model = Vehicle
+    template_name = "distributer/vehicle_list.html"
+
+    def get_queryset(self):
+        return Vehicle.objects.select_related('owner').prefetch_related('driver_set').all()
+
+
+class VehicleDailySummaryView(ListView):
+    model = DailyVehicleComm
+    template_name = "distributer/vehicle_daily_summary.html"
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        completed_rides_dates = RideDetails.objects.filter(
+            driver__vehicle=vehicle,
+            ride_status='completedbookings'
+        ).values_list('pickup_date', flat=True).distinct()
+
+        for date in completed_rides_dates:
+            rides = RideDetails.objects.filter(
+                driver__vehicle=vehicle,
+                ride_status='completedbookings',
+                pickup_date=date
+            )
+
+            total_fare = Decimal(0)
+            total_driver_commission = Decimal(0)
+            total_company_commission = Decimal(0)
+
+            for ride in rides:
+                driver_commission = self.calculate_driver_commission(ride)
+                company_commission = ride.total_fare - driver_commission
+
+                total_fare += ride.total_fare
+                total_driver_commission += driver_commission
+                total_company_commission += company_commission
+
+            print(f"vehicle: {vehicle}, date: {date}")
+            print(f"total_fare: {total_fare}, total_driver_commission: {total_driver_commission}, total_company_commission: {total_company_commission}")
+
+            try:
+                daily_summary, created = DailyVehicleComm.objects.update_or_create(
+                    vehicle=vehicle,
+                    date=date,
+                    defaults={
+                        'total_fare': total_fare,
+                        'total_driver_commission': total_driver_commission,
+                        'total_company_commission': total_company_commission
+                    }
+                )
+            except Exception as e:
+                import traceback
+                print(f"Error updating or creating DailyVehicleComm: {e}")
+                print(traceback.format_exc())
+
+        return DailyVehicleComm.objects.filter(vehicle=vehicle).order_by('-date')
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage = Decimal(str(ride.driver.vehicle.commission_type.commission_percentage))
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle_id'] = self.kwargs['vehicle_id']
+        context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
+        return context
+    
+
+class BookingDetailsView(ListView):
+    model = RideDetails
+    template_name = "distributer/booking_details.html"
+
+    def get_queryset(self):
+        vehicle_id = self.kwargs['vehicle_id']
+        date = self.kwargs['date']
+        vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+
+        rides = RideDetails.objects.filter(
+            driver__vehicle=vehicle,
+            ride_status='completedbookings',
+            pickup_date=date
+        ).order_by('pickup_time')
+
+        for ride in rides:
+            ride.driver_commission = self.calculate_driver_commission(ride)
+            ride.company_commission = ride.total_fare - ride.driver_commission
+
+        return rides
+
+    def calculate_driver_commission(self, ride):
+        if ride.driver and ride.driver.vehicle and ride.driver.vehicle.commission_type:
+            vehicle_commission_percentage = Decimal(str(ride.driver.vehicle.commission_type.commission_percentage))
+            vehicle_commission_amount = (ride.total_fare * vehicle_commission_percentage) / Decimal(100)
+            driver_commission = ride.total_fare - vehicle_commission_amount
+            return driver_commission
+        return Decimal(0)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicle'] = Vehicle.objects.get(vehicle_id=self.kwargs['vehicle_id'])
+        context['date'] = self.kwargs['date']
+        return context  
+    
 @login_required(login_url='login')
 def check_ownerphonenumber(request):
     phone_number = request.GET.get('phone_number', None)
@@ -1342,7 +1552,6 @@ class UpdateOwnerView(APIView):
         owner = get_object_or_404(VehicleOwner, owner_id=owner_id)
         original_owner_status = owner.status
 
-        # Update the owner with new data
         owner.company_format = request.POST['company_format']
         owner.name = request.POST['name']
         owner.phone_number = request.POST['phone_number']
@@ -1362,7 +1571,6 @@ class UpdateOwnerView(APIView):
         owner.updated_by = request.user
         owner.save()
 
-        # Create a VehicleOwnerHistory entry after updating the owner
         VehicleOwnerHistory.objects.create(
             owner_id=owner.owner_id,
             company_format=owner.company_format,
@@ -1383,14 +1591,6 @@ class UpdateOwnerView(APIView):
             created_by=owner.created_by.username if owner.created_by else None,
             updated_by=request.user.username
         )
-
-        # Update corresponding vehicles if the status has changed
-        if original_owner_status != owner.status:
-            vehicles = owner.vehicle_set.all()  # Access related vehicles through reverse relationship
-            for vehicle in vehicles:
-                if vehicle.vehicle_status != owner.status:
-                    vehicle.vehicle_status = owner.status
-                    vehicle.save()
 
         return JsonResponse({'success': True}, status=200)
 
@@ -1415,32 +1615,30 @@ class ViewOwner(View):
     
 
 def download_owner_documents(request, owner_id):
-    # Fetch the vehicle object
-    owner = VehicleOwner.objects.get(pk=owner_id)
+    owner = get_object_or_404(VehicleOwner, pk=owner_id)
 
-    # List of all image fields in the Vehicle model
     image_fields = [
         owner.identity,
         owner.address_proof,
         owner.image,
     ]
 
-    # Create a ZIP file in memory
+    if not any(image_fields):
+        messages.error(request, "No documents found for this owner.") 
+        return HttpResponse(status=404)  
+
     response = HttpResponse(content_type='application/zip')
     response['Content-Disposition'] = f'attachment; filename={owner.company_format}_documents.zip'
-    
-    folder_name = owner.company_format  # Folder name inside the ZIP
+
+    folder_name = owner.company_format  
 
     with zipfile.ZipFile(response, 'w') as zip_file:
         for field in image_fields:
-            if field:
-                # Get the path of the image
+            if field and os.path.exists(field.path):
                 file_path = field.path
-                # Get the file name
                 file_name = os.path.basename(file_path)
-                # Add the file to the ZIP under the specified folder
                 zip_file.write(file_path, os.path.join(folder_name, file_name))
-    
+
     return response
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -1458,48 +1656,7 @@ def verify_owner(request):
         return JsonResponse({'verified': True})
     return JsonResponse({'verified': False})   
 
-@require_POST
-def toggle_owner_status(request):
-    owner_id = request.POST.get('owner_id')
-    new_status = request.POST.get('new_status')
-    block_reason = request.POST.get('block_reason', '')
-  
-    try:
-        owner = VehicleOwner.objects.get(pk=owner_id)
-        owner.status = new_status
-        if new_status == 'inactive':
-                owner.block_reason = block_reason
-        else:
-            owner.block_reason = ''
-        owner.save()
-        VehicleOwnerHistory.objects.create(
-            owner_id=owner.owner_id,
-            company_format=owner.company_format,
-            name=owner.name,
-            phone_number=owner.phone_number,
-            address=owner.address,
-            email=owner.email,
-            image=owner.image.url if owner.image else None,
-            address_proof=owner.address_proof.url if owner.address_proof else None,
-            identity=owner.identity.url if owner.identity else None,
-            status=owner.status,
-            block_reason=block_reason,
-            holdername=owner.holdername,
-            ac_number=owner.ac_number,
-            bankname=owner.bankname,
-            ifsc_code=owner.ifsc_code,
-            created_on=owner.created_on,
-            updated_on=owner.updated_on,
-            created_by=owner.created_by.username if owner.created_by else None,
-            updated_by=request.user.username
-        )
-        return JsonResponse({'success': True})
-    except Category.DoesNotExist:
-        return JsonResponse({'success': False, 'message': 'Owner not found'})
-    except Exception as e:
-        return JsonResponse({'success': False, 'message': str(e)})  
 
-# vehicle ######################
 @login_required(login_url='login')
 def check_vehicleno(request):
     Vehicle_Number = request.GET.get('Vehicle_Number', None)
@@ -1516,7 +1673,6 @@ class AddVehicle(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Fetching data for dropdowns
         context['catlist'] = Category.objects.filter(category_status='active')
         context['blist'] = Brand.objects.filter(status='active')
         context['ownerlist'] = VehicleOwner.objects.filter(status='active',verification_status='verified')
@@ -1526,7 +1682,6 @@ class AddVehicle(TemplateView):
         context['colorlist'] = Color.objects.all()
         context['tlist'] = Transmission.objects.all()
         
-        # Setting next company format
         last_vehicle = Vehicle.objects.all().order_by('-vehicle_id').first()
         if last_vehicle:
             last_company_format = int(last_vehicle.company_format.replace('VEH', ''))
@@ -1737,49 +1892,55 @@ def vehicleupdate_status(request):
             if new_status == 'inactive':
                 vehicle.block_reason = block_reason
             else:
-                vehicle.block_reason = ''  # Clear block reason if reactivating
+                vehicle.block_reason = ''  
             vehicle.save()
 
-            # Optionally, create a CustomerHistory entry here as well
+            driver = Driver.objects.get(vehicle=vehicle)
+            if new_status == 'inactive':
+                driver.status = 'inactive'  
+            else:
+                driver.status = 'active'
+            driver.save()
+
             VehicleHistory.objects.create(
-            vehicle_id=vehicle.vehicle_id,
-            company_format=vehicle.company_format,
-            Vehicle_Number=vehicle.Vehicle_Number,
-            model=vehicle.model,
-            year=vehicle.year,
-            insurance_expiry=vehicle.insurance_expiry,
-            car_type=vehicle.car_type,
-            registration_certificate=vehicle.registration_certificate,
-            fc_certificate=vehicle.fc_certificate,
-            insurance_policy=vehicle.insurance_policy,
-            tax_details=vehicle.tax_details,
-            permit_details=vehicle.permit_details,
-            emission_test=vehicle.emission_test,
-            color=vehicle.color,
-            transmission=vehicle.transmission,
-            owner=vehicle.owner,
-            vehicle_type=vehicle.vehicle_type,
-            commission_type=vehicle.commission_type,
-            vehicle_status=vehicle.vehicle_status,
-            block_reason=vehicle.block_reason,
-            created_on=vehicle.created_on,
-            updated_on=vehicle.updated_on,
-            created_by=vehicle.created_by.username if vehicle.created_by else None,
-            updated_by=request.user.username
-        )
+                vehicle_id=vehicle.vehicle_id,
+                company_format=vehicle.company_format,
+                Vehicle_Number=vehicle.Vehicle_Number,
+                model=vehicle.model,
+                year=vehicle.year,
+                insurance_expiry=vehicle.insurance_expiry,
+                car_type=vehicle.car_type,
+                registration_certificate=vehicle.registration_certificate,
+                fc_certificate=vehicle.fc_certificate,
+                insurance_policy=vehicle.insurance_policy,
+                tax_details=vehicle.tax_details,
+                permit_details=vehicle.permit_details,
+                emission_test=vehicle.emission_test,
+                color=vehicle.color,
+                transmission=vehicle.transmission,
+                owner=vehicle.owner,
+                vehicle_type=vehicle.vehicle_type,
+                commission_type=vehicle.commission_type,
+                vehicle_status=vehicle.vehicle_status,
+                block_reason=vehicle.block_reason,
+                created_on=vehicle.created_on,
+                updated_on=vehicle.updated_on,
+                created_by=vehicle.created_by.username if vehicle.created_by else None,
+                updated_by=request.user.username
+            )
 
             return JsonResponse({'success': True})
-        except Customer.DoesNotExist:
+        except Vehicle.DoesNotExist:
             return JsonResponse({'success': False, 'message': 'Vehicle not found'})
+        except Driver.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Driver not found'})
 
     return JsonResponse({'success': False, 'message': 'Invalid request method'})
     
 
 def download_vehicle_documents(request, vehicle_id):
-    # Fetch the vehicle object
-    vehicle = Vehicle.objects.get(pk=vehicle_id)
+    vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
 
-    # List of all image fields in the Vehicle model
     image_fields = [
         vehicle.registration_certificate,
         vehicle.fc_certificate,
@@ -1789,20 +1950,20 @@ def download_vehicle_documents(request, vehicle_id):
         vehicle.emission_test,
     ]
 
-    # Create a ZIP file in memory
+    if not any(image_fields):
+        messages.error(request, "No documents found for this owner.") 
+        return HttpResponse(status=404)
+
     response = HttpResponse(content_type='application/zip')
     response['Content-Disposition'] = f'attachment; filename={vehicle.company_format}_documents.zip'
     
-    folder_name = vehicle.company_format  # Folder name inside the ZIP
+    folder_name = vehicle.company_format 
 
     with zipfile.ZipFile(response, 'w') as zip_file:
         for field in image_fields:
-            if field:
-                # Get the path of the image
+            if field and os.path.exists(field.path):
                 file_path = field.path
-                # Get the file name
                 file_name = os.path.basename(file_path)
-                # Add the file to the ZIP under the specified folder
                 zip_file.write(file_path, os.path.join(folder_name, file_name))
     
     return response
@@ -1812,7 +1973,7 @@ class ViewVehicle(View):
 
     def get(self, request, vehicle_id):
         vehicle = get_object_or_404(Vehicle, pk=vehicle_id)
-        driver = Driver.objects.filter(vehicle=vehicle).first()  # Get the associated driver, if any
+        driver = Driver.objects.filter(vehicle=vehicle).first() 
         return render(request, self.template_name, {'vehicle': vehicle, 'driver': driver})
     
 def verify_vehicle(request):
@@ -1876,7 +2037,30 @@ def verify_vehicle(request):
     return JsonResponse({'verified': False})    
 
 
-# driver ################################
+
+def fetch_vehicle_details(request):
+    if request.method == "GET":
+        vehicle_company_format = request.GET.get('vehicle_company_format')
+        try:
+            vehicle = Vehicle.objects.select_related(
+                'model__brand__category'
+            ).get(company_format=vehicle_company_format)
+            response = {
+                'success': True,
+                'vehicle': {
+                    'id': vehicle.vehicle_id,  
+                    'Vehicle_Number': vehicle.Vehicle_Number,
+                    'category_name': vehicle.model.brand.category.category_name,
+                    'brand_name': vehicle.model.brand.brand_name,
+                    'model_name': vehicle.model.model_name,
+                }
+            }
+        except Vehicle.DoesNotExist:
+            response = {
+                'success': False,
+                'message': 'Vehicle not found'
+            }
+        return JsonResponse(response)
 
 @login_required(login_url='login')
 def check_dphonenumber(request):
@@ -1887,10 +2071,114 @@ def check_dphonenumber(request):
     }
     return JsonResponse(data)
 
+class AddDriverView(TemplateView):
+    template_name = "distributer/add_driver.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        last_driver = Driver.objects.order_by('-driver_id').first()
+        if last_driver and last_driver.company_format:
+            last_company_format = int(last_driver.company_format.replace('DRIV', ''))
+            next_company_format = f'DRIV{last_company_format + 1:02}'
+        else:
+            next_company_format = 'DRIV01'
+        context['next_company_format'] = next_company_format
+
+        all_vehicles = Vehicle.objects.filter(
+            vehicle_status='active',
+            verification_status='verified'
+        )
+        
+
+        assigned_vehicle_ids = Driver.objects.values_list('vehicle_id', flat=True)
+        
+        unassigned_vehicles = [vehicle for vehicle in all_vehicles if vehicle.vehicle_id not in assigned_vehicle_ids]
+        
+        context['vehicles'] = unassigned_vehicles
+        
+        return context
+    
+
+    def post(self, request, *args, **kwargs):
+        try:
+            vehicle_id = request.POST['vehicle']
+            company_format = request.POST['company_format']
+            driver_name = request.POST['name']
+            phone_number = request.POST['phone_number']
+            email = request.POST['email']
+            password = request.POST['password']
+            address = request.POST['address']
+            pfrom_date = request.POST.get('pfrom_date', None) 
+            pto_date = request.POST.get('pto_date', None) 
+            dfrom_date = request.POST.get('dfrom_date', None)  
+            dto_date = request.POST.get('dto_date', None)  
+            profile_image = request.FILES.get('profile_image')
+            address_proof = request.FILES.get('address_proof')
+            police_clearance = request.FILES.get('police_clearance')
+            driving_license = request.FILES.get('driving_license')
+            status = request.POST['status']
+            
+            print(f"Vehicle ID: {vehicle_id}, Driver Name: {driver_name}")
+
+            try:
+                vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
+            except ObjectDoesNotExist:
+                return JsonResponse({'status': 'Error', 'message': f'Vehicle with ID {vehicle_id} does not exist.'}, status=400)
+            
+            driver = Driver(
+                vehicle=vehicle,
+                company_format=company_format,
+                name=driver_name,
+                phone_number=phone_number,
+                email=email,
+                password=password,
+                address=address,
+                profile_image=profile_image if profile_image else None,
+                address_proof=address_proof if address_proof else None,
+                police_clearance=police_clearance if police_clearance else None,
+                driving_license=driving_license if driving_license else None,
+                pfrom_date=pfrom_date if pfrom_date else None,
+                pto_date=pto_date if pto_date else None,
+                dfrom_date=dfrom_date if dfrom_date else None,
+                dto_date=dto_date if dto_date else None,
+                status=status,
+                created_by=request.user,
+                updated_by=request.user
+            )
+            driver.save()
+
+            print("Driver saved successfully.")
+            
+            return JsonResponse({'status': 'Success', 'message': 'Driver details added successfully'})
+        
+        except KeyError as e:
+            return JsonResponse({'status': 'Error', 'message': f'Missing required parameter: {e}'}, status=400)
+        
+        except Exception as e:
+            print(f"An error occurred: {str(e)}")
+            return JsonResponse({'status': 'Error', 'message': str(e)}, status=400)
+
+
+
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DriverListView(ListView):
     model = Driver
     template_name = "distributer/view_driver.html"
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DriverVerificationView(ListView):
+    model = Driver
+    template_name = "distributer/view_driververification.html"    
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DeleteDriverView(View):
+    def get(self, request):
+        driver_id = request.GET.get('driver_id', None)
+        Driver.objects.get(driver_id=driver_id).delete()
+        data = {
+            'deleted': True
+        }
+        return JsonResponse(data)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class EditDriverView(TemplateView):
@@ -1899,19 +2187,15 @@ class EditDriverView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        # Fetch all active and verified vehicles
         all_vehicles = Vehicle.objects.filter(
             vehicle_status='active',
             verification_status='verified'
         )
         
-        # Fetch all assigned vehicle IDs
         assigned_vehicle_ids = Driver.objects.values_list('vehicle_id', flat=True)
         
-        # Filter out the assigned vehicles
         unassigned_vehicles = [vehicle for vehicle in all_vehicles if vehicle.vehicle_id not in assigned_vehicle_ids]
         
-        # Add unassigned vehicles to the context
         context['vehiclelist'] = unassigned_vehicles
         
         try:
@@ -1920,7 +2204,6 @@ class EditDriverView(TemplateView):
         except KeyError:
             driverlist = Driver.objects.none()
         
-        # Add driver list to the context
         context['driverlist'] = list(driverlist)
         
         return context
@@ -1932,7 +2215,6 @@ class UpdateDriverView(APIView):
     @csrf_exempt
     def post(self, request):
         try:
-            # Fetch and validate inputs
             driver_id = request.POST.get('driver_id')
             vehicle_id = request.POST.get('vehicle', None)
 
@@ -1944,13 +2226,11 @@ class UpdateDriverView(APIView):
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid driver_id format'}, status=400)
 
-            # Fetch the driver instance
             try:
                 driver = Driver.objects.get(driver_id=driver_id)
             except Driver.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Driver not found'}, status=404)
 
-            # Fetch the vehicle instance if vehicle_id is provided
             if vehicle_id:
                 try:
                     vehicle_id = int(vehicle_id)
@@ -1959,35 +2239,15 @@ class UpdateDriverView(APIView):
                 except (ValueError, Vehicle.DoesNotExist):
                     return JsonResponse({'success': False, 'error': 'Vehicle not found'}, status=404)
 
-            # Update the related Profile first
             new_email = request.POST.get('email', driver.email)
             new_phone_number = request.POST.get('phone_number', driver.phone_number)
             new_address = request.POST.get('address', driver.address)
             new_status = request.POST.get('status', driver.status)         
 
-            try:
-                profile = Profile.objects.get(user__email=driver.email)
-                profile.phone_number = new_phone_number
-                profile.address = new_address
-                profile.status = new_status
-                profile.updated_by = request.user
-                profile.save()
-            except Profile.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'Profile not found for the driver'}, status=404)
-
-            # Update the related User model
-            try:
-                user = User.objects.get(email=driver.email)
-                user.username = request.POST.get('name', driver.name)
-                user.email = new_email  # Updating the email
-                user.save()
-            except User.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'User not found for the driver'}, status=404)
-
-            # Update the driver with new data, now including the email update
+            
             driver.name = request.POST.get('name', driver.name)
             driver.phone_number = new_phone_number
-            driver.email = new_email  # Set new email
+            driver.email = new_email  
             driver.address = new_address
             driver.status = new_status
             driver.company_format = request.POST.get('company_format', driver.company_format)
@@ -2005,24 +2265,9 @@ class UpdateDriverView(APIView):
             if 'driving_license' in request.FILES:
                 driver.driving_license = request.FILES['driving_license']
 
+           
             driver.updated_by = request.user
             driver.save() 
-             # Handle vehicle and owner status updates
-            if driver.vehicle:
-                if driver.vehicle.drive_status == 'selfdrive':
-                    driver.vehicle.vehicle_status = driver.status
-                    driver.vehicle.save()
-
-                    owner = driver.vehicle.owner
-                    owner.status = driver.status
-                    owner.save()
-                elif driver.vehicle.drive_status == 'otherdrive':
-                    if new_status == 'active' and driver.status == 'inactive':
-                        driver.vehicle.vehicle_status = 'active'
-                        driver.vehicle.save()
-                    elif new_status == 'inactive' and driver.status == 'active':
-                        driver.vehicle.vehicle_status = 'active'
-                        driver.vehicle.save()
 
             DriverHistory.objects.create(
                 driver_id=driver.driver_id,
@@ -2060,6 +2305,75 @@ class UpdateDriverView(APIView):
             return JsonResponse({'success': False, 'error': 'User not found'}, status=404)
         except Exception as e:
             return JsonResponse({'success': False, 'error': f'An unexpected error occurred: {e}'}, status=500)
+            
+class DriverHistoryView(TemplateView):
+    template_name = 'distributer/history_driver.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        driver_id = self.kwargs['driver_id']
+        driver = get_object_or_404(Driver, driver_id=driver_id)
+        history = DriverHistory.objects.filter(driver_id=driver_id)
+        context['driver'] = driver
+        context['history'] = history
+        return context
+
+class ViewDriver(View):
+    template_name = 'distributer/detailview_driver.html'
+
+    def get(self, request, driver_id):
+        driverlist = get_object_or_404(Driver, pk=driver_id)
+        return render(request, self.template_name, {'driverlist': driverlist}) 
+
+def download_driver_documents(request, driver_id):
+    driver = get_object_or_404(Driver, pk=driver_id)
+
+    image_fields = [
+        driver.profile_image,
+        driver.address_proof,
+        driver.police_clearance,
+        driver.driving_license,
+    ]
+
+    if not any(image_fields):
+        messages.error(request, "No documents found for this owner.") 
+        return HttpResponse(status=404)  
+
+    response = HttpResponse(content_type='application/zip')
+    response['Content-Disposition'] = f'attachment; filename={driver.company_format}_documents.zip'
+    
+    folder_name = driver.company_format  
+
+    with zipfile.ZipFile(response, 'w') as zip_file:
+        for field in image_fields:
+            if field and os.path.exists(field.path):
+                file_path = field.path
+                file_name = os.path.basename(file_path)
+                zip_file.write(file_path, os.path.join(folder_name, file_name))
+    
+    return response
+
+def verify_driver(request):
+    driver_id = request.GET.get('driver_id')
+    driver = Driver.objects.get(driver_id=driver_id)
+    if driver.verification_status != 'verified':
+        driver.verification_status = 'verified'
+        driver.verified_on = timezone.now()
+        driver.save()
+        return JsonResponse({'verified': True})
+    return JsonResponse({'verified': False})
+
+
+@method_decorator(login_required(login_url='login'), name='dispatch')
+class DriverReport(ListView):
+    model = Driver
+    template_name = "distributer/driver_report.html"  
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['vehicles'] = Vehicle.objects.all() 
+        context['drivers'] = Driver.objects.all() 
+        return context
 
 
 def fetch_vehicle_details(request):
@@ -2087,9 +2401,6 @@ def fetch_vehicle_details(request):
             }
         return JsonResponse(response)
  
-
-# ride details ##########################################
-
 
 class customerGetRidePricingDetails(APIView):
     def post(self, request):
@@ -2127,14 +2438,12 @@ class customerGetRidePricingDetails(APIView):
 
         costs = {}
 
-        # Fetch the ridetype instance
         ride_type_instance = Ridetype.objects.filter(ridetype_id=ridetype_id).first()
         if not ride_type_instance:
             return JsonResponse({'error': 'Invalid ridetype'}, status=400)
 
         print(f"Ride Type: {ride_type_instance.name}, Trip Type: {trip_type}, Toll Option: {toll_option}")
 
-        # Call appropriate calculation function based on trip_type
         if ride_type_instance.name == 'outstation':
             pricing_details = self.get_outstation_pricing(time_slot, ridetype_id, trip_type)
             if trip_type == 'round_trip':
@@ -2161,7 +2470,6 @@ class customerGetRidePricingDetails(APIView):
 
     def get_airport_pricing(self, time_slot, ridetype_id, trip_type):
         """Fetch pricing for airport rides with or without toll."""
-        # You can modify this to include toll_option-based pricing if needed
         return Pricing.objects.select_related('category').filter(
             slots=time_slot, ridetype_id=ridetype_id,trip_type=trip_type
         )
@@ -2177,7 +2485,7 @@ class customerGetRidePricingDetails(APIView):
         pricing_dict = {}
         for price in pricing_details:
             category_name = price.category.category_name
-            car_type = price.car_type.lower()  # 'ac' or 'non ac'
+            car_type = price.car_type.lower() 
 
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
@@ -2220,51 +2528,52 @@ class customerGetRidePricingDetails(APIView):
     def calculate_outstation_roundtrip(self, request, pricing_details, distance):
         """Calculate pricing for outstation roundtrip rides based on pickup and drop date."""
         from datetime import datetime
+        from decimal import Decimal
 
-        # Parse the pickup and drop date/time from the request
         pickup_date_str = request.POST.get('pickup_date')
         pickup_time_str = request.POST.get('pickup_time')
         drop_date_str = request.POST.get('drop_date')
         drop_time_str = request.POST.get('drop_time')
 
-        # Ensure that pickup and drop date/time are provided
         if not pickup_date_str or not pickup_time_str:
             return {"error": "Pickup date and time must be provided."}
         if not drop_date_str or not drop_time_str:
             return {"error": "Drop date and time must be provided."}
 
-        # Combine pickup date and time for parsing
         pickup_datetime_str = f"{pickup_date_str} {pickup_time_str}"
-        
-        # Combine drop date and time for parsing
         drop_datetime_str = f"{drop_date_str} {drop_time_str}"
 
         try:
-            # Convert to datetime objects
             pickup_datetime = datetime.strptime(pickup_datetime_str, "%Y-%m-%d %H:%M")
             drop_datetime = datetime.strptime(drop_datetime_str, "%Y-%m-%d %H:%M")
         except ValueError as e:
-            # Return a meaningful error message in case of parsing issues
             return {"error": f"Invalid date/time format: {str(e)}"}
 
-        # Calculate the number of days based on pickup and drop dates
         num_days = self.calculate_days(pickup_datetime, drop_datetime)
 
-        # Cap the distance based on the number of days (250 km per day)
-        daily_km_cap = 250 * num_days
-        applicable_distance = max(distance, daily_km_cap)
-
-        # Calculate the pricing for each vehicle category and type
         pricing_dict = {}
+
         for price in pricing_details:
             category_name = price.category.category_name
             car_type = price.car_type.lower()
             toll_price = Decimal(str(price.toll_price))
+
+            if 'mini' in category_name.lower() or 'sedan' in category_name.lower():
+                daily_km_cap = 250 * num_days
+            else:
+                daily_km_cap = 300 * num_days
+
+            print(f"Total allowed km for {num_days} day(s) for {category_name}: {daily_km_cap} km")
+
+            applicable_distance = max(distance, daily_km_cap)
+            print(f"Applicable distance for {category_name} based on days: {applicable_distance} km")
+
             if category_name not in pricing_dict:
                 pricing_dict[category_name] = {}
 
-            # Calculate the cost for the applicable distance and number of days
-            pricing_dict[category_name][car_type] = self.calculate_cost(applicable_distance, price,toll_price=toll_price, num_days=num_days)
+            pricing_dict[category_name][car_type] = self.calculate_cost(
+                applicable_distance, price, toll_price=toll_price, num_days=num_days
+            )
 
         return pricing_dict
 
@@ -2292,8 +2601,6 @@ class customerGetRidePricingDetails(APIView):
         toll_price_decimal = Decimal(str(toll_price))
 
         driver_beta_decimal = Decimal(str(price.driver_beta)) * Decimal(str(num_days))
-
-        # Calculate total cost
 
         total_cost = (Decimal(distance) * price_per_km_decimal) + permit_decimal + toll_price_decimal + driver_beta_decimal
         total_cost = round(total_cost, 0)
@@ -2342,9 +2649,6 @@ class AddRide(TemplateView):
     def post(self, request):
         try:
             print("Fetching POST data")
-            # Convert date and time
-            # pickup_date = datetime.strptime(pickup_date_str, '%Y-%m-%d').strftime('%Y-%m-%d')
-            # pickup_time = datetime.strptime(pickup_time_str, '%H:%M').strftime('%H:%M:%S')
             company_format = request.POST['company_format']
             ride_type_id = request.POST['ridetype']
             source = request.POST.get('source')
@@ -2355,7 +2659,7 @@ class AddRide(TemplateView):
             total_fare = request.POST.get('total_fare')
             customer_id = request.POST['customer']
             customer_notes = request.POST['customer_notes']
-            car_type = request.POST.get('car_type', '').strip()  # Fetch car_type (AC or Non-AC)
+            car_type = request.POST.get('car_type', '').strip() 
             slots = determine_time_slot(pickup_time)
             ride_status = request.POST['ride_status']
             phone_number = request.POST['phone_number']
@@ -2375,7 +2679,6 @@ class AddRide(TemplateView):
             try:
                 customer = Customer.objects.get(phone_number=phone_number)
             except Customer.DoesNotExist:
-                # Create new customer
                 last_customer = Customer.objects.all().order_by('-customer_id').first()
                 new_customer_id = last_customer.customer_id + 1 if last_customer else 1
                 customer_company_format = f'CUST{new_customer_id:02}'
@@ -2394,15 +2697,11 @@ class AddRide(TemplateView):
                 customer.save()
             print(f"Created new customer: {customer}")
 
-            # Ensure objects exist in database before saving
             ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
             category_name = category.split('|')[0]
             car_type_name = category.split('|')[1]
             category_instance = Category.objects.get(category_name=category_name)
 
-            # Retrieve pricing instance
-            # trip_type = request.POST.get('trip_type', '').strip()
-            # print('trip_type from request:', trip_type)  # This should print the trip_type value
 
             try:
                 if ridetype.name.lower() == 'local':
@@ -2414,9 +2713,8 @@ class AddRide(TemplateView):
                     )
                     
                 else:
-                # Exclude triptype filter for local rides
                     trip_type = request.POST.get('trip_type', '').strip()
-                    print('trip_type from request:', trip_type)  # This should print the trip_type value
+                    print('trip_type from request:', trip_type) 
                     pricing_instance = Pricing.objects.get(
                         category=category_instance,
                         car_type=car_type_name,
@@ -2435,11 +2733,9 @@ class AddRide(TemplateView):
 
             print(f"Saving ride with details: {company_format}, {ridetype}, {category_instance}")
 
-            # Determine ride status based on pickup date
             today = date.today().isoformat()
             ride_status = 'advancebookings' if pickup_date > today else 'currentbookings'
 
-            # Use the next company format for the ride
             next_company_format = self.get_context_data()['next_company_format']
 
             print(f'company_format: {next_company_format}')
@@ -2473,7 +2769,7 @@ class AddRide(TemplateView):
                 cancelled_by=request.user,
                 created_by=request.user,
                 updated_by=request.user,
-                pricing = pricing_instance,  # Set the Pricing instance
+                pricing = pricing_instance, 
 
             )
             ride_details.save()
@@ -2521,7 +2817,6 @@ class AddRide(TemplateView):
             return JsonResponse({'status': 'Error', 'message': str(e)})
 
 def determine_time_slot(pickup_time):
-    # Determine the time slot based on pickup_time_str
     pickup_time = datetime.strptime(pickup_time, '%H:%M').time()
     if time(0, 0) <= pickup_time < time(6, 0):
         return '12AM - 6AM'
@@ -2533,18 +2828,15 @@ def determine_time_slot(pickup_time):
         return '6PM - 12AM'
 
 
-###################################################        #
 
 class SendOtp(View):
     def post(self, request):
         phone_number = request.POST.get('phone_number')
         customer_name = request.POST.get('customer_name')
-        otp = str(random.randint(100000, 999999))  # Generate a random 6-digit OTP
+        otp = str(random.randint(100000, 999999))  
 
-        # Store OTP in cache with a 5-minute expiration
         cache.set(f'otp_{phone_number}', otp, timeout=300)
 
-        # WhatsApp API payload for OTP
         whatsapp_payload = {
             "apiKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2ZTUxNDg4NzJjYjU0MGI2ZjA2YTRmYyIsIm5hbWUiOiJSaWRleHByZXNzIiwiYXBwTmFtZSI6IkFpU2Vuc3kiLCJjbGllbnRJZCI6IjY2ZTUxNDg3NzJjYjU0MGI2ZjA2YTRlZSIsImFjdGl2ZVBsYW4iOiJCQVNJQ19NT05USExZIiwiaWF0IjoxNzI2Mjg5MDMyfQ.vEzcFg1Iyt1Qt5zk7Bcsm_HwxLLJrcap_slve0OpOog",
             "campaignName": "otp_verification",
@@ -2560,7 +2852,7 @@ class SendOtp(View):
                     "parameters": [
                         {
                             "type": "text",
-                            "text": otp  # Send OTP in the message
+                            "text": otp  
                         }
                     ]
                 }
@@ -2608,55 +2900,49 @@ class RideList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
         today = date.today()
-        # Update ride status for rides with a past pickup date
         past_rides = RideDetails.objects.filter(pickup_date__lt=today, ride_status='currentbookings')
         past_rides.update(ride_status='pendingbookings')
         
-        # Fetch rides with a pickup date of today and status as current bookings
         current_rides = RideDetails.objects.filter(ride_status='currentbookings', pickup_date=today)
         
         return current_rides
 
-#################################### advance bookings ###########################################
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AdvanceBookingsList(ListView):
     model = RideDetails
-    template_name = "distributer/advance_bookings.html"  # Ensure you create this template
+    template_name = "distributer/advance_bookings.html" 
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
         today = date.today()
         
-        # Update ride status for rides where the pickup date is today
         today_rides = RideDetails.objects.filter(pickup_date=today, ride_status='advancebookings')
         today_rides.update(ride_status='currentbookings')
         
-        # Fetch rides with a pickup date greater than today and status as advance bookings
         advance_rides = RideDetails.objects.filter(ride_status='advancebookings', pickup_date__gt=today)
         
         return advance_rides
-##############################################################################################################   
+    
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class PendingBookingsList(ListView):
     model = RideDetails
-    template_name = "distributer/pending_bookings.html"  # Ensure you create this template
+    template_name = "distributer/pending_bookings.html"  
 
     def get_queryset(self):
         today = date.today()
         return RideDetails.objects.filter(ride_status='pendingbookings', pickup_date__lt=today)
     
-# ongoing rides########################################################################################################
 class OngoingRideList(ListView):
     model = RideDetails
     template_name = "distributer/ongoing_rides.html"
@@ -2665,7 +2951,6 @@ class OngoingRideList(ListView):
         return RideDetails.objects.filter(Q(ride_status='ongoingbookings') & Q(assigned_by=self.request.user)).select_related('driver') 
 
     
-# completed rides########################################################################################################
 class CompletedRideList(ListView):
     model = RideDetails
     template_name = "distributer/completed_rides.html"
@@ -2674,7 +2959,6 @@ class CompletedRideList(ListView):
         return RideDetails.objects.filter(Q(ride_status='completedbookings') & Q(assigned_by=self.request.user)).select_related('driver')
     
 
-# invoice rides########################################################################################################
 
 class InvoiceView(DetailView):
     model = RideDetails
@@ -2686,12 +2970,12 @@ class InvoiceView(DetailView):
         return get_object_or_404(RideDetails, ride_id=ride_id)    
 
 class AssignDriverView(ListView):
-    model = Driver
+    model = Vehicle
     template_name = 'distributer/view_ride.html'
     context_object_name = 'drivers'
 
     def get_queryset(self):
-        return Driver.objects.filter(status='active')
+        return Vehicle.objects.filter(vehicle_status='active')
 
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
@@ -2738,7 +3022,6 @@ class UpdateRide(APIView):
     @csrf_exempt
     def post(self, request):
         
-            # Retrieve and validate ride_id from request
             ride_id = request.POST.get('ride_id')
             if not ride_id:
                 return JsonResponse({'success': False, 'error': 'Missing ride_id'}, status=400)
@@ -2748,13 +3031,11 @@ class UpdateRide(APIView):
             except ValueError:
                 return JsonResponse({'success': False, 'error': 'Invalid ride_id'}, status=400)
             
-            # Retrieve the ride object
             try:
                 ride = RideDetails.objects.get(ride_id=ride_id)
             except RideDetails.DoesNotExist:
                 return JsonResponse({'success': False, 'error': 'Ride not found'}, status=404)
             
-            # Update customer if provided
             customer_id = request.POST.get('customer', None)
             if customer_id:
                 try:
@@ -2764,7 +3045,6 @@ class UpdateRide(APIView):
                 except (ValueError, Customer.DoesNotExist):
                     return JsonResponse({'success': False, 'error': 'Invalid customer_id'}, status=400)
             
-            # Update the ride with new data
             ride.source = request.POST.get('source', ride.source)
             ride.destination = request.POST.get('destination', ride.destination)
             ride.pickup_date = request.POST.get('pickup_date', ride.pickup_date)
@@ -2774,7 +3054,6 @@ class UpdateRide(APIView):
             ride.updated_by = request.user
             ride.save()
 
-            # Create a RideDetailsHistory entry after updating the ride
             RideDetailsHistory.objects.create(
                 ride_id=ride.ride_id,
                 company_format=ride.company_format,
@@ -2813,70 +3092,6 @@ class RideDetailsHistoryView(TemplateView):
         context['history'] = history
         return context
 
-# @method_decorator(login_required(login_url='login'), name='dispatch')
-# class UpdateRide(APIView):
-#     def post(self, request):
-#         ride_id = request.POST['ride_id']
-#         company_format = request.POST['company_format']
-#         customer_id = request.POST['customer']
-#         vehicle_id = request.POST['vehicle']
-#         ride_type_id = request.POST['ridetype']
-#         source = request.POST['source']
-#         destination = request.POST['destination']
-#         booking_datetime = request.POST['Booking_datetime']
-#         drop_datetime = request.POST['drop_datetime']
-#         driver_id = request.POST['driver']
-#         totalfare_before_gst = request.POST['totalfare_before_gst']
-#         gst = request.POST['gst']
-#         total_after_gst = request.POST['total_after_gst']
-#         drivers_charge = request.POST['drivers_charge']
-#         petrol_charge = request.POST['petrol_charge']
-#         company_share = request.POST['company_share']
-#         no_of_days = request.POST['no_of_days']
-#         ride_status = request.POST['ride_status']
-#         customer_feedback = request.POST['customer_feedback']
-#         driver_feedback = request.POST['driver_feedback']
-
-#         ride_details = RideDetails.objects.get(ride_id=ride_id)
-#         ride_details.company_format = company_format
-#         ride_details.customer = Customer.objects.get(customer_id=customer_id)
-#         ride_details.vehicle = Vehicle.objects.get(vehicle_id=vehicle_id)
-#         ride_details.ridetype = Ridetype.objects.get(ridetype_id=ride_type_id)
-#         ride_details.source = source
-#         ride_details.destination = destination
-#         ride_details.Booking_datetime = booking_datetime
-#         ride_details.drop_datetime = drop_datetime
-#         ride_details.driver = Driver.objects.get(driver_id=driver_id)
-#         ride_details.totalfare_before_gst = totalfare_before_gst
-#         ride_details.gst = gst
-#         ride_details.total_after_gst = total_after_gst
-#         ride_details.drivers_charge = drivers_charge
-#         ride_details.petrol_charge = petrol_charge
-#         ride_details.company_share = company_share
-#         ride_details.no_of_days = no_of_days
-#         ride_details.ride_status = ride_status
-#         ride_details.customer_feedback = customer_feedback
-#         ride_details.driver_feedback = driver_feedback
-#         ride_details.updated_by = request.user  # Set updated_by to the current user
-
-#         ride_details.save()
-#         return JsonResponse({'success': True}, status=200)
-    
-# @method_decorator(login_required(login_url='login'), name='dispatch')
-# class profile(TemplateView):
-#     template_name = 'distributer/app-profile.html'
-    
-#     def get_context_data(self, **kwargs):
-#         context = super().get_context_data(**kwargs)
-#         try:
-#             user_id = self.request.session.get('user_id')
-#             print("---------------------------",user_id)
-#             userlist = User.objects.filter(id=user_id)
-#         except:
-#             userlist = User.objects.filter(id=user_id)
-            
-#         context['userlist']= list(userlist)
-#         return context
 
 @login_required
 def distributer_profile_view(request):
@@ -2891,12 +3106,10 @@ class UpdateUserView(View):
 
         if request.user:
             user = request.user
-            # Simple validation
             if username and password:
                 user.username = username
                 user.set_password(password)
                 user.save()
-                #user = authenticate(username=user.username, password=password)
                 if user is not None:
                     return JsonResponse({'status': 'success'}, status=200)
                 return JsonResponse({'status': 'error', 'message': 'Authentication failed'}, status=400)
@@ -2904,7 +3117,6 @@ class UpdateUserView(View):
         return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
     
     
-# assign driver###########################################################################################################
 def assign_driver(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -2983,17 +3195,16 @@ def assign_driver(request):
 
     return JsonResponse({'status': 'failed'}, status=400)
 
-# advanceassign driver###########################################################################################################
 def advanceassign_driver(request):
     if request.method == 'POST':
         data = json.loads(request.body)
-        driver_id = data.get('driver_id')  # This will be company_format
+        driver_id = data.get('driver_id')  
         ride_id = data.get('ride_id')
 
         try:
-            ride = RideDetails.objects.get(ride_id=ride_id)  # Use ride_id instead of id
-            driver = Driver.objects.get(company_format=driver_id)  # Lookup driver using company_format
-            ride.driver = driver  # Assign the driver object
+            ride = RideDetails.objects.get(ride_id=ride_id) 
+            driver = Driver.objects.get(company_format=driver_id)  
+            ride.driver = driver  
             ride.ride_status = 'assignlaterbookings'
             ride.assigned_by=request.user
             ride.save()
@@ -3061,44 +3272,16 @@ def advanceassign_driver(request):
 
     return JsonResponse({'status': 'failed'}, status=400)
 
-# restore bookings ##############################################33
 
-# def distributer_update_ride_status(request, ride_id):
-#     if request.method == 'POST':
-#         try:
-#             ride = RideDetails.objects.get(ride_id=ride_id)
-#             pickup_date = request.POST.get('pickup_date')
-
-#             if pickup_date:
-#                 today = date.today().isoformat()
-
-#                 if pickup_date > today:
-#                     ride.ride_status = 'advancebookings'
-#                 else:
-#                     ride.ride_status = 'currentbookings'
-
-#                 ride.save()
-#                 return JsonResponse({'success': True})
-#             else:
-#                 return JsonResponse({'success': False, 'message': 'pickup_date not provided'})
-
-#         except RideDetails.DoesNotExist:
-#             return JsonResponse({'success': False, 'message': 'Ride not found'})
-
-#     return JsonResponse({'success': False, 'message': 'Invalid request method'})
-
-# assigned ride list##################################################################################################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AssignedRideList(ListView):
     model = RideDetails
     template_name = "distributer/assigned_rides.html"
 
     def get_queryset(self):
-        # Get only rides that are assigned
         return RideDetails.objects.filter(Q(ride_status='assignbookings') & Q(assigned_by=self.request.user)).select_related('driver')
 
 
-# assign later list##################################################################################################
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class AssignLaterList(ListView):
     model = RideDetails
@@ -3111,14 +3294,12 @@ class AssignLaterList(ListView):
         context['bookings'] = RideDetails.objects.filter(ride_status='assignlaterbookings')
         context['categories'] = Category.objects.all() 
         context['vehicles'] = Vehicle.objects.all()  
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1) 
         return context
 
     def get_queryset(self):
-        # Get only rides that are assigned
         return RideDetails.objects.filter(Q(ride_status='assignlaterbookings') & Q(assigned_by=self.request.user)).select_related('driver')
     
-##################    cancel booking    #################################################################### 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class CancelledListView(ListView):
     model = RideDetails
@@ -3127,8 +3308,7 @@ class CancelledListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['drivers'] = Driver.objects.all()
-        # Pass a sample ride_id or adjust based on your logic
-        context['ride_id'] = self.kwargs.get('ride_id', 1)  # Adjust this based on your URL setup
+        context['ride_id'] = self.kwargs.get('ride_id', 1)  
         return context
 
     def get_queryset(self):
@@ -3208,12 +3388,9 @@ def cancel_ride(request):
     return JsonResponse({'status': 'failed'}, status=400)
 
 
-#invoice #########################################
 class InvoiceView(View):
     
     def get(self, request, *args, **kwargs):
-        # Manually initialize COM
-        # pythoncom.CoInitialize()
 
         try:
             ride_id = self.kwargs.get("ride_id")
@@ -3223,13 +3400,11 @@ class InvoiceView(View):
             except RideDetails.DoesNotExist:
                 return JsonResponse({'success': False, 'message': "Ride not found."})
 
-            # Load your template
             template_path = os.path.join("media", "Invoice_template.docx")
             template = DocxTemplate(template_path)
 
             current_date = datetime.now().strftime('%d-%m-%Y')
 
-            # Define the context
             sList = {
                 'serv_type': 'Drop',
                 'serv_desp': f"{ride.source} - {ride.destination}",
@@ -3268,16 +3443,12 @@ class InvoiceView(View):
         except Exception as e:
             return JsonResponse({'success': False, 'message': str(e)})
         
-        # finally:
-            # pythoncom.CoUninitialize()
 
 
-# enquiry ###############################
 class EnquiryList(ListView):
     model = Enquiry
     template_name = "distributer/view_enquiry.html"     
         
-# package category #######################################################################
 
 @login_required(login_url='login')   
 def check_package_category(request):
@@ -3339,12 +3510,10 @@ class UpdatePackageCategory(APIView):
         package_category_id = request.POST['package_category_id']
         package = PackageCategories.objects.get(package_category_id=package_category_id)
 
-        # Update the ride type with new data
         package.category_name = request.POST['category_name']
         package.updated_by = request.user
         package.save()
 
-        # Create another RidetypeHistory entry after updating the ride type
         PackageCategoriesHistory.objects.create(
             package_category_id=package.package_category_id,
             category_name=package.category_name,
@@ -3368,7 +3537,6 @@ class PackageCategoryHistoryView(TemplateView):
         context['history'] = history
         return context
 
-# packages ############
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class addwebpackages(TemplateView):
     template_name = "distributer/add_webpackages.html"
@@ -3381,10 +3549,8 @@ class addwebpackages(TemplateView):
 
     def post(self, request):
         try:
-            # Print that the POST request is received
             print("POST request received")
 
-            # Retrieve data from POST request
             title = request.POST.get('title')
             slug = slugify(title)
             package_category_id = request.POST.get('package_category')
@@ -3404,22 +3570,18 @@ class addwebpackages(TemplateView):
             h1tag = request.POST.get('h1tag')
             status = request.POST.get('status')
 
-            # Print received form data
             print(f"Form data: title={title}, category_id={package_category_id}, description={description}")
 
-            # Validate required fields
             if not title or not package_category_id:
                 print("Missing required fields: title or category")
                 return JsonResponse({'status': "Failed", 'error': "Title and category are required."}, status=400)
 
-            # Fetch category object
             try:
                 package_category = PackageCategories.objects.get(package_category_id=package_category_id)
             except PackageCategories.DoesNotExist:
                 print(f"Package category not found: {package_category_id}")
                 return JsonResponse({'status': "Failed", 'error': "Invalid package category."}, status=400)
 
-            # Create package object
             webpackage = WebsitePackages(
                 title=title,
                 slug=slug,
@@ -3443,13 +3605,11 @@ class addwebpackages(TemplateView):
                 updated_by=request.user
             )
 
-            # Save the package
             webpackage.save()
             print("Package saved successfully")
             return JsonResponse({'status': "Success"})
 
         except Exception as e:
-            # Print the exception
             print(f"Error saving package: {e}")
             return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)   
         
@@ -3457,6 +3617,10 @@ class addwebpackages(TemplateView):
 class webPackageList(ListView):
     model = WebsitePackages
     template_name = "distributer/view_webpackages.html"
+    context_object_name = 'webpackages'
+    
+    def get_queryset(self):
+        return WebsitePackages.objects.filter(created_by=self.request.user)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class DeletewebPackages(View):
@@ -3547,7 +3711,6 @@ class AddBlogView(TemplateView):
         try:
             print("POST request received")
 
-            # Retrieve data from POST request
             title = request.POST.get('title')
             slug = slugify(title)
             description = request.POST.get('description')
@@ -3583,7 +3746,6 @@ class AddBlogView(TemplateView):
                 updated_by=request.user
             )
 
-            # Process image if uploaded
             if image:
                 try:
                     print(f"Processing image: {image.name}")
@@ -3591,7 +3753,6 @@ class AddBlogView(TemplateView):
                     img = img.resize((880, 450), Image.LANCZOS)
                     file_extension = os.path.splitext(image.name)[1].lower()
 
-                    # Define format based on extension
                     format = 'JPEG' if file_extension in ['.jpg', '.jpeg'] else 'PNG' if file_extension == '.png' else 'GIF'
 
                     img_io = BytesIO()
@@ -3607,7 +3768,6 @@ class AddBlogView(TemplateView):
             return JsonResponse({'status': "Success"})
 
         except Exception as e:
-            # Print the exception
             print(f"Error saving blogs: {e}")
             return JsonResponse({'status': "Failed", 'error': str(e)}, status=500)
 
@@ -3615,6 +3775,10 @@ class AddBlogView(TemplateView):
 class BlogListView(ListView):
     model = Blogs
     template_name = "distributer/view_blog.html"
+    context_object_name = 'blogs'
+    
+    def get_queryset(self):
+        return Blogs.objects.filter(created_by=self.request.user)
 
 @method_decorator(login_required(login_url='login'), name='dispatch')
 class webDeleteBlogs(View):
@@ -3663,12 +3827,11 @@ class UpdatewebBlogs(APIView):
         except Blogs.DoesNotExist:
             return JsonResponse({'success': False, 'error': 'Blog not found'}, status=404)
 
-        # Update fields
         blog.title = title
         blog.slug=slug
         blog.description = description
         if image:
-            blog.image = image  # Update the image if a new one is uploaded
+            blog.image = image  
         blog.image_link = image_link
         blog.facebook = facebook
         blog.instagram = instagram
@@ -3680,7 +3843,6 @@ class UpdatewebBlogs(APIView):
         blog.meta_keywords = meta_keywords
         blog.h1tag = h1tag
 
-        # Save the updated blog entry
         blog.save()
 
         return JsonResponse({'success': True}, status=200)    

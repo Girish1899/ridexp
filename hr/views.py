@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404, render
 from superadmin.models import RideDetails,Customer,Driver,Vehicle
 from django.contrib.auth.decorators import login_required
-# views.py
 from django.http import JsonResponse
 from .models import Attendance, Profile, User
 from rest_framework.views import APIView
@@ -10,7 +9,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
 
-# Create your views here.
 
 @login_required(login_url='login')
 def index(request):
@@ -38,7 +36,7 @@ def fetch_employee_details(request):
             employee_details = {
                 'id': profile.id,
                 'company_format': profile.company_format,
-                'type': profile.type,  # Role
+                'type': profile.type, 
             }
             return JsonResponse({'success': True, 'profile': employee_details})
         except (User.DoesNotExist, Profile.DoesNotExist):

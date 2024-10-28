@@ -32,7 +32,6 @@
             </div>
         </div>
 
-        <!-- Current Bookings Section -->
         <div class="row">
             <div class="col-12">
             <div class="card my-4">
@@ -73,7 +72,6 @@
                                     {{ booking.customer.address }}<br>
 
                                 </td>
-                                <!-- <td>{{ booking.ridetype.name }}</td> -->
                                 <td>{{ booking.source }}</td>
                                 <td>{{ booking.destination }}<br>
                                     <span class="badge badge-pill badge-success">{{ booking.ridetype.name }}</span>
@@ -95,7 +93,6 @@
             </div>
         </div>
 
-        <!-- Advance Bookings Section -->
         <div class="row">
             <div class="col-12">
             <div class="card my-4">
@@ -136,7 +133,6 @@
                                     {{ booking.customer.address }}<br>
 
                                 </td>
-                                <!-- <td>{{ booking.ridetype.name }}</td> -->
                                 <td>{{ booking.source }}</td>
                                 <td>{{ booking.destination }}<br>
                                     <span class="badge badge-pill badge-success">{{ booking.ridetype.name }}</span>
@@ -159,7 +155,6 @@
         </div>
 
 
-        <!-- assigned Bookings Section -->
         <div class="row">
             <div class="col-12">
             <div class="card my-4">
@@ -202,7 +197,6 @@
                                     {{ booking.customer.address }}<br>
 
                                 </td>
-                                <!-- <td>{{ booking.ridetype.name }}</td> -->
                                 <td>{{ booking.source }}</td>
                                 <td>{{ booking.destination }}<br>
                                     <span class="badge badge-pill badge-success">{{ booking.ridetype.name }}</span>
@@ -237,8 +231,6 @@
             </div>
         </div>
 
-
-        <!-- ongoing Bookings Section -->
         <div class="row">
             <div class="col-12">
             <div class="card my-4">
@@ -281,7 +273,6 @@
                                     {{ booking.customer.address }}<br>
 
                                 </td>
-                                <!-- <td>{{ booking.ridetype.name }}</td> -->
                                 <td>{{ booking.source }}</td>
                                 <td>{{ booking.destination }}<br>
                                     <span class="badge badge-pill badge-success">{{ booking.ridetype.name }}</span>
@@ -316,11 +307,6 @@
             </div>
         </div>
 
-
-        
-
-
-        <!-- Completed Bookings Section -->
         <div class="row">
             <div class="col-12">
             <div class="card my-4">
@@ -363,7 +349,6 @@
                                     {{ booking.customer.address }}<br>
 
                                 </td>
-                                <!-- <td>{{ booking.ridetype.name }}</td> -->
                                 <td>{{ booking.source }}</td>
                                 <td>{{ booking.destination }}<br>
                                     <span class="badge badge-pill badge-success">{{ booking.ridetype.name }}</span>
@@ -398,7 +383,6 @@
             </div>
         </div>
 
-        <!-- Cancelled Bookings Section -->
         <div class="row">
             <div class="col-12">
             <div class="card my-4">
@@ -442,7 +426,6 @@
                                     {{ booking.customer.address }}<br>
 
                                 </td>
-                                <!-- <td>{{ booking.ridetype.name }}</td> -->
                                 <td>{{ booking.source }}</td>
                                 <td>{{ booking.destination }}<br>
                                     <span class="badge badge-pill badge-success">{{ booking.ridetype.name }}</span>
@@ -484,19 +467,15 @@
                     </table>
                 </div>
             </div>
-        </div>
-        
-        <!-- Add more sections for other booking statuses as needed -->
+        </div>        
     </div>
 </div>
 
-<!-- DataTables Initialization Script -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 <script>
 $(document).ready(function() {
-    // Initialize DataTables for each table
     $('#currentBookingsTable').DataTable({
         "paging": true,
         "searching": true,
@@ -549,11 +528,11 @@ $(document).ready(function() {
 }
 
 .customer-image {
-    margin-right: 20px; /* Space between image and text */
+    margin-right: 20px; 
 }
 
 .customer-image img {
-    border-radius: 50%; /* Optional: to make the image circular */
+    border-radius: 50%; 
 }
 
 .customer-details {
@@ -561,7 +540,7 @@ $(document).ready(function() {
 }
 
 .customer-name {
-    font-size: 1.5em; /* Adjust font size as needed */
+    font-size: 1.5em; 
 }
 
 </style>

@@ -1,5 +1,4 @@
 .breadcrumb {
-  // scss-docs-start breadcrumb-css-vars
   --#{$prefix}breadcrumb-padding-x: #{$breadcrumb-padding-x};
   --#{$prefix}breadcrumb-padding-y: #{$breadcrumb-padding-y};
   --#{$prefix}breadcrumb-margin-bottom: #{$breadcrumb-margin-bottom};
@@ -9,7 +8,6 @@
   --#{$prefix}breadcrumb-divider-color: #{$breadcrumb-divider-color};
   --#{$prefix}breadcrumb-item-padding-x: #{$breadcrumb-item-padding-x};
   --#{$prefix}breadcrumb-item-active-color: #{$breadcrumb-active-color};
-  // scss-docs-end breadcrumb-css-vars
 
   display: flex;
   flex-wrap: wrap;
@@ -22,12 +20,11 @@
 }
 
 .breadcrumb-item {
-  // The separator between breadcrumbs (by default, a forward-slash: "/")
   + .breadcrumb-item {
     padding-left: var(--#{$prefix}breadcrumb-item-padding-x);
 
     &::before {
-      float: left; // Suppress inline spacings and underlining of the separator
+      float: left; 
       padding-right: var(--#{$prefix}breadcrumb-item-padding-x);
       color: var(--#{$prefix}breadcrumb-divider-color);
       content: var(--#{$prefix}breadcrumb-divider, escape-svg($breadcrumb-divider)) #{"/* rtl:"} var(--#{$prefix}breadcrumb-divider, escape-svg($breadcrumb-divider-flipped)) #{"*/"};

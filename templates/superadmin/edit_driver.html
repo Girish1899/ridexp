@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -187,7 +186,7 @@
                                 <option value="inactive" {% if driverlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
                             </select>
                         </div>
-                    </div>
+                    </div><br>
 
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
@@ -241,7 +240,7 @@
                             $('#driver_name, #phone_number, #email, #address').prop('readonly', true);
                             $('#profile_image, #address_proof').prop('disabled', true);
                         } else {
-                            clearDriverDetails(); // Clear the fields for non-self-drive vehicles
+                            clearDriverDetails();
                         }
                     } else {
                         alert(response.message || 'Vehicle not found');
@@ -272,7 +271,7 @@
         $('#brand').val('');
         $('#model').val('');
         $('#vehicle_id').val('');
-        clearDriverDetails(); // Also clear driver details when vehicle details are cleared
+        clearDriverDetails();
     }
 
    
@@ -306,7 +305,6 @@
             formData.append('dfrom_date', dfrom_date);
             formData.append('dto_date', dto_date);
             formData.append('original_phone_number', original_phone_number);
-            // formData.append('document_link', $('#document_link')[0].files[0]);
             if ($('#profile_image')[0].files[0]) {
                 formData.append('profile_image', $('#profile_image')[0].files[0]);
             }
@@ -328,21 +326,18 @@
                 return;
             }
 
-            // Validate phone number format
             var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
                 alert("Please enter a valid 10-digit phone number.");
                 return;
             }
 
-            // Validate email format
             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
                 return;
             }
 
-        // Date validation: Ensure 'pto_date' is after 'pfrom_date' and 'dto_date' is after 'dfrom_date'
             if (pfrom_date && pto_date && new Date(pfrom_date) > new Date(pto_date)) {
                 alert("'police_clearance to date' must be after 'police_clearance from date'.");
                 return;

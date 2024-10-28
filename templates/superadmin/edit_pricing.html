@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -28,117 +27,114 @@
 
                 <div class="card-body">
                                     
-                                        <div class="form-group row">
-                                            <input type="hidden" class="form-control" id="pricing_id" name="pricing_id" value="{{ plist.0.pricing_id }}">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
-                                            <div class="col-sm-12">
-                                                <select name="select" id="category" name="category" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Category</option>
-                                                    {% for obj in catlist %}
-                                                    <option value="{{obj.category_id}}" {% if obj.category_id == plist.0.category.category_id %} selected {% endif %}>{{obj.category_name}}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Ride Type</label>
-                                            <div class="col-sm-12">
-                                                <select id="ridetype" name="ridetype" class="form-control form-control-lg">
-                                                    <option value="" selected disabled>Select Ride Type</option>
-                                                    {% for obj in rlist %}
-                                                    <option value="{{ obj.ridetype_id }}" {% if obj.ridetype_id == plist.0.ridetype.ridetype_id %}selected{% endif %}>{{ obj.name }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type</label>
-                                            <div class="col-sm-12">
-                                            <select class="form-control form-control-lg" id="car_type" name="car_type">
-                                                <option value="" selected disabled>Select Car Type</option>
-                                                <option {% if plist.0.car_type == 'ac' %}selected{% endif %}>ac</option>
-                                                <option {% if plist.0.car_type == 'non_ac' %}selected{% endif %}>non_ac</option>
-                                            </select>
-                                        </div>
-                                     </div>
-
-                                         <!-- Trip Type Radio Buttons (Initially Hidden) -->
-                                        <div class="form-group row" id="trip_type_section" style="display: none;">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
-                                            <div class="col-sm-12">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way" {% if plist.0.trip_type == "one_way" %}checked{% endif %}>
-                                                    <label class="form-check-label" for="one_way" style="color: black;">One Way</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="radio" name="trip_type" id="round_trip" value="round_trip" {% if plist.0.trip_type == "round_trip" %}checked{% endif %}>
-                                                    <label class="form-check-label" for="round_trip" style="color: black;">Round Trip</label>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Time Slot</label>
-                                            <div class="col-sm-12">
-                                                <select class="form-control form-control-lg" id="slots" name="slots">
-                                                    <option value="" selected disabled>Select Time Slot</option>
-                                                    <option value="12AM - 6AM" {% if plist.0.slots == "12AM - 6AM" %} selected {% endif %} >12AM - 6AM</option>
-                                                    <option value="6AM - 12PM" {% if plist.0.slots == "6AM - 12PM" %} selected {% endif %}>6AM - 12PM</option>
-                                                    <option value="12PM - 6PM" {% if plist.0.slots == "12PM - 6PM" %} selected {% endif %}>12PM - 6PM</option>
-                                                    <option value="6PM - 12AM" {% if plist.0.slots == "6PM - 12AM" %} selected {% endif %}>6PM - 12AM</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Beta</label>
-                                        <div class="col-sm-12">
-                                            <input type="number" class="form-control form-control-lg" id="driver_beta" name="driver_beta" value="{{ plist.0.driver_beta }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Toll Price</label>
-                                        <div class="col-sm-12">
-                                            <input type="number" class="form-control form-control-lg" id="toll_price" name="toll_price" value="{{ plist.0.toll_price }}">
-                                        </div>
-                                    </div>
-
-                                    
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit</label>
-                                        <div class="col-sm-12">
-                                            <input type="number" class="form-control form-control-lg" id="permit" name="permit" value="{{ plist.0.permit }}">
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price Per KM</label>
-                                        <div class="col-sm-12">
-                                            <input type="number" class="form-control form-control-lg" id="price_per_km" name="price_per_km" value="{{ plist.0.price_per_km }}">
-                                        </div>
-                                    </div>
-
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
-                                        </div>
-
-                                </div>
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="pricing_id" name="pricing_id" value="{{ plist.0.pricing_id }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Category</label>
+                        <div class="col-sm-12">
+                            <select name="select" id="category" name="category" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Category</option>
+                                {% for obj in catlist %}
+                                <option value="{{obj.category_id}}" {% if obj.category_id == plist.0.category.category_id %} selected {% endif %}>{{obj.category_name}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
-                <!-- </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Ride Type</label>
+                        <div class="col-sm-12">
+                            <select id="ridetype" name="ridetype" class="form-control form-control-lg">
+                                <option value="" selected disabled>Select Ride Type</option>
+                                {% for obj in rlist %}
+                                <option value="{{ obj.ridetype_id }}" {% if obj.ridetype_id == plist.0.ridetype.ridetype_id %}selected{% endif %}>{{ obj.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Type</label>
+                        <div class="col-sm-12">
+                        <select class="form-control form-control-lg" id="car_type" name="car_type">
+                            <option value="" selected disabled>Select Car Type</option>
+                            <option {% if plist.0.car_type == 'ac' %}selected{% endif %}>ac</option>
+                            <option {% if plist.0.car_type == 'non_ac' %}selected{% endif %}>non_ac</option>
+                        </select>
+                    </div>
+                    </div>
+
+                        <!-- Trip Type Radio Buttons (Initially Hidden) -->
+                    <div class="form-group row" id="trip_type_section" style="display: none;">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Trip Type</label>
+                        <div class="col-sm-12">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="trip_type" id="one_way" value="one_way" {% if plist.0.trip_type == "one_way" %}checked{% endif %}>
+                                <label class="form-check-label" for="one_way" style="color: black;">One Way</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="trip_type" id="round_trip" value="round_trip" {% if plist.0.trip_type == "round_trip" %}checked{% endif %}>
+                                <label class="form-check-label" for="round_trip" style="color: black;">Round Trip</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Time Slot</label>
+                        <div class="col-sm-12">
+                            <select class="form-control form-control-lg" id="slots" name="slots">
+                                <option value="" selected disabled>Select Time Slot</option>
+                                <option value="12AM - 6AM" {% if plist.0.slots == "12AM - 6AM" %} selected {% endif %} >12AM - 6AM</option>
+                                <option value="6AM - 12PM" {% if plist.0.slots == "6AM - 12PM" %} selected {% endif %}>6AM - 12PM</option>
+                                <option value="12PM - 6PM" {% if plist.0.slots == "12PM - 6PM" %} selected {% endif %}>12PM - 6PM</option>
+                                <option value="6PM - 12AM" {% if plist.0.slots == "6PM - 12AM" %} selected {% endif %}>6PM - 12AM</option>
+                            </select>
+                        </div>
+                    </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Driver Beta</label>
+                    <div class="col-sm-12">
+                        <input type="number" class="form-control form-control-lg" id="driver_beta" name="driver_beta" value="{{ plist.0.driver_beta }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Toll Price</label>
+                    <div class="col-sm-12">
+                        <input type="number" class="form-control form-control-lg" id="toll_price" name="toll_price" value="{{ plist.0.toll_price }}">
+                    </div>
+                </div>
+
+                
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Permit</label>
+                    <div class="col-sm-12">
+                        <input type="number" class="form-control form-control-lg" id="permit" name="permit" value="{{ plist.0.permit }}">
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Price Per KM</label>
+                    <div class="col-sm-12">
+                        <input type="number" class="form-control form-control-lg" id="price_per_km" name="price_per_km" value="{{ plist.0.price_per_km }}">
+                    </div>
+                </div>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
 
 <script>
     $(document).ready(function () {
-    // Function to check if ride type is "Outstation" and show trip_type section
     function checkRideType() {
         var selectedRideType = $('#ridetype option:selected').text().toLowerCase();
         if (selectedRideType.includes('outstation') || selectedRideType.includes('airport')) {
@@ -147,16 +143,12 @@
             $('#trip_type_section').hide();
         }
     }
-
-    // On page load, check if the ride type is "Outstation" and display trip_type section
     checkRideType();
 
-    // When ridetype is changed, check again
     $('#ridetype').change(function () {
         checkRideType();
     });
 
-    // On form submission
     $("#save_action").click(function (event) {
         event.preventDefault();
 
@@ -166,7 +158,7 @@
         var driver_beta = $('#driver_beta').val();
         var toll_price = $('#toll_price').val();
         var car_type = $('#car_type').val();
-        var trip_type = $('input[name="trip_type"]:checked').val(); // Get selected trip type value
+        var trip_type = $('input[name="trip_type"]:checked').val(); 
         var permit = $('#permit').val();
         var price_per_km = $('#price_per_km').val();
         var pricing_id = $('#pricing_id').val();

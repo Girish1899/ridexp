@@ -192,7 +192,6 @@
             }
 
             console.log(image);
-            // Check if required fields are empty
             if (!$('#title').val().trim() || !$('#description').val()) {
                 alert("Title, and Description are required fields.");
                 return;
@@ -201,7 +200,7 @@
                 url: '{% url "dispatch-create-author-blogs" %}',
                 type: "POST",
                 data: formData,
-                processData: false,  // Important for file upload
+                processData: false, 
                 contentType: false, 
                 success: function (result) {
                     alert("Blog added successfully");
@@ -220,7 +219,7 @@
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
                 reader.onload = function (e) {
-                    $(input).next('img').attr('src', e.target.result).show();  // Update the image preview
+                    $(input).next('img').attr('src', e.target.result).show();  
                 }
                 reader.readAsDataURL(input.files[0]);
             }

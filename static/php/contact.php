@@ -1,6 +1,5 @@
 <?php 
 
- //contact form info
  $name=  $_POST['name'];
  $email=  $_POST['email'];
  $subject = $_POST['subject'];
@@ -14,19 +13,15 @@
             <p>".$contact_message."</p>";
             
             
- $to = "contact@example.com"; //Replace your real receiving email address
+ $to = "contact@example.com"; 
 
- $header = "From:info@example.com \r\n"; //Replace with your real web master email
+ $header = "From:info@example.com \r\n"; 
  $header .= "MIME-Version: 1.0\r\n";
  $header .= "Content-type: text/html\r\n";
  
  $mail_send = mail ($to,$subject,$message,$header);
  
-//  if( $mail_send == true ) {
-//     echo "Your message send successfully!.";
-//  }else {
-//     echo "Your message could not be send!.";
-//  }
+
 
 echo "Your message send successfully!.";
 

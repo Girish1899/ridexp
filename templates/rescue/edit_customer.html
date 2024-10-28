@@ -2,16 +2,13 @@
 {% load static %}
 {% block content %}
 
-<!--**********************************
-            Content body start
-        ***********************************-->
+
         <div class="content-body">
             <div class="container-fluid">
                 <div class="row page-titles mx-0">
                     <div class="col-sm-6 p-md-0">
                         <div class="welcome-text">
                             <h4>Edit Customer</h4>
-                            <!-- <span class="ml-1">Element</span> -->
                         </div>
                     </div>
                     <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
@@ -21,16 +18,13 @@
                         </ol>
                     </div>
                 </div>
-                <!-- row -->
-                <!-- <div class="row"> -->
+              
                     <div class="col-xl-12">
 
                         <div class="card">
                             <div class="card-header">
-                                <!-- <h4 class="card-title">Edit Customer</h4> -->
                             </div>
                             <div class="card-body">
-                                <!-- <div class="basic-form"> -->
                                     
                                         <div class="form-group row">
                                             <input type="hidden" class="form-control" id="customer_id" name="customer_id" value="{{ customerlist.0.customer_id }}"> 
@@ -84,11 +78,9 @@
                                             <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                                         </div>
 
-                                <!-- </div> -->
                             </div>
                         </div>
                     </div>
-                <!-- </div> -->
             </div>
         </div>
 
@@ -112,21 +104,18 @@
                 return;
             }
 
-            // Validate phone number format
             var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
                 alert("Please enter a valid 10-digit phone number.");
                 return;
             }
 
-            // Validate email format
             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
                 return;
             }
 
-            // Check if phone number already exists
             $.ajax({
                 url: "{% url 'check_phonenumber' %}",
                 type: "GET",

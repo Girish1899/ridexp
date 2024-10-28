@@ -197,15 +197,12 @@
 
 <script>
     function calculateTotalAfterGST() {
-        // Get the values from the input fields
         var totalFareBeforeGST = parseFloat(document.getElementById('totalfare_before_gst').value) || 0;
         var gstPercentage = parseFloat(document.getElementById('gst').value) || 0;
     
-        // Calculate the total after GST
         var gstAmount = (totalFareBeforeGST * gstPercentage) / 100;
         var totalAfterGST = totalFareBeforeGST + gstAmount;
     
-        // Set the calculated value to the total after GST input field
         document.getElementById('total_after_gst').value = totalAfterGST.toFixed(2);
     }
 </script>

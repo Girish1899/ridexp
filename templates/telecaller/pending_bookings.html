@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -17,7 +16,6 @@
                 </ol>
             </div>
         </div>
-        <!-- row -->
 
         <div class="row">
             <div class="col-12">
@@ -44,7 +42,6 @@
                                 <th>Customer Comments</th>
                                 <th>Booking datetime</th>
                                 <th>Created On/Created By/Modified On/Modified By</th>
-                                <!-- <th>Action</th> -->
                             </tr>
                         </thead>
                         <tbody>
@@ -74,12 +71,7 @@
                                     <div>{{ i.updated_on }}</div>
                                     <div>{{ i.updated_by }}</div>
                                 </td>
-                                <!-- <td style="display: flex; flex-direction: column; justify-content: space-between; align-items: center; height: 200px;">
-                                    <a href="#" class="btn btn-primary btn-sm btn-custom-sm" onclick="EditRide('{{ i.ride_id }}')"><i class="fa fa-edit"></i></a>
-                                    <a href="#" class="btn btn-warning btn-sm btn-custom-sm" onclick="HistoryRide('{{i.ride_id}}')"><i class="fa fa-clock"></i></a>
-                                    <button type="button" class="btn btn-success btn-sm btn-custom-sm" data-toggle="modal" data-target="#assignDriverModal" data-ride-id="{{ i.ride_id }}">Assign Driver</button>
-                                    <button type="button" class="btn btn-danger btn-sm btn-custom-sm" data-toggle="modal" data-target="#cancelBookingModal" data-ride-id="{{ i.ride_id }}">Cancel Booking</button>
-                                </td>                                                                                                                       -->
+                                                                                                                                                       -->
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -93,7 +85,6 @@
     </div>
 </div>
 
-<!-- Assign Driver Modal -->
 <div class="modal fade" id="assignDriverModal" tabindex="-1" role="dialog" aria-labelledby="assignDriverModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -145,8 +136,6 @@
 </div>
 </div>
 
-<!-- Cancel Booking Modal -->
-
 <div class="modal fade" id="cancelBookingModal" tabindex="-1" role="dialog" aria-labelledby="cancelBookingModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
@@ -172,23 +161,20 @@
 
 <script>
 $(document).ready(function() {
-    // Update data-comments attribute whenever textarea value changes
     $('#comments').on('input', function() {
         const comments = $(this).val();
         $('.cancel-btn').attr('data-comments', comments);
     });
 
-    // Handle cancel button click
     $(document).on('click', '.cancel-btn', function() {
         console.log("Submit button clicked!");
 
         const comments = $(this).data('comments');
         const rideId = $('#cancelBookingModal').data('ride-id');
 
-    console.log("comments: ", comments); // Debugging statement
-    console.log("Ride ID: ", rideId);     // Debugging statement
+    console.log("comments: ", comments); 
+    console.log("Ride ID: ", rideId);     
 
-    // Check if driverId is correctly retrieved
     if (!comments) {
         console.error("comments is missing");
         alert("comments is missing.");
@@ -206,7 +192,7 @@ $(document).ready(function() {
         success: function(result) {
             console.log("Success: ", result);
             alert("Submitted successfully.");
-            location.reload(); // Reload page after successful assignment
+            location.reload(); 
         },
         error: function(xhr, status, error) {
             console.error("Error: ", xhr.responseText);
@@ -215,14 +201,13 @@ $(document).ready(function() {
     });
 });
 
-// Modal Show Event
 $('#cancelBookingModal').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+    var button = $(event.relatedTarget); 
+    var rideId = button.data('ride-id'); 
     var modal = $(this);
-    modal.data('ride-id', rideId); // Store ride ID in modal attribute
+    modal.data('ride-id', rideId); 
 
-    console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    console.log("Modal shown for Ride ID: ", rideId); 
 });
 
 });
@@ -233,17 +218,15 @@ $('#cancelBookingModal').on('show.bs.modal', function(event) {
 $(document).ready(function() {
 console.log("Document is ready!");
 
-// Assign Driver Button Click Event
 $(document).on('click', '.assign-driver-btn', function() {
     console.log("Assign driver button clicked!");
 
     const driverId = $(this).data('driver-id');
     const rideId = $('#assignDriverModal').data('ride-id');
 
-    console.log("Driver ID: ", driverId); // Debugging statement
-    console.log("Ride ID: ", rideId);     // Debugging statement
+    console.log("Driver ID: ", driverId); 
+    console.log("Ride ID: ", rideId);     
 
-    // Check if driverId is correctly retrieved
     if (!driverId) {
         console.error("Driver ID is missing");
         alert("Driver ID is missing.");
@@ -261,7 +244,7 @@ $(document).on('click', '.assign-driver-btn', function() {
         success: function(result) {
             console.log("Success: ", result);
             alert("Driver assigned successfully.");
-            location.reload(); // Reload page after successful assignment
+            location.reload(); 
         },
         error: function(xhr, status, error) {
             console.error("Error: ", xhr.responseText);
@@ -270,14 +253,13 @@ $(document).on('click', '.assign-driver-btn', function() {
     });
 });
 
-// Modal Show Event
 $('#assignDriverModal').on('show.bs.modal', function(event) {
-    var button = $(event.relatedTarget); // Button that triggered the modal
-    var rideId = button.data('ride-id'); // Extract ride ID from data-* attributes
+    var button = $(event.relatedTarget); 
+    var rideId = button.data('ride-id');
     var modal = $(this);
-    modal.data('ride-id', rideId); // Store ride ID in modal attribute
+    modal.data('ride-id', rideId); 
 
-    console.log("Modal shown for Ride ID: ", rideId); // Debugging statement
+    console.log("Modal shown for Ride ID: ", rideId); 
 });
 });
 
@@ -289,7 +271,7 @@ if (action !== false) {
 }
 
 function HistoryRide(ride_id) {
-    window.location.href = "RideHistory/" + ride_id; // Add a slash here
+    window.location.href = "RideHistory/" + ride_id; 
 };
 };    
 </script>

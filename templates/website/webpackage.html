@@ -12,7 +12,6 @@
 
 <main class="main">
 
-    <!-- breadcrumb -->
     <div class="site-breadcrumb" style="background: url(/static/img/taxi/explore_india.jfif)">
         <div class="container">
             <h2 class="breadcrumb-title">Our Packages</h2>
@@ -22,10 +21,7 @@
             </ul>
         </div>
     </div>
-    <!-- breadcrumb end -->
 
-
-    <!-- taxi area -->
     <div class="taxi-area py-120">
         <div class="container">
             <div class="row">
@@ -70,7 +66,6 @@
             </div>
         </div>
     </div>
-    <!-- taxi area end -->
 
 </main>
 
@@ -81,7 +76,6 @@
         object-fit: cover;
     }
 
-    /* Limit title to 3 lines */
     .title {
         display: -webkit-box;
         -webkit-box-orient: vertical;
@@ -89,17 +83,15 @@
         text-overflow: ellipsis;
     }
 
-    /* Limit description to 6 lines */
     .description {
         display: -webkit-box;
         -webkit-box-orient: vertical;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-height: 7.5em; /* Approximately 6 lines depending on font size */
+        max-height: 7.5em; 
         text-align: justify;
     }
 
-    /* Ensure consistent card height */
     .taxi-item-img {
         height: 100%;
         display: flex;
@@ -107,7 +99,6 @@
         justify-content: space-between;
     }
 
-    /* Consistent button placement */
     .taxi-content {
         flex-grow: 1;
         display: flex;
@@ -115,7 +106,6 @@
         justify-content: space-between;
     }
 
-    /* Space between rows */
     .row > [class^='col'] {
         margin-bottom: 30px;
     }

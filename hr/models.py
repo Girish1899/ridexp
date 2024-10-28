@@ -3,7 +3,6 @@ from django.db import models
 from superadmin.models import Profile
 from django.contrib.auth.models import User
 
-# Create your models here.
 STATUS_CHOICES = [
         ('Present', 'Present'),
         ('Absent', 'Absent'),
@@ -17,6 +16,6 @@ class Attendance(models.Model):
     mark_attendance = models.CharField(max_length=20, choices=STATUS_CHOICES)
     login_time = models.TimeField(null=True, blank=True)
     logout_time = models.TimeField(null=True, blank=True)
-    duration = models.CharField(max_length=10, null=True, blank=True)  # Change to CharField
+    duration = models.CharField(max_length=10, null=True, blank=True)  
     created_on = models.DateField(auto_now_add=True)
     updated_on = models.DateField(auto_now=True)

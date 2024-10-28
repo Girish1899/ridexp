@@ -3,52 +3,39 @@ from adminuser.views import *
 from . import views
 
 urlpatterns = [
-    # path('index',adminuser_index,name='adminindex'),
     path('adindex/', views.adminuser_index, name='adindex'),
     
-    # category##################
     path('adCategoryListView',views.CategoryListView.as_view(),name='adCategoryListView'),
     path('adCategoryHistory/<int:category_id>/', CategoryHistoryView.as_view(), name='adcategory_history'),
 
-    # Brand #####################
     path('adBrandListView',views.BrandListView.as_view(),name='adBrandListView'),
     path('adBrandHistory/<int:brand_id>/', BrandHistoryView.as_view(), name='adbrand_history'),
 
-    # Model ############################
     path('adModelListView',views.ModelListView.as_view(),name='adModelListView'),
     path('adModelHistory/<int:model_id>/', ModelHistoryView.as_view(), name='admodel_history'),
 
-    #vehicletype################
     path('advehicletypeList', views.vehicletypeList.as_view(), name='advehicletypeList'),
     path('adVtypeHistory/<int:vehicle_type_id>/', VehicleTypeHistoryView.as_view(), name='adVtype_history'),
   
-    #ridetype################  
     path('adridetypeList', views.ridetypeList.as_view(), name='adridetypeList'),
     path('adRtypeHistory/<int:ridetype_id>/', RidetypeHistoryView.as_view(), name='adRtype_history'),
 
-    # User 
     path('aduserlist', views.UserList.as_view(), name='aduserlist'),
     path('adUserHistory/<int:user_id>/', ProfileHistoryView.as_view(), name='adUserHistory'),
     path('aduseremp', UserEmpList.as_view(), name='aduseremp'),
 
-
-    # customer 
     path('adcustomerlist', views.CustomerList.as_view(), name='adcustomerlist'),
     path('adCustomerHistory/<int:customer_id>/', CustomerHistoryView.as_view(), name='adCustomer_history'),
 
-    # vehicle owner##############################  
     path('adviewvehicleowner', views.OwnerListView.as_view(), name='adviewvehicleowner'),
     path('adVehicleownerHistory/<int:owner_id>/', VehicleOwnerHistoryView.as_view(), name='adVehicleowner_history'),
 
-    # driverss####################### 
     path('adviewdriver', DriverListView.as_view(), name='adviewdriver'),
     path('adDriverHistory/<int:driver_id>/', DriverHistoryView.as_view(), name='addriver_history'),
 
-    # vehicle ############################## 
     path('advehiclelist', views.VehicleList.as_view(), name='advehiclelist'),
     path('adVehicleHistory/<int:vehicle_id>/', VehicleHistoryView.as_view(), name='adVehicle_history'),
 
-     # ride ############################## 
     path('adaddbookings', AddRide.as_view(), name='adaddbookings'),
     path('adridelist/<int:ride_id>/', RideList.as_view(), name='adridelist'),
     path('adridelist',RideList.as_view(), name='adridelist'),
@@ -59,21 +46,16 @@ urlpatterns = [
     path('adongoing_rides', OngoingRideList.as_view(), name='adongoing_rides'),
     path('adcompleted_rides', CompletedRideList.as_view(), name='adcompleted_rides'),
     path('adcancelledbookings',CancelledListView.as_view(),name='adcancelledbookings'),
-    # path('adcancel_ride', cancel_ride, name='adcancel_ride'),
 
-    # path('adcurrent-bookings', AssignDriverView.as_view(), name='adcurrent_bookings'),
     path('adinvoice/<int:ride_id>/', InvoiceView.as_view(), name='adinvoice_view'),
 
-    #profile
     path('adminuser_profile', adminuser_profile_view, name='adminuser_profile'),
 
-    # path('profile', profile.as_view(), name='admin_profile'),
     path('update-user/', UpdateUserView.as_view(), name='admin_update_user'),
 
     path('adcommissionlist', CommissionList.as_view(), name='adcommissionlist'),
     path('adcommission_history/<int:commission_id>/', CommissionHistoryView.as_view(), name='adcommission_history'),
 
-################## price details ###########################
     path('adpricinglist', PriceList.as_view(), name='adpricinglist'),
     path('adpricing_history/<int:pricing_id>/', PricingHistoryView.as_view(), name='adpricing_history'),
 
@@ -92,13 +74,10 @@ urlpatterns = [
 
     path('adaccounts_list', AccountsListView.as_view(), name='adaccounts_list'),
 
-    #contact #########################
     path('adcontactlist', ContactList.as_view(), name='adcontactlist'),
 
-#  enquiry ################################
     path('adenquirylist', EnquiryList.as_view(), name='adenquirylist'), 
 
-    # package #######################
 
     path('adpackage_category_list', PackageCategoryList.as_view(), name='adpackage_category_list'),
     path('adpackage_name_list', PackageNameList.as_view(), name='adpackage_name_list'),
@@ -120,6 +99,9 @@ urlpatterns = [
     path('adassign_driver', assign_driver, name='adassign_driver'),
     path('adadvanceassign_driver', advanceassign_driver, name='adadvanceassign_driver'),
 
+    path('download-vehicle-documents/<int:vehicle_id>/',download_vehicle_documents, name='download_vehicle_documents'),
+    path('download-driver-documents/<int:driver_id>/',download_driver_documents, name='download_driver_documents'),
+    path('download-owner-documents/<int:owner_id>/',download_owner_documents, name='download_owner_documents'),
 
 
 

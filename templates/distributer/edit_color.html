@@ -1,0 +1,119 @@
+{% extends 'distributer/base.html' %}
+{% load static %}
+{% block content%}
+<div class="content-body">
+    <div class="container-fluid">
+        <div class="row page-titles mx-0">
+            <div class="col-sm-6 p-md-0">
+                <div class="welcome-text">
+                    <h4>Hi, welcome back!</h4>
+                </div>
+            </div>
+            <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex">
+                <ol class="breadcrumb" style="background-color: #98BDFF;">
+                    <li class="breadcrumb-item"><a href="{% url 'dispatch-colorList' %}" style="color: white !important;">View Car Color</a></li>
+                    <li class="breadcrumb-item"><a href="javascript:history.back()" style="color: white !important;">Go Back</a></li>
+                </ol>
+            </div>
+        </div>
+
+        <div class="col-xl-12">
+            <div class="card my-4">
+                <div class="card-header p-0 position-relative mt-n4 mx-3 z-index-2">
+                    <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
+                        <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Color</h6>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="color_id" name="color_id" value="{{ clist.0.color_id }}">
+                            <input type="hidden" class="form-control" id="original_color_name" name="original_color_name" value="{{ clist.0.name }}">
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Car Color Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="name" name="name" value="{{ clist.0.name }}">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#save_action").click(function () {
+            event.preventDefault();
+
+            var name = $('#name').val().trim().toLowerCase();
+            var color_id = $('#color_id').val();
+            var original_color_name = $('#original_color_name').val();
+
+            if (name.trim() === '') {
+                alert("Please enter color name.");
+                return;
+            }
+
+            var original_name = "{{ clist.0.name }}";
+
+            if (name.trim() === original_color_name.trim()) {
+                submitForm(name, color_id);
+            } else {
+                $.ajax({
+                    url: "{% url 'dispatch-check_color' %}",
+                    type: "GET",
+                    data: { 'name': name },
+                    success: function (data) {
+                        if (data.exists) {
+                            alert("color name already exists.");
+                        } else {
+                            if (confirm("Are you sure you want to save this color?")) {
+                                submitForm(name, color_id);
+                            }
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log('AJAX error:', error);
+                    }
+                });
+            }
+        });
+
+        function submitForm(name, color_id) {
+            $.ajax({
+                url: "{% url 'dispatch-Updatecolor' %}",
+                type: "POST",
+                data: {
+                    'name': name,
+                    'color_id': color_id,
+                },
+                headers: {
+                                'X-CSRFToken': '{{ csrf_token }}'
+                            },
+                success: function (result) {
+                    console.log("result val: ", result);
+                    if (result['success']) {
+                        alert("color details edited successfully");
+                        window.location.href = "{% url 'dispatch-colorList' %}";
+                    } else {
+                        alert("Failed to edit color details: " + result['message']);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log('AJAX error:', error);
+                }
+            });
+        }
+    });
+
+</script>
+
+{% endblock content%}

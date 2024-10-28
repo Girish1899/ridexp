@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -24,76 +23,73 @@
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Edit Customer</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
                                     
-                                        <div class="form-group row">
-                                            <input type="hidden" class="form-control" id="customer_id" name="customer_id" value="{{ customerlist.0.customer_id }}"> 
-                                            <input type="hidden" class="form-control" id="original_phone_number" name="original_phone_number" value="{{ customerlist.0.phone_number }}">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Id</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ customerlist.0.company_format }}" readonly>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Customer Name</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name" value="{{ customerlist.0.customer_name }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ customerlist.0.phone_number }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Email</label>
-                                            <div class="col-sm-12">
-                                                <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ customerlist.0.email }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Password</label>
-                                            <div class="col-sm-12">
-                                                <input type="text" class="form-control form-control-lg" id="password" name="password" value="{{ customerlist.0.password }}">
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
-                                            <div class="col-sm-12">                                            
-                                                <textarea class="form-control" rows="2" id="address" name="address">{{ customerlist.0.address }}</textarea>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
-                                            <div class="col-sm-12">    
-                                            <select class="form-control form-control-lg" id="status" name="status">
-                                                <option value="" selected disabled>Select Status</option>
-                                                <option value="active" {% if customerlist.0.status == "active" %} selected {% endif %}>Active</option>
-                                                <option value="inactive" {% if customerlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
-                                            </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
-                                        </div>
-
-                                <!-- </div> -->
-                            </div>
+                    <div class="form-group row">
+                        <input type="hidden" class="form-control" id="customer_id" name="customer_id" value="{{ customerlist.0.customer_id }}"> 
+                        <input type="hidden" class="form-control" id="original_phone_number" name="original_phone_number" value="{{ customerlist.0.phone_number }}">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Customer Id</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="company_format" name="company_format" value="{{ customerlist.0.company_format }}" readonly>
                         </div>
                     </div>
-                <!-- </div> -->
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Customer Name</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="customer_name" name="customer_name" value="{{ customerlist.0.customer_name }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Phone Number</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" value="{{ customerlist.0.phone_number }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">* Email</label>
+                        <div class="col-sm-12">
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" value="{{ customerlist.0.email }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Password</label>
+                        <div class="col-sm-12">
+                            <input type="text" class="form-control form-control-lg" id="password" name="password" value="{{ customerlist.0.password }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Address</label>
+                        <div class="col-sm-12">                                            
+                            <textarea class="form-control" rows="2" id="address" name="address">{{ customerlist.0.address }}</textarea>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Select Status</label>
+                        <div class="col-sm-12">    
+                        <select class="form-control form-control-lg" id="status" name="status">
+                            <option value="" selected disabled>Select Status</option>
+                            <option value="active" {% if customerlist.0.status == "active" %} selected {% endif %}>Active</option>
+                            <option value="inactive" {% if customerlist.0.status == "inactive" %} selected {% endif %}>Inactive</option>
+                        </select>
+                        </div>
+                    </div><br>
+
+                    <div class="col-12">
+                        <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
+                    </div>
+                </div>
             </div>
         </div>
+    </div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 
@@ -116,7 +112,6 @@
                 return;
             }
 
-            // Validate phone number format
             var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
                 alert("Please enter a valid 10-digit phone number.");
@@ -128,14 +123,12 @@
                 return;
             }
 
-            // Validate email format
             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
                 alert("Please enter a valid email address.");
                 return;
             }
 
-            // Check if phone number already exists
             $.ajax({
                 url: "{% url 'check_phonenumber' %}",
                 type: "GET",

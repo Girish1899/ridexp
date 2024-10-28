@@ -15,21 +15,20 @@
 {% endblock %}
 {% block body_content %}
 <br>
-<!-- Booking Start -->
+
 <div class="container-fluid booking pb-5 wow fadeIn" data-wow-delay="0.1s">
     <div class="container">
         <div class="bg-white shadow" style="padding: 35px;">
             <div class="row g-2">
                 <div class="col-md-12">
                     <div class="row g-2">
-                        <!-- <h3>Summary</h3> -->
+
                         <h6 class="  text-primary text-uppercase">Summary</h6>
                         <div class="col-md-3">
                             <div class="date" id="date1" data-target-input="nearest">
                                 <label>Pickup Location</label>
                                 <h6>{{ source }}</h6>
                                 <input type="hidden" id="source_hidden" name="source" value="{{ source }}">
-                                <!-- <input type="text" class="form-control datetimepicker-input" placeholder="Pickup Location" value="{{ source }}" readonly> -->
                             </div>
                         </div>
                         <div class="col-md-3">
@@ -46,7 +45,6 @@
                                 <h6>{{ pickup_date }}</h6>
                                 <input type="hidden" id="pickup_date_hidden" name="pickup_date"
                                     value="{{ pickup_date }}">
-                                <!-- <input type="date" class="form-control datetimepicker-input"  value="{{ pickup_date }}" readonly> -->
                             </div>
                         </div>
                         <div class="col-md-2">
@@ -57,13 +55,9 @@
                                     value="{{ pickup_time }}">
                             </div>
                         </div>
-                        <!-- <div class="col-md-2">
-                                <div class="date" id="date2" data-target-input="nearest">
-                                    <label>Ride Type</label>
-                                    <h6>{{ ridetype }}</h6> -->
+                        
                         <input type="hidden" id="ridetype_hidden" name="ridetype" value="{{ ridetype }}">
-                        <!-- </div>
-                            </div> -->
+                      
                         <div class="col-md-2">
                             <div class="date" data-target-input="nearest">
                                 <label>Vehicle Type</label>
@@ -104,19 +98,15 @@
 
                         <div class="col-md-2"></div>
                         <div class="date" data-target-input="nearest">
-                            <!-- <label>Time Slot</label> -->
-                            <h6>{{ time_slot }}</h6> <!-- Ensure time_slot is available here -->
+                            <h6>{{ time_slot }}</h6> 
                             <input type="hidden" id="time_slot_hidden" name="time_slot" value="{{ time_slot }}">
-                            <!-- <input type="hidden" id="drop_date_hidden" name="drop_date" value="{{ drop_date }}">
-                                    <input type="hidden" id="drop_time_hidden" name="drop_time" value="{{ drop_time }}"> -->
-
+                           
                         </div>
                     </div>
 
                     <div class="col-md-2">
                         <div class="date" id="date2" data-target-input="nearest">
-                            <!-- <label>trip_type</label> -->
-                            <!-- <h6>{{ trip_type }}</h6> -->
+                            
                             <input type="hidden" id="trip_type_hidden" name="trip_type" value="{{ trip_type }}">
                         </div>
                     </div>
@@ -129,14 +119,11 @@
     </div>
 </div>
 </div>
-<!-- Booking End -->
 
 
-<!-- Booking Start -->
 <div class="container-xxl py-5">
     <div class="container">
         <div class="text-center wow fadeInUp" data-wow-delay="0.1s">
-            <!-- <h6 class="section-title text-center text-primary text-uppercase">Room Booking</h6> -->
             <h1 class="mb-5"> <span class="text text-uppercase" style="color: rgb(10, 10, 63);">TRAVELLER DETAILS</span>
             </h1>
         </div>
@@ -146,7 +133,6 @@
                 <div class="wow fadeInUp" data-wow-delay="0.2s">
                     <form>
                         <div class="row g-3">
-                            <!-- Phone Number Input -->
                             <div class="col-md-6">
                                 <div class="form-floating date" id="date3" data-target-input="nearest">
                                     <input type="text" class="form-control" id="phone_number"
@@ -204,9 +190,7 @@
         </div>
     </div>
 </div>
-<!-- Booking End -->
 
-<!-- Add OTP Modal -->
 <center>
     <div id="otpModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -236,7 +220,6 @@
 
 
 <script>
-    // Set the minimum date to today's date
     document.addEventListener('DOMContentLoaded', function () {
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -246,7 +229,6 @@
         document.getElementById('pickup_date_hidden').setAttribute('min', today);
     });
 
-    // Customer details autofill when phone number changes
     $(document).ready(function () {
         $('#phone_number').on('change', function () {
             var phoneNumber = $(this).val();
@@ -262,7 +244,7 @@
                     $('#email').val(data.email).prop('readonly', true);
                     $('#address').val(data.address).prop('readonly', true);
                     $('#password').val(data.password).prop('readonly', true);
-                    $('#customer_notes').val(''); // Clear any existing notes
+                    $('#customer_notes').val(''); 
                 },
                 error: function (xhr, status, error) {
                     if (xhr.status === 404) {
@@ -271,7 +253,7 @@
                         $('#email').val('').prop('readonly', false);
                         $('#address').val('').prop('readonly', false);
                         $('#password').val('').prop('readonly', false);
-                        $('#customer_notes').val(''); // Clear any existing notes
+                        $('#customer_notes').val(''); 
                     }
                 }
             });
@@ -281,7 +263,6 @@
     $('#confirmBookingBtn').click(function (event) {
         event.preventDefault();
 
-        // Collect booking details
         var bookingDetails = {
             ridetype: $('#ridetype_hidden').val(),
             category: $('#category_hidden').val(),
@@ -305,9 +286,8 @@
 
         };
 
-        // Send OTP to the customer's WhatsApp number
         $.ajax({
-            url: '{% url "send_otp" %}', // Backend endpoint to send OTP
+            url: '{% url "send_otp" %}', 
             type: "POST",
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
@@ -318,7 +298,6 @@
             },
             success: function (result) {
                 if (result["status"] == "Success") {
-                    // Show OTP modal
                     $('#otpModal').modal('show');
                 } else {
                     alert("Failed to send OTP. Please try again. " + result['message']);
@@ -334,16 +313,13 @@
             keyboard: false
         });
 
-        // Disable the button and show feedback while OTP is being verified
 $('#verifyOtpBtn').click(function () {
     var otp = $('#otpInput').val();
 
-    // Disable the button to prevent multiple submissions
     $('#verifyOtpBtn').prop('disabled', true).text('Verifying...');
 
-    // Make AJAX call for OTP verification
     $.ajax({
-        url: '{% url "verify_otp" %}', // Backend endpoint to verify OTP
+        url: '{% url "verify_otp" %}', 
         type: "POST",
         headers: {
             'X-CSRFToken': '{{ csrf_token }}'
@@ -354,32 +330,28 @@ $('#verifyOtpBtn').click(function () {
         },
         success: function (result) {
             if (result["status"] === "Success") {
-                // If OTP is correct, proceed to confirm booking
                 confirmBooking(bookingDetails);
             } else {
                 alert("Incorrect OTP. Please try again.");
-                // Re-enable the button in case of failure
                 $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
             }
         },
         error: function (xhr, status, error) {
             console.error(xhr.responseText);
-            // Re-enable the button in case of an error
             $('#verifyOtpBtn').prop('disabled', false).text('Verify OTP');
         }
     });
     });
 });
 
-    // Function to confirm booking after OTP verification
     function confirmBooking(bookingDetails) {
         try {
             function formatDateToLocal(dateStr) {
                 var date = new Date(dateStr);
                 var year = date.getFullYear();
-                var month = ('0' + (date.getMonth() + 1)).slice(-2); // Months are zero-based, so add 1
-                var day = ('0' + date.getDate()).slice(-2); // Ensure two digits for day
-                return `${year}-${month}-${day}`; // Return in 'YYYY-MM-DD' format
+                var month = ('0' + (date.getMonth() + 1)).slice(-2); 
+                var day = ('0' + date.getDate()).slice(-2); 
+                return `${year}-${month}-${day}`; 
             }
 
             if (bookingDetails.pickup_date) {
@@ -389,7 +361,6 @@ $('#verifyOtpBtn').click(function () {
                 throw new Error("Pickup date is missing.");
             }
 
-            // Check and convert drop_date if it exists
             if (bookingDetails.drop_date) {
                 var formattedDropDate = formatDateToLocal(bookingDetails.drop_date);
                 bookingDetails.drop_date = formattedDropDate;
@@ -404,9 +375,8 @@ $('#verifyOtpBtn').click(function () {
                 data: bookingDetails,
                 success: function (result) {
                     if (result["status"] != "Error") {
-                        var company_format = result['company_format']; // Get company_format from the backend
+                        var company_format = result['company_format']; 
 
-                        // Construct the message with company_format
                         var message = `Hello ${customer_name},
     
                         Thank you for choosing Ridexpress!
@@ -445,13 +415,12 @@ $('#verifyOtpBtn').click(function () {
 
     $(document).ready(function () {
         $('#closeOtpModal').click(function () {
-            $('#otpModal').modal('hide'); // Hide the modal when close button is clicked
+            $('#otpModal').modal('hide'); 
         });
     });
 </script>
 
 <style>
-    /* Required Bootstrap Modal CSS */
     .modal {
         position: fixed;
         top: 0;
@@ -537,7 +506,6 @@ $('#verifyOtpBtn').click(function () {
         cursor: pointer;
         padding: 0;
         margin: -1rem -4rem -1rem auto;
-        /* Adjust position */
     }
 
     .modal-header .close:hover,

@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title> Luxury Taxi Services | Premium Cab Rides for Special Occasions  </title>
-    <!-- Favicon icon -->
     <link rel="icon" type="image/x-icon" href="{% static '/img/logo/favicon.png' %}">
     <link href="{% static '/dashboard/css/style.css' %}" rel="stylesheet">
     <link rel="canonical" href="https://www.ridexpress.in/">
@@ -41,21 +40,17 @@
                                         </div>
 
                                         <div class="form-group row">
-                                            <!-- <label><strong>Phone Number</strong></label> -->
                                             <input type="text" class="form-control form-control-lg" id="phone_number" name="phone_number" placeholder="Phone Number">
                                         </div>
 
                                         <div class="form-group row">
-                                            <!-- <label><strong>Email</strong></label>                                             -->
                                             <input type="email" class="form-control form-control-lg" id="email" name="email" placeholder="Email">
                                         </div>
 
                                         <div class="form-group row">
-                                            <!-- <label><strong>Address</strong></label>                                            -->
                                             <textarea class="form-control" rows="2" id="address" name="address" placeholder="Address"></textarea>                                           
                                         </div>
                                         <div class="form-group row">
-                                            <!-- <label><strong>Password</strong></label> -->
                                             <input type="text" class="form-control form-control-lg" id="password" name="password" placeholder="Password">
                                         </div>
 
@@ -75,7 +70,6 @@
         </div>
     </div>
 
-    <!-- Modal Structure -->
     <div class="modal fade" id="statusErrorsModal" tabindex="-1" role="dialog" data-bs-backdrop="static"
         data-bs-keyboard="false">
         <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
@@ -152,10 +146,7 @@
     </div>
 
 
-<!--**********************************
-    Scripts
-***********************************-->
-<!-- Required vendors -->
+
 <script src="{% static '/dashboard/vendor/global/global.min.js' %}"></script>
 <script src="{% static '/dashboard/js/quixnav-init.js' %}"></script>
 <script src="{% static '/dashboard/js/custom.min.js' %}"></script>
@@ -179,7 +170,6 @@
                 return;
             }
 
-            // Validate phone number format
             var phonePattern = /^[0-9]{10}$/;
             if (!phonePattern.test(phone_number)) {
                 var myModal = new bootstrap.Modal(document.getElementById('statusErrorsModal_phone'));
@@ -187,7 +177,6 @@
                 return;
             }
 
-            // Validate password criteria
             var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
                 if (!passwordPattern.test(password)) {
                     alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
@@ -216,13 +205,11 @@
                                 password: password,
                                 address: address,
                                 status: status,
-                                // company_format: company_format,
                             },
                             success: function (result) {
                                 var myModal = new bootstrap.Modal(document.getElementById('statusSuccessModal'));
                                 myModal.show();
 
-                                // location.href = "{% url 'customer_login' %}";
                             },
                             error: function (xhr, status, error) {
                                 console.error(xhr.responseText);

@@ -8,7 +8,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -18,8 +17,6 @@
                 </ol>
             </div>
         </div>
-
-        <!-- row -->
 
                     <div class="row">
                         <div class="col-12">
@@ -45,7 +42,6 @@
                                     <th>Related Bloglink</th>
                                     <th>Tags</th>
                                     <th>Created On</th>
-                                    <!-- <th>Action</th> -->
                                 </tr>
                             </thead>
                             <tbody>
@@ -70,11 +66,9 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
-    </div><!-- .animated -->
-</div><!-- .content -->
+    </div>
+</div>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
     function DeleteColor(color_id){
@@ -101,11 +95,11 @@
     function EditColor(color_id) {
         var action = confirm("Are you sure you want to edit this color?");
         if (action !== false) {
-            window.location.href = "Editcolor/" + color_id; // Add a slash here
+            window.location.href = "Editcolor/" + color_id; 
         }
     };
     function HistoryColor(color_id) {
-        window.location.href = "ColorHistory/" + color_id; // Add a slash here
+        window.location.href = "ColorHistory/" + color_id; 
     };
 
 </script>

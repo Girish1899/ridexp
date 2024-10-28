@@ -1,7 +1,5 @@
-// stylelint-disable function-disallowed-list
 
 %offcanvas-css-vars {
-  // scss-docs-start offcanvas-css-vars
   --#{$prefix}offcanvas-zindex: #{$zindex-offcanvas};
   --#{$prefix}offcanvas-width: #{$offcanvas-horizontal-width};
   --#{$prefix}offcanvas-height: #{$offcanvas-vertical-height};
@@ -12,7 +10,6 @@
   --#{$prefix}offcanvas-border-width: #{$offcanvas-border-width};
   --#{$prefix}offcanvas-border-color: #{$offcanvas-border-color};
   --#{$prefix}offcanvas-box-shadow: #{$offcanvas-box-shadow};
-  // scss-docs-end offcanvas-css-vars
 }
 
 @each $breakpoint in map-keys($grid-breakpoints) {
@@ -95,7 +92,7 @@
       @include media-breakpoint-up($next) {
         --#{$prefix}offcanvas-height: auto;
         --#{$prefix}offcanvas-border-width: 0;
-        background-color: transparent !important; // stylelint-disable-line declaration-no-important
+        background-color: transparent !important; 
 
         .offcanvas-header {
           display: none;
@@ -106,8 +103,7 @@
           flex-grow: 0;
           padding: 0;
           overflow-y: visible;
-          // Reset `background-color` in case `.bg-*` classes are used in offcanvas
-          background-color: transparent !important; // stylelint-disable-line declaration-no-important
+          background-color: transparent !important; 
         }
       }
     }

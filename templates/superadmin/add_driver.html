@@ -7,7 +7,6 @@
             <div class="col-sm-6 p-md-0">
                 <div class="welcome-text">
                     <h4>Hi, welcome back!</h4>
-                    <!-- <span class="ml-1">Datatable</span> -->
                 </div>
             </div>
             <div class="col-sm-6 p-md-0 justify-content-sm-end mt-2 mt-sm-0 d-flex" >
@@ -24,7 +23,7 @@
                     <div class="bg-gradient-primary shadow-primary border-radius-lg pt-4 pb-3" style="background-color: #F3797E;">
                         <h6 class="text-white text-capitalize ps-3" style="color: white !important;">Add Driver</h6>
                     </div>
-                    </div>
+                </div>
 
                 <div class="card-body">
 
@@ -56,7 +55,6 @@
                         </div>
                     </div>
                                         
-                    
                     <div class="form-group row">
                         <label class="col-sm-2 col-form-label col-form-label-lg" style="color: #454545; font-size: 16px;">Vehicle Number</label>
                         <div class="col-sm-12">
@@ -176,7 +174,7 @@
                             </select>
                         </div>
                     </div>
-<br>
+                    <br>
                     <div class="col-12">
                         <button type="submit" class="btn btn-primary mb-2" id="save_action">Submit</button>
                     </div>
@@ -227,7 +225,6 @@
                             }
 
                             $('#driver_name, #phone_number, #email, #address').prop('readonly', true);
-                                // Do not disable profile_image and address_proof
                             } else {
                                 $('#driver_name, #phone_number, #email, #address').prop('readonly', false);
                             }
@@ -293,17 +290,14 @@
             var driving_license = $('#driving_license').prop('files')[0];
             var dfrom_date = $('#dfrom_date').val();
             var dto_date = $('#dto_date').val();
-            // var document_link = $('#document_link').prop('files')[0];
             var status = $('#status').val();
 
-            // Validate password criteria
             var passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
                 if (!passwordPattern.test(password)) {
                     alert("Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.");
                     return;
                 }
 
-            // Date validation: Ensure 'pto_date' is after 'pfrom_date' and 'dto_date' is after 'dfrom_date'
                 if (pfrom_date && pto_date && new Date(pfrom_date) > new Date(pto_date)) {
                     alert("'police_clearance to date' must be after 'police_clearance from date'.");
                     return;
@@ -318,7 +312,7 @@
                 alert("All fields are required.");
             } else {
                 var formData = new FormData();
-                formData.append('vehicle', vehicle_id);  // Pass the numeric vehicle ID
+                formData.append('vehicle', vehicle_id); 
                 formData.append('company_format', company_format);
                 formData.append('name', driver_name);
                 formData.append('phone_number', phone_number);
@@ -333,7 +327,6 @@
                 formData.append('driving_license', driving_license);
                 formData.append('dfrom_date', dfrom_date);
                 formData.append('dto_date', dto_date);
-                // formData.append('document_link', document_link);
                 formData.append('status', status);
 
                 $.ajax({
@@ -370,8 +363,6 @@
             }
         }
     });
-</script>
-
     
-
+</script>
 {% endblock %}
