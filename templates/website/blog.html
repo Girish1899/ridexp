@@ -71,7 +71,7 @@ function loadMoreBlogs() {
     const spinner = document.getElementById('loading-spinner');
     spinner.style.display = 'block';
 
-    fetch(/blog?page=${page}, {
+    fetch(`/blog?page=${page}`, {
         headers: {
             'X-Requested-With': 'XMLHttpRequest'  // Indicate this is an AJAX request
         }

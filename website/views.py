@@ -55,13 +55,8 @@ def our_rides(request):
     return render(request, 'website/our_rides.html',context)
 
 def packages(request):
-    packages = WebsitePackages.objects.filter(status='active').select_related('package_category')
-    categories = PackageCategories.objects.all()  # Get all categories for filtering
-    context = {
-        'packages': packages,
-        'categories': categories
-    }
-    return render(request, 'website/webpackage.html',context)
+    context = None
+    return render(request, 'website/taxi.html',context)
 
 class PackageDetailView(View):
     def get(self, request, title):
@@ -997,9 +992,6 @@ def blog(request):
 
     blogs_page = paginator.get_page(1)  
     return render(request, 'website/blog.html', {'blogs_page': blogs_page})
-
-
-
 
 class BlogDetailView(View):
     def get(self, request, title):
