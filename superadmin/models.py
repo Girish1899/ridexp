@@ -784,7 +784,7 @@ class PackageCategories(models.Model):
     updated_by = models.ForeignKey(User, related_name='package_category_updated', on_delete=models.SET_NULL, null=True, blank=True)
 
 class PackageCategoriesHistory(models.Model):
-    package_category_id = models.IntegerField()
+    # package_category_id = models.IntegerField()
     category_name = models.CharField(max_length=255)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
