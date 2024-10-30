@@ -1,0 +1,867 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &quot;Why You Should Choose a Taxi Over Rideshare&quot; | RidexpressTaxi Services</title>
+  <meta name="description" content="&quot;Discover the advantages of using a taxi service for safety, reliability, and convenience.&quot;"/>
+  <meta name="keywords" content="taxi service, rideshare, transportation, safety, reliability"/>
+
+  <meta property="og:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services" />
+  <meta property="og:description"
+    content="RidexpressTaxi Services offers 24/7 local, outstation, and airport taxi services with professional drivers and affordable rates. Book your ride today for a comfortable and safe journey!" />
+  <meta property="og:image" content="https://ridexpress.in/static/img/logo/ridexpress.png" />
+  <meta property="og:url" content="https://ridexpress.in" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services">
+  <meta name="twitter:description"
+    content="Book local, outstation, and airport taxis with RidexpressTaxi Services. 24/7 availability, affordable fares, and professional drivers for stress-free travel.">
+  <meta name="twitter:image" content="https://ridexpress.in/static/img/logo/ridexpress.png">
+  <meta name="twitter:url" content="https://ridexpress.in">
+
+  <link rel="icon" type="image/x-icon" href="/static/img/logo/favicon.png">
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/all-fontawesome.min.css">
+  <link rel="stylesheet" href="/static/css/animate.min.css">
+  <link rel="stylesheet" href="/static/css/magnific-popup.min.css">
+  <link rel="stylesheet" href="/static/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="/static/css/jquery.timepicker.min.css">
+  <link rel="stylesheet" href="/static/css/nice-select.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <style>
+    .blog-title a {
+      text-decoration: none;
+    }
+
+    
+    .whatsapp-float {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      z-index: 100;
+    }
+
+    .whatsapp-float img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-float img:hover {
+      transform: scale(1.1);
+    }
+
+    #scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      z-index: 100;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #scroll-top:hover {
+      transform: scale(1.1);
+    }
+
+
+    .enquiry-float {
+      position: fixed;
+      bottom: 150px;
+      right: 26px;
+      width: 53px;
+      height: 53px;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      border-radius: 50%;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .enquiry-float i {
+      font-size: 45px;
+      color: #f34545;
+    }
+
+    .enquiry-float:hover {
+      transform: scale(1.1);
+    }
+
+   
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: flex-start;
+      transition: opacity 0.3s ease;
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 900px;
+      max-width: 90%;
+      max-height: calc(90vh - 60px);
+      overflow-y: auto;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      animation: slideIn 0.5s;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #333;
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .modal-content label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    .modal-content input:focus,
+    .modal-content textarea:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      outline: none;
+    }
+
+    .modal-content button {
+      background-color: #DB9710;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s, transform 0.2s;
+      width: 150px;
+      height: 50px;
+    }
+
+    .modal-content button:hover {
+      background-color: #DB9710;
+      transform: scale(1.05);
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #aaa;
+      transition: color 0.3s;
+    }
+
+    .close:hover {
+      color: red;
+    }
+
+    @media (max-width: 600px) {
+      .modal-content {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .modal-content h2 {
+        font-size: 20px;
+      }
+
+      .modal-content button {
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Ridexpress",
+      "image": "https://www.ridexpress.in/logo.png",
+      "url": "https://www.ridexpress.in",
+      "telephone": "+91-6366463555",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Jp Nagar",
+        "addressLocality": "Bangalore",
+        "addressRegion": "Karnataka",
+        "postalCode": "560078",
+        "addressCountry": "IN"
+      },
+      "priceRange": "INR",
+      "openingHours": "Mo-Su 00:00-23:59"
+    }
+    </script>
+
+
+</head>
+
+
+<body>
+
+  <div class="preloader">
+    <div class="loader-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+
+  <header class="header">
+    <div class="main-navigation">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container position-relative">
+                <a class="navbar-brand" href="/">
+                    <img src="/static/img/logo/logo-icon.png" alt="Ridexpress" style="height: 62px; width: 67px;">
+                    <h2 id="logoheader">Ridexpress</h2>
+                </a>
+                <div class="mobile-menu-right">
+                    <div class="search-btn">
+                        <button type="button" class="nav-right-link"><i class="far fa-search"></i></button>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-mobile-icon"><i class="far fa-bars"></i></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="main_nav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">Services</a>
+                            <ul class="dropdown-menu fade-down">
+                                <li><a class="dropdown-item" href="/taxi_services">Taxi Services</a></li>
+                                <li><a class="dropdown-item" href="/airport-taxi">Airport Taxi</a></li>
+                                <li><a class="dropdown-item" href="/outstationcabs">OutStation Cabs</a></li>
+                                <li><a class="dropdown-item" href="/localtaxi">Local Taxi</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/packages">Packages</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/faq">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    </ul>
+                    <div class="nav-right">
+                        <div class="nav-right-btn mt-2">
+                            <a href="/">
+                                <button class="theme-btn">Book A Taxi <span class="fas fa-taxi"></span></button>
+                            </a>
+                        </div>
+                        <div class="nav-right-btn mt-2">
+                            <a href="/customer/customer_login">
+                                <button class="theme-btn">Customer Login <span class="fas fa-person"></span></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="sidebar-popup">
+    <div class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <button type="button" class="close-sidebar-popup"><i class="far fa-xmark"></i></button>
+            <div class="sidebar-logo">
+                <img src="/static/img/logo/Ridexpress_new.png" alt="logo">
+            </div>
+            <div class="sidebar-about">
+                <h4>About Us</h4>
+                <p style="text-align: justify;">We are Ridexpress Taxi Car Rentals, the leading and most reliable cab rentals provider in India. We provide taxi for Airport Pickup, Airport Drop, Local Pickup and Drop, and to major outstations from Bangalore. Our Airport Taxi Services is the way to go option for all your Airport Pickup & Airport Drop needs. Since 2007, we have been uniquely placed as the largest and safest chauffeur-driven car rental company in India.</p>
+            </div>
+            <div class="sidebar-contact">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li>
+                        <h6>Email</h6>
+                        <a href="/cdn-cgi/l/email-protection#30434540405f42447062595455484042554343445148591e535f5d"><i class="far fa-envelope"></i><span class="__cf_email__" data-cfemail="483b3d3838273a3c081a212c2d30383a2d3b3b3c293021662b2725">[email&#160;protected]</span></a>
+                    </li>
+                    <li>
+                        <h6>Phone</h6>
+                        <a href="tel:08046844684"><i class="far fa-phone"></i>+91 6366463555</a>
+                    </li>
+                    <li>
+                        <h6>Address</h6>
+                        <a href="#"><i class="far fa-location-dot"></i>Bengaluru, Karnataka, India</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-social">
+                <h4>Follow Us</h4>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<main class="main">
+    <!-- breadcrumb -->
+    <div class="site-breadcrumb" style="background: url(/static/img/blog/heading.jpg)">
+        <div class="container">
+            <h1 class="breadcrumb-title">&quot;Why Choose a Taxi Over Rideshare Services?&quot;</h1>
+            <ul class="breadcrumb-menu">
+                <li><a href="/blog">Blogs</a></li>
+                <li class="active"> &quot;Why You Should Choose a Taxi Over Rideshare&quot;</li>
+            </ul>
+        </div>
+    </div>
+    <!-- blog single area -->
+    <div class="blog-single-area py-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="blog-single-wrapper">
+                        <div class="blog-single-content">
+                            <div class="blog-thumb-img">
+                                <img src="/media/data%3Aimage/png%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAAQMAAADCCAMAAAB6zFdcAAABjFBMVEX29vbnhBv/qjwAAAD/%2Bkt/P/zowROWpPUkr/rD3T09TV3/36%2BfbmfQD2%2BPrZ2degtPX/rz7qnDf/pivou3/y4XmfwDuiBz2xofx1MD3/f85SEvvmDDbkjPcmUz13MTsyLDo7fh1Qw/8N23xvR7URz/z5z2oTz/1JD/piXjlSz70aX/xIMAI18AM2c7PTgALGPefxrpk0Tvx6jRdxeKiorRizFxSxooGgnGxczqmVLz49f%2BtFz627zojjbuvZb77eL%2Br0rf5vutra60eCqVYyKlbiYYGBgwMS1FLRAOL1hIXIEGEyNjY2S9vb7y2snrp2/tsYL%2BuGXG0fXuwJ3ur3q0YABaNQwfEwWGTQ%2BLUBGhXBNWMguzZxYhMTckGQ37uXE3JAyieES5g0BZVUh1YUbZpWTWq3RUQCxAMiNERkGvjF8HJC4oOj%2BvdSn/16QBFy8ADzMAI0SuscBqeZYAAA4tSnZbbY2Jk6onRnPYt6CQZkZVLgDezcGVn7Nzd3o7QldRap2Mnc9DYJegUfdaAAANXElEQVR4nO2djX/TxhmAFclOqkQ%2BIquxiYpnHIiNZ2IcAglOMHFIQoEA4XOBtrSk3bqNdv0goWnWDbbuH9/dSbKk091ZNtY5hHvg1zqxfNY9eu%2B9D32gKBKJRCKRSCQSiUQikUgkEolEIpFIJBKJRCKRfJAAh2HvxtAAtq20t6enp7dXDNv%2B8EQAYK8s3J/PeOSWV7ehh2HvlkCA3V4dgRUf8cnlMrkHKx%2BMBWBPL4fq3/GQWd7%2BMCzY09cyFAEOmeW2PewdTByg3GcbwLGwetxDAayM0FpBKBQuGsdagj3NDQIvPa4cYwmxFKBQ2D62EkBMBcdYAliJqwBKOKbNwYhtADG03UxyCmMvd%2BsRguSWhzJOALZSrJVPllvtJHro%2BMnAbQ0LQ2gNdvu85VBdqw0%2BFuxrPSmAEga9B10B4GRV7WCpxQGHIiMMvGkjrTU8ENwagLFmqUGq5cHugX2RUsvM8sKKkTLaxScZiqGM2PEiMFSSwUqg9YuZ%2B%2B1Uh4VoLAgOBHA14kCttgZ4GOwnkSpmiqkgxnLEUm5w398dULOiDlTLGOA3RMOgnSJ4Qm6TmRbZGGgKVOvkwGIRbEfqF1GQSt0nYiV3X1xjoIcBbA3cTxlKqVQy4sUKeEBULzMdVZBKRRqDuDiwKdkABwInIxils5OQ9EQsCWSvkFumKUgViWgROWuoMhycZO6CcX0yjZlMx/qGSOWoDlKEKnFjRdBmOFAfku3RC/2OAsjZGJFA9ozX6ApgDxkOF2G9IyjS04GqroV3wVCuT5RQjY2SryA9eb37NxCDxNwqw4FBbCds4hTXgVFKwwxw1jAMkA7SPRDA6XDdiKFBgDwRL8IcxG0L7sF/9CgdxoARAngiwONwt0DrGB2Www5GxHWOrJxYDqakYA4IMWkYj2B8cMoHq7EdhDcU1znaDxkOiiEH5OH3GwPsHdKTnCbRg4ORITlgjZGs0FbGBCMOOuHA/gKyLcTNB/MCZ030sXI5fBQA30Ga4%2BB0f/2CuJzInDMRW/EDYfIRxwE5XbjIcNAiXAmcMMCMEJVQLZKNkSeBnxPb5DiRkRDIlPhA6CrKWkRBLXoM4CSBBX/eYEdmhFQF5HAyc1qkA6BctboqUNBgmQW3eJucFme2aQ7IZddMW%2BxqGihXfQvW2spAWyJYINcPckZUwYPIQovocwy2UVarztr61daA19YjCWEkdy0iYTWyjeiVZXySqd2q1WpFY/DnWKLLyjlyMS2ylDakk46JnWqLNgZYxQeBUCjOR88xCBwdiIFyGiWXeVLEGlYe0y5RGsrZtiQBkdbuWMjkRvIZ2hkWyDFToFADgcuxCwN6RuBy7LKB0vOJZ7EnWATR4wUIw7kGI2lscqGMGwbH84KkXq7JEjprFklk5sQJA7GzJXFEZw3MMFg9pmEAA4E89cp0MOw9TZJ4DsQPj8D1iYnrYr405kBJ%2BPCoNIEpCfkyECsMhA%2BPJiYESog1ULooOgyuT3QkoPPKE93PIr8TtGv0yDAQOjwqlRTDd%2BCSrITuAyWxwyOUCUqkgr4dAAapVCq4WdeBktjhUSQE3sUBWFk4TWV9ff1ewEK3gZLghVS6gz6Pwop36TG6WxP9RaBf/EnTtPWAhC4DJdHDI5qCPrsHL%2BFf2nn6LD/zWf7Z82eXZi7h30AHl0PNgRcI4odHpQj9ltTp9OZn8vMzO/n8rc/yDAfgMU/CezxXCjp4NrPz%2BfzOFywHvIHSe7d6FDwTAbzrK%2BdhO8jnn302/z55/MMB%2ByBkvDhUb/ADs%2B2gWG024Fzrp165eGfkXwev/Id2B5IHHOg9H6sHsHqG8Xa%2Bau6VQ3Dur5PVU2I7rC29rBcVOzoJdwO78PqEbBBsbxWtSy1kuWg46rrummq4TegDt2yqi9ajIHS0V89AvaZ85ZlqhtLTzUuT5EE3Vxc8n/15SeIL7%2BaXdRNXbWsF3mKgiGcZ%2B4NAFprVdWszPLrj9GRgV3/5wsfIS6gl68vfK1iReqpqINh15EPADXV0s1sHAOb0EB2h2oAvX758hsYCrCpkBYyj49yS%2BjFwGwFpoHAhoQBxCd/oNJi4UjrMAzsMSodZClLOwEbnANYAt/yUYsiL0AqyeAEt/ArQI0sOhnTNfAp4QBbOFr1VRDFo7s8Agorakp3SzsMOvts7towi1vdX6%2ByTaALXyj644F3Ecc1UceYAPnzn0bx8CVDWig4keLU%2BuXLANIwkdOWoAWjuzwyDXw17/FMKAhA/omEQOOgZtUA8G0oOqnckdxeOQZ%2BHscAzfgANDc6NEA5KY266YFPYFb7d%2BRngxsqmZwTNSDAexPN53LQou2twQ57NojejIwiwz4Y6IeDSA2nAZRfVEul2u1VnHFAMN9ThQ6DNjAd7EMLFVgBcxOIujDgIb6VGeaZXkPobCu1pQhWUD1bxdrU1Ojo9/FEaDtZHEcm24UfI9nRv%2B4479m8D1ZkB65eUIVnyRRMzTOtMpTSADk5GiEcwQPUVfgLhEUdDOwTBB8jVELoR/dLXyyEQfQglAJ%2BPC3aqNu/T%2BOweho%2BD4wc5FSC9z1O1k/W6G8r3f%2BR3MQvcs2ueqDdtE/DgEYhC9E65Aq4ZewJG%2BqOu0t008onpqqjrVQTX5QMCd0JnWj6PB%2BsfjRXSX9QKlFvAAa1euXNGgAKqDza92d6/ssBzwbrsfUP1h8uuj%2BshA5L4fDF2CkxoYYeIkA5XloJagAwDg4e%2Br%2BpApugGVGu3%2BuxVqNb13RTsARqvf%2BrMNoHrwasloK7qTGEU7AK2%2BBYxOMR6Ywakl712YKRHZbIH60aQcAGO0bwOjPAMqKyEw34V5soADQWfET2Jx0LcAYkCAhznhnecmhIgDGAPc7RNzAOA42INT3SkSwgAcHxY2bmz%2BUAhq0LO8CpEpU1%2BsOGch3DGlOAfKGZ8fmQrOnSEhBoX%2BAvNmYO/5CSH8pr6Im4FZuLH0xa2dzQ3VjFpIKg6CN9N9%2BwcGC5G7L4MOdB0a%2BOn2GOQ2nB0VTEY1eQ50nAnQ4uPPt%2BuQxp3Zikl%2BIiEHoYqdtHQqVpnnQFd3tdfYALYQlBDbAexH4X/NG9rrMb%2BgDVKCGAdqgUKF60BXn2p3xgJoWqV3Byg5mJuhgm5rPxASEnJwIsh53C85c1v/JYyDj8dPEPgOzFuaNhZCu%2BXtO89BMCfiWaS%2BGHYJJRBzTxFxoAcrHvxuThygFaPbY4x9jxsHyIeuky7HXmnh7iEZB6BW9kHfB8dof/TB1wgUYGiXCc57F1joFZgOnT2uNxqNOn51Z9eMHGpuHCAfMBm8cgua8wp6vRlqDck4sNcsH3eMdr7DQy8kdIugs1vmrHf0GlvNvTcHDScQ3PrFjQP00vQKmtuHBW25BYXjMRkHVytBTiH8gK%2Bd6kBu1MELg8Y%2B/ECz%2BWsjePzi5oMCzgZOQXNvcEH7uCBtMfRlT5JYV7UvRh9a6jvgXjboMO9mg/ov%2BBPN5gGK4ldOY4jdFgo4oJyCDnBBe80tVNBPM6HLUxJ5AD/lDsOcf2XZavcbbebdCJ5r4l0/0dxr4Bh2ZsDcCYAfJGg86TWFuRIuaNwp6NWV5J%2BXRrvLMuP/2zhdFfgOnMgB8PjhGHZqX6CPuZwkkw29zLrDo0O3oHvNQyyT3LkBPtKV46An5p0%2Bvb7lNh/YkFEMaxvOSghtyOWyuOi/VDvpoL7vFrTntCrtEuFg8MuqlCf89udgv%2BPgV7zrN9wTp/HAPaPj4FdC5nPCweDjoJe7bWnkn7sODqgO4gOHWthBI%2BIgnBSTuDbFPp0JtP88kwyNfP6S5o5vD4kQ/sFkQI40MPD3s24cHHQKQh1DXfs89I0jiZxhAMZ0h3/OMNmepvDbv9CKgZMTnUm44qSyuvbFLJ3fijRml2Z33ZzoJtdSs9lAaebev4NfuJ3UWXj/RiOFeSr1bop2X9JlreOg8cbt0t6gLm2LWdBbakF3AwXtBdoUzA7hLZMxECR1gbXr6yna9vfwe7f9fh12jYe4Hp%2ByCrpH/d71QEENgMNgr45HHYNPgV1w94XCCfoH8HvulGmslFKae3h0N6dcZhVEKQQ9Wg2/50yZ6oclpOAQ%2B2A/jS3%2Bo9l6hbHnH1HDQEm99WMY1vxg/6Bed/LaCUZBbyMFGaWz6XT6P4GC6nNb%2B86Uqf5f/jMqPTgPauydFOP4jTO2PxE4fnCX686Md27ccFt4jHhyHsz8O7WgRjwF3Ce39kHMo%2BcSzIod4AySVdDlaBicdaqxRSkobhhACQO9NXucsuc32ZunXqINXof2/BC/cY9S0MuoS89BGmfR0Fpa/Ze4CgbsgLLvn3I/cJPY9/qYW9B6pKALlI93HDgSfgq6jK1gwA6U1DjRr93t8oG7wUiozx0obtuM2KS2KN%2BBkxc9m/VG7IYweAdKKrUeGCbcHWflgs7249jCnTlIY7/pb55S1gPX272lF2Tgf7TB4Xds4Wdc0P9%2Bn%2ByFEiUpjr8LaO288yrm9h2INyJFcj/slUH7JRdKwe8SB8NH%2BNhQIpFIJBKJRCKRSCQSiUQikUgkEolEIpFIJBKJRCKRSCQSiUQiic3/AWxcSNsoEL5NAAAAAElFTkSuQmCC" alt="why-you-should-choose-a-taxi-over-rideshare">
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-details">
+                                    <h3 class="blog-details-title mb-20"> &quot;Why You Should Choose a Taxi Over Rideshare&quot;</h3>
+                                    <!-- <p>Explore the benefits of using a taxi service instead of rideshare options for reliable transportation.</p> -->
+                                    <p class="mb-10" style="text-align: justify;">
+                                    
+                                        <li>Explore the benefits of using a taxi service instead of rideshare options for reliable transportation.</li>
+                                      
+                                    </p>
+                                    <hr>
+                                    <div class="blog-details-tags pb-20">
+                                        <h5>Tags : </h5>
+                                        <ul>
+                                            <li><a href="#">Taxi</a></li>
+                                            <li><a href="#">Booking</a></li>
+                                            <li><a href="#">Online</a></li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-comments mb-lg-0">
+                                    
+                                <div class="blog-comments-form">
+                                    <h3>Leave A Comment</h3>
+                                    <form action="#">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" placeholder="Your Name*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="email" class="form-control" placeholder="Your Email*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="5" placeholder="Your Comment*"></textarea>
+                                                </div>
+                                                <button type="submit" class="theme-btn">Post Comment <i class="far fa-paper-plane"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <aside class="sidebar">
+                        <!-- search-->
+                        <div class="widget search">
+                            <h5 class="widget-title">Search</h5>
+                            <form class="search-form">
+                                <input type="text" class="form-control" placeholder="Search Here...">
+                                <button type="submit"><i class="far fa-search"></i></button>
+                            </form>
+                        </div>
+                        <!-- category -->
+                    
+                        <!-- recent post -->
+                        
+                        <!-- social share -->
+                        <div class="widget social-share">
+                            <h5 class="widget-title">Follow Us</h5>
+                            <div class="social-share-link">
+                                <a href=""><i class="fab fa-facebook-f"></i></a>
+                                <a href=""><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-dribbble"></i></a>
+                                <a href=""><i class="fab fa-whatsapp"></i></a>
+                                
+                            </div>
+                        </div>
+                        <!-- Recent Post -->
+                        <div class="widget sidebar-tag">
+                            <h5 class="widget-title">Popular Tags</h5>
+                            <div class="tag-list">
+                                <a href="#">Car</a>
+                                <a href="#">Taxi</a>
+                                <a href="#">Drive</a>
+                                <a href="#">Booking</a>
+                                <a href="#">Offer</a>
+                                <a href="#">Tips</a>
+                                <a href="#">Cab</a>
+                                <a href="#">Luxury</a>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</main>
+
+
+  <footer class="footer-area">
+    <div class="footer-widget">
+        <div class="container">
+            <div class="row footer-widget-wrapper pt-120 pb-70">
+                <div class="col-md-6 col-lg-4">
+                    <div class="footer-widget-box about-us">
+                        <a href="#" class="footer-logo">
+                            <img src="/static/img/logo/logo-icon.png" alt="Ridexpress Logo" style="height: 60px; width: 67px;">
+                            <h2 id="logoheader" style="color: white;">RIDEXPRESS</h2>
+                        </a>
+                        <p class="mb-3">
+                            We are Ridexpress Taxi Car Rentals, the leading and most reliable cab rentals provider in India. We provide taxi for Airport Pickup, Airport Drop, Local Pickup and Drop, and to major outstations from Bangalore.
+                        </p>
+                        <ul class="footer-contact">
+                            <li><a href="tel:+916366463555"><i class="far fa-phone"></i>+91 6366463555</a>&nbsp;&nbsp;&nbsp; <a href="tel:+916366955441"><i class="far fa-phone"></i>+91 6366955441</a></li>
+                            <li> <a href="tel:+919019765645"><i class="far fa-phone"></i>+91 9019765645</a></li>
+                            <li><i class="far fa-map-marker-alt"></i>Kuvempu Nagar,Doddakallasandra, Kanakapura Rd Bangalore 560062</li>
+                            <li><a href="/cdn-cgi/l/email-protection#b0c3c5c0c0dfc2c4f0c2d9d4d5c8c0c2d5c3c39ed9de"><i class="far fa-envelope"></i><span class="__cf_email__" data-cfemail="0d7e787d7d627f794d7f646968757d7f687e7e236463">[email&#160;protected]</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <div class="footer-widget-box list">
+                        <h4 class="footer-widget-title">Quick Links</h4>
+                        <ul class="footer-list">
+                            <li><a href="/about"><i class="fas fa-caret-right"></i> About Us</a></li>
+                            <li><a href="/terms"><i class="fas fa-caret-right"></i> Terms Of Service</a></li>
+                            <li><a href="#"><i class="fas fa-caret-right"></i> Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="footer-widget-box list">
+                        <h4 class="footer-widget-title">Support Center</h4>
+                        <ul class="footer-list">
+                            <li><a href="/faq"><i class="fas fa-caret-right"></i> FAQ</a></li>
+                            <li><a href="/"><i class="fas fa-caret-right"></i> Book A Ride</a></li>
+                            <li><a href="/contact"><i class="fas fa-caret-right"></i> Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="footer-widget-box list">
+                        <h4 class="footer-widget-title">Newsletter</h4>
+                        <div class="footer-newsletter">
+                            <p>Subscribe to our newsletter for the latest updates and news.</p>
+                            <div class="subscribe-form">
+                                <form action="#" method="post">
+                                    <input type="email" class="form-control" placeholder="Your Email" required>
+                                    <button class="theme-btn" type="submit">
+                                        Subscribe Now <i class="far fa-paper-plane"></i>
+                                    </button>
+                                </form>
+                                <div class="mt-2">
+                                    <a href="/login" class="theme-btn">Admin Login <i class="fas fa-person"></i></a>
+                                    <a href="/driver/driver_login" class="theme-btn">Driver Login <i class="fas fa-person"></i></a>
+                                    <a href="/register_vehicle" class="theme-btn">Register Vehicle <i class="fas fa-car"></i></a>
+                                    <a href="/add_blog_website/" class="theme-btn">Add Blogs <i class="fas fa-car"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 align-self-center">
+                    <p class="copyright-text">
+                        &copy; Copyright <span id="date"></span> <a href="#"> RidexpressTaxi </a>. All Rights Reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <ul class="footer-social">
+                        <li><a href="https://www.facebook.com/profile.php?id=61566246083463" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="https://x.com/RExpress247" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/in/ridexpress-bangalore-a6858432b/" target="_blank"><i class="fab fa-linkedin-in" ></i></a></li>
+                        <li><a href="https://www.instagram.com/recabrides/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    document.getElementById('date').innerText = new Date().getFullYear();
+</script>
+
+
+
+
+  <a href="https://wa.me/6366463555?text=Hello,%20I%20would%20like%20to%20book%20a%20taxi.%20Could%20you%20please%20help%20me%20with%20the%20details?"
+    class="whatsapp-float" target="_blank">
+
+
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
+
+  </a>
+  <br>
+
+
+  <a href="#" class="enquiry-float" id="enquiry-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Quill_Paper_Icon_with_White_Background.png" alt="Enquiry Icon">
+  </a>
+
+  <div id="enquiryModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 style="color: rgb(6, 6, 54);">Reach Out: We’re Here to Help</h2><br>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Your Name" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="email" class="form-control" id="cust_phone_number" name="cust_phone_number"
+              placeholder=" Phone Number" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="cust_email" name="cust_email" placeholder="Your Email" required>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <select class="form-control" id="service" name="service">
+              <option value="Airport Transfer">Airport Transfer</option>
+              <option value="Local Transfer">Local Transfer</option>
+              <option value="Outstation">Outstation Transfer</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div><br>
+
+      <div class="form-group">
+        <textarea name="message" cols="30" rows="2" class="form-control" placeholder="Write Your Message"
+          id="cust_message" name="cust_message"></textarea>
+      </div>
+      <center><button type="submit" class="theme-btn" id="save_btn">Submit
+        <i class="far fa-paper-plane"></i></button></center>
+
+    </div>
+  </div>
+
+  <br>
+
+  <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
+
+
+  
+
+
+  <script src="/static/js/modernizr.min.js"></script>
+  <script src="/static/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/js/imagesloaded.pkgd.min.js"></script>
+  <script src="/static/js/jquery.magnific-popup.min.js"></script>
+  <script src="/static/js/isotope.pkgd.min.js"></script>
+  <script src="/static/js/jquery.appear.min.js"></script>
+  <script src="/static/js/jquery.easing.min.js"></script>
+  <script src="/static/js/owl.carousel.min.js"></script>
+  <script src="/static/js/counter-up.js"></script>
+  <script src="/static/js/jquery-ui.min.js"></script>
+  <script src="/static/js/jquery.timepicker.min.js"></script>
+  <script src="/static/js/jquery.nice-select.min.js"></script>
+  <script src="/static/js/wow.min.js"></script>
+  <script src="/static/js/main.js"></script>
+  <script>
+
+    var modal = document.getElementById('myModal');
+
+    function openModal() {
+      var googleFormUrl = 'https://forms.gle/EUGWHRSqYExnpyzH6';
+      document.getElementById('googleFormFrame').src = googleFormUrl;
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    };
+
+
+    function initAutocomplete() {
+      const inputs = document.querySelectorAll('.autocomeple_g');
+
+
+      inputs.forEach(input => {
+        const autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function () {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) {
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+          console.log('Place details for', input.id, ':', place);
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    });
+
+
+
+    $('.date-picker').datepicker({
+      format: 'mm/dd/yyyy',
+      autoclose: true,
+      todayHighlight: true,
+      startDate: new Date() 
+    });
+
+    $('.date-picker').change(function () {
+      var selectedDate = new Date($(this).val());
+      var today = new Date();
+
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        $(this).val(''); 
+        $(this).addClass('is-invalid');
+        $('#dateError').text('Please select a future date.');
+      } else {
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#dateError').text('');
+      }
+    });
+
+    $('.pickup-time').change(function () {
+      var selectedDate = new Date($('.date-picker').val());
+      var today = new Date();
+      var selectedTime = $(this).val();
+
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+        var now = new Date();
+        var selectedHours = parseInt(selectedTime.split(':')[0]);
+        var selectedMinutes = parseInt(selectedTime.split(':')[1]);
+        var currentHours = now.getHours();
+        var currentMinutes = now.getMinutes();
+        var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
+
+        if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
+          $(this).val('');
+          $(this).addClass('is-invalid');
+          $('#timeError').text('Please select a current or future time.');
+        } else {
+          $(this).removeClass('is-invalid');
+          $(this).addClass('is-valid');
+          $('#timeError').text('');
+        }
+      } else {
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#timeError').text('');
+      }
+    });
+
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16701194260"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'AW-16701194260');
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var modal = document.getElementById("enquiryModal");
+
+    var btn = document.getElementById("enquiry-btn");
+
+    var closeBtn = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function () {
+      modal.style.display = "flex";
+    }
+
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    $(document).ready(function () {
+      console.log("Document is ready.");
+      $("#save_btn").click(function () {
+        console.log("Submit button clicked.");
+        var cust_name = $('#cust_name').val();
+        var cust_phone_number = $('#cust_phone_number').val();
+        var cust_email = $('#cust_email').val();
+        var service = $('#service').val();
+        var cust_message = $('#cust_message').val();
+
+        if (!cust_name || !cust_phone_number || !service || !cust_message) {
+                alert("All fields are required.");
+                return;
+            }
+
+        console.log("name :", cust_name);
+        console.log("phone :", cust_phone_number);
+        console.log("email :", cust_email);
+        console.log("subject :", service);
+        console.log("message :", cust_message);
+
+        $.ajax({
+          url: '/save-enquiry/',
+          type: "POST",
+          headers: {
+            'X-CSRFToken': 'CZEkxmgodPunNjJj1kysRliSLvEp4GXirfj1sAabqaAMu72PSRJvA7sgKuUEhb2p'
+          },
+          data: {
+            cust_name: cust_name,
+            cust_phone_number: cust_phone_number,
+            cust_email: cust_email,
+            service: service,
+            cust_message: cust_message
+          },
+          success: function (result) {
+            console.log("Success response:", result);
+            if (result.success) {
+              alert(result.success);
+              $('#cust_name').val('');
+              $('#cust_phone_number').val('');
+              $('#cust_email').val('');
+              $('#service').val('');
+              $('#cust_message').val('');
+              modal.style.display = "none";
+            } else {
+              alert(result.error);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error: ", xhr.responseText);
+            alert("There was an error submitting your enquiry.");
+          }
+        });
+      });
+    });
+  </script>
+
+<style>
+  @media (max-width: 991px) {
+    .navbar-brand {
+        padding-left: 1px;
+    }
+}
+</style>
+</body>
+
+</html>
