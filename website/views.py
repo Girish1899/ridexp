@@ -536,6 +536,434 @@ def navigating_language_barriers(request):
     return render(request, 'website/blog/out25.html',context)   
 
 
+#### hareesh 
+def airport_taxi_driver_training_what_it_involves(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-driver-training-what-it-involves.html',context)
+
+def airport_taxi_etiquette_for_first_time_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-etiquette-for-first-time-travelers.html',context)
+
+def airport_taxi_etiquette_tips_for_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-etiquette-tips-for-travelers.html',context)
+
+def airport_taxi_etiquette_tips_for_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-etiquette-tips-for-travelers.html', context)
+
+def airport_taxi_safety_what_you_should_know(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-safety-what-you-should-know.html', context)
+
+def airport_taxi_safety_tips_for_women_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-safety-tips-for-women-travelers.html', context)
+
+def airport_taxi_safety_measures_for_solo_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-safety-measures-for-solo-travelers.html', context)
+
+def airport_taxi_safety_features_you_should_look_for(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-safety-features-you-should-look-for.html', context)
+
+def airport_taxi_etiquette_what_you_need_to_know(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-etiquette-what-you-need-to-know.html', context)
+
+def airport_taxi_services_for_ski_resorts_and_mountain_destinations(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-ski-resorts-and-mountain-destinations.html', context)
+
+def airport_taxi_services_for_red_eye_flights(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-red-eye-flights.html', context)
+
+def airport_taxi_services_for_music_festivals_and_major_events(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-music-festivals-and-major-events.html', context)
+
+def airport_taxi_services_for_last_minute_flight_changes(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-last-minute-flight-changes.html', context)
+
+def airport_taxi_services_for_frequent_flyers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-frequent-flyers.html', context)
+
+def airport_taxi_services_for_elderly_passengers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-elderly-passengers.html', context)
+
+def airport_taxi_services_for_early_morning_and_late_night_flights(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-early-morning-and-late-night-flights.html', context)
+
+def airport_taxi_services_for_disabled_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-disabled-travelers.html', context)
+
+def airport_taxi_services_for_city_layovers_exploring_your_options(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-city-layovers-exploring-your-options.html', context)
+
+def airport_taxi_services_for_business_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-business-travelers.html', context)
+
+def airport_taxi_services_a_sustainable_future(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-a-sustainable-future.html', context)
+
+def benefits_of_pre_booking_your_airport_taxi(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-pre-booking-your-airport-taxi.html', context)
+
+def benefits_of_pre_booking_an_airport_taxi(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-pre-booking-an-airport-taxi.html', context)
+
+def benefits_of_hiring_a_car_for_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-hiring-a-car-for-outstation-travel.html', context)
+
+def benefits_of_choosing_car_rentals_for_outstation_trips(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-choosing-car-rentals-for-outstation-trips.html', context)
+
+def benefits_of_booking_a_car_for_outstation_trips(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-booking-a-car-for-outstation-trips.html', context)
+
+def benefits_of_booking_a_car_for_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-booking-a-car-for-outstation-travel.html', context)
+
+def airport_taxis_for_last_minute_travel_plans(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxis-for-last-minute-travel-plans.html', context)
+
+def airport_taxi_vs_shuttle_service_which_is_right_for_you(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-vs-shuttle-service-which-is-right-for-you.html', context)
+
+def airport_taxi_vs_public_transport_which_is_better(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-vs-public-transport-which-is-better.html', context)
+
+def airport_taxi_tips_for_first_time_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-tips-for-first-time-travelers.html', context)
+
+def airport_taxi_services_with_real_time_tracking(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-with-real-time-tracking.html', context)
+
+def airport_taxi_services_with_language_assistance(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-with-language-assistance.html', context)
+
+def airport_taxi_services_vs_hotel_shuttles(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-vs-hotel-shuttles.html', context)
+
+def airport_taxi_services_vs_car_rentals_which_is_better(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-vs-car-rentals-which-is-better.html', context)
+
+def airport_taxi_services_for_wheelchair_users(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-wheelchair-users.html', context)
+
+def airport_taxi_services_for_vips_and_celebrities(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-vips-and-celebrities.html', context)
+
+def airport_taxi_services_for_travelers_with_disabilities(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/airport-taxi-services-for-travelers-with-disabilities.html', context)
+
+def choosing_the_right_outstation_taxi_for_group_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/choosing-the-right-outstation-taxi-for-group-travel.html', context)
+
+def choosing_the_right_car_service_for_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/choosing-the-right-car-service-for-outstation-travel.html', context)
+
+def choosing_the_right_car_for_your_outstation_trip(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/choosing-the-right-car-for-your-outstation-trip.html', context)
+
+def choosing_the_right_car_cab_service_for_your_needs(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/choosing-the-right-car-cab-service-for-your-needs.html', context)
+
+def choosing_the_best_vehicle_for_long_outstation_taxi_trips(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/choosing-the-best-vehicle-for-long-outstation-taxi-trips.html', context)
+
+def choosing_the_best_airport_taxi_service_for_families(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/choosing-the-best-airport-taxi-service-for-families.html', context)
+
+def budgeting_for_your_outstation_taxi_travel_tips_and_tricks(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/budgeting-for-your-outstation-taxi-travel-tips-and-tricks.html', context)
+
+def booking_an_airport_taxi_for_business_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/booking-an-airport-taxi-for-business-travelers.html', context)
+
+def booking_airport_taxis_in_high_traffic_tourist_destinations(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/booking-airport-taxis-in-high-traffic-tourist-destinations.html', context)
+
+def booking_airport_taxis_during_peak_holiday_seasons(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/booking-airport-taxis-during-peak-holiday-seasons.html', context)
+
+def best_tips_for_reducing_outstation_call_taxi_tariffs(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/best-tips-for-reducing-outstation-call-taxi-tariffs.html', context)
+
+def best_practices_for_airport_taxi_service_providers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/best-practices-for-airport-taxi-service-providers.html', context)
+
+def best_cars_for_long_distance_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/best-cars-for-long-distance-outstation-travel.html', context)
+
+def best_airport_taxi_services_for_pet_owners(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/best-airport-taxi-services-for-pet-owners.html', context)
+
+def best_airport_taxi_services_for_group_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/best-airport-taxi-services-for-group-travel.html', context)
+
+def benefits_of_using_airport_taxi_services_for_international_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-using-airport-taxi-services-for-international-travelers.html', context)
+
+def benefits_of_using_a_professional_car_cab_service(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-using-a-professional-car-cab-service.html', context)
+
+def benefits_of_renting_a_car_for_outstation_trips_near_you(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-renting-a-car-for-outstation-trips-near-you.html', context)
+
+def benefits_of_renting_a_car_for_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/benefits-of-renting-a-car-for-outstation-travel.html', context)
+
+def cultural_etiquette_when_traveling_with_outstation_taxis(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/cultural-etiquette-when-traveling-with-outstation-taxis.html', context)
+
+def comparing_the_cost_of_airport_taxis_vs_ride_sharing_apps(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/comparing-the-cost-of-airport-taxis-vs-ride-sharing-apps.html', context)
+
+def comparing_outstation_taxi_services_what_to_look_for(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/comparing-outstation-taxi-services-what-to-look-for.html', context)
+
+def comparing_outstation_car_booking_services(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/comparing-outstation-car-booking-services.html', context)
+
+def comparing_local_vs_national_airport_taxi_services(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/comparing-local-vs-national-airport-taxi-services.html', context)
+
+def comparing_local_car_cab_services_for_your_travel_needs(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/comparing-local-car-cab-services-for-your-travel-needs.html', context)
+
+def comparing_airport_taxi_services_local_vs_ride_sharing_apps(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/comparing-airport-taxi-services-local-vs-ride-sharing-apps.html', context)
+
+def common_mistakes_to_avoid_when_renting_cars_for_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/common-mistakes-to-avoid-when-renting-cars-for-outstation-travel.html', context)
+
+def common_mistakes_to_avoid_when_booking_outstation_cars(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/common-mistakes-to-avoid-when-booking-outstation-cars.html', context)
+
+def common_airport_taxi_myths_debunked(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/common-airport-taxi-myths-debunked.html', context)
+
+def exploring_the_most_popular_taxi_routes_in_your_city(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-the-most-popular-taxi-routes-in-your-city.html', context)
+
+def exploring_the_different_types_of_airport_taxi_services(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-the-different-types-of-airport-taxi-services.html', context)
+
+def exploring_offbeat_destinations_with_outstation_taxis(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-offbeat-destinations-with-outstation-taxis.html', context)
+
+def exploring_local_cuisine_with_outstation_taxis_foodies_guide(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-local-cuisine-with-outstation-taxis-foodies-guide.html', context)
+
+def exploring_local_attractions_with_outstation_taxis_a_complete_guide(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-local-attractions-with-outstation-taxis-a-complete-guide.html', context)
+
+def exploring_hidden_gems_outstation_taxi_trips_beyond_the_tourist_trail(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-hidden-gems-outstation-taxi-trips-beyond-the-tourist-trail.html', context)
+
+def exploring_car_bazar_options_for_outstation_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/exploring-car-bazar-options-for-outstation-travel.html', context)
+
+def electric_airport_taxis_the_future_of_sustainable_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/electric-airport-taxis-the-future-of-sustainable-travel.html', context)
+
+def eco_friendly_taxi_services_going_green_on_the_road(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/eco-friendly-taxi-services-going-green-on-the-road.html', context)
+
+def eco_friendly_outstation_taxi_services_travel_sustainably(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/eco-friendly-outstation-taxi-services-travel-sustainably.html', context)
+
+def eco_friendly_airport_taxi_services_on_the_rise(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/eco-friendly-airport-taxi-services-on-the-rise.html', context)
+
+def eco_friendly_airport_taxi_options_for_green_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/eco-friendly-airport-taxi-options-for-green-travelers.html', context)
+
+def green_airport_taxis_eco_friendly_transportation_options(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/green-airport-taxis-eco-friendly-transportation-options.html', context)
+
+def finding_the_best_outstation_car_booking_services_near_you(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/finding-the-best-outstation-car-booking-services-near-you.html', context)
+
+def finding_the_best_car_rental_for_outstation_trips_near_you(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/finding-the-best-car-rental-for-outstation-trips-near-you.html', context)
+
+def financing_your_outstation_car_purchase_from_car_bazar(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/financing-your-outstation-car-purchase-from-car-bazar.html', context)
+
+def family_friendly_features_of_outstation_taxi_services(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/family-friendly-features-of-outstation-taxi-services.html', context)
+
+def the_impact_of_ride_hailing_apps_on_airport_taxi_services(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/the-impact-of-ride-hailing-apps-on-airport-taxi-services.html', context)
+
+def the_role_of_customer_reviews_in_choosing_an_airport_taxi(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/the-role-of-customer-reviews-in-choosing-an-airport-taxi.html', context)
+
+def how_airport_taxi_drivers_can_improve_customer_experience(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxi-drivers-can-improve-customer-experience.html', context)
+
+def how_airport_taxi_drivers_handle_special_requests(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxi-drivers-handle-special-requests.html', context)
+
+def how_airport_taxi_drivers_navigate_traffic_efficiently(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxi-drivers-navigate-traffic-efficiently.html', context)
+
+def how_airport_taxi_services_are_evolving_with_technology(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxi-services-are-evolving-with-technology.html', context)
+
+def how_airport_taxi_services_ensure_punctuality(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxi-services-ensure-punctuality.html', context)
+
+def how_airport_taxis_are_adapting_to_pandemic_protocols(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxis-are-adapting-to-pandemic-protocols.html', context)
+
+def how_airport_taxis_can_help_with_heavy_luggage(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxis-can-help-with-heavy-luggage.html', context)
+
+def how_airport_taxis_can_improve_accessibility_for_all_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxis-can-improve-accessibility-for-all-travelers.html', context)
+
+def how_airport_taxis_support_local_economies(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxis-support-local-economies.html', context)
+
+def how_airport_taxis_provide_special_assistance_for_disabled_travelers(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxis-provide-special-assistance-for-disabled-travelers.html', context)
+
+def how_airport_taxis_handle_international_flight_arrivals(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-airport-taxis-handle-international-flight-arrivals.html', context)
+
+def how_outstation_taxis_are_supporting_local_economies(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-outstation-taxis-are-supporting-local-economies.html', context)
+
+def how_outstation_taxis_promote_eco_friendly_travel(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-outstation-taxis-promote-eco-friendly-travel.html', context)
+
+def how_taxi_services_are_adapting_to_technology(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-taxi-services-are-adapting-to-technology.html', context)
+
+def how_taxi_services_can_support_local_businesses(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-taxi-services-can-support-local-businesses.html', context)
+
+def how_to_avoid_airport_taxi_scams(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-to-avoid-airport-taxi-scams.html', context)
+
+def how_to_avoid_common_airport_taxi_scams(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-to-avoid-common-airport-taxi-scams.html', context)
+
+def how_to_avoid_extra_charges_with_airport_taxi_services(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-to-avoid-extra-charges-with-airport-taxi-services.html', context)
+
+def how_to_avoid_hidden_charges_in_outstation_taxi_bookings(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-to-avoid-hidden-charges-in-outstation-taxi-bookings.html', context)
+
+def how_to_avoid_long_wait_times_for_airport_taxis(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-to-avoid-long-wait-times-for-airport-taxis.html', context)
+
+def how_to_avoid_overpacking_for_outstation_taxi_trips(request):
+    context = None
+    return render(request, 'website/blog/web_blogs/how-to-avoid-overpacking-for-outstation-taxi-trips.html', context)
+
+
+#############
+
 def about(request):
     return render(request, 'website/about.html')
 

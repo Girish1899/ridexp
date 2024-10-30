@@ -1,0 +1,867 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title> &quot;Understanding Taxi Fare Structures: What You Need to Know&quot; | RidexpressTaxi Services</title>
+  <meta name="description" content=" &quot;Learn how taxi fares are determined and what influences the cost of your ride.&quot;"/>
+  <meta name="keywords" content="taxi fares, fare structure, pricing, transportation"/>
+
+  <meta property="og:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services" />
+  <meta property="og:description"
+    content="RidexpressTaxi Services offers 24/7 local, outstation, and airport taxi services with professional drivers and affordable rates. Book your ride today for a comfortable and safe journey!" />
+  <meta property="og:image" content="https://ridexpress.in/static/img/logo/ridexpress.png" />
+  <meta property="og:url" content="https://ridexpress.in" />
+  <meta property="og:type" content="website" />
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Reliable Local, Outstation, and Airport Taxi Services | RidexpressTaxi Services">
+  <meta name="twitter:description"
+    content="Book local, outstation, and airport taxis with RidexpressTaxi Services. 24/7 availability, affordable fares, and professional drivers for stress-free travel.">
+  <meta name="twitter:image" content="https://ridexpress.in/static/img/logo/ridexpress.png">
+  <meta name="twitter:url" content="https://ridexpress.in">
+
+  <link rel="icon" type="image/x-icon" href="/static/img/logo/favicon.png">
+
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/static/css/all-fontawesome.min.css">
+  <link rel="stylesheet" href="/static/css/animate.min.css">
+  <link rel="stylesheet" href="/static/css/magnific-popup.min.css">
+  <link rel="stylesheet" href="/static/css/owl.carousel.min.css">
+  <link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="/static/css/jquery.timepicker.min.css">
+  <link rel="stylesheet" href="/static/css/nice-select.min.css">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <script src="/static/js/jquery-3.6.0.min.js"></script>
+  <style>
+    .blog-title a {
+      text-decoration: none;
+    }
+
+    
+    .whatsapp-float {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      z-index: 100;
+    }
+
+    .whatsapp-float img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      border-radius: 50%;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .whatsapp-float img:hover {
+      transform: scale(1.1);
+    }
+
+    #scroll-top {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      z-index: 100;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    #scroll-top:hover {
+      transform: scale(1.1);
+    }
+
+
+    .enquiry-float {
+      position: fixed;
+      bottom: 150px;
+      right: 26px;
+      width: 53px;
+      height: 53px;
+      z-index: 100;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: transparent;
+      border-radius: 50%;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease;
+    }
+
+    .enquiry-float i {
+      font-size: 45px;
+      color: #f34545;
+    }
+
+    .enquiry-float:hover {
+      transform: scale(1.1);
+    }
+
+   
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 200;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      justify-content: center;
+      align-items: flex-start;
+      transition: opacity 0.3s ease;
+      padding-top: 60px;
+    }
+
+    .modal-content {
+      background: linear-gradient(135deg, #ffffff 0%, #f9f9f9 100%);
+      margin: auto;
+      padding: 30px;
+      border-radius: 15px;
+      width: 900px;
+      max-width: 90%;
+      max-height: calc(90vh - 60px);
+      overflow-y: auto;
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+      position: relative;
+      animation: slideIn 0.5s;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .modal-content h2 {
+      margin-top: 0;
+      color: #333;
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      text-align: center;
+    }
+
+    .modal-content label {
+      display: block;
+      margin: 15px 0 5px;
+      font-weight: bold;
+      color: #555;
+    }
+
+    .modal-content input,
+    .modal-content textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      transition: border 0.3s, box-shadow 0.3s;
+    }
+
+    .modal-content input:focus,
+    .modal-content textarea:focus {
+      border-color: #007bff;
+      box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+      outline: none;
+    }
+
+    .modal-content button {
+      background-color: #DB9710;
+      color: #fff;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 18px;
+      transition: background-color 0.3s, transform 0.2s;
+      width: 150px;
+      height: 50px;
+    }
+
+    .modal-content button:hover {
+      background-color: #DB9710;
+      transform: scale(1.05);
+    }
+
+    .close {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 20px;
+      cursor: pointer;
+      color: #aaa;
+      transition: color 0.3s;
+    }
+
+    .close:hover {
+      color: red;
+    }
+
+    @media (max-width: 600px) {
+      .modal-content {
+        width: 90%;
+        padding: 20px;
+      }
+
+      .modal-content h2 {
+        font-size: 20px;
+      }
+
+      .modal-content button {
+        font-size: 16px;
+      }
+    }
+  </style>
+
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Ridexpress",
+      "image": "https://www.ridexpress.in/logo.png",
+      "url": "https://www.ridexpress.in",
+      "telephone": "+91-6366463555",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Jp Nagar",
+        "addressLocality": "Bangalore",
+        "addressRegion": "Karnataka",
+        "postalCode": "560078",
+        "addressCountry": "IN"
+      },
+      "priceRange": "INR",
+      "openingHours": "Mo-Su 00:00-23:59"
+    }
+    </script>
+
+
+</head>
+
+
+<body>
+
+  <div class="preloader">
+    <div class="loader-ripple">
+      <div></div>
+      <div></div>
+    </div>
+  </div>
+
+
+  <header class="header">
+    <div class="main-navigation">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container position-relative">
+                <a class="navbar-brand" href="/">
+                    <img src="/static/img/logo/logo-icon.png" alt="Ridexpress" style="height: 62px; width: 67px;">
+                    <h2 id="logoheader">Ridexpress</h2>
+                </a>
+                <div class="mobile-menu-right">
+                    <div class="search-btn">
+                        <button type="button" class="nav-right-link"><i class="far fa-search"></i></button>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#main_nav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-mobile-icon"><i class="far fa-bars"></i></span>
+                    </button>
+                </div>
+                <div class="collapse navbar-collapse" id="main_nav">
+                    <ul class="navbar-nav">
+                        <li class="nav-item"><a class="nav-link active" href="/">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/about">About</a></li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="/" data-bs-toggle="dropdown">Services</a>
+                            <ul class="dropdown-menu fade-down">
+                                <li><a class="dropdown-item" href="/taxi_services">Taxi Services</a></li>
+                                <li><a class="dropdown-item" href="/airport-taxi">Airport Taxi</a></li>
+                                <li><a class="dropdown-item" href="/outstationcabs">OutStation Cabs</a></li>
+                                <li><a class="dropdown-item" href="/localtaxi">Local Taxi</a></li>
+                            </ul>
+                        </li>
+                        <li class="nav-item"><a class="nav-link" href="/packages">Packages</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/blog">Blog</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/faq">FAQ</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/contact">Contact</a></li>
+                    </ul>
+                    <div class="nav-right">
+                        <div class="nav-right-btn mt-2">
+                            <a href="/">
+                                <button class="theme-btn">Book A Taxi <span class="fas fa-taxi"></span></button>
+                            </a>
+                        </div>
+                        <div class="nav-right-btn mt-2">
+                            <a href="/customer/customer_login">
+                                <button class="theme-btn">Customer Login <span class="fas fa-person"></span></button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </div>
+</header>
+
+<div class="sidebar-popup">
+    <div class="sidebar-wrapper">
+        <div class="sidebar-content">
+            <button type="button" class="close-sidebar-popup"><i class="far fa-xmark"></i></button>
+            <div class="sidebar-logo">
+                <img src="/static/img/logo/Ridexpress_new.png" alt="logo">
+            </div>
+            <div class="sidebar-about">
+                <h4>About Us</h4>
+                <p style="text-align: justify;">We are Ridexpress Taxi Car Rentals, the leading and most reliable cab rentals provider in India. We provide taxi for Airport Pickup, Airport Drop, Local Pickup and Drop, and to major outstations from Bangalore. Our Airport Taxi Services is the way to go option for all your Airport Pickup & Airport Drop needs. Since 2007, we have been uniquely placed as the largest and safest chauffeur-driven car rental company in India.</p>
+            </div>
+            <div class="sidebar-contact">
+                <h4>Contact Info</h4>
+                <ul>
+                    <li>
+                        <h6>Email</h6>
+                        <a href="/cdn-cgi/l/email-protection#6e1d1b1e1e011c1a2e3c070a0b161e1c0b1d1d1a0f1607400d0103"><i class="far fa-envelope"></i><span class="__cf_email__" data-cfemail="265553565649545266744f42435e565443555552475e4f0845494b">[email&#160;protected]</span></a>
+                    </li>
+                    <li>
+                        <h6>Phone</h6>
+                        <a href="tel:08046844684"><i class="far fa-phone"></i>+91 6366463555</a>
+                    </li>
+                    <li>
+                        <h6>Address</h6>
+                        <a href="#"><i class="far fa-location-dot"></i>Bengaluru, Karnataka, India</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="sidebar-social">
+                <h4>Follow Us</h4>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+  
+<main class="main">
+    <!-- breadcrumb -->
+    <div class="site-breadcrumb" style="background: url(/static/img/blog/heading.jpg)">
+        <div class="container">
+            <h1 class="breadcrumb-title">&quot;Understanding Taxi Fare Structures&quot;</h1>
+            <ul class="breadcrumb-menu">
+                <li><a href="/blog">Blogs</a></li>
+                <li class="active"> &quot;Understanding Taxi Fare Structures: What You Need to Know&quot;</li>
+            </ul>
+        </div>
+    </div>
+    <!-- blog single area -->
+    <div class="blog-single-area py-120">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="blog-single-wrapper">
+                        <div class="blog-single-content">
+                            <div class="blog-thumb-img">
+                                <img src="/media/data%3Aimage/jpeg%3Bbase64%2C/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxIQEhMQExIWEBUVFxcVFhUVFxAVFRAQFxcWFhUVFRUYHSggGBolGxUVITEhJSkrLy4uFx8zODMtNyktLisBCgoKDg0OGxAQGy0lHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAKkBKQMBEQACEQEDEQH/xAAcAAABBQEBAQAAAAAAAAAAAAAAAQIDBAUGBwj/xABOEAABAwIDBAYEBwwJAwUAAAABAAIDBBESITEFMkFRBhMiYXGBBxSRoSNCUmKTsdEVF1RVcnOCssHC0vAWM1NjdJKUouE0NUMkRGSD8f/EABsBAAMBAQEBAQAAAAAAAAAAAAABAwIEBQYH/8QANxEAAgEDAwEFBwMDBAMBAAAAAAECAxExBBIhMgUTIkFRFEJSYXGBkRWh8AaxwSMzYtE0U%2BEk/9oADAMBAAIRAxEAPwD2mbdKpHJKeGEB7I8ESyEcDisjeCvR8VSZKnklmlw%2BKzGNzcpWRSc6%2BZVkrHO3fkRMAQBbo9D4qM8lqeCdYKlSs18lWmc9XJJTbh81mfUbh0jaPQ%2BKKnkFMSm1P88U54QqeWRTbxVI9JOeWXY9B4KDydKwZHTL/oar8y/6kR6jNTpZT2fK7qo8/iM5fJCJZNwwi3BISczwWJYZorrxHkmS07bkjuXXo%2Btmh/q3evRNEtNBZwN%2BKAEqCBa4umMgxt%2BT70ATtiaQDb60gMjomOxVf4yb91Wjk4nj7nVxaDwCmzpWBk0uHxTjG5mUrFNxurpWOdu4iYAkFgQDL8eg8FB5OpYHYhzSC6DEOaQXDEOaLBczVchc0Jt0qUclp4YkG6EPIRwSFZGytR8VSpklTK7jc3VErIk%2BWImDBAAgBWvI0NknFMabHskNxmsuKsNSdx9Zr5JU8DqklNuHzWZ9Rqn0jaPQoqeQ6YlNqf54pzwhU%2BpkU28VSPSTnllmQ2ZfwUUryLSfhMDpbKTRVOf/AIn/AFKyiiEpNol2dA3qos/iM5fJC53k7IYRajiAzBusywMoSyBoLibAarxDFjldp9MXxuMcLACL4nPDiG/NAG87ny711afTuXic7L5WuZnV2cJclD%2BmNYWtd2AO1e7HaC1rAG/Eqr0lKUmnUl5e8g9rqWT2r8HTdFuk76ktMjAwF2DXMO1Bw62Pu7%2BGlWVOp3UpX9H/ADzKQbnHdax0FXoPNdhorIEKHHmkBR6JblV/i5fqarRycbx9zqg6zb9yxa7OjESrG3Ec1WT2rg50tzCePD3ojK45xsPNP2b34XWd/Nh92rXGQxYrrU5bQhG4kjbGyIu6FJWdi5GMh4KLOiOClLvHxVo4OaWRq0ZBAAgC9MeyfBQjk6p4YQDshEshHBIVkbwVqPj/ADzVJ%2BRKBFALuWpYMxV2TzxgWy4hYi2UklYWWMYSbIi3cGkkKyMWGQ0SbdwsrDaeMFul05NphBKxC8Wf5hbXMST6h1Zr5JU8DqklNuHzWZ9Rqn0iUmhRU8h08MbS6lOeEZp5ZFNvFUj0mJ5ZYl3PYpR6isukxOlDB6hVHiIn/UtttSJ7VsZa2bsu8MRxasZw%2BaFBvk6odKJpqLq2udjAytpoTkPeoamqqdNyZWCvJGHV1QghdJIceEZ4Rm4k2Aa0cSSAF8ZHvK1TbG/PqejLZHlIow7Xex4jlpXxueC5gD45Q7DbG0lp7L23F29%2BV7Lt1fZdSik9ysShVjN4LL64mx6mXwGG4tzz0N1xRpv1/uV49BJdrBjS58UjGtBLnENs1oFy42KI6ebaSlz9wbXoMp9tvLohNA%2BFspwxuc6N3bLS9rJGtN43OaCRflzyXpVtFqtPDvN97ZSbIxqU5uyRvUEAnDnAGMNcW2dY3tbtAg6G69zQ6jvqW45KkNsi19yvne7/AJXXcwYPRRuFtW3lWTfurojk43j7nTu3PJTXUVfSQUu95Kk8E4ZH1vDwSpjqkr9zyWFk3LpI6PitVTNIjqd4rUMCnktx6DwCky0cFRo%2BE8yqe4Q98nqWi2nELMb3KSSSHStFjlwWU%2BRyirFBdBzXJHB3G/vWeBtSANd3%2B9HhDxAWu7/ei8R%2BLzJqPisVMm6RFC6zgVqWBRfJNNIDax43WIxZuUkOllaQQCiMXccpRsDJm2AvwQ4u4tysNglAFiUSi2EJJIhcbuv3ra4iTfUPrNfJKngdUkptw%2BazPqNU%2BkgZOGNJPPIcyuTtDVx00Nz%2BxXTU3NtFeEyuuW5ez9q8WNXtLULfHhfY61DT03bzG9acVna81fR9p1qdVUNUvozFfSxlFypmjLuexe9HqOOfSYvSj/t9X%2Baf9S1LqMX8DNvZX9TD%2BbZ%2BqFB5OmOEWJomvBa4BwOoIBB8QUmk8mjN2j0fp5o3RGJrMQ3mNa17HA3a5rrZOBAI8ElCK8gKFH0WHWCWpl9bLQQxroomMaXWxyFjR2pDYdo%2BQFym1fIXsaf3EpfweH6OP7Eu7j6D3MjqOj1JI10bqeKzmlpsxgOEixsbZao2R9EF2ZlN0R7cZnnNTHEcTI3RxtxvDSxj53D%2BtLWkgZAcbXsm1cLnR01MyMYWMawa2aA0X8AhRSwK5KmBxvRkZ1h/%2BZN%2B6uhM4vNnTu3PJTXUWfSQUu8qTwThkfW6jwWaYVSV%2B55LKyUl0kdHxWqpmkR1O8VqGBTyW49B4BSZaOCoHWeT3lVteJC9pkk8wIsDxCzGLTNymmh0k7SCElBhKorFOysc5oVG6VCOTqlgIN0eCTyEF4RzkGngr0fFbmSpkMTLmxW5OyMRjdkssAFvGyxGbZqVNIWSnABOaFNtjlTSQradtgc0b2GxWGwwAi%2BacptMFTViIts63etXvEm1aViSs18lmng1VJKbcPmsz6jdPpM2cbt9Lr57t5PvKV8HZoemVi/R6lfQcbFtwccep3Kdfvd918/24o/6duq526O95XwX5dz2L3qV7K5x1MMwulcd6Gqdyif9Su5eKxBwvFm9sr%2Bpi/Ns/VC5nk7I4RbQaBAGftONl45Hue3ATYNJAcSCLOA1FrpONzcargmuOTPgggbg%2BEl7AfYue7MP1xcyOHJGwo9W3fhc28vQsbOoog9hZI9xjbhs4k3HMkjPUd2iNtjM9Q53usmwmSBAAgDkOjOlZ/jJv3VeJxvDOkdueSwuoq%2Bkgpd5UngnDJS6Rbap6XD10gZcZNzLiOYaM7d6VPAVWkyfZm2IKqIuhkEgAsbXBabaOacws2tI3uTjwWqPinVFSI6neK1DAp5Lceg8ApMtHBUw3fbvKre0SFrzJJ4QBcc1mMnc3KKSHPgAB8EKbuDgrFNWOcvT7pUI5OuXSOg3R4JPIodI5yRp4K9HxW5kqZHT7wWpYMw6ixUcPEKcSsxZj2SiOQngVhyHgk8jWBtMez7U5ZFDBWfv%2BYVF0kpdY%2Bs18kqeAqklNuHzWZ9Rqn0lYw42OHEZhcHaul7%2BjZZXKL6SeyRUhqXM096%2BXo9qamjDYnf6npS01OT3WBt3Ouc109nU6mt1PeVHdLkjqZxo07R8zUl3PYvro9R5s%2BkxelH/AG%2Br/NP%2BpafWjHuM29lf1MX5tn6oUHk6Y4RbQaIakuDewATca6WuL%2B66AKnXSkDFFfQ2yNjbPuTFyNIeWkmFoOVhYG%2BeYQArJJRmIQ08uNr/AGBAi3TyOJdibhtoflc0hk6BggDkOjOlZ/jJv3VeJxvDOkduforC6ir6SvAbG/IFUngnTfJ5DHsSpr3PqZHgYwXgkklwzwtaBoMrKcq8YcFKejqVVueBvRl81DXRMcC0yYWOaDcPjk00yNjY%2BSrGUZq6OaVOVKe1nstHxWKpekR1O8VqGBTyW49B4BSZaOCq3f8AMqnuEF1ktSRbzCzDJub4HyuGE58EkuTV1Yz1e5zl%2BfdKjHJ0y6R0G6PBJ5FDpHOSNPBXo%2BK3MlTIGNubLbdkYSuySSEi2fGyypXNSg15g%2BAgE3Qpq43CyyK2mNr3RvQbHYbHCSL3TcrCUGxuGzrd6d7oza0iSs18lmngdUkptw%2BazPqN0%2BkbRcU6nkFMzqiLPLifevk%2B1%2BznCqp01xL%2B56Wl1F42eUTNjw5fzdfRdnaSOmoqKz5nnamq6ky9NuexdMeoUukw%2BksL30VSG8Yn5fo3VG1clZ2NjYcofTQPGYMTCP8AKFzSydcMIbX7S6o2w307tV5Gs7T7mp3cY3Z006O5XbKH9Ix8jlbvv%2B1c/wCr1fgX5NdzH1FHSIXAwHPL6vt9xTfa1Vc7V%2BRKivU1oakOZj5Xv5L0aGsjVo97YnKntltM6fbeH4nM68B%2B3NeWu2pyfhh%2B5Z6dLLIv6RDPs3t9tlp9r1fgX5F3MfUtU21sduzYHLIp0e2HKooTja/oEtP4bpmovdOY5DoqcTKl40fVzlp5gHDf2groicfkzpXbnksLJV9Jjbbx%2BrVBjyf1T7Hl2Sqy8iMTj%2BgW1opqcRNe1z4uy4XzDCThNuWZHkvP1EVuPY0Mm6Si1gw9r9K427QjcXNcyneWhoLbl268%2BN9B81dOnUVDJwa6U5VMcI9Z2FXx1DOticHtPEcDxBHA9ypVI0ueSWp3itQwE8luPQeAUmWjgplt3kd6qnaJz2vKw6SDCL3SU7jlTsOdTWBN0KoN0%2BMlZUJlqWcEEKSg0yrmmrIIqgAAZocG2EalkONSO9LYx94htHxTnkzTI6feC1LAodRYqfi%2BIU4lJjqjdPgiORywLHoPBLzNLAyl3fanPJmGCu/f81RdJF9Q6s18kqeB1SSm3D5rM%2Bo3T6RKLinU8ggNptXfzxSqJNK4qT5ZFNvFUjgnLJZl3PYpx6isukbTtBaQcwbgjmCETyFNeGxzvR2s9RkOzZjhbcmlkO7JETfqr/Lbe1uISkr8jhNJ7GdPPSsfm4XXDX0VGs7zXJ1RqSjgj%2B50fyfeVz/pOm%2BH92b9on6h9zo%2BXvKF2Tpvh/di7%2BfqWGxgCwFhyXbClCEdkVwTcm3dkDtnxnPD7yuOXZWlbvt/coq8/UT7mx/J95Wf0nTfD%2B7H38/UfFRMabhqrS7O09KW6MeTMqs5cNmN0q24Yh6tB26mUWY0f%2BNp1lfyaBn3r0Ixuc1WpZWWRdnUraanjgbmI25ni52rneZJKq/CmyUfHaJepqtsjDbKwsQVClVU3wdWooSpKzPKfTTW1eBkMbXtpwMUzwbBzibMYTe5HG3G4Wq0%2BdoaWi9rmzyah2hLTkuhkdESMJLTYlvJRcUztUmsEcEEkrsLGOlcc7NDnOPM2Gfmh8Cs3we8eheknjjqBM10bgYwWute4Djiy4lparbt0bnnunsqNHeVO8VaGCM8luPQeAUmWjgqs3/NU90gusnqtPMLEclKg6TQ%2BCSyalgoLoOWxYkprAm6mptuxVwsrhHT3AN0OdmCp3Qppe9LvGPugo%2BKKmRUyBl75arbtbkzzfgfJjyvz7tUlt8htSFfjsb3t5IW243usKMf82S8IXkNjx2y08k3tvyJbrcDc8Wet0%2BLcGeb8klZr5LNPBqqSU24fNZn1G6fSNouKdTyCHmJS6u/niieEZp5ZDNvFbjgzLqLUu57FOPUUl0leOUgWC1JwvyzEXJLhFXaNHHUtdHNGJGngQcjwLSM2nvCe1eom75MmPZVZB2aeudh4MnjbNhHIPydZDjFgpTWGSdXtT8Kg/07v40tkA7yoL1e1PwqD/Tu/jRsgPfVHxU%2B1Hf%2B7g/07v41mUYo1GU35iMg2oTb1yD/AE7v40OMVyClNu1yX1Lan4ZB/p3fxrPh9Cnj9SGXZu0XkMkrwxp16mBrX27nOJt5LVo5SMSc7pXNLZPR6CmvgDnPdm%2BR7i6SQ83OP1aI3sFTRbqYg0ZLUHfJmasVKykIAljyNswPjBcdSDT3QPRoVozh3dXBxfT/AGeaqgqXG/wbRLYZE9WQ4gX7rqcFKcnNnRVlCjCNKJ4Rhj%2BU8foNP76sR5Oq9FjHHaLQzTq5S6%2BRdGACcs89DbuWJxvE3Co4STPoHo%2B0BryBYk3PebAD3AJ0H/pkdbG1a/yLNRvFdsMHnzyW49B4BSZaOCmQcRtrcqq6eTnfULIxwGf1oTj5DakhXMfbPTxSTiO0rEKoT2v1L8%2B6VCOTol0hT7oRLIQ6RzkjTwV6PitzyRpkdPvBal0mY9RPU6DxCxErMfNulKORyfAse6PBJ5GsDKXd8ynLJmGCs/f81RdJOXUPrNR4JU8BUyOheAw3NtdVCvWhT5k7FaUHJWRXhrGtvqb8l5lftvTxfhuzop6OfmRR1uEk4dVx1P6hvxGH7lYaG2WRvqiSTZSf9Q1fKCNPQRbySOryRaw96zHt%2BqndxQ5aKLVrlZxubryK%2BonWquo/Pk6adNQjtNCkqm8TY2Az5r6jR9qUZUoxm7SXqefU001NtYLLj2m%2BBXrwkpRujmkrSVxanQeIWohMdNofBJZB4IqPitVCdIbBvnzTlgceotKZYgm32rcelkpZROsIoV63QeKpTyTqjnbnksrqH7pgdJgPUqu%2BhglHmWED32WqtlEKEZTqJLlny61cqPROj9Hk7mbRpi3i57T%2BQ6N4d7s/JKbtG5uEN0kj6R2GyzCeZujTxtC7I6yalVt6E1RvFdsMHnTyW49B4BSZaOCqz%2Bs8yqe4QXWTVOnmFmOSlThD5d0%2BCysjlgz7roOa5oT7pXPHJ0y6RKfdCbyEOke5I08Fek4rc8kqZAx1jdbauiadmPknJtlobpKBp1GxXVBIIskoWY3NsVtQQLW%2BtGxBvdrDY5yBaybhcUZtDMV3XOWabVlYSd3dma7bQnkIhGKNnZdL8Vzxq2P5VuLtPFeL2j2ktLDZDqf7HXQod7K7wjndu9MYoCWN%2BHkGoB7LTyLv2BeVp%2BzNTrX3laVk/X/o6KuspUPDFcnJ1fTSrfuubEOTWgn2uuvZpdiaWHUr/U8%2BfaFaWOCrDtitmdhFQ/S5OLC1rRq5xGgXWuztLHEES9prS940OiG1J5KuNr5nvacVw5ziD2SdCuLtTSUIaWUowSfBfSVqjqpNmVPtqpD3fDybzvjO5ldlLQ6fZG8FhEJ6iqpPkWPpHVt0qH%2Bdj9YRLszSyzBAtXWXvGzs3plVgOc9rJWMtiJswi5sACMiTytwK4a/YOnmvA2mdFPtGqurlHQ0u2xWNDqaY09QwXDHaO5tc3R7TzGYXn0oajsufj8VNnU5U9THw8SRrbA6Wiod6tOzqKhhzb8WS3Fl/bb2XX0lKUakd8HdM4ZTd9suGdLJUAgiy2oMbqXQtHxRUFSGwb580SwOPUWlMsQTbzVuPSyUsosLCKFat0HiqU8k6o5255LK6h%2B6cZ09qsMDYx/5HZ/ktz%2BuylrJ2jY9j%2BnqKnXc37q/ueWVfRyBzicJaeOEkC/HJcKrSXB9HU7N09SW61jf6H7GiheZmsDRGHXebk3tzPdfRZcnLJGvp6VCO2C5Z7Fs9oAsNLC3gvVatFJHxl25ybG1O8VSGCU8luPQeAUmVjgpOJDiRzKsl4Tnbe7gWSVxGY%2BtJRQ5Sk8jnTOI09xS2xHvlYgVDBoT7pXPHJ0S6RIN0IlkIdI9yRp4K1JxVJ5JUyOn3lqWDEeosVHDxCnErMdPulEcjkuB0Y7I8EnkaXhI6c9m/inLIoWscHtPaT9pTOp4HFtMw2mmbkZf7th5fz48XaGvjpKX/J4X%2BTNGi60/kYXSnpE2Mep0tmNaMLnN4AfEYfrK8/szs2VWXtOp5b8n/ctqtVtXd0/ucY1pJsBcnIAZknuX0vB5drmtBTmMmNtjMQcbiRgpY7drtaYrHM8NBmVls2k1jJUq6lob1MV8FwXO0dM4aOdyaODeHHNNIHZcRNHoP/1sX6f6hXndsf8AiS%2Bx0aL/AHkZboXPlcxoxOLnWHmfYO9d1N2px%2BiOeavNperLrYGYXRtIwNsZp7XBI0ZFzz04uIvkAtDsvLHmynWVeOzGjBG3dbrnxc48XnifIZISMN34WCGB7muaWEhwIw4b3xcLW4pVFBxanjzCLkpKx3k2y5q2JrpYjT1UYBZJkBLbS5aeyfqXy1PW09DWtTlupvy9D2JUJ6in41aa8/U6joht71qN8MrcFTDlI0ixcNA8D6/%2BQvpIzU0pRd0zjjhqS5R0dHxWqoUxsG%2BfNEukI9RaUyxBNvtW49LJSyidYKFet0HiqU8k6o5255LK6h%2B6cB6Q7gwH8v29lc2tymfR/wBNpNVE/kc7sah68yt%2BTE9473C1veuWlDe2e5rtR3EYv1kkQQV72RuiFsL73555KWDplQhKam/I9X6Lz9ZTxP5sbfxAsfeF6yd4RZ8Bqqfd6mpH0bLVTvFWhg455Lceg8ApMtHBVZv%2BZVH0EPfJ6nTzCxHJSeB0u6fBJZNSwZy6LHISumccrrOxG97BsrhkCntQ1N%2BovXu5pbEPvGSUnFYqZNUyKJ1jdbfKMLh8kss4Nu43WFFm5STFkqAQRmhRaY5TTQrKltgM9EnBgpq1jieku0Jqp/3PgDo2azzEEDDxY0nXy105rk1WupUIOo2m/QKdKdR7EuCntuGaCBtJRQPII7Ugw5DjYk5uPEr57RTpVqz1Gqn9Ed1eNSEO7pROM/o1Wfg7/az7V9Eu1NJ8a/n2PL9jr/CS0%2Bwa6M4mwPabEA/B3F8iRc5HvGaf6ppPjX8%2Bw/Za690kfsOs6sRNpnsbkX5sJlfzcb7o4N4a5nNL9T0nxr%2BfYfstbyiV/wCjNZ%2BDu/2fan%2BqaT41/PsL2St8JsdEth1MNVHJJC5jRiuThsLtIGhXB2pr9PV00owmm%2BDq0mmqwqqUlwUTsOtBka2Bwa9xxOGDEWXJwgk5A6242F12U%2B09IoRTmsIg9LW3Pw%2BYlZsOsfZjaZ7I27rLsPi5xvm88T5DJa/U9J/7F/PsJ6WthRK39Gaz8Hf/ALPtT/VNJ8a/n2Mex1vhJqPYVbFIyVtO67HBw3NR5qdbtDR1IOEqi5N09PXhJS24O1btipwkeoz3I%2BVBYHuNx9S%2Ba9i025NVo2X1PWlqKlv9tkUME0gjq%2BrNPVxZEGwbUs4tNjoR7CuvT62GjrbIy3U3%2BxGdCVaG61pL9zutmS4m4rFtwDY6i40PevpFUhUipQd0ccYuLaeSN5zPiuhWsSlkTGeaLIzdhiPNOyC4YzzKVkO7AuJ43TskLJbdueSiuov7pxHpBjvFE7k%2B3tafsUNavCme5/Tc7Vpx9UZ/o9ZeWY8mAe13/Clo14md39RycaULev8AYwdsUfUTSRcGuNvyTm33ELmqxcZtHs6Guq%2BnjU9T0HoNU/8ApGDWxc32OJ/avQ063U0fHdtru9ZK3nybUj7m66krKx5Dd%2BS9FoPAKDydEcFPFZ5PeVXMbEHxK4%2BWe4tYrKjYbmmsDn1FwRYoUBupdWKuFVuRsaXq7eS5d8js2R9BfV28kb5B3cfQPV28kb2Hdx9BzYgNBZJtsailgbKQ0EkaKdasqUHN%2BRqMbuxkSVrjpZo5WC%2BUrds6ib8DsjujpoLI0Vb%2BfuCku1tWveNPTU/QR9S85E%2BwALFXtLU1VtlL8cGo0KccIrSOwgnkuNK7KmfXbUZShvWCRxdc/BxTy58b9W04dcrq8KEqze23Hq0v7mXJIho%2BkcMr2xtbOC42GKnqmN83OYAPMpz0c4Rcnt4%2BaBVE2bIXKaBFkAJWAjqd135J%2BorcF4kJ4K1PUMjgje94Y3Ay7nEAAlo1JVHGUqjUfmNcIZ93KX8Jh%2Bkj%2B1P2ar8D/AtyL7XAgEZg5g8wouNnZo0KgQIGNljDhY/AJ3jvQpOPKELR1L23bfMa6docDZdVLV1aC/0nZMnKnGWUWhWv7j5BdUe2NUvNfgm9LT9A9ef832Bb/WtT6oXstP0FFe7k32JrtvUL0D2SBNFtEfGaPEfYuyh27firG3zROWj9DQjLXC4sQvcp1o1I7ou6OVwtw0SYQqCsjlPSPGPU720kZ%2B0ftUdRzA9bsTjVfZmZ6LYbiof%2BQ32Yj%2B0LGn82dn9QPxQj9WR%2Bk7ZwBiqANfg3eIzb%2B8lqV7xrsGvxKj90aHoyfenkb8mU%2Bwtat6d%2BE5u3Yf/AKE/VHYYByXRdniWQtkh2CyBWCyAsgsgLILICyHIGCABAAgDA6aSObSuw4wS5o%2BDF32vfL2Ln1O3u3uwd/ZqT1Cvb74OEoWzvkY1rqkdoEmQBrcIOdzfkvE1Hssabatf7H0NV0oxbaj9r3O1Xzx4wIAinzLW99z4Nz%2Buy1HDYEoWEAXQAIAEwBAEdTuO/JP1Fah1IGQUUYdDGHAOGBmRAI3RwK1NtTdvUFyiT1GL%2BzZ/kZ9iXe1PVi2onAssXGCABAAkBDNk5rv0T4HT329q3HlNATXWAC6LjBAi/SCFw7QAPG5K%2Bh0a0FWmt6SaOOo6sXwy5CY25NIF%2B9erQlpaXhptK/zISU3yyyF3kzmfSIP/AET/AMtn6yjX6D1Oxv8Ayl9H/Yz/AEWj4Gf84P1Qs6fpOrt/dh9P8m50xoeupJW2uWjG38pmf1XHmqVY3izzuzq3damMvt%2BTk/RdV2kmi%2BU0PHi02PucFDTPKPZ7fp3hCfpwejhdZ8yCABAAgAQAIAEACABACFAGftSZpaW3zuMl4fa%2BppOi6afi9Dp08JbrmSvlrHfwOTECAMXpNt%2BKgYZ5T8UhjBvSPJHZb7NeC69Lpp6h7YmZS2nkk/SDau1ZHNgEpH9nThwawfOeLZ%2BJX1FDs6jSXCu/VnNKr6kUr9s7MtJJ6zC3nJikiPcSS5vvVaujo1FaUUJVPRnpXQXps3aDXRvAjqGC5aN2Vvy2eeo4XC%2Ba1/Zz073Lpf7HRTnuHDpbK0BskDWSx9urjx3FLSZkTB1rPyscIzzR7BB8xlw%2Bl%2Br9PkHeMU9LXuBEcLXyS9qiZjI9cgFi6Qki0dgdHI9hiuZS4XEvk/T5h3j/wCi7s7bbqpz%2BrjDqcRuHXB2frLTZ8WAi%2BXytFGppo0rbn4r4%2BXrcalu%2Bgyp206lbCZGBtMYmYp8WbZiAGR4ALm/PgnDTKs5Wfivj5eoOTVvQrDpVK0Br4GsljOOqjx39VpDe02K1n3AvhGaq9DB8qXDxxl%2BnyF3gjulshBEcLXyS9qiZjt67CAC55JFo7A3s6yXsEU7ylwur5P/ACJVGxXdMm4sYa0wH4KOW7rv2hp6vgtcce3oj9O4tfxZt/x9R96IOl7m26yJrOp/67tE%2Bo3F47WHwt/m3sn%2BnxfS89Pz/wChd56j2dKJnfBtp2mdzscUWP8AraG4HrGK1mmxvhOay9DBeJy8Ky/%2BXpb/ACPeP6b9LItnxgEdZK/NkY42N8Tjwas6HQz1EnbiKyxyntPO2dIdt7RJdTNlwg6QRgMb3dY7j5r6Kl2Zp4Lpuc8qr9QHSzbGzXgVTXkH4tQy2LubIBr5lKt2Vp6i4Vn8gjVfqeodFeksO0Iutj7Lm5PjO9G79oPAr5jV6SemntljyZ0wmpI2lzcGzltpekGgp5XwvkdjjOF2GORwDhqLgZr0qXZepmlOKRKU44PQ9j7QZUwRVEZxMlY17SQQS0i4uDovr6d9qvk815Mvp3Hiopu7C72OCVVXizv7KlbVRM70Yx2ppHc5D7mtCxp%2Bk6u3ZX1CXojr3tuLHQ5K54ydnc8u6OQ%2BqbTEJys58Y72uF2furiprbUsfV6yftHZ%2B9fJ/jJ6kF2nyYqABAAgAQAIAEACABADJnWaTyBPuWZYGsnNxSB4DwbhwBB5g53X5/UTU3uzc9WOB11kYIAQpXGeMekB76/a0dE02DXRwN07LpMLnv8AeP8AKvruyKXd6dPzfJyVpcntlFSQ7JgaxobHSxsu95sHMcBcyPPx8XHiDbUHL1jjyyLYW1INoU7BC%2BOogtgmc4HtOAF4%2BreARe9ySNCLXvcA7WPEulGzhsXa7equIg5krBnlBIS17O%2B3bHsXPqKaqU3Bl6cvM9Qh6J07WQxgyEQyda0l5Lnm98MjtXt7ivkXrqjlJu3Kt9PmvmdexWFn6KwPbO0mQCdwe4h5BYQb2jI3BloEo66onF8cfv8AUNi5LI2LGyR1Q3EHmLqsN%2BxhGd8Ayxd6x7TKUVCVrXvfzDakxkOxY3uhnfixshEeEnsWIF8TD8Yc0PUzjGUI2ze/mG1N3ZDF0UgayGO8hEMnWNJeS57rk2kPxm56FUevqOUnxyrfT6BsQs3RaBzZ2EyATuDnEPsWEZ2iPxB3BJa6onF8cfv9Rd2iV/RyEyuls67oupIv2Az5QboH/OWfbKm3b87/AD%2Bn0HsVyOLovA31fOQ%2Br4sN3X6zFr1v9p5rT11R7r28X7fT0Du1wNPRSDA%2BO8gDpeuJxnE1174Wutkz5uiPbqjknxi3/wB%2BobFax5ds2jO29slkhPVl7y6xNxTRGwaDwvkP0ivrNJSVOlGKOSpJ5Pb9q1UWz6aRjzHSwNZhikAwtYSLNYWjPFytr5LrOfJLIyHakJBDJ6SRmTsnGUn4zfkYfbflbMDB4Z0da/ZO2TSlxLetNO758b7GJxHPNh8yvO7SoKpp5LzXKOqlLm57YvjLo7TOqej9JK4ySUsMjjq50bHOd4kjNdMdVWirRkzLijqdixsbBG2MNaxowtDQA1oGVgBkLWX2OhlKWni55sebV62RdJI8VLO3%2B7d7hddM%2BlldHLbXg/mjL9HbLUTD8pzz/ut%2BxTodB2dsu%2Bqf0R0yseUcD09peoqKetbpiaHflNNx7W3HkuasrSUj6Dsqp3tGpp36XR3rDcXXSfP44HIAEACABAAgAQAIAEAIQgDgar0WxF7nRV1bTMcS7qoprRsJNyGgjIdyi6FOTu4r8IoqjRD96ofjXaH0w/hS9mo/Cvwh99IPvVj8a7Q%2BmH8KPZqXwr8IO%2BkL96sfjTaH0w/hR7LR%2BFfhB30jzDpPs12xNrRPL5KhrXRTtklOKSVl7Pu74zhZw9iooqPCNKTkj26qoKbaEJYyNj4KmO75W2beN2bQwjMvvn3W8lojgpdFOi0FDA2OKPronvL5DNgdIH7oeMgLANAsAOfNA27nkfTypbtXbDIKfNt46VhbaxAcTI9vCwxP/wAqy%2BSkeInpX3q2/jTaH04%2BxT9mpfCvwhd9IPvVt/Gm0fpx9iXs1L4V%2BEHfSD71Y/Gm0fpx9ifs1H4V%2BEHfSD71Y/Gm0Ppx9iPZqXwr8IO%2BkH3qx%2BNNofTj7EezUvhX4Qd9IPvVj8abQ%2BnH2I9mpfCvwg76QferH402h9OPsR7NS%2BFfhB30g%2B9WPxptD6cfYj2al8K/CDvpB96sfjTaH0w%2BxHs1L4V%2BEHeyPNOhkrdk7aMNQbNDpKdznfJeR1b3dxsw3%2BcqLgcruJ7B0t6NwV1PLA9jo4mfC9Yw2eZWgkYAbgixIJOt8ua0STsWdh7FgoIY6fqw6BjC5ssmEuY7N7%2BsJ0uSSCMtRllcDlniIi%2B7e23dU5zGSylwkZk6OCJoAkHI9htuRcFlpPgrfbE9PPosZ8baW0Hf/cP4VNael5RX4M99Ia30VUnxqquf4zj9jVT2eHovwjPfM7fZVLHTQx08TcMcbQxoJJIaOZOpVdhNzuYW1%2BkE75JKSLZ084sWmVxjihN8jZzzcjvAKxODasjdKooyUvQ1ejsD4KeON7GRuAN2xue9jSSTYOcAXa62C1CnZWCtqJVZucss0etPJa2E95mdJaXr6d7Oq645FrA4MLnA3yccgdVOpT3RsX02plQqKcTL2d0omD4qd%2BzauMGzestC9jOALnMecu9EIytaRmpKLe5M6oSrVie4kCRoEACABAAgAQAIAYXp2E3YTrUbRb0HWp7Q3oTre5G0W4OtRtDccv0%2B6JxbVgEbvg5WXdFJrgcdWuHFp4jwKNppVLHj9P8AdzYTnMY2Tq73sGGeB3zhYXb/ALVhxaLJwkLVdItu7Vb6u2OQMdkWwwuha4HUOkdoP0gkkx2ij0L0Zej0bNvUzlslS4YQG5sp2nUNPFx0J5ZDjfagRnVvwj0Tre5a2k94db3I2hvDre5G0N4db3I2hvDre5G0N4db3I2hvDre5G0N4db3JbQ3h1vcntDeedelD0f/AHRtU09mVDRhLTk2oYNATwcOB8knApCrbJ57RdM9s7Kb6tKxxY0YQypje7C3SzZARceZCxaxXwyG1/SHbO27U7WOMZ1ZCx0cRH95I46dxdbuRZh4Ynqfo06Dt2VG58hElTILPcN2NmvVs7r6niQOQWlAjKrc7fre5PYZ3h1g5I2huQAjkjkOB2AckrmrIOrHJFwsg6sckXYtqDAOSLhtQuAckh2QtkDFQAIAEACABAAgAQAIALIASyBWDCEXCyDCOSLhZCYRyRcLIXCEBYTAEDDqxyTuKyDqxyRdhYOrHJF2Fg6sckXYWDqxyRdhYOrHJF2Fg6sckXYWDqxyRdhYMA5IuFgwDklcLBgHJO7CyEdEDkQD4gFILCtYBkAAgYuEIuKwWQOwWQKwIGKgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQAIAEACABAAgAQB/Z" alt="understanding-taxi-fare-structures-what-you-need-to-know">
+                            </div>
+                            <div class="blog-info">
+                                <div class="blog-details">
+                                    <h3 class="blog-details-title mb-20"> &quot;Understanding Taxi Fare Structures: What You Need to Know&quot;</h3>
+                                    <!-- <p> Get insights into how taxi fares are calculated and what factors affect pricing.</p> -->
+                                    <p class="mb-10" style="text-align: justify;">
+                                    
+                                        <li> Get insights into how taxi fares are calculated and what factors affect pricing.</li>
+                                      
+                                    </p>
+                                    <hr>
+                                    <div class="blog-details-tags pb-20">
+                                        <h5>Tags : </h5>
+                                        <ul>
+                                            <li><a href="#">Taxi</a></li>
+                                            <li><a href="#">Booking</a></li>
+                                            <li><a href="#">Online</a></li>
+                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="blog-comments mb-lg-0">
+                                    
+                                <div class="blog-comments-form">
+                                    <h3>Leave A Comment</h3>
+                                    <form action="#">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="text" class="form-control" placeholder="Your Name*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <input type="email" class="form-control" placeholder="Your Email*">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <textarea class="form-control" rows="5" placeholder="Your Comment*"></textarea>
+                                                </div>
+                                                <button type="submit" class="theme-btn">Post Comment <i class="far fa-paper-plane"></i></button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <aside class="sidebar">
+                        <!-- search-->
+                        <div class="widget search">
+                            <h5 class="widget-title">Search</h5>
+                            <form class="search-form">
+                                <input type="text" class="form-control" placeholder="Search Here...">
+                                <button type="submit"><i class="far fa-search"></i></button>
+                            </form>
+                        </div>
+                        <!-- category -->
+                    
+                        <!-- recent post -->
+                        
+                        <!-- social share -->
+                        <div class="widget social-share">
+                            <h5 class="widget-title">Follow Us</h5>
+                            <div class="social-share-link">
+                                <a href=""><i class="fab fa-facebook-f"></i></a>
+                                <a href=""><i class="fab fa-instagram"></i></a>
+                                <a href="#"><i class="fab fa-dribbble"></i></a>
+                                <a href=""><i class="fab fa-whatsapp"></i></a>
+                                
+                            </div>
+                        </div>
+                        <!-- Recent Post -->
+                        <div class="widget sidebar-tag">
+                            <h5 class="widget-title">Popular Tags</h5>
+                            <div class="tag-list">
+                                <a href="#">Car</a>
+                                <a href="#">Taxi</a>
+                                <a href="#">Drive</a>
+                                <a href="#">Booking</a>
+                                <a href="#">Offer</a>
+                                <a href="#">Tips</a>
+                                <a href="#">Cab</a>
+                                <a href="#">Luxury</a>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</main>
+
+
+  <footer class="footer-area">
+    <div class="footer-widget">
+        <div class="container">
+            <div class="row footer-widget-wrapper pt-120 pb-70">
+                <div class="col-md-6 col-lg-4">
+                    <div class="footer-widget-box about-us">
+                        <a href="#" class="footer-logo">
+                            <img src="/static/img/logo/logo-icon.png" alt="Ridexpress Logo" style="height: 60px; width: 67px;">
+                            <h2 id="logoheader" style="color: white;">RIDEXPRESS</h2>
+                        </a>
+                        <p class="mb-3">
+                            We are Ridexpress Taxi Car Rentals, the leading and most reliable cab rentals provider in India. We provide taxi for Airport Pickup, Airport Drop, Local Pickup and Drop, and to major outstations from Bangalore.
+                        </p>
+                        <ul class="footer-contact">
+                            <li><a href="tel:+916366463555"><i class="far fa-phone"></i>+91 6366463555</a>&nbsp;&nbsp;&nbsp; <a href="tel:+916366955441"><i class="far fa-phone"></i>+91 6366955441</a></li>
+                            <li> <a href="tel:+919019765645"><i class="far fa-phone"></i>+91 9019765645</a></li>
+                            <li><i class="far fa-map-marker-alt"></i>Kuvempu Nagar,Doddakallasandra, Kanakapura Rd Bangalore 560062</li>
+                            <li><a href="/cdn-cgi/l/email-protection#fe8d8b8e8e918c8abe8c979a9b868e8c9b8d8dd09790"><i class="far fa-envelope"></i><span class="__cf_email__" data-cfemail="cbb8bebbbba4b9bf8bb9a2afaeb3bbb9aeb8b8e5a2a5">[email&#160;protected]</span></a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-2">
+                    <div class="footer-widget-box list">
+                        <h4 class="footer-widget-title">Quick Links</h4>
+                        <ul class="footer-list">
+                            <li><a href="/about"><i class="fas fa-caret-right"></i> About Us</a></li>
+                            <li><a href="/terms"><i class="fas fa-caret-right"></i> Terms Of Service</a></li>
+                            <li><a href="#"><i class="fas fa-caret-right"></i> Privacy Policy</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="footer-widget-box list">
+                        <h4 class="footer-widget-title">Support Center</h4>
+                        <ul class="footer-list">
+                            <li><a href="/faq"><i class="fas fa-caret-right"></i> FAQ</a></li>
+                            <li><a href="/"><i class="fas fa-caret-right"></i> Book A Ride</a></li>
+                            <li><a href="/contact"><i class="fas fa-caret-right"></i> Contact Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <div class="footer-widget-box list">
+                        <h4 class="footer-widget-title">Newsletter</h4>
+                        <div class="footer-newsletter">
+                            <p>Subscribe to our newsletter for the latest updates and news.</p>
+                            <div class="subscribe-form">
+                                <form action="#" method="post">
+                                    <input type="email" class="form-control" placeholder="Your Email" required>
+                                    <button class="theme-btn" type="submit">
+                                        Subscribe Now <i class="far fa-paper-plane"></i>
+                                    </button>
+                                </form>
+                                <div class="mt-2">
+                                    <a href="/login" class="theme-btn">Admin Login <i class="fas fa-person"></i></a>
+                                    <a href="/driver/driver_login" class="theme-btn">Driver Login <i class="fas fa-person"></i></a>
+                                    <a href="/register_vehicle" class="theme-btn">Register Vehicle <i class="fas fa-car"></i></a>
+                                    <a href="/add_blog_website/" class="theme-btn">Add Blogs <i class="fas fa-car"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="copyright">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 align-self-center">
+                    <p class="copyright-text">
+                        &copy; Copyright <span id="date"></span> <a href="#"> RidexpressTaxi </a>. All Rights Reserved.
+                    </p>
+                </div>
+                <div class="col-md-6 align-self-center">
+                    <ul class="footer-social">
+                        <li><a href="https://www.facebook.com/profile.php?id=61566246083463" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                        <li><a href="https://x.com/RExpress247" target="_blank"><i class="fab fa-twitter"></i></a></li>
+                        <li><a href="https://www.linkedin.com/in/ridexpress-bangalore-a6858432b/" target="_blank"><i class="fab fa-linkedin-in" ></i></a></li>
+                        <li><a href="https://www.instagram.com/recabrides/" target="_blank"><i class="fab fa-instagram"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    document.getElementById('date').innerText = new Date().getFullYear();
+</script>
+
+
+
+
+  <a href="https://wa.me/6366463555?text=Hello,%20I%20would%20like%20to%20book%20a%20taxi.%20Could%20you%20please%20help%20me%20with%20the%20details?"
+    class="whatsapp-float" target="_blank">
+
+
+    <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Icon">
+
+  </a>
+  <br>
+
+
+  <a href="#" class="enquiry-float" id="enquiry-btn">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Quill_Paper_Icon_with_White_Background.png" alt="Enquiry Icon">
+  </a>
+
+  <div id="enquiryModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2 style="color: rgb(6, 6, 54);">Reach Out: We’re Here to Help</h2><br>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="cust_name" name="cust_name" placeholder="Your Name" required>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="email" class="form-control" id="cust_phone_number" name="cust_phone_number"
+              placeholder=" Phone Number" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group">
+            <input type="text" class="form-control" id="cust_email" name="cust_email" placeholder="Your Email" required>
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <div class="form-group">
+            <select class="form-control" id="service" name="service">
+              <option value="Airport Transfer">Airport Transfer</option>
+              <option value="Local Transfer">Local Transfer</option>
+              <option value="Outstation">Outstation Transfer</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div><br>
+
+      <div class="form-group">
+        <textarea name="message" cols="30" rows="2" class="form-control" placeholder="Write Your Message"
+          id="cust_message" name="cust_message"></textarea>
+      </div>
+      <center><button type="submit" class="theme-btn" id="save_btn">Submit
+        <i class="far fa-paper-plane"></i></button></center>
+
+    </div>
+  </div>
+
+  <br>
+
+  <a href="#" id="scroll-top"><i class="far fa-arrow-up"></i></a>
+
+
+  
+
+
+  <script src="/static/js/modernizr.min.js"></script>
+  <script src="/static/js/bootstrap.bundle.min.js"></script>
+  <script src="/static/js/imagesloaded.pkgd.min.js"></script>
+  <script src="/static/js/jquery.magnific-popup.min.js"></script>
+  <script src="/static/js/isotope.pkgd.min.js"></script>
+  <script src="/static/js/jquery.appear.min.js"></script>
+  <script src="/static/js/jquery.easing.min.js"></script>
+  <script src="/static/js/owl.carousel.min.js"></script>
+  <script src="/static/js/counter-up.js"></script>
+  <script src="/static/js/jquery-ui.min.js"></script>
+  <script src="/static/js/jquery.timepicker.min.js"></script>
+  <script src="/static/js/jquery.nice-select.min.js"></script>
+  <script src="/static/js/wow.min.js"></script>
+  <script src="/static/js/main.js"></script>
+  <script>
+
+    var modal = document.getElementById('myModal');
+
+    function openModal() {
+      var googleFormUrl = 'https://forms.gle/EUGWHRSqYExnpyzH6';
+      document.getElementById('googleFormFrame').src = googleFormUrl;
+      modal.style.display = "block";
+    }
+
+    function closeModal() {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        closeModal();
+      }
+    };
+
+
+    function initAutocomplete() {
+      const inputs = document.querySelectorAll('.autocomeple_g');
+
+
+      inputs.forEach(input => {
+        const autocomplete = new google.maps.places.Autocomplete(input);
+
+        autocomplete.addListener('place_changed', function () {
+          const place = autocomplete.getPlace();
+          if (!place.geometry) {
+            window.alert("No details available for input: '" + place.name + "'");
+            return;
+          }
+          console.log('Place details for', input.id, ':', place);
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAXVR7rD8GXKZ2HBhLn8qOQ2Jj_-mPfWSo&libraries=places&callback=initAutocomplete';
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    });
+
+
+
+    $('.date-picker').datepicker({
+      format: 'mm/dd/yyyy',
+      autoclose: true,
+      todayHighlight: true,
+      startDate: new Date() 
+    });
+
+    $('.date-picker').change(function () {
+      var selectedDate = new Date($(this).val());
+      var today = new Date();
+
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate < today) {
+        $(this).val(''); 
+        $(this).addClass('is-invalid');
+        $('#dateError').text('Please select a future date.');
+      } else {
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#dateError').text('');
+      }
+    });
+
+    $('.pickup-time').change(function () {
+      var selectedDate = new Date($('.date-picker').val());
+      var today = new Date();
+      var selectedTime = $(this).val();
+
+      today.setHours(0, 0, 0, 0);
+
+      if (selectedDate.setHours(0, 0, 0, 0) === today.setHours(0, 0, 0, 0)) {
+        var now = new Date();
+        var selectedHours = parseInt(selectedTime.split(':')[0]);
+        var selectedMinutes = parseInt(selectedTime.split(':')[1]);
+        var currentHours = now.getHours();
+        var currentMinutes = now.getMinutes();
+        var [selectedHours, selectedMinutes] = selectedTime.split(':').map(Number);
+
+        if (selectedHours < currentHours || (selectedHours === currentHours && selectedMinutes <= currentMinutes)) {
+          $(this).val('');
+          $(this).addClass('is-invalid');
+          $('#timeError').text('Please select a current or future time.');
+        } else {
+          $(this).removeClass('is-invalid');
+          $(this).addClass('is-valid');
+          $('#timeError').text('');
+        }
+      } else {
+        $(this).removeClass('is-invalid');
+        $(this).addClass('is-valid');
+        $('#timeError').text('');
+      }
+    });
+
+  </script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16701194260"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'AW-16701194260');
+  </script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var modal = document.getElementById("enquiryModal");
+
+    var btn = document.getElementById("enquiry-btn");
+
+    var closeBtn = document.getElementsByClassName("close")[0];
+
+    btn.onclick = function () {
+      modal.style.display = "flex";
+    }
+
+    closeBtn.onclick = function () {
+      modal.style.display = "none";
+    }
+
+    window.onclick = function (event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    $(document).ready(function () {
+      console.log("Document is ready.");
+      $("#save_btn").click(function () {
+        console.log("Submit button clicked.");
+        var cust_name = $('#cust_name').val();
+        var cust_phone_number = $('#cust_phone_number').val();
+        var cust_email = $('#cust_email').val();
+        var service = $('#service').val();
+        var cust_message = $('#cust_message').val();
+
+        if (!cust_name || !cust_phone_number || !service || !cust_message) {
+                alert("All fields are required.");
+                return;
+            }
+
+        console.log("name :", cust_name);
+        console.log("phone :", cust_phone_number);
+        console.log("email :", cust_email);
+        console.log("subject :", service);
+        console.log("message :", cust_message);
+
+        $.ajax({
+          url: '/save-enquiry/',
+          type: "POST",
+          headers: {
+            'X-CSRFToken': 'zwjnYLrXzjFobsjELDRBjLS5byUeegrvoMY4TZlKMELNSgCaCa2E2x2taxatrLwC'
+          },
+          data: {
+            cust_name: cust_name,
+            cust_phone_number: cust_phone_number,
+            cust_email: cust_email,
+            service: service,
+            cust_message: cust_message
+          },
+          success: function (result) {
+            console.log("Success response:", result);
+            if (result.success) {
+              alert(result.success);
+              $('#cust_name').val('');
+              $('#cust_phone_number').val('');
+              $('#cust_email').val('');
+              $('#service').val('');
+              $('#cust_message').val('');
+              modal.style.display = "none";
+            } else {
+              alert(result.error);
+            }
+          },
+          error: function (xhr, status, error) {
+            console.error("Error: ", xhr.responseText);
+            alert("There was an error submitting your enquiry.");
+          }
+        });
+      });
+    });
+  </script>
+
+<style>
+  @media (max-width: 991px) {
+    .navbar-brand {
+        padding-left: 1px;
+    }
+}
+</style>
+</body>
+
+</html>
