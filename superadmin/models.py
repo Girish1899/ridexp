@@ -774,33 +774,15 @@ class Enquiry(models.Model):
     cust_message = models.TextField()
 
 
-from django.db import models
-from pymongo import MongoClient
-from django.conf import settings
-
-# Function to get the next package_category_id
-def get_next_package_category_id():
-    counter = db.counters.find_one_and_update(
-        {"_id": "package_category_id"},
-        {"$inc": {"seq": 1}},
-        upsert=True,
-        return_document=True
-    )
-    return counter["seq"]
-
 class PackageCategories(models.Model):
-    package_category_id = models.IntegerField(primary_key=True)
+    new_auto_id = models.AutoField(primary_key=True)
+    package_category_id = models.IntegerField(unique=True)
+    # package_category_id = models.IntegerField(primary_key=True)
     category_name = models.CharField(max_length=255)
     created_on = models.DateTimeField(auto_now_add=True)
     updated_on = models.DateTimeField(auto_now=True)
     created_by = models.ForeignKey(User, related_name='package_category_created', on_delete=models.SET_NULL, null=True, blank=True)
     updated_by = models.ForeignKey(User, related_name='package_category_updated', on_delete=models.SET_NULL, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        # Set package_category_id only if it's a new record
-        if not self.package_category_id:
-            self.package_category_id = get_next_package_category_id()
-        super().save(*args, **kwargs)
 
 
 # class PackageCategories(models.Model):
