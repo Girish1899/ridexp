@@ -774,15 +774,15 @@ class Enquiry(models.Model):
     cust_message = models.TextField()
 
 
-# class PackageCategories(models.Model):
-#     new_auto_id = models.AutoField(primary_key=True)
-#     package_category_id = models.IntegerField(unique=True)
-#     # package_category_id = models.IntegerField(primary_key=True)
-#     category_name = models.CharField(max_length=255)
-#     created_on = models.DateTimeField(auto_now_add=True)
-#     updated_on = models.DateTimeField(auto_now=True)
-#     created_by = models.ForeignKey(User, related_name='package_category_created', on_delete=models.SET_NULL, null=True, blank=True)
-#     updated_by = models.ForeignKey(User, related_name='package_category_updated', on_delete=models.SET_NULL, null=True, blank=True)
+class PackageCategories(models.Model):
+    new_auto_id = models.AutoField(primary_key=True)
+    package_category_id = models.IntegerField(unique=True)
+    # package_category_id = models.IntegerField(primary_key=True)
+    category_name = models.CharField(max_length=255)
+    created_on = models.DateTimeField(auto_now_add=True)
+    updated_on = models.DateTimeField(auto_now=True)
+    created_by = models.ForeignKey(User, related_name='package_category_created', on_delete=models.SET_NULL, null=True, blank=True)
+    updated_by = models.ForeignKey(User, related_name='package_category_updated', on_delete=models.SET_NULL, null=True, blank=True)
 
 
 # class PackageCategories(models.Model):
