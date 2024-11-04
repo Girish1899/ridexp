@@ -125,6 +125,10 @@ def banaglore_to_ooty(request):
     context = None
     return render(request, 'website/packages/banaglore_to_ooty.html',context)
 
+def banaglore_to_pondicherry(request):
+    context = None
+    return render(request, 'website/packages/banaglore_to_pondicherry.html',context)
+
 def bangalore_to_melukote(request):
     context = None
     return render(request, 'website/packages/bangalore_to_melukote.html',context)
