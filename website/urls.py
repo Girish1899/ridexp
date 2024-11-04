@@ -156,7 +156,7 @@ urlpatterns = [
     path('packages/banaglore_to_kabini', views.banaglore_to_kabini, name="banaglore_to_kabini"),
     path('packages/banaglore_to_chikmagalur', views.banaglore_to_chikmagalur, name="banaglore_to_chikmagalur"),
     path('packages/banaglore_to_ooty', views.banaglore_to_ooty, name="banaglore_to_ooty"),
-    path('packages/banaglore_to_pondicherry', views.banaglore_to_ooty, name="banaglore_to_pondicherry"),
+    path('packages/banaglore_to_pondicherry', views.banaglore_to_pondicherry, name="banaglore_to_pondicherry"),
 
     path('packages/bangalore_to_melukote', views.bangalore_to_melukote, name="bangalore_to_melukote"),
     path('packages/bangalore_to_brindavan_gardens', views.bangalore_to_brindavan_gardens, name="bangalore_to_brindavan_gardens"),
